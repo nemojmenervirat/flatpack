@@ -10,8 +10,8 @@ view is read-only.** When he asks for a new piece or a change, edit the JSON.
 - Units: **mm** everywhere.
 - Sizes `[width, depth, height]` = `[x, y, z]`, **z up**. Positions = min corner of the box.
 - Data space is z-up; three.js is y-up. Conversion happens **only** in `Viewer.jsx`
-  (`three.x = x, three.y = z, three.z = y`). Never leak three.js coordinates into
-  data or geometry code.
+  (`three.x = x, three.y = z, three.z = -y` — the minus keeps handedness; `+y` would
+  mirror the plan). Never leak three.js coordinates into data or geometry code.
 - Rotations: only 0/90/180/270 around vertical, CCW from above, pivot at local origin.
   All boxes stay axis-aligned; all placement math is AABB min/max arithmetic in
   `geometry.js`. Don't introduce arbitrary angles without a plan.

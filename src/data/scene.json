@@ -1,7 +1,32 @@
 {
   "apartment": "apartment",
   "placements": [
-    { "piece": "wardrobe", "pos": [200, 2900, 0], "rot": 0 },
-    { "piece": "bed", "pos": [600, 400, 0], "rot": 0 }
+    {
+      "piece": "wardrobe",
+      "pos": [
+        6200,
+        4498,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "bed",
+      "pos": [
+        6550,
+        300,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "wardrobe-hall",
+      "pos": [
+        6424,
+        6649,
+        0
+      ],
+      "rot": 0
+    }
   ]
 }

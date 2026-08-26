@@ -127,3 +127,40 @@ button:hover {
   padding: 3px 0;
   color: #c9c5bd;
 }
+
+/* dimension labels floating in the 3D view */
+.dim {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 26px;
+  font-variant-numeric: tabular-nums;
+  color: #e6e4df;
+  background: rgba(22, 24, 28, 0.78);
+  border-radius: 6px;
+  padding: 2px 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+.dim {
+  text-align: center;
+}
+
+.dim-name {
+  font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 18px;
+  color: #9a958c;
+  letter-spacing: 0.5px;
+}
+
+.dim.door {
+  color: #7fd17f;
+}
+
+.dim.window {
+  color: #7fb8ff;
+}
+
+.dim.piece {
+  color: #ffd479;
+}

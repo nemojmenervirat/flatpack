@@ -1,0 +1,29 @@
+{
+  "id": "wardrobe-hall",
+  "name": "Hall wardrobe 1700",
+  "buildable": true,
+  "color": "#3f4449",
+  "clearance": { "front": 600 },
+  "parts": [
+    { "name": "side", "pos": [0, 0, 0], "size": [18, 600, 2600] },
+    { "name": "side", "pos": [1682, 0, 0], "size": [18, 600, 2600] },
+    { "name": "partition", "pos": [1100, 0, 18], "size": [18, 597, 2564] },
+    { "name": "bottom", "pos": [18, 0, 0], "size": [1664, 600, 18] },
+    { "name": "top", "pos": [18, 0, 2582], "size": [1664, 600, 18] },
+    { "name": "back HDF", "pos": [18, 597, 18], "size": [1664, 3, 2564], "color": "#31353a" },
+
+    { "name": "shelf hanging bay", "pos": [18, 0, 1900], "size": [1082, 597, 18] },
+    { "name": "shelf column", "pos": [1118, 0, 400], "size": [564, 597, 18] },
+    { "name": "shelf column", "pos": [1118, 0, 800], "size": [564, 597, 18] },
+    { "name": "shelf column", "pos": [1118, 0, 1200], "size": [564, 597, 18] },
+    { "name": "shelf column", "pos": [1118, 0, 1600], "size": [564, 597, 18] },
+    { "name": "shelf column", "pos": [1118, 0, 2000], "size": [564, 597, 18] },
+
+    { "name": "door lower", "pos": [3, -18, 3], "size": [545, 18, 1894], "color": "#7a8b7f" },
+    { "name": "door lower", "pos": [551, -18, 3], "size": [545, 18, 1894], "color": "#7a8b7f" },
+    { "name": "door lower", "pos": [1099, -18, 3], "size": [598, 18, 1894], "color": "#7a8b7f" },
+    { "name": "door upper", "pos": [3, -18, 1903], "size": [545, 18, 694], "color": "#93a297" },
+    { "name": "door upper", "pos": [551, -18, 1903], "size": [545, 18, 694], "color": "#93a297" },
+    { "name": "door upper", "pos": [1099, -18, 1903], "size": [598, 18, 694], "color": "#93a297" }
+  ]
+}

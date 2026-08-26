@@ -5,9 +5,10 @@ import { cutList, cutListCsv } from './cutlist.js';
 import apartment from './data/apartment.json';
 import scene from './data/scene.json';
 import wardrobe from './data/wardrobe.json';
+import wardrobeHall from './data/wardrobe-hall.json';
 import bed from './data/bed.json';
 
-const piecesById = { [wardrobe.id]: wardrobe, [bed.id]: bed };
+const piecesById = { [wardrobe.id]: wardrobe, [wardrobeHall.id]: wardrobeHall, [bed.id]: bed };
 
 export default function App() {
   const [showClearances, setShowClearances] = useState(true);
