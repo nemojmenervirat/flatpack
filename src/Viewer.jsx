@@ -43,7 +43,7 @@ function Box({ box, color = '#c9a36b', opacity = 1, hovered = false, ...handlers
     (-(box.min[1] + box.max[1]) / 2) * S,
   ];
   return (
-    <mesh position={pos} castShadow={opacity === 1} receiveShadow {...handlers}>
+    <mesh position={pos} {...handlers}>
       <boxGeometry args={size} />
       <meshStandardMaterial
         color={color}
@@ -57,7 +57,7 @@ function Box({ box, color = '#c9a36b', opacity = 1, hovered = false, ...handlers
 }
 
 // A part box in piece-local coordinates (rendered inside the placement group).
-function LocalBox({ part, color, hovered, ...handlers }) {
+function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
   const size = [part.size[0] * S, part.size[2] * S, part.size[1] * S];
   const pos = [
     (part.pos[0] + part.size[0] / 2) * S,
@@ -65,11 +65,52 @@ function LocalBox({ part, color, hovered, ...handlers }) {
     -(part.pos[1] + part.size[1] / 2) * S,
   ];
   return (
-    <mesh position={pos} castShadow receiveShadow {...handlers}>
+    <mesh position={pos} {...handlers}>
       <boxGeometry args={size} />
-      <meshStandardMaterial color={color} emissive={hovered ? '#4a4638' : '#000000'} />
+      <meshStandardMaterial
+        color={color}
+        emissive={hovered ? '#4a4638' : '#000000'}
+        transparent={opacity < 1}
+        opacity={opacity}
+        depthWrite={opacity === 1}
+      />
     </mesh>
   );
+}
+
+// Door leaf layouts per style, in "leaf plane" coordinates:
+// u = along the width (0 at the hinge), z = up, t = leaf thickness.
+const DOOR_WHITE = '#f2f1ed';
+const DOOR_GLASS = '#bcd8ee';
+function doorLeafParts(style, w, h) {
+  switch (style) {
+    case 'entrance': // strong solid brown door
+      return [{ u: 0, du: w, z: 0, dz: h, t: 54, color: '#6b4a2f' }];
+    case 'balcony': {
+      // glass door with a white border all around
+      const f = 90;
+      return [
+        { u: 0, du: f, z: 0, dz: h, t: 44, color: DOOR_WHITE },
+        { u: w - f, du: f, z: 0, dz: h, t: 44, color: DOOR_WHITE },
+        { u: f, du: w - 2 * f, z: 0, dz: 120, t: 44, color: DOOR_WHITE },
+        { u: f, du: w - 2 * f, z: h - 120, dz: 120, t: 44, color: DOOR_WHITE },
+        { u: f, du: w - 2 * f, z: 120, dz: h - 240, t: 12, color: DOOR_GLASS, opacity: 0.35 },
+      ];
+    }
+    case 'living': {
+      // white door with a glass panel in the middle
+      const s = 140, bottom = 350, top = 250;
+      return [
+        { u: 0, du: s, z: 0, dz: h, t: 44, color: DOOR_WHITE },
+        { u: w - s, du: s, z: 0, dz: h, t: 44, color: DOOR_WHITE },
+        { u: s, du: w - 2 * s, z: 0, dz: bottom, t: 44, color: DOOR_WHITE },
+        { u: s, du: w - 2 * s, z: h - top, dz: top, t: 44, color: DOOR_WHITE },
+        { u: s, du: w - 2 * s, z: bottom, dz: h - bottom - top, t: 12, color: DOOR_GLASS, opacity: 0.4 },
+      ];
+    }
+    default: // 'inner' — simple white door
+      return [{ u: 0, du: w, z: 0, dz: h, t: 40, color: '#e8e6e1' }];
+  }
 }
 
 // A clickable door: pivots on a vertical hinge at its outer edge (the edge
@@ -124,9 +165,6 @@ function RoomDoor({ opening, hovered, onPointerOver, onPointerOut }) {
     ? opening.pos[1] + sy / 2
     : (hinge === 'max' ? opening.pos[1] + sy : opening.pos[1]);
   const away = hinge === 'max' ? -w : 0;
-  const leaf = horiz
-    ? { pos: [away, -20, 0], size: [w, 40, sz] }
-    : { pos: [-20, away, 0], size: [40, w, sz] };
   const target = open ? swing * MathUtils.degToRad(90) : 0;
 
   useFrame((_, dt) => {
@@ -135,12 +173,10 @@ function RoomDoor({ opening, hovered, onPointerOver, onPointerOut }) {
     }
   });
 
+  const leafParts = doorLeafParts(opening.style, w, sz);
   return (
     <group ref={ref} position={[hx * S, opening.pos[2] * S, -hy * S]}>
-      <LocalBox
-        part={leaf}
-        color="#6fbf6f"
-        hovered={hovered}
+      <group
         onClick={(e) => {
           e.stopPropagation();
           setOpen((o) => !o);
@@ -153,7 +189,21 @@ function RoomDoor({ opening, hovered, onPointerOver, onPointerOut }) {
           document.body.style.cursor = 'auto';
           onPointerOut?.(e);
         }}
-      />
+      >
+        {leafParts.map((p, i) => (
+          <LocalBox
+            key={i}
+            part={
+              horiz
+                ? { pos: [away + p.u, -p.t / 2, p.z], size: [p.du, p.t, p.dz] }
+                : { pos: [-p.t / 2, away + p.u, p.z], size: [p.t, p.du, p.dz] }
+            }
+            color={p.color}
+            opacity={p.opacity ?? 1}
+            hovered={hovered}
+          />
+        ))}
+      </group>
     </group>
   );
 }
@@ -252,7 +302,6 @@ export default function Viewer({ apartment, report, showClearances }) {
 
   return (
     <Canvas
-      shadows
       camera={{ position: [7.5, 11, 14], fov: 45 }}
       style={{ background: '#16181c' }}
     >
@@ -261,12 +310,6 @@ export default function Viewer({ apartment, report, showClearances }) {
       <directionalLight
         position={[10, 14, 2]}
         intensity={1.4}
-        castShadow
-        shadow-mapSize={[2048, 2048]}
-        shadow-camera-left={-12}
-        shadow-camera-right={12}
-        shadow-camera-top={12}
-        shadow-camera-bottom={-12}
       />
 
       {apartment.floor && (

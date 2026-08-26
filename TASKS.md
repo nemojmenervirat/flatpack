@@ -40,6 +40,10 @@ _(empty)_
 
 ## Done
 
+- 2026-08-26 — Door styles: openings carry a `"style"` field (`entrance` brown solid,
+  `balcony` glass with white border, `inner` plain white, `living` white with glass
+  middle); Viewer composes each leaf from parts (`doorLeafParts`). Unstyled doors
+  default to `inner`.
 - 2026-08-26 — New piece `wardrobe-hall` (1700 × 600 × 2600 full height): graphite
   carcass, sage two-tier doors (3 + 3), hanging bay + shelf column. Placed in the hall
   against `north-hall`; replaces the temporary second placement of the bedroom wardrobe.
