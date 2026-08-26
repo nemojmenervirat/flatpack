@@ -1,0 +1,63 @@
+{
+  "id": "wardrobe-desk-room5",
+  "name": "Wardrobe + desk L (room 5)",
+  "buildable": true,
+  "color": "#c9a36b",
+  "parts": [
+    { "name": "side", "pos": [0, 1700, 0], "size": [18, 600, 2600] },
+    { "name": "side", "pos": [2732, 1700, 0], "size": [18, 600, 2600] },
+    { "name": "bottom", "pos": [18, 1700, 0], "size": [2714, 600, 18] },
+    { "name": "top", "pos": [18, 1700, 2582], "size": [2714, 600, 18] },
+    { "name": "back HDF", "pos": [18, 2297, 18], "size": [2714, 3, 2564], "color": "#b9a98c" },
+    { "name": "partition", "pos": [600, 1700, 18], "size": [18, 597, 2564] },
+    { "name": "partition", "pos": [1666, 1700, 18], "size": [18, 597, 2564] },
+
+    { "name": "open shelf", "pos": [18, 1700, 360], "size": [582, 597, 18] },
+    { "name": "open shelf", "pos": [18, 1700, 732], "size": [582, 597, 18] },
+    { "name": "open shelf", "pos": [18, 1700, 1100], "size": [582, 597, 18] },
+    { "name": "open shelf", "pos": [18, 1700, 1450], "size": [582, 597, 18] },
+    { "name": "open shelf", "pos": [18, 1700, 1800], "size": [582, 597, 18] },
+    { "name": "open shelf", "pos": [18, 1700, 2150], "size": [582, 597, 18] },
+
+    { "name": "shelf hanging bay", "pos": [618, 1700, 1900], "size": [1048, 597, 18] },
+    { "name": "shelf column", "pos": [1684, 1700, 800], "size": [1048, 597, 18] },
+    { "name": "shelf column", "pos": [1684, 1700, 1200], "size": [1048, 597, 18] },
+    { "name": "shelf column", "pos": [1684, 1700, 1600], "size": [1048, 597, 18] },
+    { "name": "shelf column", "pos": [1684, 1700, 2000], "size": [1048, 597, 18] },
+
+    { "name": "door lower", "pos": [621, 1682, 3], "size": [529, 18, 1894], "color": "#e8e4da" },
+    { "name": "door lower", "pos": [1154, 1682, 3], "size": [528, 18, 1894], "color": "#e8e4da" },
+    { "name": "door lower", "pos": [1686, 1682, 741], "size": [528, 18, 1156], "color": "#e8e4da" },
+    { "name": "door lower", "pos": [2218, 1682, 741], "size": [529, 18, 1156], "color": "#e8e4da" },
+    { "name": "door upper", "pos": [621, 1682, 1903], "size": [529, 18, 694], "color": "#e8e4da" },
+    { "name": "door upper", "pos": [1154, 1682, 1903], "size": [528, 18, 694], "color": "#e8e4da" },
+    { "name": "door upper", "pos": [1686, 1682, 1903], "size": [528, 18, 694], "color": "#e8e4da" },
+    { "name": "door upper", "pos": [2218, 1682, 1903], "size": [529, 18, 694], "color": "#e8e4da" },
+
+    { "name": "drawer front", "pos": [1686, 1682, 3], "size": [1061, 18, 236], "color": "#e8e4da" },
+    { "name": "drawer front", "pos": [1686, 1682, 242], "size": [1061, 18, 236], "color": "#e8e4da" },
+    { "name": "drawer front", "pos": [1686, 1682, 481], "size": [1061, 18, 236], "color": "#e8e4da" },
+
+    { "name": "drawer bottom", "pos": [1697, 1710, 18], "size": [1022, 480, 6], "color": "#d9bf94" },
+    { "name": "drawer box side", "pos": [1697, 1710, 24], "size": [18, 480, 196], "color": "#d9bf94" },
+    { "name": "drawer box side", "pos": [2701, 1710, 24], "size": [18, 480, 196], "color": "#d9bf94" },
+    { "name": "drawer box front", "pos": [1715, 1710, 24], "size": [986, 18, 196], "color": "#d9bf94" },
+    { "name": "drawer box back", "pos": [1715, 2172, 24], "size": [986, 18, 196], "color": "#d9bf94" },
+
+    { "name": "drawer bottom", "pos": [1697, 1710, 251], "size": [1022, 480, 6], "color": "#d9bf94" },
+    { "name": "drawer box side", "pos": [1697, 1710, 257], "size": [18, 480, 196], "color": "#d9bf94" },
+    { "name": "drawer box side", "pos": [2701, 1710, 257], "size": [18, 480, 196], "color": "#d9bf94" },
+    { "name": "drawer box front", "pos": [1715, 1710, 257], "size": [986, 18, 196], "color": "#d9bf94" },
+    { "name": "drawer box back", "pos": [1715, 2172, 257], "size": [986, 18, 196], "color": "#d9bf94" },
+
+    { "name": "drawer bottom", "pos": [1697, 1710, 490], "size": [1022, 480, 6], "color": "#d9bf94" },
+    { "name": "drawer box side", "pos": [1697, 1710, 496], "size": [18, 480, 196], "color": "#d9bf94" },
+    { "name": "drawer box side", "pos": [2701, 1710, 496], "size": [18, 480, 196], "color": "#d9bf94" },
+    { "name": "drawer box front", "pos": [1715, 1710, 496], "size": [986, 18, 196], "color": "#d9bf94" },
+    { "name": "drawer box back", "pos": [1715, 2172, 496], "size": [986, 18, 196], "color": "#d9bf94" },
+
+    { "name": "desk top", "pos": [0, 0, 722], "size": [600, 1700, 28], "color": "#b08d5f" },
+    { "name": "desk end panel", "pos": [0, 0, 0], "size": [600, 18, 722] },
+    { "name": "desk apron", "pos": [0, 18, 522], "size": [18, 1682, 200] }
+  ]
+}

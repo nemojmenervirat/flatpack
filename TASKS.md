@@ -40,6 +40,22 @@ _(empty)_
 
 ## Done
 
+- 2026-08-26 — New piece `wardrobe-desk-room5`: L-shaped wardrobe + work desk in one
+  connected unit in room 5. Wardrobe 2750 × 600 × 2600 (full ceiling height) along the
+  west wall, running wall-to-wall from the south (window) wall up to the bed foot:
+  open shelf bay at the corner next to the desk (6 shelves — one flush with the desk
+  top at 750, one below, four above), then a hanging bay and a shelf column behind
+  two-tier doors (4 upper + 4 lower, split at 1900 like wardrobe-hall). The shelf
+  column bay has a 3-drawer block at the bottom (external fronts to 717, boxes on
+  slides, lower doors over that bay start at 741). Desk 1700 × 600 × 750 along the
+  south wall under the window (28 mm top butted to the wardrobe front, end panel +
+  back apron); it ends at x 8299 so the loggia-7 balcony door (hinge at the nook,
+  801 leaf) swings fully clear. Placed rot 90 at [8299, 250]; no external clearance —
+  the L-notch
+  (knee/door space) is inside the piece bbox and self-reserves. Fit report clean.
+- 2026-08-26 — Skill `.claude/skills/new-piece`: step-by-step recipe for authoring new
+  pieces (rotation cheat sheet, door-animation constraint, clearance semantics,
+  construction rules, verify command).
 - 2026-08-26 — Door styles: openings carry a `"style"` field (`entrance` brown solid,
   `balcony` glass with white border, `inner` plain white, `living` white with glass
   middle); Viewer composes each leaf from parts (`doorLeafParts`). Unstyled doors

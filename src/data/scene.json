@@ -11,6 +11,16 @@
       "rot": 0
     },
     {
+      "piece": "wardrobe-desk-room5",
+      "label": "Wardrobe + desk L - room 5",
+      "pos": [
+        8299,
+        250,
+        0
+      ],
+      "rot": 90
+    },
+    {
       "piece": "bed-90",
       "label": "Bed 90 - room 5",
       "pos": [

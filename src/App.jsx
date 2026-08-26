@@ -10,11 +10,13 @@ import bed from './data/bed.json';
 import bed90 from './data/bed-90.json';
 import bed180 from './data/bed-180.json';
 import wardrobeMaster1 from './data/wardrobe-master-1.json';
+import wardrobeDeskRoom5 from './data/wardrobe-desk-room5.json';
 
 const piecesById = {
   [wardrobe.id]: wardrobe,
   [wardrobeHall.id]: wardrobeHall,
   [wardrobeMaster1.id]: wardrobeMaster1,
+  [wardrobeDeskRoom5.id]: wardrobeDeskRoom5,
   [bed.id]: bed,
   [bed90.id]: bed90,
   [bed180.id]: bed180,
