@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { Canvas, useThree } from '@react-three/fiber';
+import { useEffect, useRef, useState } from 'react';
+import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, Html } from '@react-three/drei';
-import { Vector3 } from 'three';
-import { aabbOf, placeBox } from './geometry.js';
+import { Vector3, MathUtils } from 'three';
+import { aabbOf, pieceLocalBBox } from './geometry.js';
 
 // Data space is mm, [x, y, z] with z up.
 // Three.js is y-up, meters. Mapping: three.x = x, three.y = z, three.z = -y.
@@ -56,24 +56,142 @@ function Box({ box, color = '#c9a36b', opacity = 1, hovered = false, ...handlers
   );
 }
 
+// A part box in piece-local coordinates (rendered inside the placement group).
+function LocalBox({ part, color, hovered, ...handlers }) {
+  const size = [part.size[0] * S, part.size[2] * S, part.size[1] * S];
+  const pos = [
+    (part.pos[0] + part.size[0] / 2) * S,
+    (part.pos[2] + part.size[2] / 2) * S,
+    -(part.pos[1] + part.size[1] / 2) * S,
+  ];
+  return (
+    <mesh position={pos} castShadow receiveShadow {...handlers}>
+      <boxGeometry args={size} />
+      <meshStandardMaterial color={color} emissive={hovered ? '#4a4638' : '#000000'} />
+    </mesh>
+  );
+}
+
+// A clickable door: pivots on a vertical hinge at its outer edge (the edge
+// farther from the piece's center) and swings open/closed with damping.
+function Door({ part, color, pieceCenterX, hovered }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef();
+  const hingeLeft = part.pos[0] + part.size[0] / 2 < pieceCenterX;
+  const hx = hingeLeft ? part.pos[0] : part.pos[0] + part.size[0];
+  const hy = part.pos[1] + part.size[1]; // door's back plane = carcass front
+  const target = open ? (hingeLeft ? -1 : 1) * MathUtils.degToRad(90) : 0;
+
+  useFrame((_, dt) => {
+    if (ref.current) {
+      ref.current.rotation.y = MathUtils.damp(ref.current.rotation.y, target, 6, dt);
+    }
+  });
+
+  const shifted = { ...part, pos: [part.pos[0] - hx, part.pos[1] - hy, part.pos[2]] };
+  return (
+    <group ref={ref} position={[hx * S, 0, -hy * S]}>
+      <LocalBox
+        part={shifted}
+        color={color}
+        hovered={hovered}
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen((o) => !o);
+        }}
+        onPointerOver={(e) => (document.body.style.cursor = 'pointer')}
+        onPointerOut={() => (document.body.style.cursor = 'auto')}
+      />
+    </group>
+  );
+}
+
+// A room door: the opening renders as a 40mm leaf that swings on its hinge.
+// opening.hinge ('min'/'max') picks the pivot end, opening.swing (+1 CCW / -1 CW
+// seen from above) picks the direction, both authored in apartment.json.
+function RoomDoor({ opening, hovered, onPointerOver, onPointerOut }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef();
+  const [sx, sy, sz] = opening.size;
+  const horiz = sx >= sy;
+  const w = horiz ? sx : sy;
+  const hinge = opening.hinge || 'min';
+  const swing = opening.swing || -1;
+  const hx = horiz
+    ? (hinge === 'max' ? opening.pos[0] + sx : opening.pos[0])
+    : opening.pos[0] + sx / 2;
+  const hy = horiz
+    ? opening.pos[1] + sy / 2
+    : (hinge === 'max' ? opening.pos[1] + sy : opening.pos[1]);
+  const away = hinge === 'max' ? -w : 0;
+  const leaf = horiz
+    ? { pos: [away, -20, 0], size: [w, 40, sz] }
+    : { pos: [-20, away, 0], size: [40, w, sz] };
+  const target = open ? swing * MathUtils.degToRad(90) : 0;
+
+  useFrame((_, dt) => {
+    if (ref.current) {
+      ref.current.rotation.y = MathUtils.damp(ref.current.rotation.y, target, 6, dt);
+    }
+  });
+
+  return (
+    <group ref={ref} position={[hx * S, opening.pos[2] * S, -hy * S]}>
+      <LocalBox
+        part={leaf}
+        color="#6fbf6f"
+        hovered={hovered}
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen((o) => !o);
+        }}
+        onPointerOver={(e) => {
+          document.body.style.cursor = 'pointer';
+          onPointerOver?.(e);
+        }}
+        onPointerOut={(e) => {
+          document.body.style.cursor = 'auto';
+          onPointerOut?.(e);
+        }}
+      />
+    </group>
+  );
+}
+
 function Placement({ entry, collided, showClearances, hovered, onPointerOver, onPointerOut }) {
   const { piece, placement } = entry;
-  const boxes = piece.parts?.length
-    ? piece.parts.map((p) => ({
-        box: placeBox(aabbOf(p.pos, p.size), placement),
-        color: p.color || piece.color || '#c9a36b',
-      }))
-    : [{ box: entry.bbox, color: piece.color || '#8a93a6' }];
+  const parts = piece.parts?.length
+    ? piece.parts
+    : [{ name: piece.name, pos: [0, 0, 0], size: piece.size, color: piece.color || '#8a93a6' }];
+  const bb = pieceLocalBBox(piece);
+  const centerX = (bb.min[0] + bb.max[0]) / 2;
+  const rot = (((placement.rot || 0) % 360) + 360) % 360;
+  const isDoor = (p) => p.name.startsWith('door');
 
   return (
     <group>
       {/* clearances stay outside the hover group so empty air doesn't trigger the label */}
-      <group onPointerOver={onPointerOver} onPointerOut={onPointerOut}>
-        {boxes.map((b, i) => (
-          <Box key={i} box={b.box} color={b.color} hovered={hovered} />
-        ))}
-        {collided && <Box box={entry.bbox} color="#ff3b30" opacity={0.35} />}
+      <group
+        position={[placement.pos[0] * S, placement.pos[2] * S, -placement.pos[1] * S]}
+        rotation={[0, MathUtils.degToRad(rot), 0]}
+        onPointerOver={onPointerOver}
+        onPointerOut={onPointerOut}
+      >
+        {parts.map((p, i) =>
+          isDoor(p) ? (
+            <Door
+              key={i}
+              part={p}
+              color={p.color || piece.color || '#c9a36b'}
+              pieceCenterX={centerX}
+              hovered={hovered}
+            />
+          ) : (
+            <LocalBox key={i} part={p} color={p.color || piece.color || '#c9a36b'} hovered={hovered} />
+          )
+        )}
       </group>
+      {collided && <Box box={entry.bbox} color="#ff3b30" opacity={0.35} />}
       {showClearances &&
         entry.clearances.map((c, i) => (
           <Box key={`c${i}`} box={c.box} color="#ffcc00" opacity={0.15} />
@@ -183,6 +301,17 @@ export default function Viewer({ apartment, report, showClearances }) {
           text: cm(Math.max(o.size[0], o.size[1])),
           className: o.type,
         };
+        if (o.type === 'door') {
+          return (
+            <RoomDoor
+              key={o.name}
+              opening={o}
+              hovered={hover?.key === info.key}
+              onPointerOver={over(info)}
+              onPointerOut={out(info.key)}
+            />
+          );
+        }
         return (
           <Box
             key={o.name}

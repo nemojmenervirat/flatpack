@@ -14,6 +14,10 @@ _(empty)_
   and emits a piece JSON — wardrobe, bookshelf, kitchen carcass. Removes hand-writing parts.
 - Door swing arcs: model door swings (room doors and wardrobe doors) as clearance
   shapes so the fit report catches "door hits the bed".
+  (Viewer half done 2026-08-26: furniture parts named `door*` open/close on click with
+  a damped swing animation, hinge auto-picked on the outer edge. Room doors too: door
+  openings render as 40mm leaves swinging per `hinge`/`swing` fields in apartment.json.
+  Fit-report arcs still open.)
 - Top-down floor-plan camera + front elevation views (canned camera buttons).
 
 ## Later

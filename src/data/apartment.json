@@ -964,7 +964,9 @@
         998,
         199,
         2100
-      ]
+      ],
+      "hinge": "min",
+      "swing": -1
     },
     {
       "name": "door-living-V2",
@@ -978,7 +980,9 @@
         201,
         900,
         2100
-      ]
+      ],
+      "hinge": "min",
+      "swing": 1
     },
     {
       "name": "door-room5-V2",
@@ -992,7 +996,9 @@
         897,
         101,
         2100
-      ]
+      ],
+      "hinge": "max",
+      "swing": 1
     },
     {
       "name": "door-room6-V3",
@@ -1006,7 +1012,9 @@
         848,
         101,
         2100
-      ]
+      ],
+      "hinge": "min",
+      "swing": -1
     },
     {
       "name": "door-master-V3",
@@ -1020,7 +1028,9 @@
         101,
         950,
         2100
-      ]
+      ],
+      "hinge": "max",
+      "swing": 1
     },
     {
       "name": "door-bath-V3",
@@ -1034,7 +1044,9 @@
         101,
         800,
         2100
-      ]
+      ],
+      "hinge": "min",
+      "swing": -1
     },
     {
       "name": "door-wc-V4",
@@ -1048,7 +1060,9 @@
         800,
         100,
         2100
-      ]
+      ],
+      "hinge": "max",
+      "swing": -1
     },
     {
       "name": "door-loggia4",
@@ -1062,7 +1076,9 @@
         199,
         801,
         2400
-      ]
+      ],
+      "hinge": "min",
+      "swing": 1
     },
     {
       "name": "door-loggia7",
@@ -1076,7 +1092,9 @@
         201,
         801,
         2400
-      ]
+      ],
+      "hinge": "min",
+      "swing": 1
     },
     {
       "name": "window-living",
