@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, Html } from '@react-three/drei';
-import { Vector3, MathUtils } from 'three';
+import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace } from 'three';
 import { aabbOf, pieceLocalBBox } from './geometry.js';
 
 // Data space is mm, [x, y, z] with z up.
@@ -13,6 +13,137 @@ const cm = (mm) => {
   const v = mm / 10;
   return Number.isInteger(v) ? String(v) : v.toFixed(1);
 };
+
+// Procedural oak plank texture: the canvas covers WOOD_TILE_MM × WOOD_TILE_MM of
+// floor, planks 200mm wide with staggered joints, per-plank tone jitter and grain.
+// Deterministic PRNG so hot reloads don't reshuffle the floor.
+const WOOD_TILE_MM = 2400;
+function makeWoodTexture() {
+  const px = 2048;
+  const c = document.createElement('canvas');
+  c.width = c.height = px;
+  const ctx = c.getContext('2d');
+  let seed = 42;
+  const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+
+  const rows = 10; // 10 planks of 240mm across the 2400mm tile
+  const rowH = px / rows;
+  for (let row = 0; row < rows; row++) {
+    const y = row * rowH;
+    let x = -rnd() * px * 0.6;
+    while (x < px) {
+      const len = px * (0.38 + rnd() * 0.45); // 900–2000mm boards
+      // warm natural oak with tonal drift ALONG the board, not flat rectangles
+      const t0 = 0.92 + rnd() * 0.12;
+      const t1 = 0.92 + rnd() * 0.12;
+      const tm = (t0 + t1) / 2 + (rnd() - 0.5) * 0.08;
+      const oak = (t) => `rgb(${(216 * t) | 0},${(174 * t) | 0},${(126 * t) | 0})`;
+      const grad = ctx.createLinearGradient(x, 0, x + len, 0);
+      grad.addColorStop(0, oak(t0));
+      grad.addColorStop(0.5, oak(tm));
+      grad.addColorStop(1, oak(t1));
+      ctx.fillStyle = grad;
+      ctx.fillRect(x, y, len, rowH);
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(x, y, len, rowH);
+      ctx.clip();
+
+      // pronounced straight grain along the board
+      const streaks = 14 + ((rnd() * 6) | 0);
+      for (let k = 0; k < streaks; k++) {
+        const gy = y + ((k + 0.5) / streaks) * rowH + (rnd() - 0.5) * 8;
+        const heavy = rnd() > 0.75;
+        ctx.strokeStyle = `rgba(146,100,58,${heavy ? 0.16 + rnd() * 0.1 : 0.07 + rnd() * 0.07})`;
+        ctx.lineWidth = heavy ? 1.6 : 1;
+        ctx.beginPath();
+        ctx.moveTo(x, gy);
+        ctx.bezierCurveTo(x + len * 0.33, gy + (rnd() - 0.5) * 9, x + len * 0.66, gy + (rnd() - 0.5) * 9, x + len, gy + (rnd() - 0.5) * 5);
+        ctx.stroke();
+      }
+
+      // cathedral figures: long nested arcs with real contrast
+      const figs = 1 + (rnd() > 0.45 ? 1 : 0);
+      for (let f = 0; f < figs; f++) {
+        const cx = x + len * (0.25 + rnd() * 0.5);
+        const cy = y + rowH * (0.3 + rnd() * 0.4);
+        const rings = 5 + ((rnd() * 4) | 0);
+        for (let i = 1; i <= rings; i++) {
+          ctx.strokeStyle = `rgba(148,100,56,${0.14 + rnd() * 0.12})`;
+          ctx.lineWidth = 1.2 + rnd() * 1.2;
+          ctx.beginPath();
+          ctx.ellipse(cx, cy, i * (len * 0.09), i * (rowH * 0.085), 0, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      }
+
+      // occasional knot with a hairline crack
+      if (rnd() > 0.65) {
+        const kx = x + len * (0.15 + rnd() * 0.7);
+        const ky = y + rowH * (0.25 + rnd() * 0.5);
+        ctx.fillStyle = 'rgba(96,66,38,0.9)';
+        ctx.beginPath();
+        ctx.ellipse(kx, ky, 5 + rnd() * 5, 4 + rnd() * 3, rnd(), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(120,82,46,0.6)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.ellipse(kx, ky, 12 + rnd() * 6, 8 + rnd() * 4, rnd(), 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.strokeStyle = 'rgba(92,62,36,0.6)';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(kx - 40 - rnd() * 80, ky + (rnd() - 0.5) * 12);
+        ctx.lineTo(kx, ky);
+        ctx.lineTo(kx + 40 + rnd() * 80, ky + (rnd() - 0.5) * 12);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // butt joint (subtle)
+      ctx.fillStyle = 'rgba(140,108,74,0.5)';
+      ctx.fillRect(x + len - 1, y, 2, rowH);
+      x += len;
+    }
+    // board edge seam
+    ctx.fillStyle = 'rgba(140,108,74,0.45)';
+    ctx.fillRect(0, y, px, 1.5);
+  }
+
+  const tex = new CanvasTexture(c);
+  tex.wrapS = tex.wrapT = RepeatWrapping;
+  tex.colorSpace = SRGBColorSpace;
+  tex.anisotropy = 8;
+  return tex;
+}
+
+// One floor zone; zones with texture:"wood" get the plank map, scaled to mm.
+function FloorZone({ f, wood }) {
+  const box = aabbOf(f.pos, f.size);
+  const tex = useMemo(() => {
+    if (f.texture !== 'wood' || !wood) return null;
+    const t = wood.clone();
+    t.repeat.set(f.size[0] / WOOD_TILE_MM, f.size[1] / WOOD_TILE_MM);
+    // world-aligned offset so the plank pattern runs continuously across zones
+    t.offset.set(f.pos[0] / WOOD_TILE_MM, f.pos[1] / WOOD_TILE_MM);
+    t.needsUpdate = true;
+    return t;
+  }, [f, wood]);
+  if (!tex) return <Box box={box} color={f.color || '#57534c'} />;
+  const size = [f.size[0] * S, f.size[2] * S, f.size[1] * S];
+  const pos = [
+    (f.pos[0] + f.size[0] / 2) * S,
+    (f.pos[2] + f.size[2] / 2) * S,
+    -(f.pos[1] + f.size[1] / 2) * S,
+  ];
+  return (
+    <mesh position={pos}>
+      <boxGeometry args={size} />
+      <meshStandardMaterial map={tex} color="#ffffff" />
+    </mesh>
+  );
+}
 
 // Floating label at the top center of a data-space box.
 function DimLabel({ box, text, name, className = '' }) {
@@ -291,6 +422,7 @@ function ArrowKeyPan() {
 
 export default function Viewer({ apartment, report, showClearances }) {
   const openingColor = { door: '#7fd17f', window: '#7fb8ff' };
+  const woodTex = useMemo(() => makeWoodTexture(), []);
 
   // hover = { key, box, text, className } for the item under the pointer
   const [hover, setHover] = useState(null);
@@ -315,6 +447,9 @@ export default function Viewer({ apartment, report, showClearances }) {
       {apartment.floor && (
         <Box box={aabbOf(apartment.floor.pos, apartment.floor.size)} color="#57534c" />
       )}
+      {(apartment.floors || []).map((f) => (
+        <FloorZone key={f.name} f={f} wood={woodTex} />
+      ))}
       {apartment.walls.map((w) => {
         const box = aabbOf(w.pos, w.size);
         const info = {

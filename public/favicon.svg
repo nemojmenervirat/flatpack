@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- flatpack: a room with oak floor and an open door -->
+  <rect width="64" height="64" rx="13" fill="#16181c"/>
+  <rect x="16" y="16" width="32" height="32" fill="#c08a55"/>
+  <path d="M30 48 H16 V16 H48 V48 H44" fill="none" stroke="#e6e4df" stroke-width="5" stroke-linecap="square"/>
+  <path d="M44 48 A14 14 0 0 0 30 34" fill="none" stroke="#e6e4df" stroke-width="2" opacity="0.65"/>
+  <path d="M30 48 V34" fill="none" stroke="#e6e4df" stroke-width="4" stroke-linecap="round"/>
+</svg>
