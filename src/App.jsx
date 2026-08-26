@@ -7,8 +7,18 @@ import scene from './data/scene.json';
 import wardrobe from './data/wardrobe.json';
 import wardrobeHall from './data/wardrobe-hall.json';
 import bed from './data/bed.json';
+import bed90 from './data/bed-90.json';
+import bed180 from './data/bed-180.json';
+import wardrobeMaster1 from './data/wardrobe-master-1.json';
 
-const piecesById = { [wardrobe.id]: wardrobe, [wardrobeHall.id]: wardrobeHall, [bed.id]: bed };
+const piecesById = {
+  [wardrobe.id]: wardrobe,
+  [wardrobeHall.id]: wardrobeHall,
+  [wardrobeMaster1.id]: wardrobeMaster1,
+  [bed.id]: bed,
+  [bed90.id]: bed90,
+  [bed180.id]: bed180,
+};
 
 export default function App() {
   const [showClearances, setShowClearances] = useState(true);

@@ -2,28 +2,55 @@
   "apartment": "apartment",
   "placements": [
     {
-      "piece": "wardrobe",
-      "pos": [
-        6200,
-        4498,
-        0
-      ],
-      "rot": 0
-    },
-    {
-      "piece": "bed",
-      "pos": [
-        6550,
-        300,
-        0
-      ],
-      "rot": 0
-    },
-    {
       "piece": "wardrobe-hall",
       "pos": [
         6424,
         6649,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "bed-90",
+      "label": "Bed 90 - room 5",
+      "pos": [
+        5999,
+        3018,
+        0
+      ],
+      "rot": 0,
+      "clearance": {
+        "right": 500
+      }
+    },
+    {
+      "piece": "bed-90",
+      "label": "Bed 90 - room 6",
+      "pos": [
+        9907,
+        3678,
+        0
+      ],
+      "rot": 180
+    },
+    {
+      "piece": "bed-180",
+      "label": "Master bed",
+      "pos": [
+        12714,
+        5531,
+        0
+      ],
+      "rot": 270,
+      "clearance": {
+        "right": 500
+      }
+    },
+    {
+      "piece": "wardrobe-master-1",
+      "pos": [
+        12928,
+        6149,
         0
       ],
       "rot": 0

@@ -107,7 +107,10 @@ export function fitReport(scene, piecesById, apartment) {
       placement: pl,
       piece,
       bbox: placeBox(pieceLocalBBox(piece), pl),
-      clearances: clearanceLocalBoxes(piece).map((c) => ({
+      // a placement may override the piece's clearance (e.g. wall side differs)
+      clearances: clearanceLocalBoxes(
+        pl.clearance ? { ...piece, clearance: pl.clearance } : piece
+      ).map((c) => ({
         side: c.side,
         box: placeBox(c, pl),
       })),

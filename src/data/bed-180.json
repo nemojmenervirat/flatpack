@@ -1,0 +1,18 @@
+{
+  "id": "bed-180",
+  "name": "Bed 180x200 (frame 186x208)",
+  "buildable": false,
+  "color": "#a08663",
+  "clearance": { "left": 500, "right": 500 },
+  "parts": [
+    { "name": "frame", "pos": [0, 0, 100], "size": [1860, 2000, 200] },
+    { "name": "leg", "pos": [20, 20, 0], "size": [60, 60, 100] },
+    { "name": "leg", "pos": [1780, 20, 0], "size": [60, 60, 100] },
+    { "name": "leg", "pos": [20, 1920, 0], "size": [60, 60, 100] },
+    { "name": "leg", "pos": [1780, 1920, 0], "size": [60, 60, 100] },
+    { "name": "headboard", "pos": [0, 2000, 0], "size": [1860, 80, 900] },
+    { "name": "mattress", "pos": [30, 30, 300], "size": [1800, 1960, 180], "color": "#dcd7cd" },
+    { "name": "pillow", "pos": [120, 1620, 480], "size": [750, 340, 90], "color": "#eeebe3" },
+    { "name": "pillow", "pos": [990, 1620, 480], "size": [750, 340, 90], "color": "#eeebe3" }
+  ]
+}
