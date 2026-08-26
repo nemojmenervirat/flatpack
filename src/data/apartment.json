@@ -1,0 +1,17 @@
+{
+  "name": "Sample room",
+  "height": 2600,
+  "floor": { "pos": [0, 0, -50], "size": [4000, 3500, 50] },
+  "walls": [
+    { "name": "north", "pos": [-100, 3500, 0], "size": [4200, 100, 2600] },
+    { "name": "south-left", "pos": [-100, -100, 0], "size": [2600, 100, 2600] },
+    { "name": "south-right", "pos": [3400, -100, 0], "size": [700, 100, 2600] },
+    { "name": "south-lintel", "pos": [2500, -100, 2100], "size": [900, 100, 500] },
+    { "name": "west", "pos": [-100, 0, 0], "size": [100, 3500, 2600] },
+    { "name": "east", "pos": [4000, 0, 0], "size": [100, 3500, 2600] }
+  ],
+  "openings": [
+    { "name": "door", "type": "door", "pos": [2500, -100, 0], "size": [900, 100, 2100] },
+    { "name": "window", "type": "window", "pos": [3995, 1000, 900], "size": [110, 1200, 1200] }
+  ]
+}

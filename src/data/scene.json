@@ -1,0 +1,7 @@
+{
+  "apartment": "apartment",
+  "placements": [
+    { "piece": "wardrobe", "pos": [200, 2900, 0], "rot": 0 },
+    { "piece": "bed", "pos": [600, 400, 0], "rot": 0 }
+  ]
+}

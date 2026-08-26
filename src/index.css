@@ -1,0 +1,129 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: #16181c;
+  color: #e6e4df;
+  font-size: 14px;
+}
+
+.app {
+  display: flex;
+  height: 100%;
+}
+
+.canvas-pane {
+  flex: 1;
+  min-width: 0;
+}
+
+.side-pane {
+  width: 340px;
+  padding: 16px;
+  overflow-y: auto;
+  border-left: 1px solid #2c2f36;
+  background: #1c1f24;
+}
+
+h1 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+}
+
+h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #9a958c;
+  margin-bottom: 8px;
+}
+
+section {
+  margin-bottom: 24px;
+}
+
+.ok {
+  color: #7fd17f;
+}
+
+.issues {
+  list-style: none;
+}
+
+.issues li {
+  padding: 4px 0;
+}
+
+.issues .collision {
+  color: #ff6b60;
+}
+
+.issues .warning {
+  color: #ffcc00;
+}
+
+.toggle {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: 8px;
+  color: #9a958c;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 8px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 4px 6px;
+  border-bottom: 1px solid #2c2f36;
+}
+
+th {
+  color: #9a958c;
+  font-weight: 500;
+}
+
+td:nth-child(2),
+td:nth-child(3),
+td:nth-child(4) {
+  font-variant-numeric: tabular-nums;
+}
+
+button {
+  background: #2c2f36;
+  color: #e6e4df;
+  border: 1px solid #3a3e46;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+button:hover {
+  background: #3a3e46;
+}
+
+.pieces {
+  list-style: none;
+}
+
+.pieces li {
+  padding: 3px 0;
+  color: #c9c5bd;
+}
