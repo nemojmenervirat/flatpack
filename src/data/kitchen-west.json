@@ -1,0 +1,26 @@
+{
+  "id": "kitchen-west",
+  "name": "Kitchen base — west (oven + stove)",
+  "buildable": true,
+  "color": "#3f4449",
+  "clearance": { "front": 600 },
+  "parts": [
+    { "name": "side", "pos": [0, 0, 150], "size": [18, 560, 720] },
+    { "name": "side", "pos": [1482, 0, 150], "size": [18, 560, 720] },
+    { "name": "partition", "pos": [600, 0, 150], "size": [18, 557, 720] },
+    { "name": "bottom oven bay", "pos": [18, 0, 150], "size": [582, 557, 18] },
+    { "name": "bottom cabinet bay", "pos": [618, 0, 150], "size": [864, 557, 18] },
+    { "name": "plinth", "pos": [18, 50, 0], "size": [1464, 18, 150] },
+    { "name": "back HDF", "pos": [18, 557, 168], "size": [1464, 3, 702], "color": "#31353a" },
+    { "name": "shelf", "pos": [618, 0, 510], "size": [864, 557, 18] },
+    { "name": "worktop", "pos": [0, -18, 870], "size": [1500, 600, 28], "color": "#b08d5f" },
+
+    { "name": "filler front", "pos": [3, -18, 767], "size": [596, 18, 100], "color": "#e8e4da" },
+    { "name": "door work", "pos": [603, -18, 153], "size": [445, 18, 714], "color": "#e8e4da" },
+    { "name": "door work", "pos": [1052, -18, 153], "size": [445, 18, 714], "color": "#e8e4da" },
+
+    { "name": "oven", "pos": [22, 0, 168], "size": [574, 530, 590], "color": "#2e3338", "appliance": true },
+    { "name": "oven front", "pos": [3, -18, 153], "size": [596, 18, 610], "color": "#24282c", "appliance": true },
+    { "name": "cooktop", "pos": [30, 45, 898], "size": [560, 490, 8], "color": "#1c1f22", "appliance": true }
+  ]
+}

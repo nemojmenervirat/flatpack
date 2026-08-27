@@ -1,0 +1,12 @@
+{
+  "id": "fridge",
+  "name": "Refrigerator",
+  "buildable": false,
+  "color": "#cfd4d8",
+  "clearance": { "front": 600 },
+  "parts": [
+    { "name": "body", "pos": [0, 0, 0], "size": [600, 630, 1850] },
+    { "name": "fridge door", "pos": [8, -25, 10], "size": [584, 25, 1830], "color": "#c6cbd0" },
+    { "name": "handle", "pos": [25, -45, 900], "size": [25, 20, 400], "color": "#9aa0a6" }
+  ]
+}

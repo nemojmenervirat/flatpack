@@ -27,6 +27,7 @@ function banding(part) {
 export function partRows(piece) {
   const rows = new Map();
   (piece.parts || []).forEach((p, i) => {
+    if (p.appliance) return; // bought appliances — not cut, not banded
     const [L, W, T] = sortedDims(p.size);
     const key = `${p.name}|${L}x${W}x${T}`;
     const row =

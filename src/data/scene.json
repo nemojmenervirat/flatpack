@@ -194,6 +194,46 @@
         0
       ],
       "rot": 0
+    },
+    {
+      "piece": "kitchen-west",
+      "label": "Kitchen base west - oven + stove",
+      "pos": [
+        780,
+        5149,
+        0
+      ],
+      "rot": 90
+    },
+    {
+      "piece": "kitchen-north",
+      "label": "Kitchen base north - sink + dishwasher",
+      "pos": [
+        494,
+        6667,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "fridge",
+      "label": "Fridge 1",
+      "pos": [
+        4534,
+        6619,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "fridge",
+      "label": "Fridge 2",
+      "pos": [
+        5158,
+        6619,
+        0
+      ],
+      "rot": 0
     }
   ]
 }

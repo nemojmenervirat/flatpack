@@ -40,6 +40,28 @@ _(empty)_
 
 ## Done
 
+- 2026-08-27 — Kitchen base (L-shape) + fridges: the L runs from `kitchen-south-stub`
+  along the west wall, turns at the NW corner and follows `north-kitchen` to the
+  fridge zone in front of `shaft-hall-1`. Authored as TWO pieces because the fit
+  checker uses rectangular bboxes — one L-piece would falsely collide with
+  `west-nw-corner` and reserve the whole kitchen floor.
+  `kitchen-west` (1500 × 600, rot 90 at [780, 5149], fronts east): oven housing 600
+  with cooktop on the worktop + 900 two-door cabinet; front clearance 600.
+  `kitchen-north` (4000 × 600, rot 0 at [494, 6667], fronts south): blind corner
+  panel 600 (its front is behind the west leg's worktop — hence no clearance on this
+  piece, the west counter would falsely trip it), sink cabinet 800 (2 doors, basin +
+  tap), 600 dishwasher opening (no plinth/bottom there), two 1000 bays with 2 pot
+  drawers each (boxes on slides, 995 × 355 fronts).
+  Counters: plinth 150 + carcass 720 + worktop 28 = 898 high; 18 fronts + 560 carcass
+  + 22 service gap = 600 deep, worktop flush to wall. New bought piece `fridge`
+  (600 × 630 × 1850 + door/handle) placed twice at x 4534 and 5158 — freestanding,
+  not integrated, 40 mm ventilation gaps to the counter end and to the shaft.
+  Parts can now carry `"appliance": true` (oven, cooktop, sink, tap, dishwasher):
+  rendered in 3D but skipped by cutlist.js and hardware.js banding/parts table.
+  Small dead corner void (x 494–798 behind the counters' meeting point) is closed
+  by the corner panel. Known quirk: the derived hinge rule puts both sink-door
+  hinges on the same side (rule uses whole-piece center). Fit report clean.
+
 - 2026-08-27 — New piece `desk-master`: work desk + open shelving L in the master's
   SW corner. Shelf unit 1200 × 400 × 2000 against `room6-master-s` (two 573 columns,
   4 shelf levels, one flush with the desk top at 750); desk 1379 × 600 × 750 under

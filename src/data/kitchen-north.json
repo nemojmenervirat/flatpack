@@ -1,0 +1,60 @@
+{
+  "id": "kitchen-north",
+  "name": "Kitchen base — north (sink + dishwasher)",
+  "buildable": true,
+  "color": "#3f4449",
+  "parts": [
+    { "name": "side", "pos": [0, 0, 150], "size": [18, 560, 720] },
+    { "name": "side", "pos": [3982, 0, 150], "size": [18, 560, 720] },
+    { "name": "partition", "pos": [600, 0, 150], "size": [18, 557, 720] },
+    { "name": "partition", "pos": [1382, 0, 150], "size": [18, 557, 720] },
+    { "name": "partition", "pos": [2000, 0, 150], "size": [18, 557, 720] },
+    { "name": "partition", "pos": [2991, 0, 150], "size": [18, 557, 720] },
+    { "name": "bottom corner bay", "pos": [18, 0, 150], "size": [582, 557, 18] },
+    { "name": "bottom sink bay", "pos": [618, 0, 150], "size": [764, 557, 18] },
+    { "name": "bottom drawer bay", "pos": [2018, 0, 150], "size": [973, 557, 18] },
+    { "name": "bottom drawer bay", "pos": [3009, 0, 150], "size": [973, 557, 18] },
+    { "name": "plinth", "pos": [18, 50, 0], "size": [1382, 18, 150] },
+    { "name": "plinth right", "pos": [2000, 50, 0], "size": [1982, 18, 150] },
+    { "name": "back HDF", "pos": [18, 557, 168], "size": [1982, 3, 702], "color": "#31353a" },
+    { "name": "back HDF", "pos": [2000, 557, 168], "size": [1982, 3, 702], "color": "#31353a" },
+    { "name": "shelf corner", "pos": [18, 0, 510], "size": [582, 557, 18] },
+    { "name": "worktop", "pos": [0, -18, 870], "size": [4000, 600, 28], "color": "#b08d5f" },
+
+    { "name": "corner panel", "pos": [3, -18, 153], "size": [594, 18, 714], "color": "#e8e4da" },
+    { "name": "door sink", "pos": [601, -18, 153], "size": [396, 18, 714], "color": "#e8e4da" },
+    { "name": "door sink", "pos": [1001, -18, 153], "size": [396, 18, 714], "color": "#e8e4da" },
+    { "name": "drawer front", "pos": [2003, -18, 153], "size": [995, 18, 355], "color": "#e8e4da" },
+    { "name": "drawer front", "pos": [2003, -18, 512], "size": [995, 18, 355], "color": "#e8e4da" },
+    { "name": "drawer front", "pos": [3002, -18, 153], "size": [995, 18, 355], "color": "#e8e4da" },
+    { "name": "drawer front", "pos": [3002, -18, 512], "size": [995, 18, 355], "color": "#e8e4da" },
+
+    { "name": "drawer bottom", "pos": [2031, 10, 168], "size": [947, 480, 6], "color": "#d9bf94" },
+    { "name": "drawer box side", "pos": [2031, 10, 174], "size": [18, 480, 196], "color": "#d9bf94" },
+    { "name": "drawer box side", "pos": [2960, 10, 174], "size": [18, 480, 196], "color": "#d9bf94" },
+    { "name": "drawer box front", "pos": [2049, 10, 174], "size": [911, 18, 196], "color": "#d9bf94" },
+    { "name": "drawer box back", "pos": [2049, 472, 174], "size": [911, 18, 196], "color": "#d9bf94" },
+
+    { "name": "drawer bottom", "pos": [2031, 10, 527], "size": [947, 480, 6], "color": "#d9bf94" },
+    { "name": "drawer box side", "pos": [2031, 10, 533], "size": [18, 480, 196], "color": "#d9bf94" },
+    { "name": "drawer box side", "pos": [2960, 10, 533], "size": [18, 480, 196], "color": "#d9bf94" },
+    { "name": "drawer box front", "pos": [2049, 10, 533], "size": [911, 18, 196], "color": "#d9bf94" },
+    { "name": "drawer box back", "pos": [2049, 472, 533], "size": [911, 18, 196], "color": "#d9bf94" },
+
+    { "name": "drawer bottom", "pos": [3022, 10, 168], "size": [947, 480, 6], "color": "#d9bf94" },
+    { "name": "drawer box side", "pos": [3022, 10, 174], "size": [18, 480, 196], "color": "#d9bf94" },
+    { "name": "drawer box side", "pos": [3951, 10, 174], "size": [18, 480, 196], "color": "#d9bf94" },
+    { "name": "drawer box front", "pos": [3040, 10, 174], "size": [911, 18, 196], "color": "#d9bf94" },
+    { "name": "drawer box back", "pos": [3040, 472, 174], "size": [911, 18, 196], "color": "#d9bf94" },
+
+    { "name": "drawer bottom", "pos": [3022, 10, 527], "size": [947, 480, 6], "color": "#d9bf94" },
+    { "name": "drawer box side", "pos": [3022, 10, 533], "size": [18, 480, 196], "color": "#d9bf94" },
+    { "name": "drawer box side", "pos": [3951, 10, 533], "size": [18, 480, 196], "color": "#d9bf94" },
+    { "name": "drawer box front", "pos": [3040, 10, 533], "size": [911, 18, 196], "color": "#d9bf94" },
+    { "name": "drawer box back", "pos": [3040, 472, 533], "size": [911, 18, 196], "color": "#d9bf94" },
+
+    { "name": "sink basin", "pos": [750, 90, 898], "size": [500, 400, 8], "color": "#b9bec4", "appliance": true },
+    { "name": "tap", "pos": [985, 505, 898], "size": [30, 30, 260], "color": "#b9bec4", "appliance": true },
+    { "name": "dishwasher", "pos": [1402, -18, 0], "size": [596, 560, 850], "color": "#2e3338", "appliance": true }
+  ]
+}

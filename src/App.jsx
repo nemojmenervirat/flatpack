@@ -21,6 +21,9 @@ import bathtub from './data/bathtub.json';
 import washer from './data/washer.json';
 import dryer from './data/dryer.json';
 import waterHeater from './data/water-heater.json';
+import kitchenWest from './data/kitchen-west.json';
+import kitchenNorth from './data/kitchen-north.json';
+import fridge from './data/fridge.json';
 
 const piecesById = {
   [wardrobeHall.id]: wardrobeHall,
@@ -39,6 +42,9 @@ const piecesById = {
   [washer.id]: washer,
   [dryer.id]: dryer,
   [waterHeater.id]: waterHeater,
+  [kitchenWest.id]: kitchenWest,
+  [kitchenNorth.id]: kitchenNorth,
+  [fridge.id]: fridge,
 };
 
 // short codes for the rail buttons; unknown ids fall back to initials
@@ -59,6 +65,9 @@ const RAIL_CODES = {
   washer: 'WA',
   dryer: 'DY',
   'water-heater': 'WH2',
+  'kitchen-west': 'KW',
+  'kitchen-north': 'KN',
+  fridge: 'FR',
 };
 const railCode = (id) =>
   RAIL_CODES[id] ||
