@@ -20,7 +20,7 @@
     { "name": "door work", "pos": [1052, -18, 153], "size": [445, 18, 714], "color": "#e8e4da" },
 
     { "name": "oven", "pos": [22, 0, 168], "size": [574, 530, 590], "color": "#2e3338", "appliance": true },
-    { "name": "oven front", "pos": [3, -18, 153], "size": [596, 18, 610], "color": "#24282c", "appliance": true },
+    { "name": "flap oven", "pos": [3, -18, 153], "size": [596, 18, 610], "color": "#24282c", "appliance": true },
     { "name": "cooktop", "pos": [30, 45, 898], "size": [560, 490, 8], "color": "#1c1f22", "appliance": true }
   ]
 }

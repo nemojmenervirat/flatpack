@@ -1,0 +1,13 @@
+{
+  "id": "dining-table",
+  "name": "Dining table 200x90",
+  "buildable": false,
+  "color": "#6f5a40",
+  "parts": [
+    { "name": "table top", "pos": [0, 0, 722], "size": [2000, 900, 28], "color": "#b08d5f" },
+    { "name": "table leg", "pos": [40, 40, 0], "size": [80, 80, 722] },
+    { "name": "table leg", "pos": [1880, 40, 0], "size": [80, 80, 722] },
+    { "name": "table leg", "pos": [40, 780, 0], "size": [80, 80, 722] },
+    { "name": "table leg", "pos": [1880, 780, 0], "size": [80, 80, 722] }
+  ]
+}

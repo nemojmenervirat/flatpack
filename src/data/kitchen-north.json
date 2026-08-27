@@ -53,8 +53,10 @@
     { "name": "drawer box front", "pos": [3040, 10, 533], "size": [911, 18, 196], "color": "#d9bf94" },
     { "name": "drawer box back", "pos": [3040, 472, 533], "size": [911, 18, 196], "color": "#d9bf94" },
 
+    { "name": "flap dishwasher", "pos": [1401, -18, 153], "size": [598, 18, 714], "color": "#e8e4da" },
+
     { "name": "sink basin", "pos": [750, 90, 898], "size": [500, 400, 8], "color": "#b9bec4", "appliance": true },
     { "name": "tap", "pos": [985, 505, 898], "size": [30, 30, 260], "color": "#b9bec4", "appliance": true },
-    { "name": "dishwasher", "pos": [1402, -18, 0], "size": [596, 560, 850], "color": "#2e3338", "appliance": true }
+    { "name": "dishwasher", "pos": [1402, 0, 0], "size": [596, 542, 850], "color": "#2e3338", "appliance": true }
   ]
 }

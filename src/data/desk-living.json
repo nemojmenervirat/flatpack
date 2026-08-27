@@ -1,0 +1,12 @@
+{
+  "id": "desk-living",
+  "name": "Work desk (living)",
+  "buildable": true,
+  "color": "#3f4449",
+  "parts": [
+    { "name": "desk end panel", "pos": [0, 0, 0], "size": [18, 600, 722] },
+    { "name": "desk end panel", "pos": [2284, 0, 0], "size": [18, 600, 722] },
+    { "name": "desk apron", "pos": [18, 582, 522], "size": [2266, 18, 200] },
+    { "name": "desk top", "pos": [0, 0, 722], "size": [2302, 600, 28], "color": "#b08d5f" }
+  ]
+}

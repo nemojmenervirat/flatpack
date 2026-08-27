@@ -1,0 +1,10 @@
+{
+  "id": "ac-indoor",
+  "name": "AC indoor unit",
+  "buildable": false,
+  "color": "#e8e6e1",
+  "parts": [
+    { "name": "body", "pos": [0, 0, 0], "size": [900, 230, 300] },
+    { "name": "vent flap", "pos": [40, -6, 20], "size": [820, 6, 60], "color": "#cfccc4" }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "desk-chair",
+  "name": "Desk chair",
+  "buildable": false,
+  "color": "#4a4f57",
+  "parts": [
+    { "name": "chair base", "pos": [50, 50, 0], "size": [400, 400, 40], "color": "#33383e" },
+    { "name": "chair stem", "pos": [210, 210, 40], "size": [80, 80, 400], "color": "#33383e" },
+    { "name": "chair seat", "pos": [25, 25, 440], "size": [450, 450, 60], "color": "#5a6068" },
+    { "name": "chair backrest", "pos": [50, 415, 500], "size": [400, 70, 500], "color": "#5a6068" }
+  ]
+}

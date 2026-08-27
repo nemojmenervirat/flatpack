@@ -17,7 +17,7 @@ function banding(part) {
   const [L, W, T] = sortedDims(part.size);
   if (T <= 6) return { edges: 'none', length: 0 };
   const n = part.name;
-  if (n.startsWith('door') || n.startsWith('drawer front') || n.includes('desk top'))
+  if (n.startsWith('door') || n.startsWith('drawer front') || n.startsWith('flap') || n.includes('desk top'))
     return { edges: 'all', length: 2 * (L + W) };
   return { edges: 'long', length: L };
 }

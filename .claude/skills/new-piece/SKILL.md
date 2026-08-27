@@ -50,11 +50,14 @@ piece JSON in `src/data/`, a placement in `src/data/scene.json`, registration in
   x-center. A door thin along x will animate garbage. So orient the piece in local
   space so doors face −y, and use `rot` to aim them in the world.
 - **Don't name non-door parts `door*`.** `drawer front` is fine (not animated).
-- **Bbox is the rectangular union of all parts** (`pieceLocalBBox`). For an L-shaped
-  piece the notch counts as solid for collisions — nothing else can be placed inside
-  it (a desk chair in the knee space *will* report a false collision). Upside: the
-  notch self-reserves door-swing/knee space, so such a piece usually needs **no
-  external clearance**.
+- **Bbox is the rectangular union of all parts** (`pieceLocalBBox`), but collisions
+  are only *broad-phased* on it — `fitReport` confirms every hit against the actual
+  part boxes (piece-vs-piece, piece-vs-wall, and clearance-vs-piece). So another
+  piece CAN sit inside an L-piece's notch (a desk chair in the knee space is fine),
+  and an L-piece's bbox may span a wall as long as no part touches it. Consequence:
+  the notch no longer self-reserves door-swing/knee space against other placements —
+  only what physically stands there blocks it. Clearance zones still span the full
+  bbox side.
 - **Clearance boxes span the full bbox side**, not just the relevant part:
   `front` = −y side, `back` = +y, `left` = −x, `right` = +x, in *local* space,
   rotated with the piece. A placement can override with its own `"clearance"`.

@@ -1,0 +1,25 @@
+{
+  "id": "kitchen-upper-west",
+  "name": "Kitchen uppers — west (hood)",
+  "buildable": true,
+  "color": "#3f4449",
+  "clearance": { "front": 600 },
+  "parts": [
+    { "name": "side", "pos": [0, 0, 1600], "size": [18, 332, 1000] },
+    { "name": "side", "pos": [1482, 0, 1600], "size": [18, 332, 1000] },
+    { "name": "bottom", "pos": [18, 0, 1600], "size": [1464, 332, 18] },
+    { "name": "top", "pos": [18, 0, 2582], "size": [1464, 332, 18] },
+    { "name": "back HDF", "pos": [18, 329, 1618], "size": [1464, 3, 964], "color": "#31353a" },
+    { "name": "partition", "pos": [600, 0, 1618], "size": [18, 329, 964] },
+
+    { "name": "shelf hood bay", "pos": [18, 0, 2150], "size": [582, 329, 18] },
+    { "name": "shelf", "pos": [618, 0, 1940], "size": [864, 329, 18] },
+    { "name": "shelf", "pos": [618, 0, 2260], "size": [864, 329, 18] },
+
+    { "name": "door hood", "pos": [3, -18, 1603], "size": [594, 18, 994], "color": "#e8e4da" },
+    { "name": "door work", "pos": [601, -18, 1603], "size": [446, 18, 994], "color": "#e8e4da" },
+    { "name": "door work", "pos": [1051, -18, 1603], "size": [446, 18, 994], "color": "#e8e4da" },
+
+    { "name": "hood", "pos": [10, -148, 1560], "size": [580, 480, 40], "color": "#b9bec4", "appliance": true }
+  ]
+}

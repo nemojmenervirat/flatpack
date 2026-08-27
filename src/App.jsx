@@ -23,7 +23,19 @@ import dryer from './data/dryer.json';
 import waterHeater from './data/water-heater.json';
 import kitchenWest from './data/kitchen-west.json';
 import kitchenNorth from './data/kitchen-north.json';
+import kitchenUpperWest from './data/kitchen-upper-west.json';
+import kitchenUpperNorth from './data/kitchen-upper-north.json';
+import kitchenUpperFridge from './data/kitchen-upper-fridge.json';
 import fridge from './data/fridge.json';
+import sofaCorner from './data/sofa-corner.json';
+import deskLiving from './data/desk-living.json';
+import tvCabinet from './data/tv-cabinet.json';
+import tv from './data/tv.json';
+import diningTable from './data/dining-table.json';
+import diningChair from './data/dining-chair.json';
+import acIndoor from './data/ac-indoor.json';
+import acOutdoor from './data/ac-outdoor.json';
+import deskChair from './data/desk-chair.json';
 
 const piecesById = {
   [wardrobeHall.id]: wardrobeHall,
@@ -44,7 +56,19 @@ const piecesById = {
   [waterHeater.id]: waterHeater,
   [kitchenWest.id]: kitchenWest,
   [kitchenNorth.id]: kitchenNorth,
+  [kitchenUpperWest.id]: kitchenUpperWest,
+  [kitchenUpperNorth.id]: kitchenUpperNorth,
+  [kitchenUpperFridge.id]: kitchenUpperFridge,
   [fridge.id]: fridge,
+  [sofaCorner.id]: sofaCorner,
+  [deskLiving.id]: deskLiving,
+  [tvCabinet.id]: tvCabinet,
+  [tv.id]: tv,
+  [diningTable.id]: diningTable,
+  [diningChair.id]: diningChair,
+  [acIndoor.id]: acIndoor,
+  [acOutdoor.id]: acOutdoor,
+  [deskChair.id]: deskChair,
 };
 
 // short codes for the rail buttons; unknown ids fall back to initials
@@ -67,7 +91,19 @@ const RAIL_CODES = {
   'water-heater': 'WH2',
   'kitchen-west': 'KW',
   'kitchen-north': 'KN',
+  'kitchen-upper-west': 'UW',
+  'kitchen-upper-north': 'UN',
+  'kitchen-upper-fridge': 'UF',
   fridge: 'FR',
+  'sofa-corner': 'SF',
+  'desk-living': 'DL',
+  'tv-cabinet': 'TC',
+  tv: 'TV',
+  'dining-table': 'DT',
+  'dining-chair': 'DC',
+  'ac-indoor': 'AC',
+  'ac-outdoor': 'AO',
+  'desk-chair': 'DK',
 };
 const railCode = (id) =>
   RAIL_CODES[id] ||

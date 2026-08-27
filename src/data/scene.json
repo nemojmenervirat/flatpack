@@ -234,6 +234,236 @@
         0
       ],
       "rot": 0
+    },
+    {
+      "piece": "kitchen-upper-west",
+      "label": "Kitchen uppers west - hood",
+      "pos": [
+        530,
+        5149,
+        0
+      ],
+      "rot": 90
+    },
+    {
+      "piece": "kitchen-upper-north",
+      "label": "Kitchen uppers north",
+      "pos": [
+        494,
+        6917,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "kitchen-upper-fridge",
+      "label": "Kitchen uppers - over fridges",
+      "pos": [
+        4494,
+        6667,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "sofa-corner",
+      "label": "Corner sofa - living room",
+      "pos": [
+        3798,
+        1598,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "desk-living",
+      "label": "Work desk - living room",
+      "pos": [
+        198,
+        250,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "tv-cabinet",
+      "label": "TV cabinet - living room",
+      "pos": [
+        580,
+        2198,
+        0
+      ],
+      "rot": 90
+    },
+    {
+      "piece": "tv",
+      "label": "TV 55 - living room",
+      "pos": [
+        450,
+        2483,
+        450
+      ],
+      "rot": 90
+    },
+    {
+      "piece": "dining-table",
+      "label": "Dining table",
+      "pos": [
+        1500,
+        4650,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "dining-chair",
+      "label": "Chair north 1",
+      "pos": [
+        1775,
+        5550,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "dining-chair",
+      "label": "Chair north 2",
+      "pos": [
+        2275,
+        5550,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "dining-chair",
+      "label": "Chair north 3",
+      "pos": [
+        2775,
+        5550,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "dining-chair",
+      "label": "Chair south 1",
+      "pos": [
+        2225,
+        4650,
+        0
+      ],
+      "rot": 180
+    },
+    {
+      "piece": "dining-chair",
+      "label": "Chair south 2",
+      "pos": [
+        2725,
+        4650,
+        0
+      ],
+      "rot": 180
+    },
+    {
+      "piece": "dining-chair",
+      "label": "Chair south 3",
+      "pos": [
+        3225,
+        4650,
+        0
+      ],
+      "rot": 180
+    },
+    {
+      "piece": "ac-indoor",
+      "label": "AC indoor - living room",
+      "pos": [
+        5568,
+        2800,
+        2250
+      ],
+      "rot": 270
+    },
+    {
+      "piece": "ac-outdoor",
+      "label": "AC outdoor - loggia 4",
+      "pos": [
+        5498,
+        1100,
+        1850
+      ],
+      "rot": 270
+    },
+    {
+      "piece": "ac-indoor",
+      "label": "AC indoor - master",
+      "pos": [
+        12027,
+        450,
+        2250
+      ],
+      "rot": 90
+    },
+    {
+      "piece": "ac-outdoor",
+      "label": "AC outdoor - loggia 7",
+      "pos": [
+        11296,
+        1100,
+        1850
+      ],
+      "rot": 270
+    },
+    {
+      "piece": "desk-chair",
+      "label": "Desk chair 1 - living",
+      "pos": [
+        700,
+        500,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "desk-chair",
+      "label": "Desk chair 2 - living",
+      "pos": [
+        1500,
+        500,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "desk-chair",
+      "label": "Desk chair - room 5",
+      "pos": [
+        7150,
+        500,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "desk-chair",
+      "label": "Desk chair - room 6",
+      "pos": [
+        10750,
+        1848,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "desk-chair",
+      "label": "Desk chair - master",
+      "pos": [
+        12700,
+        500,
+        0
+      ],
+      "rot": 0
     }
   ]
 }

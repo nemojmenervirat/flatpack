@@ -1,0 +1,12 @@
+{
+  "id": "tv",
+  "name": "TV 55\"",
+  "buildable": false,
+  "color": "#22262b",
+  "parts": [
+    { "name": "tv foot", "pos": [100, -90, 0], "size": [80, 240, 50], "color": "#33383e" },
+    { "name": "tv foot", "pos": [1050, -90, 0], "size": [80, 240, 50], "color": "#33383e" },
+    { "name": "tv panel", "pos": [0, 0, 50], "size": [1230, 60, 720] },
+    { "name": "screen", "pos": [40, -8, 90], "size": [1150, 8, 640], "color": "#101318" }
+  ]
+}

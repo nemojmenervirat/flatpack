@@ -1,0 +1,18 @@
+{
+  "id": "tv-cabinet",
+  "name": "TV cabinet 1800",
+  "buildable": true,
+  "color": "#3f4449",
+  "clearance": { "front": 600 },
+  "parts": [
+    { "name": "side", "pos": [0, 0, 0], "size": [18, 382, 450] },
+    { "name": "side", "pos": [1782, 0, 0], "size": [18, 382, 450] },
+    { "name": "bottom", "pos": [18, 0, 0], "size": [1764, 379, 18] },
+    { "name": "top", "pos": [18, 0, 432], "size": [1764, 379, 18] },
+    { "name": "back HDF", "pos": [18, 379, 18], "size": [1764, 3, 414], "color": "#31353a" },
+    { "name": "partition", "pos": [891, 0, 18], "size": [18, 379, 414] },
+
+    { "name": "door media", "pos": [3, -18, 3], "size": [895, 18, 444], "color": "#e8e4da" },
+    { "name": "door media", "pos": [902, -18, 3], "size": [895, 18, 444], "color": "#e8e4da" }
+  ]
+}

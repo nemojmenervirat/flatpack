@@ -278,6 +278,96 @@ function Door({ part, color, pieceCenterX, hovered }) {
   );
 }
 
+// A clickable bottom-hinged flap (dishwasher / oven front): pivots on its
+// bottom edge at the carcass front plane and tilts forward to horizontal.
+function Flap({ part, color, hovered }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef();
+  const hy = part.pos[1] + part.size[1]; // back plane = carcass front
+  const hz = part.pos[2]; // bottom edge
+  const target = open ? MathUtils.degToRad(88) : 0;
+
+  useFrame((_, dt) => {
+    if (ref.current) {
+      ref.current.rotation.x = MathUtils.damp(ref.current.rotation.x, target, 6, dt);
+    }
+  });
+
+  const shifted = { ...part, pos: [part.pos[0], part.pos[1] - hy, part.pos[2] - hz] };
+  return (
+    <group ref={ref} position={[0, hz * S, -hy * S]}>
+      <LocalBox
+        part={shifted}
+        color={color}
+        hovered={hovered}
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen((o) => !o);
+        }}
+        onPointerOver={(e) => (document.body.style.cursor = 'pointer')}
+        onPointerOut={() => (document.body.style.cursor = 'auto')}
+      />
+    </group>
+  );
+}
+
+// A clickable drawer: the front and its box slide out along the front
+// direction (local -y, which is three.js +z inside the placement group).
+function Drawer({ pullMm, children }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef();
+  const target = open ? pullMm * S : 0;
+
+  useFrame((_, dt) => {
+    if (ref.current) {
+      ref.current.position.z = MathUtils.damp(ref.current.position.z, target, 6, dt);
+    }
+  });
+
+  return (
+    <group
+      ref={ref}
+      onClick={(e) => {
+        e.stopPropagation();
+        setOpen((o) => !o);
+      }}
+      onPointerOver={() => (document.body.style.cursor = 'pointer')}
+      onPointerOut={() => (document.body.style.cursor = 'auto')}
+    >
+      {children}
+    </group>
+  );
+}
+
+// Group drawer parts for animation: each 'drawer front' takes along the box
+// parts (drawer bottom / box sides / box front / box back) whose center falls
+// inside the front's x/z span. Returns the members per front index and the
+// set of member indices (so the normal render loop skips them).
+function drawerGroups(parts) {
+  const isFront = (p) => p.name.startsWith('drawer front');
+  const frontIdx = parts.map((p, i) => (isFront(p) ? i : -1)).filter((i) => i >= 0);
+  const groups = new Map(frontIdx.map((i) => [i, []]));
+  const consumed = new Set();
+  parts.forEach((p, i) => {
+    if (isFront(p) || !p.name.startsWith('drawer')) return;
+    const cx = p.pos[0] + p.size[0] / 2;
+    const cz = p.pos[2] + p.size[2] / 2;
+    const f = frontIdx.find((fi) => {
+      const fp = parts[fi];
+      return cx > fp.pos[0] && cx < fp.pos[0] + fp.size[0] && cz > fp.pos[2] && cz < fp.pos[2] + fp.size[2];
+    });
+    if (f !== undefined) {
+      groups.get(f).push(i);
+      consumed.add(i);
+    }
+  });
+  return { groups, consumed };
+}
+
+// Pull-out distance: 80% of the box depth (falls back to 400mm front-only).
+const drawerPull = (parts, members) =>
+  Math.round(0.8 * Math.max(400, ...members.map((i) => parts[i].size[1])));
+
 // A room door: the opening renders as a 40mm leaf that swings on its hinge.
 // opening.hinge ('min'/'max') picks the pivot end, opening.swing (+1 CCW / -1 CW
 // seen from above) picks the direction, both authored in apartment.json.
@@ -348,6 +438,8 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
   const centerX = (bb.min[0] + bb.max[0]) / 2;
   const rot = (((placement.rot || 0) % 360) + 360) % 360;
   const isDoor = (p) => p.name.startsWith('door');
+  const isFlap = (p) => p.name.startsWith('flap');
+  const { groups: drawers, consumed } = useMemo(() => drawerGroups(parts), [parts]);
 
   return (
     <group>
@@ -359,16 +451,40 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
         onPointerOut={onPointerOut}
         onDoubleClick={onDoubleClick}
       >
-        {parts.map((p, i) =>
-          isDoor(p) ? (
-            <Door
-              key={i}
-              part={p}
-              color={p.color || piece.color || '#c9a36b'}
-              pieceCenterX={centerX}
-              hovered={hovered}
-            />
-          ) : (
+        {parts.map((p, i) => {
+          if (consumed.has(i)) return null; // rendered inside its Drawer
+          if (isDoor(p)) {
+            return (
+              <Door
+                key={i}
+                part={p}
+                color={p.color || piece.color || '#c9a36b'}
+                pieceCenterX={centerX}
+                hovered={hovered}
+              />
+            );
+          }
+          if (isFlap(p)) {
+            return (
+              <Flap key={i} part={p} color={p.color || piece.color || '#c9a36b'} hovered={hovered} />
+            );
+          }
+          if (drawers.has(i)) {
+            return (
+              <Drawer key={i} pullMm={drawerPull(parts, drawers.get(i))}>
+                {[i, ...drawers.get(i)].map((pi) => (
+                  <LocalBox
+                    key={pi}
+                    part={parts[pi]}
+                    color={parts[pi].color || piece.color || '#c9a36b'}
+                    opacity={parts[pi].opacity ?? 1}
+                    hovered={hovered}
+                  />
+                ))}
+              </Drawer>
+            );
+          }
+          return (
             <LocalBox
               key={i}
               part={p}
@@ -376,8 +492,8 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
               opacity={p.opacity ?? 1}
               hovered={hovered}
             />
-          )
-        )}
+          );
+        })}
       </group>
       {collided && <Box box={entry.bbox} color="#ff3b30" opacity={0.35} />}
       {showClearances &&
@@ -556,6 +672,8 @@ export function PieceViewer({ piece, highlight, onHoverPart }) {
   const bb = pieceLocalBBox(piece);
   const centerX = (bb.min[0] + bb.max[0]) / 2;
   const isDoor = (p) => p.name.startsWith('door');
+  const isFlap = (p) => p.name.startsWith('flap');
+  const { groups: drawers, consumed } = useMemo(() => drawerGroups(parts), [parts]);
 
   const [hover, setHover] = useState(null); // part index under the pointer
   const setHovered = (i) => {
@@ -585,7 +703,31 @@ export function PieceViewer({ piece, highlight, onHoverPart }) {
       />
 
       {parts.map((p, i) => {
+        if (consumed.has(i)) return null; // rendered inside its Drawer
         const lit = hover === i || highlight?.has(i);
+        if (drawers.has(i)) {
+          return (
+            <Drawer key={i} pullMm={drawerPull(parts, drawers.get(i))}>
+              {[i, ...drawers.get(i)].map((pi) => (
+                <group
+                  key={pi}
+                  onPointerOver={(e) => {
+                    e.stopPropagation();
+                    setHovered(pi);
+                  }}
+                  onPointerOut={() => setHovered(null)}
+                >
+                  <LocalBox
+                    part={parts[pi]}
+                    color={parts[pi].color || piece.color || '#c9a36b'}
+                    opacity={parts[pi].opacity ?? 1}
+                    hovered={hover === pi || highlight?.has(pi)}
+                  />
+                </group>
+              ))}
+            </Drawer>
+          );
+        }
         return (
           <group
             key={i}
@@ -597,6 +739,8 @@ export function PieceViewer({ piece, highlight, onHoverPart }) {
           >
             {isDoor(p) ? (
               <Door part={p} color={p.color || piece.color || '#c9a36b'} pieceCenterX={centerX} hovered={lit} />
+            ) : isFlap(p) ? (
+              <Flap part={p} color={p.color || piece.color || '#c9a36b'} hovered={lit} />
             ) : (
               <LocalBox part={p} color={p.color || piece.color || '#c9a36b'} opacity={p.opacity ?? 1} hovered={lit} />
             )}

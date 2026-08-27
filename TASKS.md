@@ -40,6 +40,106 @@ _(empty)_
 
 ## Done
 
+- 2026-08-27 — Integrated dishwasher + flap fronts: the dishwasher in `kitchen-north`
+  got a real furniture front — new buildable part `flap dishwasher` (598 × 714 × 18,
+  kitchen front color, in the fronts plane with 4 mm gaps / 3 mm reveals); the dark
+  appliance body pulled back behind the fronts plane (y 0, 542 deep). New `Flap`
+  component in Viewer.jsx: parts named `flap*` open on click by tilting forward on a
+  bottom hinge at the carcass front plane (damped, like doors/drawers) — the oven
+  front (`flap oven`) folds down the same way. hardware.js bands flap fronts on all
+  four edges. Fit report clean, dishwasher front now in the cut list.
+
+- 2026-08-27 — Desk chairs everywhere + part-level collisions: new bought piece
+  `desk-chair` (500 × 500 office chair: base, stem, seat at 440, backrest to 1000)
+  placed 5× — two at the living desk ([700, 500] and [1500, 500]), one each at the
+  room-5 desk ([7150, 500]), room-6 desk ([10750, 1848]) and master desk
+  ([12700, 500]), all rot 0, tucked ~350 under their desk tops. To allow chairs
+  inside the L-pieces' knee notches, `fitReport` now confirms every bbox hit at part
+  level (piece-vs-piece, piece-vs-wall, clearance-vs-piece) — the bbox stays as
+  broad phase; the old "chair in the knee space reports a false collision" wart is
+  gone (skill doc updated; note: notches no longer self-reserve against placements).
+  `desk-living` dropped its `back: 800` clearance — the chairs occupy that zone now.
+  Fit report clean.
+
+- 2026-08-27 — New piece `kitchen-upper-fridge`: cabinet over the fridges, 1304 × 600
+  × 700 (z 1900–2600), rot 0 at [4494, 6667] — spans the fridge zone from the counter
+  end to `shaft-hall-1`, 50 mm ventilation gap above the 1850 fridges, top aligned
+  with the other uppers. 600 deep (base-run depth, ~flush with fridge fronts) unlike
+  the 350 wall uppers; two 625 bays with a shelf each behind two 647 doors.
+  Fit report clean.
+
+- 2026-08-27 — Split AC on `room6-master-s` (reused pieces): `ac-indoor` rot 90 at
+  [12027, 450, 2250] on the master-side face (x 11797, y 450–1350) — clears the
+  desk-master shelf unit below it (2000 top vs 2250 bottom); `ac-outdoor` rot 270 at
+  [11296, 1100, 1850] on the loggia-7 side of the same wall, top at 2400 (200 below
+  the ceiling), matching the loggia-4 mount. Fit report clean.
+
+- 2026-08-27 — Split AC on `living-room5`: new bought pieces `ac-indoor` (900 × 230 ×
+  300 wall unit + vent flap, rot 270 at [5568, 2800, 2250] — high on the living-room
+  face of the wall above the sofa chaise, top 50 under the ceiling) and `ac-outdoor`
+  (800 × 300 × 550 body + fan grille + wall brackets, rot 270 at [5498, 1100, 1850] —
+  on the loggia-4 side of the same wall, the only outdoor-mountable face of it,
+  bracket-hung high with its top at 2400, 200 below the 2600 ceiling). Refrigerant
+  run goes straight through the wall between them. Fit report clean.
+
+- 2026-08-27 — Dining set: new bought pieces `dining-table` (2000 × 900 × 750, top on
+  four 80 legs, rot 0 at [1500, 4650] — long axis east-west between the kitchen and
+  the sofa) and `dining-chair` (450 × 450, seat 450, backrest to 930) placed 6× —
+  three on the north edge (rot 0, facing the table) at x 1775/2275/2775, three on the
+  south edge (rot 180) at x 2225/2725/3225, all touching the table edge. Originally
+  at table y 5150–6050, then moved 500 south total on request: north-chair backs now
+  end 649 from the kitchen counter front; the set sits west of the sofa (x ≤ 3500 vs
+  sofa from 3798) so the south side is open floor. Table overlaps the kitchen west
+  leg's front-clearance y-range but starts 102 east of it. Fit report clean.
+
+- 2026-08-27 — TV corner: new piece `tv-cabinet` (1800 × 400 × 450 low media unit,
+  rot 90 at [580, 2198] — back on the `west` wall at y 2198–3998, centered opposite
+  the sofa's long run, two 895 doors facing east, front clearance 600) and new bought
+  piece `tv` (55", 1230 panel + screen + feet, rot 90 at [450, 2483, 450] — standing
+  on the cabinet top, feet verified to land on the top board). Cabinet sits clear of
+  the desk's chair zone (ends y 850–1650) and the kitchen west leg (starts y 5149);
+  viewing distance to the sofa front ≈ 4.2 m. Fit report clean.
+
+- 2026-08-27 — New piece `desk-living`: work desk 2302 × 600 × 750 under the south
+  living window (`window-living`, sill 900 > desk 750), rot 0 at [198, 250] — runs
+  wall-to-wall from the `west` wall face to x 2500. Right end capped at 2500 so the
+  loggia-4 balcony door (801 leaf, hinge at [3199, 399], swings west into the room)
+  stays clear of the desk — swing arcs aren't fit-checked yet, verified by hand.
+  28 mm top on two end panels + back apron (desk-master pattern). Clearance authored
+  as `back: 800` — at rot 0 the knee side faces world +y, which is the piece-local
+  back side. Started 1600 wide centered on the window, extended to the west wall
+  same day. Fit report clean.
+
+- 2026-08-27 — New bought piece `sofa-corner`: L-shaped sofa 3000 × 2000 × 800 in the
+  living room's SE corner, rot 0 at [3798, 1598] — long run (3000) back against
+  `living-room5` (y 1598–4598, 800 clear of the living-door swing at 5399), short run
+  (2000) back under the loggia-4 window (`parapet-loggia4` / `loggia4-north-*`, back
+  800 < sill 900, fully wall-backed x 3798–5798). Feet + bases, backs, one west
+  armrest, seat and back cushions. Note: "under the window" resolved to the loggia-4
+  window — the south `window-living` doesn't meet `living-room5` (the loggia sits
+  between), so an L touching both is impossible. Started as 2400 × 2400, resized to
+  300 × 200 cm same day. No clearance — the L-notch self-reserves the lounge space.
+  Fit clean.
+
+- 2026-08-27 — Kitchen uppers: two wall-cabinet pieces above the base L.
+  `kitchen-upper-north` (4000 × 350 × 1150, z 1450–2600 to the ceiling, rot 0 at
+  [494, 6917]): partitions aligned with the base run below; two-tier doors split at
+  2150 (594 over the corner, 5 × 516 over the right half); open shelf bay over the
+  sink (three display levels, no fronts); every bay gets shelves at 1800 and 2146.
+  `kitchen-upper-west` (1500 × 350, carcass z 1600–2600, rot 90 at [530, 5149]):
+  mounted 150 higher for the hood — 480-deep hood visor (appliance part) at z 1560
+  over the cooktop (654 above the hob), hood bay + two-door bay above, front
+  clearance 600. North uppers carry no clearance (same corner reason as the base).
+  Uppers depth 350 = 332 carcass + 18 fronts; no cabinets above the freestanding
+  fridges. Fit report clean, cut list verified.
+
+- 2026-08-27 — Clickable drawers in the viewer: parts named `drawer front` slide out
+  on click with the same damped animation as doors (new `Drawer` group in Viewer.jsx,
+  translation along local −y, pull = 80% of box depth). The front takes its box parts
+  (`drawer bottom` / `drawer box *`) along — grouped spatially by whose front x/z span
+  contains the box part's center, no authoring change needed. Works in both the
+  apartment view and the single-piece view (hover/table cross-highlight preserved).
+
 - 2026-08-27 — Kitchen base (L-shape) + fridges: the L runs from `kitchen-south-stub`
   along the west wall, turns at the NW corner and follows `north-kitchen` to the
   fridge zone in front of `shaft-hall-1`. Authored as TWO pieces because the fit

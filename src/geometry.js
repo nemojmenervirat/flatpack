@@ -97,16 +97,23 @@ export function overlaps(a, b) {
 // Full fit report for a scene: resolved placements + list of issues.
 // collision = two solid things intersect. warning = something sits inside
 // a clearance zone (it fits, but you can't open/use it).
+// Collisions are broad-phase bbox first, then confirmed against the actual
+// part boxes — so a piece may sit inside another piece's L-notch (a desk
+// chair in the knee space) without a false positive.
 export function fitReport(scene, piecesById, apartment) {
   const placed = scene.placements.map((pl, i) => {
     const piece = piecesById[pl.piece];
     if (!piece) throw new Error(`Unknown piece id in scene: ${pl.piece}`);
+    const bbox = placeBox(pieceLocalBBox(piece), pl);
     return {
       id: i,
       name: pl.label || piece.name,
       placement: pl,
       piece,
-      bbox: placeBox(pieceLocalBBox(piece), pl),
+      bbox,
+      partBoxes: piece.parts?.length
+        ? piece.parts.map((p) => placeBox(aabbOf(p.pos, p.size), pl))
+        : [bbox],
       // a placement may override the piece's clearance (e.g. wall side differs)
       clearances: clearanceLocalBoxes(
         pl.clearance ? { ...piece, clearance: pl.clearance } : piece
@@ -125,25 +132,31 @@ export function fitReport(scene, piecesById, apartment) {
   const issues = [];
   const collidedIds = new Set();
 
+  const hitsParts = (box, entry) =>
+    overlaps(box, entry.bbox) && entry.partBoxes.some((pb) => overlaps(box, pb));
+
   for (let i = 0; i < placed.length; i++) {
     const a = placed[i];
     for (let j = i + 1; j < placed.length; j++) {
       const b = placed[j];
-      if (overlaps(a.bbox, b.bbox)) {
+      if (
+        overlaps(a.bbox, b.bbox) &&
+        a.partBoxes.some((pa) => hitsParts(pa, b))
+      ) {
         issues.push({ level: 'collision', text: `${a.name} overlaps ${b.name}` });
         collidedIds.add(a.id);
         collidedIds.add(b.id);
       }
     }
     for (const w of walls) {
-      if (overlaps(a.bbox, w.box)) {
+      if (hitsParts(w.box, a)) {
         issues.push({ level: 'collision', text: `${a.name} overlaps wall (${w.name})` });
         collidedIds.add(a.id);
       }
     }
     for (const c of a.clearances) {
       for (const b of placed) {
-        if (b !== a && overlaps(c.box, b.bbox)) {
+        if (b !== a && hitsParts(c.box, b)) {
           issues.push({
             level: 'warning',
             text: `${b.name} blocks ${a.name}'s ${c.side} clearance`,

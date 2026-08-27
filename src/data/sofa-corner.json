@@ -1,0 +1,31 @@
+{
+  "id": "sofa-corner",
+  "name": "Corner sofa 300x200",
+  "buildable": false,
+  "color": "#8d8579",
+  "parts": [
+    { "name": "foot", "pos": [20, 20, 0], "size": [60, 60, 60], "color": "#4a463f" },
+    { "name": "foot", "pos": [1940, 20, 0], "size": [60, 60, 60], "color": "#4a463f" },
+    { "name": "foot", "pos": [20, 920, 0], "size": [60, 60, 60], "color": "#4a463f" },
+    { "name": "foot", "pos": [1020, 920, 0], "size": [60, 60, 60], "color": "#4a463f" },
+    { "name": "foot", "pos": [1020, 2940, 0], "size": [60, 60, 60], "color": "#4a463f" },
+    { "name": "foot", "pos": [1940, 2940, 0], "size": [60, 60, 60], "color": "#4a463f" },
+
+    { "name": "base window run", "pos": [0, 0, 60], "size": [2000, 1000, 360], "color": "#6f6a5e" },
+    { "name": "base long run", "pos": [1000, 1000, 60], "size": [1000, 2000, 360], "color": "#6f6a5e" },
+
+    { "name": "back window run", "pos": [0, 0, 420], "size": [2000, 200, 380] },
+    { "name": "back long run", "pos": [1800, 200, 420], "size": [200, 2800, 380] },
+    { "name": "arm west", "pos": [0, 200, 420], "size": [160, 800, 230] },
+
+    { "name": "seat cushion", "pos": [160, 200, 420], "size": [820, 740, 140], "color": "#a39b88" },
+    { "name": "seat cushion", "pos": [980, 200, 420], "size": [820, 740, 140], "color": "#a39b88" },
+    { "name": "seat cushion long", "pos": [1060, 1000, 420], "size": [740, 1000, 140], "color": "#a39b88" },
+    { "name": "seat cushion long", "pos": [1060, 2000, 420], "size": [740, 1000, 140], "color": "#a39b88" },
+
+    { "name": "back cushion", "pos": [160, 200, 560], "size": [820, 120, 240], "color": "#b3ab98" },
+    { "name": "back cushion", "pos": [980, 200, 560], "size": [820, 120, 240], "color": "#b3ab98" },
+    { "name": "back cushion long", "pos": [1680, 1000, 560], "size": [120, 1000, 240], "color": "#b3ab98" },
+    { "name": "back cushion long", "pos": [1680, 2000, 560], "size": [120, 1000, 240], "color": "#b3ab98" }
+  ]
+}

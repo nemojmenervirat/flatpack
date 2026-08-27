@@ -1,0 +1,12 @@
+{
+  "id": "ac-outdoor",
+  "name": "AC outdoor unit",
+  "buildable": false,
+  "color": "#c8c9c5",
+  "parts": [
+    { "name": "body", "pos": [0, 0, 0], "size": [800, 300, 550] },
+    { "name": "fan grille", "pos": [80, -8, 95], "size": [360, 8, 360], "color": "#7d807e" },
+    { "name": "bracket", "pos": [60, 260, -100], "size": [60, 40, 100], "color": "#8a8d8a" },
+    { "name": "bracket", "pos": [680, 260, -100], "size": [60, 40, 100], "color": "#8a8d8a" }
+  ]
+}
