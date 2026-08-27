@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import Viewer, { PieceViewer } from './Viewer.jsx';
-import { fitReport } from './geometry.js';
+import { fitReport, pieceLocalBBox, placeBox } from './geometry.js';
 import { cutList, cutListCsv } from './cutlist.js';
 import { partRows, hardwareList } from './hardware.js';
 import apartment from './data/apartment.json';
@@ -71,49 +71,55 @@ const piecesById = {
   [deskChair.id]: deskChair,
 };
 
-// short codes for the rail buttons; unknown ids fall back to initials
-const RAIL_CODES = {
-  'wardrobe-hall': 'WH',
-  'wardrobe-master-1': 'WM',
-  'wardrobe-master-2': 'M2',
-  'desk-master': 'DM',
-  'bed-90': 'B9',
-  'bed-180': 'B18',
-  'wardrobe-desk-room5': 'W5',
-  'wardrobe-room6': 'W6',
-  'hall-bench': 'HB',
-  shower: 'SH',
-  sink: 'SK',
-  toilet: 'WC',
-  bathtub: 'BT',
-  washer: 'WA',
-  dryer: 'DY',
-  'water-heater': 'WH2',
-  'kitchen-west': 'KW',
-  'kitchen-north': 'KN',
-  'kitchen-upper-west': 'UW',
-  'kitchen-upper-north': 'UN',
-  'kitchen-upper-fridge': 'UF',
-  fridge: 'FR',
-  'sofa-corner': 'SF',
-  'desk-living': 'DL',
-  'tv-cabinet': 'TC',
-  tv: 'TV',
-  'dining-table': 'DT',
-  'dining-chair': 'DC',
-  'ac-indoor': 'AC',
-  'ac-outdoor': 'AO',
-  'desk-chair': 'DK',
+// Sidebar groups: each piece is bucketed by the room its placements sit in,
+// derived from the apartment's floor rects — nothing to maintain when new
+// furniture is added. A piece placed in several rooms shows up in each.
+const ROOM_LABELS = [
+  ['living', 'Living room & kitchen'],
+  ['hall', 'Hall'],
+  ['room5', 'Room 5'],
+  ['room6', 'Room 6'],
+  ['master', 'Master bedroom'],
+  ['bath', 'Bathroom'],
+  ['wc', 'WC'],
+  ['vestibule', 'Vestibule'],
+  ['loggia', 'Loggias'],
+];
+
+const roomAt = (x, y) => {
+  const floor = apartment.floors.find(
+    (f) => x >= f.pos[0] && x <= f.pos[0] + f.size[0] && y >= f.pos[1] && y <= f.pos[1] + f.size[1]
+  );
+  const hit = floor && ROOM_LABELS.find(([key]) => floor.name.includes(key));
+  return hit ? hit[1] : 'Elsewhere';
 };
-const railCode = (id) =>
-  RAIL_CODES[id] ||
-  id
-    .split(/[^a-z0-9]+/i)
-    .filter(Boolean)
-    .map((w) => w[0])
-    .join('')
-    .slice(0, 3)
-    .toUpperCase();
+
+const pieceGroups = (() => {
+  const byRoom = new Map();
+  for (const pl of scene.placements) {
+    const piece = piecesById[pl.piece];
+    if (!piece) continue;
+    const bb = placeBox(pieceLocalBBox(piece), pl);
+    const room = roomAt((bb.min[0] + bb.max[0]) / 2, (bb.min[1] + bb.max[1]) / 2);
+    const counts = byRoom.get(room) || new Map();
+    counts.set(pl.piece, (counts.get(pl.piece) || 0) + 1);
+    byRoom.set(room, counts);
+  }
+  for (const id of Object.keys(piecesById))
+    if (![...byRoom.values()].some((c) => c.has(id))) {
+      const counts = byRoom.get('Unplaced') || new Map();
+      counts.set(id, 0);
+      byRoom.set('Unplaced', counts);
+    }
+  return [...ROOM_LABELS.map(([, label]) => label), 'Elsewhere', 'Unplaced']
+    .filter((label) => byRoom.has(label))
+    .map((label) => ({
+      label,
+      items: [...byRoom.get(label)]
+        .map(([id, count]) => ({ id, count, name: piecesById[id].name }))
+        .sort((a, b) => a.name.localeCompare(b.name)),
+    }));
+})();
 
 // view + toggles survive a refresh
 const lsGet = (key, fallback) => {
@@ -225,11 +231,14 @@ function PiecePanel({ piece, hoverIndex, onHoverRow }) {
 export default function App() {
   const [view, setView] = useState(() => lsGet('flatpack.view', 'apartment'));
   const [showClearances, setShowClearances] = useState(() => lsGet('flatpack.showClearances', true));
+  const [sideOpen, setSideOpen] = useState(() => lsGet('flatpack.sideOpen', true));
+  const [filter, setFilter] = useState('');
   const [highlight, setHighlight] = useState(null); // Set of part indices (table -> 3D)
   const [hoverIndex, setHoverIndex] = useState(null); // part index (3D -> table)
 
   useEffect(() => lsSet('flatpack.view', view), [view]);
   useEffect(() => lsSet('flatpack.showClearances', showClearances), [showClearances]);
+  useEffect(() => lsSet('flatpack.sideOpen', sideOpen), [sideOpen]);
 
   const report = useMemo(() => fitReport(scene, piecesById, apartment), []);
 
@@ -274,33 +283,61 @@ export default function App() {
         )}
       </div>
 
-      <nav className="rail">
-        <button
-          className={view === 'apartment' ? 'active' : ''}
-          data-tip="Whole apartment"
-          onClick={() => setView('apartment')}
-        >
-          🏠
-        </button>
-        <div className="rail-sep" />
-        {Object.values(piecesById).map((p) => (
-          <button
-            key={p.id}
-            className={view === p.id ? 'active' : ''}
-            data-tip={p.name}
-            onClick={() => setView(p.id)}
-          >
-            {railCode(p.id)}
+      <nav className={sideOpen ? 'side' : 'side collapsed'}>
+        <div className="side-head">
+          <button data-tip={sideOpen ? 'Collapse' : 'Pieces'} onClick={() => setSideOpen((v) => !v)}>
+            {sideOpen ? '»' : '«'}
           </button>
-        ))}
-        <div className="rail-sep" />
-        <button
-          className={showClearances ? 'active' : ''}
-          data-tip={`Clearance zones: ${showClearances ? 'on' : 'off'}`}
-          onClick={() => setShowClearances((v) => !v)}
-        >
-          ⛶
-        </button>
+          <button
+            className={view === 'apartment' ? 'active' : ''}
+            data-tip="Whole apartment"
+            onClick={() => setView('apartment')}
+          >
+            🏠
+          </button>
+          <button
+            className={showClearances ? 'active' : ''}
+            data-tip={`Clearance zones: ${showClearances ? 'on' : 'off'}`}
+            onClick={() => setShowClearances((v) => !v)}
+          >
+            ⛶
+          </button>
+        </div>
+        {sideOpen && (
+          <>
+            <input
+              className="side-filter"
+              type="search"
+              placeholder="Filter pieces…"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            />
+            <div className="side-list">
+              {pieceGroups
+                .map((g) => ({
+                  ...g,
+                  items: g.items.filter((it) => it.name.toLowerCase().includes(filter.toLowerCase().trim())),
+                }))
+                .filter((g) => g.items.length > 0)
+                .map((g) => (
+                  <div key={g.label}>
+                    <h3>{g.label}</h3>
+                    {g.items.map((it) => (
+                      <button
+                        key={it.id}
+                        className={view === it.id ? 'piece-btn active' : 'piece-btn'}
+                        title={it.name}
+                        onClick={() => setView(it.id)}
+                      >
+                        <span className="nm">{it.name}</span>
+                        {it.count > 1 && <span className="ct">×{it.count}</span>}
+                      </button>
+                    ))}
+                  </div>
+                ))}
+            </div>
+          </>
+        )}
       </nav>
     </div>
   );

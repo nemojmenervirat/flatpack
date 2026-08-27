@@ -40,6 +40,13 @@ _(empty)_
 
 ## Done
 
+- 2026-08-27 — Piece browser sidebar: replaced the rail of two-letter codes (31 buttons,
+  unreadable and growing) with a collapsible 240 px sidebar listing pieces by full name,
+  grouped by room. Groups are derived, not maintained: each placement's world bbox center
+  is matched against the apartment's floor rects (`roomAt` in App.jsx), so new furniture
+  files itself automatically; pieces placed in several rooms appear in each group with a
+  ×count. Filter box on top; 🏠 / clearance-toggle / collapse live in the header; state
+  persists in localStorage. `RAIL_CODES` and `railCode` deleted.
 - 2026-08-27 — Integrated dishwasher + flap fronts: the dishwasher in `kitchen-north`
   got a real furniture front — new buildable part `flap dishwasher` (598 × 714 × 18,
   kitchen front color, in the fronts plane with 4 mm gaps / 3 mm reveals); the dark
