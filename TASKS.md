@@ -40,6 +40,17 @@ _(empty)_
 
 ## Done
 
+- 2026-08-27 — New piece `hall-bench`: entry bench + coat rack against the north-east
+  hall wall (between the entrance and WC doors, clear of both door swings). Bench
+  1600 × 400, seat at 450 (28 mm), two open shoe cubbies with a mid shelf at 200
+  (floor + shelf = two shoe levels per bay); above it a wall-mounted coat panel
+  (1100–2000) with a hook rail at 1650 (5 hooks derived) and a 250-deep hat shelf on
+  brackets at 2000. Placed rot 0 at [9196, 6849]; front clearance 600. hardware.js
+  learned a hook rule (1 hook per ~280 mm of hook rail). Fit report clean.
+- 2026-08-27 — Removed unused sample pieces `wardrobe` (Wardrobe 1200) and `bed`
+  (files deleted, unregistered). Double-clicking a piece in the apartment view now
+  jumps to its piece page. Rail buttons got instant CSS tooltips (piece name /
+  action, flying out left of the rail).
 - 2026-08-27 — UI rework: the right side panel is gone, replaced by a 36px menu rail
   on the right — 🏠 whole apartment, a chip per piece (W5, W6, WH, B9, …), and the
   clearance-zones toggle ⛶. Current view + toggle persist in localStorage across

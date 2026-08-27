@@ -1,8 +1,0 @@
-{
-  "id": "bed",
-  "name": "Bed 160",
-  "buildable": false,
-  "color": "#7d8aa0",
-  "size": [1600, 2000, 450],
-  "clearance": { "left": 500, "right": 500 }
-}

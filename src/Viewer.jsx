@@ -339,7 +339,7 @@ function RoomDoor({ opening, hovered, onPointerOver, onPointerOut }) {
   );
 }
 
-function Placement({ entry, collided, showClearances, hovered, onPointerOver, onPointerOut }) {
+function Placement({ entry, collided, showClearances, hovered, onPointerOver, onPointerOut, onDoubleClick }) {
   const { piece, placement } = entry;
   const parts = piece.parts?.length
     ? piece.parts
@@ -357,6 +357,7 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
         rotation={[0, MathUtils.degToRad(rot), 0]}
         onPointerOver={onPointerOver}
         onPointerOut={onPointerOut}
+        onDoubleClick={onDoubleClick}
       >
         {parts.map((p, i) =>
           isDoor(p) ? (
@@ -420,7 +421,7 @@ function ArrowKeyPan() {
   return null;
 }
 
-export default function Viewer({ apartment, report, showClearances }) {
+export default function Viewer({ apartment, report, showClearances, onSelectPiece }) {
   const openingColor = { door: '#7fd17f', window: '#7fb8ff' };
   const woodTex = useMemo(() => makeWoodTexture(), []);
 
@@ -520,6 +521,10 @@ export default function Viewer({ apartment, report, showClearances }) {
             hovered={hover?.key === info.key}
             onPointerOver={over(info)}
             onPointerOut={out(info.key)}
+            onDoubleClick={(e) => {
+              e.stopPropagation();
+              onSelectPiece?.(entry.piece.id);
+            }}
           />
         );
       })}

@@ -21,6 +21,16 @@
       "rot": 90
     },
     {
+      "piece": "hall-bench",
+      "label": "Bench + coat rack - hall",
+      "pos": [
+        9196,
+        6849,
+        0
+      ],
+      "rot": 0
+    },
+    {
       "piece": "bed-90",
       "label": "Bed 90 - room 5",
       "pos": [

@@ -1,0 +1,23 @@
+{
+  "id": "hall-bench",
+  "name": "Hall bench + coat rack",
+  "buildable": true,
+  "color": "#c9a36b",
+  "clearance": { "front": 600 },
+  "parts": [
+    { "name": "side", "pos": [0, 0, 0], "size": [18, 400, 422] },
+    { "name": "side", "pos": [1582, 0, 0], "size": [18, 400, 422] },
+    { "name": "partition", "pos": [791, 0, 0], "size": [18, 400, 422] },
+    { "name": "seat", "pos": [0, 0, 422], "size": [1600, 400, 28], "color": "#b08d5f" },
+    { "name": "shoe shelf", "pos": [18, 20, 200], "size": [773, 360, 18] },
+    { "name": "shoe shelf", "pos": [809, 20, 200], "size": [773, 360, 18] },
+    { "name": "back rail", "pos": [18, 382, 222], "size": [773, 18, 200] },
+    { "name": "back rail", "pos": [809, 382, 222], "size": [773, 18, 200] },
+
+    { "name": "coat panel", "pos": [0, 382, 1100], "size": [1600, 18, 900] },
+    { "name": "hook rail", "pos": [50, 364, 1650], "size": [1500, 18, 120], "color": "#8b5a2b" },
+    { "name": "bracket", "pos": [18, 160, 1850], "size": [18, 222, 150] },
+    { "name": "bracket", "pos": [1564, 160, 1850], "size": [18, 222, 150] },
+    { "name": "hat shelf", "pos": [0, 150, 2000], "size": [1600, 250, 18] }
+  ]
+}

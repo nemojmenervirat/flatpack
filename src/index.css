@@ -37,7 +37,28 @@ body {
   padding: 8px 0;
   border-left: 1px solid #2c2f36;
   background: #1c1f24;
-  overflow-y: auto;
+  /* no overflow clipping — tooltips fly out to the left of the rail */
+}
+
+.rail button {
+  position: relative;
+}
+
+.rail button[data-tip]:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  right: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: #2c2f36;
+  border: 1px solid #3a3e46;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #e6e4df;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 20;
 }
 
 .rail button {

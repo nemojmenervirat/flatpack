@@ -84,5 +84,10 @@ export function hardwareList(piece) {
     .filter((p) => p.name.includes('hanging'))
     .map((p) => ({ length: sortedDims(p.size)[0] }));
 
-  return { hinges, hingesTotal, drawers, slideBoxDepth, shelves, shelfPins: shelves * 4, rails };
+  // coat hooks: one per ~280mm of hook rail, at least 3
+  const hooks = parts
+    .filter((p) => p.name.includes('hook'))
+    .reduce((n, p) => n + Math.max(3, Math.round(sortedDims(p.size)[0] / 280)), 0);
+
+  return { hinges, hingesTotal, drawers, slideBoxDepth, shelves, shelfPins: shelves * 4, rails, hooks };
 }
