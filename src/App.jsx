@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react';
-import Viewer from './Viewer.jsx';
+import { useEffect, useMemo, useState } from 'react';
+import Viewer, { PieceViewer } from './Viewer.jsx';
 import { fitReport } from './geometry.js';
 import { cutList, cutListCsv } from './cutlist.js';
+import { partRows, hardwareList } from './hardware.js';
 import apartment from './data/apartment.json';
 import scene from './data/scene.json';
 import wardrobe from './data/wardrobe.json';
@@ -17,90 +18,215 @@ const piecesById = {
   [wardrobe.id]: wardrobe,
   [wardrobeHall.id]: wardrobeHall,
   [wardrobeMaster1.id]: wardrobeMaster1,
-  [wardrobeDeskRoom5.id]: wardrobeDeskRoom5,
-  [wardrobeRoom6.id]: wardrobeRoom6,
   [bed.id]: bed,
   [bed90.id]: bed90,
   [bed180.id]: bed180,
+  [wardrobeDeskRoom5.id]: wardrobeDeskRoom5,
+  [wardrobeRoom6.id]: wardrobeRoom6,
 };
 
+// short codes for the rail buttons; unknown ids fall back to initials
+const RAIL_CODES = {
+  wardrobe: 'W',
+  'wardrobe-hall': 'WH',
+  'wardrobe-master-1': 'WM',
+  bed: 'B',
+  'bed-90': 'B9',
+  'bed-180': 'B18',
+  'wardrobe-desk-room5': 'W5',
+  'wardrobe-room6': 'W6',
+};
+const railCode = (id) =>
+  RAIL_CODES[id] ||
+  id
+    .split(/[^a-z0-9]+/i)
+    .filter(Boolean)
+    .map((w) => w[0])
+    .join('')
+    .slice(0, 3)
+    .toUpperCase();
+
+// view + toggles survive a refresh
+const lsGet = (key, fallback) => {
+  try {
+    const v = localStorage.getItem(key);
+    return v === null ? fallback : JSON.parse(v);
+  } catch {
+    return fallback;
+  }
+};
+const lsSet = (key, value) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    /* private mode etc. — the app just won't remember */
+  }
+};
+
+const m = (mm) => (mm >= 1000 ? `${(mm / 1000).toFixed(2)} m` : `${mm} mm`);
+
+const bandingText = (b) =>
+  b.edges === 'none' ? '—' : b.edges === 'all' ? `all 4 edges, ${m(b.length)}` : `front edge, ${m(b.length)}`;
+
+function PiecePanel({ piece, hoverIndex, onHoverRow }) {
+  const rows = useMemo(() => partRows(piece), [piece]);
+  const hw = useMemo(() => hardwareList(piece), [piece]);
+  const bandTotal = rows.reduce((n, r) => n + r.banding.length * r.qty, 0);
+
+  const copyCsv = () =>
+    navigator.clipboard.writeText(cutListCsv(cutList({ placements: [{ piece: piece.id }] }, piecesById)));
+
+  return (
+    <div className="piece-panel">
+      <h1>{piece.name}</h1>
+      {!piece.buildable && <p className="muted">bought piece — not part of the cut list</p>}
+
+      <section>
+        <h2>Parts</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Part</th>
+              <th>Cut (mm)</th>
+              <th>Thk</th>
+              <th>Qty</th>
+              <th>Edge band</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r, i) => (
+              <tr
+                key={i}
+                className={hoverIndex != null && r.indices.includes(hoverIndex) ? 'hot' : ''}
+                onMouseEnter={() => onHoverRow(new Set(r.indices))}
+                onMouseLeave={() => onHoverRow(null)}
+              >
+                <td>{r.name}</td>
+                <td>
+                  {r.length} × {r.width}
+                </td>
+                <td>{r.thickness}</td>
+                <td>{r.qty}</td>
+                <td>{bandingText(r.banding)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {piece.buildable && (
+          <>
+            <p className="muted">edge banding total: {m(bandTotal)}</p>
+            <button onClick={copyCsv}>Copy cut list CSV</button>
+          </>
+        )}
+      </section>
+
+      {(hw.hingesTotal > 0 || hw.drawers > 0 || hw.shelves > 0 || hw.rails.length > 0) && (
+        <section>
+          <h2>Hardware</h2>
+          <ul className="hardware">
+            {hw.hinges.map((g, i) => (
+              <li key={`h${i}`}>
+                {g.doors * g.perDoor} × hinge — {g.doors} door{g.doors > 1 ? 's' : ''} {g.doorW}×{g.doorH},{' '}
+                {g.perDoor} each, hinge {g.side}
+              </li>
+            ))}
+            {hw.hingesTotal > 0 && <li className="muted">hinges total: {hw.hingesTotal}</li>}
+            {hw.drawers > 0 && (
+              <li>
+                {hw.drawers} × drawer slide pair{hw.drawers > 1 ? 's' : ''}
+                {hw.slideBoxDepth ? ` (box depth ${hw.slideBoxDepth})` : ''}
+              </li>
+            )}
+            {hw.shelves > 0 && (
+              <li>
+                {hw.shelfPins} × shelf support ({hw.shelves} shelves × 4)
+              </li>
+            )}
+            {hw.rails.map((r, i) => (
+              <li key={`r${i}`}>1 × hanging rail, {r.length} mm</li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </div>
+  );
+}
+
 export default function App() {
-  const [showClearances, setShowClearances] = useState(true);
+  const [view, setView] = useState(() => lsGet('flatpack.view', 'apartment'));
+  const [showClearances, setShowClearances] = useState(() => lsGet('flatpack.showClearances', true));
+  const [highlight, setHighlight] = useState(null); // Set of part indices (table -> 3D)
+  const [hoverIndex, setHoverIndex] = useState(null); // part index (3D -> table)
+
+  useEffect(() => lsSet('flatpack.view', view), [view]);
+  useEffect(() => lsSet('flatpack.showClearances', showClearances), [showClearances]);
 
   const report = useMemo(() => fitReport(scene, piecesById, apartment), []);
-  const rows = useMemo(() => cutList(scene, piecesById), []);
 
-  const copyCsv = () => navigator.clipboard.writeText(cutListCsv(rows));
+  const piece = view !== 'apartment' ? piecesById[view] : null;
+  useEffect(() => {
+    if (view !== 'apartment' && !piecesById[view]) setView('apartment'); // stale localStorage
+  }, [view]);
+
+  const copyAllCsv = () => navigator.clipboard.writeText(cutListCsv(cutList(scene, piecesById)));
 
   return (
     <div className="app">
       <div className="canvas-pane">
-        <Viewer apartment={apartment} report={report} showClearances={showClearances} />
-      </div>
+        {piece ? (
+          <PieceViewer key={piece.id} piece={piece} highlight={highlight} onHoverPart={setHoverIndex} />
+        ) : (
+          <Viewer apartment={apartment} report={report} showClearances={showClearances} />
+        )}
 
-      <div className="side-pane">
-        <h1>flatpack</h1>
+        {piece && <PiecePanel piece={piece} hoverIndex={hoverIndex} onHoverRow={setHighlight} />}
 
-        <section>
-          <h2>Fit report</h2>
-          {report.issues.length === 0 && <p className="ok">Everything fits.</p>}
-          <ul className="issues">
-            {report.issues.map((issue, i) => (
-              <li key={i} className={issue.level}>
-                {issue.level === 'collision' ? '✕' : '⚠'} {issue.text}
-              </li>
-            ))}
-          </ul>
-          <label className="toggle">
-            <input
-              type="checkbox"
-              checked={showClearances}
-              onChange={(e) => setShowClearances(e.target.checked)}
-            />
-            show clearance zones
-          </label>
-        </section>
-
-        <section>
-          <h2>Cut list</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Part</th>
-                <th>Cut (mm)</th>
-                <th>Thk</th>
-                <th>Qty</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r, i) => (
-                <tr key={i}>
-                  <td>{r.part}</td>
-                  <td>
-                    {r.length} × {r.width}
-                  </td>
-                  <td>{r.thickness}</td>
-                  <td>{r.qty}</td>
-                </tr>
+        {!piece && report.issues.length > 0 && (
+          <div className="issues-chip">
+            <ul className="issues">
+              {report.issues.map((issue, i) => (
+                <li key={i} className={issue.level}>
+                  {issue.level === 'collision' ? '✕' : '⚠'} {issue.text}
+                </li>
               ))}
-            </tbody>
-          </table>
-          <button onClick={copyCsv}>Copy as CSV (for cutlistoptimizer.com)</button>
-        </section>
-
-        <section>
-          <h2>Pieces</h2>
-          <ul className="pieces">
-            {report.placed.map((p) => (
-              <li key={p.id}>
-                {p.name} — {Math.round(p.bbox.max[0] - p.bbox.min[0])} ×{' '}
-                {Math.round(p.bbox.max[1] - p.bbox.min[1])} ×{' '}
-                {Math.round(p.bbox.max[2] - p.bbox.min[2])} mm
-              </li>
-            ))}
-          </ul>
-        </section>
+            </ul>
+          </div>
+        )}
+        {!piece && (
+          <button className="csv-chip" onClick={copyAllCsv} title="Copy the full cut list as CSV">
+            ⧉ cut list
+          </button>
+        )}
       </div>
+
+      <nav className="rail">
+        <button
+          className={view === 'apartment' ? 'active' : ''}
+          title="Whole apartment"
+          onClick={() => setView('apartment')}
+        >
+          🏠
+        </button>
+        <div className="rail-sep" />
+        {Object.values(piecesById).map((p) => (
+          <button
+            key={p.id}
+            className={view === p.id ? 'active' : ''}
+            title={p.name}
+            onClick={() => setView(p.id)}
+          >
+            {railCode(p.id)}
+          </button>
+        ))}
+        <div className="rail-sep" />
+        <button
+          className={showClearances ? 'active' : ''}
+          title="Show clearance zones (apartment view)"
+          onClick={() => setShowClearances((v) => !v)}
+        >
+          ⛶
+        </button>
+      </nav>
     </div>
   );
 }

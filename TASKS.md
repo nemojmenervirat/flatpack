@@ -32,14 +32,26 @@ _(empty)_
 - Board count / cost estimate: given board size and price, compute boards needed and
   rough cost directly in the app (before cutlistoptimizer).
 - Wall openings by subtraction (CSG) instead of hand-split wall segments.
-- Edge banding lengths in the cut list (perimeter of visible edges).
-- Hardware list per piece: hinges, drawer slides, screws, rail — as data on the piece.
+- Hardware/banding as authored data on the piece where the derived rule is wrong
+  (hardware.js currently derives everything by convention).
 - Unit tests for geometry.js and cutlist.js (vitest).
 - Labels in the 3D view (piece names floating over boxes, drei `<Html>`).
 - Export scene as PNG snapshot.
 
 ## Done
 
+- 2026-08-27 — UI rework: the right side panel is gone, replaced by a 36px menu rail
+  on the right — 🏠 whole apartment, a chip per piece (W5, W6, WH, B9, …), and the
+  clearance-zones toggle ⛶. Current view + toggle persist in localStorage across
+  refreshes. Clicking a piece opens a single-piece view: the piece alone in 3D
+  (auto-framed, doors still clickable) plus a floating panel with the parts table
+  (cut size, thickness, qty, edge banding per part + total), hardware list (hinges
+  per door with side and count, drawer slide pairs with box depth, shelf supports,
+  hanging rail lengths) and a per-piece cut-list CSV button; hovering a table row
+  highlights the parts in 3D and vice versa. Apartment view keeps the fit report as
+  a floating chip (only when there are issues) and a full-CSV button. New pure module
+  `src/hardware.js` derives banding + hardware from parts by convention (covers the
+  two "Later" items about banding/hardware; authored overrides stay in Later).
 - 2026-08-27 — New piece `wardrobe-room6`: built-in wardrobe + work desk L for room 6.
   Wardrobe 2000 × 600 × 2600 filling the niche in the east wall (back against
   `niche-east`, front flush with the room's wall plane at x 11596): hanging bay +

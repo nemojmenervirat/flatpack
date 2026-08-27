@@ -533,3 +533,76 @@ export default function Viewer({ apartment, report, showClearances }) {
     </Canvas>
   );
 }
+
+// Single-piece view: the piece alone at the origin on a grid, auto-framed.
+// highlight = Set of part indices to light up (driven by the parts table);
+// onHoverPart reports the hovered part index back so the table can follow.
+// Remount (key it by piece id) when the piece changes so the camera reframes.
+export function PieceViewer({ piece, highlight, onHoverPart }) {
+  const parts = piece.parts?.length
+    ? piece.parts
+    : [{ name: piece.name, pos: [0, 0, 0], size: piece.size, color: piece.color || '#8a93a6' }];
+  const bb = pieceLocalBBox(piece);
+  const centerX = (bb.min[0] + bb.max[0]) / 2;
+  const isDoor = (p) => p.name.startsWith('door');
+
+  const [hover, setHover] = useState(null); // part index under the pointer
+  const setHovered = (i) => {
+    setHover(i);
+    onHoverPart?.(i);
+  };
+
+  // three-space center of the piece and a camera distance from its span
+  const c = [
+    ((bb.min[0] + bb.max[0]) / 2) * S,
+    ((bb.min[2] + bb.max[2]) / 2) * S,
+    (-(bb.min[1] + bb.max[1]) / 2) * S,
+  ];
+  const span = Math.max(bb.max[0] - bb.min[0], bb.max[1] - bb.min[1], bb.max[2] - bb.min[2]) * S;
+  const cam = [c[0] + span * 0.9, c[1] + span * 0.75, c[2] + span * 1.3];
+
+  const hoveredPart = hover != null ? parts[hover] : null;
+
+  return (
+    <Canvas camera={{ position: cam, fov: 45 }} style={{ background: '#16181c' }}>
+      <color attach="background" args={['#16181c']} />
+      <ambientLight intensity={0.75} />
+      <directionalLight position={[4, 8, 5]} intensity={1.3} />
+      <gridHelper
+        args={[Math.ceil(span * 3), Math.ceil(span * 3) * 2, '#3a3e46', '#24272d']}
+        position={[c[0], -0.001, c[2]]}
+      />
+
+      {parts.map((p, i) => {
+        const lit = hover === i || highlight?.has(i);
+        return (
+          <group
+            key={i}
+            onPointerOver={(e) => {
+              e.stopPropagation();
+              setHovered(i);
+            }}
+            onPointerOut={() => setHovered(null)}
+          >
+            {isDoor(p) ? (
+              <Door part={p} color={p.color || piece.color || '#c9a36b'} pieceCenterX={centerX} hovered={lit} />
+            ) : (
+              <LocalBox part={p} color={p.color || piece.color || '#c9a36b'} hovered={lit} />
+            )}
+          </group>
+        );
+      })}
+
+      {hoveredPart && (
+        <DimLabel
+          box={aabbOf(hoveredPart.pos, hoveredPart.size)}
+          name={hoveredPart.name}
+          text={[...hoveredPart.size].sort((a, b) => b - a).join(' × ')}
+          className="piece"
+        />
+      )}
+
+      <OrbitControls target={c} makeDefault />
+    </Canvas>
+  );
+}

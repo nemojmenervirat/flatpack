@@ -24,14 +24,100 @@ body {
 .canvas-pane {
   flex: 1;
   min-width: 0;
+  position: relative;
 }
 
-.side-pane {
-  width: 340px;
-  padding: 16px;
-  overflow-y: auto;
+/* slim menu rail on the right */
+.rail {
+  width: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 0;
   border-left: 1px solid #2c2f36;
   background: #1c1f24;
+  overflow-y: auto;
+}
+
+.rail button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-size: 10px;
+  line-height: 1;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rail button.active {
+  background: #4a4638;
+  border-color: #ffd479;
+  color: #ffd479;
+}
+
+.rail-sep {
+  width: 20px;
+  border-top: 1px solid #2c2f36;
+  margin: 4px 0;
+}
+
+/* floating panels over the canvas */
+.piece-panel {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  bottom: 12px;
+  width: 400px;
+  max-width: 45%;
+  overflow-y: auto;
+  padding: 14px;
+  border: 1px solid #2c2f36;
+  border-radius: 10px;
+  background: rgba(28, 31, 36, 0.92);
+}
+
+.issues-chip {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  max-width: 45%;
+  padding: 8px 12px;
+  border: 1px solid #2c2f36;
+  border-radius: 10px;
+  background: rgba(28, 31, 36, 0.92);
+}
+
+.csv-chip {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+}
+
+.muted {
+  color: #9a958c;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.hardware {
+  list-style: none;
+}
+
+.hardware li {
+  padding: 3px 0;
+  color: #c9c5bd;
+}
+
+tr.hot td {
+  background: #34302a;
+  color: #ffd479;
+}
+
+tbody tr {
+  cursor: default;
 }
 
 h1 {
