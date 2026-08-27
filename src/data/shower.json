@@ -1,0 +1,12 @@
+{
+  "id": "shower",
+  "name": "Walk-in shower 900",
+  "buildable": false,
+  "color": "#dfe3e6",
+  "parts": [
+    { "name": "tray", "pos": [0, 0, 0], "size": [900, 1699, 40], "color": "#e9e7e1" },
+    { "name": "glass panel", "pos": [892, 699, 40], "size": [8, 1000, 2000], "color": "#bcd8ee", "opacity": 0.3 },
+    { "name": "column", "pos": [430, 1659, 40], "size": [40, 40, 2060], "color": "#c0c4c8" },
+    { "name": "shower head", "pos": [355, 1379, 2050], "size": [190, 280, 24], "color": "#c0c4c8" }
+  ]
+}

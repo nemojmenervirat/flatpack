@@ -1,0 +1,12 @@
+{
+  "id": "bathtub",
+  "name": "Bathtub 1700",
+  "buildable": false,
+  "color": "#f4f2ec",
+  "clearance": { "front": 600 },
+  "parts": [
+    { "name": "tub", "pos": [0, 0, 0], "size": [1700, 750, 540] },
+    { "name": "rim", "pos": [-20, -20, 540], "size": [1720, 770, 60], "color": "#f7f5ef" },
+    { "name": "tap", "pos": [1560, 620, 600], "size": [60, 60, 180], "color": "#c0c4c8" }
+  ]
+}

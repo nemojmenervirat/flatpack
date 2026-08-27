@@ -77,6 +77,116 @@
       }
     },
     {
+      "piece": "shower",
+      "label": "Walk-in shower - WC",
+      "pos": [
+        9447,
+        7349,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "sink",
+      "label": "Sink - WC",
+      "pos": [
+        10453,
+        8588,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "toilet",
+      "label": "Toilet - WC",
+      "pos": [
+        11160,
+        8548,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "sink",
+      "label": "Sink - bath",
+      "pos": [
+        12257,
+        7200,
+        0
+      ],
+      "rot": 90
+    },
+    {
+      "piece": "toilet",
+      "label": "Toilet - bath",
+      "pos": [
+        12297,
+        8300,
+        0
+      ],
+      "rot": 90
+    },
+    {
+      "piece": "bathtub",
+      "label": "Bathtub - bath",
+      "pos": [
+        13094,
+        8298,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "washer",
+      "label": "Washer - bath",
+      "pos": [
+        14194,
+        7447,
+        0
+      ],
+      "rot": 180
+    },
+    {
+      "piece": "dryer",
+      "label": "Dryer - bath",
+      "pos": [
+        14794,
+        7447,
+        0
+      ],
+      "rot": 180
+    },
+    {
+      "piece": "water-heater",
+      "label": "Water heater - bath",
+      "pos": [
+        14747,
+        7347,
+        1150
+      ],
+      "rot": 180
+    },
+    {
+      "piece": "desk-master",
+      "label": "Desk + shelves - master",
+      "pos": [
+        11797,
+        250,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "wardrobe-master-2",
+      "label": "Master wardrobe 2 - east wall",
+      "pos": [
+        14194,
+        3168,
+        0
+      ],
+      "rot": 270
+    },
+    {
       "piece": "wardrobe-master-1",
       "pos": [
         12928,

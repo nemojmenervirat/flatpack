@@ -1,0 +1,27 @@
+{
+  "id": "desk-master",
+  "name": "Desk + shelves (master)",
+  "buildable": true,
+  "color": "#c9a36b",
+  "parts": [
+    { "name": "side", "pos": [0, 0, 0], "size": [400, 18, 2000] },
+    { "name": "side", "pos": [0, 1182, 0], "size": [400, 18, 2000] },
+    { "name": "bottom", "pos": [3, 18, 0], "size": [397, 1164, 18] },
+    { "name": "top", "pos": [3, 18, 1982], "size": [397, 1164, 18] },
+    { "name": "back HDF", "pos": [0, 18, 18], "size": [3, 1164, 1964], "color": "#b9a98c" },
+    { "name": "partition", "pos": [3, 591, 18], "size": [397, 18, 1964] },
+
+    { "name": "open shelf", "pos": [3, 18, 360], "size": [397, 573, 18] },
+    { "name": "open shelf", "pos": [3, 609, 360], "size": [397, 573, 18] },
+    { "name": "open shelf", "pos": [3, 18, 732], "size": [397, 573, 18] },
+    { "name": "open shelf", "pos": [3, 609, 732], "size": [397, 573, 18] },
+    { "name": "open shelf", "pos": [3, 18, 1100], "size": [397, 573, 18] },
+    { "name": "open shelf", "pos": [3, 609, 1100], "size": [397, 573, 18] },
+    { "name": "open shelf", "pos": [3, 18, 1500], "size": [397, 573, 18] },
+    { "name": "open shelf", "pos": [3, 609, 1500], "size": [397, 573, 18] },
+
+    { "name": "desk top", "pos": [400, 0, 722], "size": [1379, 600, 28], "color": "#b08d5f" },
+    { "name": "desk end panel", "pos": [1761, 0, 0], "size": [18, 600, 722] },
+    { "name": "desk apron", "pos": [400, 0, 522], "size": [1361, 18, 200] }
+  ]
+}

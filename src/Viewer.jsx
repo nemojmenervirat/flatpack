@@ -369,7 +369,13 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
               hovered={hovered}
             />
           ) : (
-            <LocalBox key={i} part={p} color={p.color || piece.color || '#c9a36b'} hovered={hovered} />
+            <LocalBox
+              key={i}
+              part={p}
+              color={p.color || piece.color || '#c9a36b'}
+              opacity={p.opacity ?? 1}
+              hovered={hovered}
+            />
           )
         )}
       </group>
@@ -592,7 +598,7 @@ export function PieceViewer({ piece, highlight, onHoverPart }) {
             {isDoor(p) ? (
               <Door part={p} color={p.color || piece.color || '#c9a36b'} pieceCenterX={centerX} hovered={lit} />
             ) : (
-              <LocalBox part={p} color={p.color || piece.color || '#c9a36b'} hovered={lit} />
+              <LocalBox part={p} color={p.color || piece.color || '#c9a36b'} opacity={p.opacity ?? 1} hovered={lit} />
             )}
           </group>
         );

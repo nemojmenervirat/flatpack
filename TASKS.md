@@ -40,6 +40,40 @@ _(empty)_
 
 ## Done
 
+- 2026-08-27 — New piece `desk-master`: work desk + open shelving L in the master's
+  SW corner. Shelf unit 1200 × 400 × 2000 against `room6-master-s` (two 573 columns,
+  4 shelf levels, one flush with the desk top at 750); desk 1379 × 600 × 750 under
+  the south window, running from the shelf unit to exactly the edge of
+  wardrobe-master-2's front clearance. No doors, so authored in natural orientation,
+  rot 0 at [11797, 250]; the L-notch self-reserves the knee space. Fit report clean.
+- 2026-08-27 — New piece `wardrobe-master-2`: 2918 × 600 × 2600 full-height wardrobe
+  along `east-1` in the master, from the south wall up to 3 mm short of the bed's
+  500 mm getting-in aisle (bed headboard is on the same wall). Two hanging bays +
+  shelf column, two-tier doors (4 × 725 lower + upper), doors facing west, rot 270
+  at [14194, 3168]. Front clearance 600, all clear. Fit report clean.
+- 2026-08-27 — New bought piece `water-heater` (100 l, 500 × 500 × 950 + pipe stubs
+  and dial): wall-mounted on `bath-south` centered above the dryer, bottom at 1150
+  (300 above the dryer top), top at 2100. First placement using a non-zero pos z.
+  Fit report clean.
+- 2026-08-27 — Laundry corner: new bought pieces `washer` and `dryer` (600 × 600 × 850,
+  body + glass drum door + control panel) side by side against `bath-south`, rot 180
+  facing north — washer x 13594–14194, dryer flush to the east wall at 14194–14794.
+  Clear of the door swing, sink clearance and tub entry zone. Fit report clean.
+- 2026-08-27 — Bathroom fitted out: `sink` and `toilet` (reused pieces, rot 90 facing
+  east) on the bath side of `wc-east` — sink at y 7200–7800 near the door, toilet at
+  y 8300–8800 — and a new bought piece `bathtub` (1700 × 750, rim overhanging the
+  open sides, tap at the corner end) in the NE corner against `wing-north` and the
+  east wall, under the window (tub 780 ≤ sill 900). All clearances clear of the door
+  swing and each other. Fit report clean.
+- 2026-08-27 — WC fitted out, left to right from the door: walk-in `shower` (900-wide
+  full-depth cabin in the west end, tray + fixed glass panel with a 700 entry gap at
+  the south-east, rain column), `sink` vanity 600 on the north wall (wall-hung
+  two-door cabinet, counter, basin, tap, mirror), wall-hung `toilet` with concealed
+  cistern on `wing-north` east of the sink (150-deep tiled chase, bowl, seat, flush
+  plate; bowl faces south, clear of the door swing). All bought pieces
+  (buildable: false); sink and toilet carry 600 front clearance, the shower entry is
+  the room walkway. Parts can now carry an `opacity` (shower glass, mirror).
+  Fit report clean.
 - 2026-08-27 — New piece `hall-bench`: entry bench + coat rack against the north-east
   hall wall (between the entrance and WC doors, clear of both door swings). Bench
   1600 × 400, seat at 450 (28 mm), two open shoe cubbies with a mid shelf at 200

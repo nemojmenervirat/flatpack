@@ -1,0 +1,18 @@
+{
+  "id": "sink",
+  "name": "Sink vanity 600",
+  "buildable": false,
+  "color": "#e8e4da",
+  "clearance": { "front": 600 },
+  "parts": [
+    { "name": "side", "pos": [0, 0, 250], "size": [18, 460, 552] },
+    { "name": "side", "pos": [582, 0, 250], "size": [18, 460, 552] },
+    { "name": "bottom", "pos": [18, 0, 250], "size": [564, 460, 18] },
+    { "name": "counter", "pos": [0, -10, 802], "size": [600, 470, 18], "color": "#b08d5f" },
+    { "name": "door", "pos": [3, -18, 253], "size": [295, 18, 546] },
+    { "name": "door", "pos": [302, -18, 253], "size": [295, 18, 546] },
+    { "name": "basin", "pos": [75, 60, 820], "size": [450, 350, 140], "color": "#f4f2ec" },
+    { "name": "tap", "pos": [270, 415, 820], "size": [60, 45, 280], "color": "#c0c4c8" },
+    { "name": "mirror", "pos": [50, 452, 1300], "size": [500, 8, 700], "color": "#bcd8ee", "opacity": 0.5 }
+  ]
+}

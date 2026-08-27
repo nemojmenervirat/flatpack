@@ -1,0 +1,12 @@
+{
+  "id": "water-heater",
+  "name": "Water heater 100l",
+  "buildable": false,
+  "color": "#eceae4",
+  "parts": [
+    { "name": "tank", "pos": [0, 0, 0], "size": [500, 500, 950] },
+    { "name": "dial", "pos": [200, -8, 80], "size": [100, 8, 100], "color": "#2e3338" },
+    { "name": "pipe", "pos": [140, 400, -120], "size": [40, 40, 120], "color": "#c0c4c8" },
+    { "name": "pipe", "pos": [320, 400, -120], "size": [40, 40, 120], "color": "#c0c4c8" }
+  ]
+}

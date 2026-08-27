@@ -1,0 +1,33 @@
+{
+  "id": "wardrobe-master-2",
+  "name": "Master wardrobe 2 (east wall)",
+  "buildable": true,
+  "color": "#c9a36b",
+  "clearance": { "front": 600 },
+  "parts": [
+    { "name": "side", "pos": [0, 0, 0], "size": [18, 600, 2600] },
+    { "name": "side", "pos": [2900, 0, 0], "size": [18, 600, 2600] },
+    { "name": "bottom", "pos": [18, 0, 0], "size": [2882, 600, 18] },
+    { "name": "top", "pos": [18, 0, 2582], "size": [2882, 600, 18] },
+    { "name": "back HDF", "pos": [18, 597, 18], "size": [2882, 3, 2564], "color": "#b9a98c" },
+    { "name": "partition", "pos": [967, 0, 18], "size": [18, 597, 2564] },
+    { "name": "partition", "pos": [1934, 0, 18], "size": [18, 597, 2564] },
+
+    { "name": "shelf hanging bay", "pos": [18, 0, 1900], "size": [949, 597, 18] },
+    { "name": "shelf hanging bay", "pos": [985, 0, 1900], "size": [949, 597, 18] },
+    { "name": "shelf column", "pos": [1952, 0, 400], "size": [948, 597, 18] },
+    { "name": "shelf column", "pos": [1952, 0, 800], "size": [948, 597, 18] },
+    { "name": "shelf column", "pos": [1952, 0, 1200], "size": [948, 597, 18] },
+    { "name": "shelf column", "pos": [1952, 0, 1600], "size": [948, 597, 18] },
+    { "name": "shelf column", "pos": [1952, 0, 2000], "size": [948, 597, 18] },
+
+    { "name": "door lower", "pos": [3, -18, 3], "size": [725, 18, 1894], "color": "#e8e4da" },
+    { "name": "door lower", "pos": [732, -18, 3], "size": [725, 18, 1894], "color": "#e8e4da" },
+    { "name": "door lower", "pos": [1461, -18, 3], "size": [725, 18, 1894], "color": "#e8e4da" },
+    { "name": "door lower", "pos": [2190, -18, 3], "size": [725, 18, 1894], "color": "#e8e4da" },
+    { "name": "door upper", "pos": [3, -18, 1903], "size": [725, 18, 694], "color": "#e8e4da" },
+    { "name": "door upper", "pos": [732, -18, 1903], "size": [725, 18, 694], "color": "#e8e4da" },
+    { "name": "door upper", "pos": [1461, -18, 1903], "size": [725, 18, 694], "color": "#e8e4da" },
+    { "name": "door upper", "pos": [2190, -18, 1903], "size": [725, 18, 694], "color": "#e8e4da" }
+  ]
+}

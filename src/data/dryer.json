@@ -1,0 +1,12 @@
+{
+  "id": "dryer",
+  "name": "Dryer",
+  "buildable": false,
+  "color": "#e0ded8",
+  "clearance": { "front": 600 },
+  "parts": [
+    { "name": "body", "pos": [0, 0, 0], "size": [600, 600, 850] },
+    { "name": "drum door", "pos": [100, -20, 200], "size": [400, 20, 400], "color": "#3a3e46", "opacity": 0.85 },
+    { "name": "control panel", "pos": [40, -12, 760], "size": [520, 12, 60], "color": "#c9c5bd" }
+  ]
+}

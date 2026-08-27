@@ -9,29 +9,56 @@ import wardrobeHall from './data/wardrobe-hall.json';
 import bed90 from './data/bed-90.json';
 import bed180 from './data/bed-180.json';
 import wardrobeMaster1 from './data/wardrobe-master-1.json';
+import wardrobeMaster2 from './data/wardrobe-master-2.json';
+import deskMaster from './data/desk-master.json';
 import wardrobeDeskRoom5 from './data/wardrobe-desk-room5.json';
 import wardrobeRoom6 from './data/wardrobe-room6.json';
 import hallBench from './data/hall-bench.json';
+import shower from './data/shower.json';
+import sink from './data/sink.json';
+import toilet from './data/toilet.json';
+import bathtub from './data/bathtub.json';
+import washer from './data/washer.json';
+import dryer from './data/dryer.json';
+import waterHeater from './data/water-heater.json';
 
 const piecesById = {
   [wardrobeHall.id]: wardrobeHall,
   [wardrobeMaster1.id]: wardrobeMaster1,
+  [wardrobeMaster2.id]: wardrobeMaster2,
+  [deskMaster.id]: deskMaster,
   [bed90.id]: bed90,
   [bed180.id]: bed180,
   [wardrobeDeskRoom5.id]: wardrobeDeskRoom5,
   [wardrobeRoom6.id]: wardrobeRoom6,
   [hallBench.id]: hallBench,
+  [shower.id]: shower,
+  [sink.id]: sink,
+  [toilet.id]: toilet,
+  [bathtub.id]: bathtub,
+  [washer.id]: washer,
+  [dryer.id]: dryer,
+  [waterHeater.id]: waterHeater,
 };
 
 // short codes for the rail buttons; unknown ids fall back to initials
 const RAIL_CODES = {
   'wardrobe-hall': 'WH',
   'wardrobe-master-1': 'WM',
+  'wardrobe-master-2': 'M2',
+  'desk-master': 'DM',
   'bed-90': 'B9',
   'bed-180': 'B18',
   'wardrobe-desk-room5': 'W5',
   'wardrobe-room6': 'W6',
   'hall-bench': 'HB',
+  shower: 'SH',
+  sink: 'SK',
+  toilet: 'WC',
+  bathtub: 'BT',
+  washer: 'WA',
+  dryer: 'DY',
+  'water-heater': 'WH2',
 };
 const railCode = (id) =>
   RAIL_CODES[id] ||
