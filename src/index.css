@@ -146,6 +146,25 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+.piece-btn .tag {
+  color: #77716a;
+  font-size: 10px;
+  border: 1px solid #34383f;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+
+.size-line {
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  color: #e6e4df;
+}
+
+.muted-inline {
+  color: #9a958c;
+  font-size: 12px;
+}
+
 .piece-btn:hover {
   background: #2c2f36;
   color: #e6e4df;

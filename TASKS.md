@@ -40,6 +40,12 @@ _(empty)_
 
 ## Done
 
+- 2026-08-27 — Bought vs buildable in the UI: bought pieces (`buildable: false`) now get
+  their own panel in the piece view — name, overall W × D × H, and how many are placed —
+  instead of the meaningless cut table with banding; the cut-list panel (parts, hardware,
+  CSV) is buildable-only. Sidebar rows for bought pieces carry a small "bought" tag.
+  No data changes: all 31 pieces already had the right flag, and cutlist.js already
+  skipped bought ones.
 - 2026-08-27 — Piece browser sidebar: replaced the rail of two-letter codes (31 buttons,
   unreadable and growing) with a collapsible 240 px sidebar listing pieces by full name,
   grouped by room. Groups are derived, not maintained: each placement's world bbox center

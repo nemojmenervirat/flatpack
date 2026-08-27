@@ -143,6 +143,30 @@ const m = (mm) => (mm >= 1000 ? `${(mm / 1000).toFixed(2)} m` : `${mm} mm`);
 const bandingText = (b) =>
   b.edges === 'none' ? '—' : b.edges === 'all' ? `all 4 edges, ${m(b.length)}` : `front edge, ${m(b.length)}`;
 
+// Bought pieces aren't cut from boards — the parts only model how the thing
+// looks. All that matters for shopping is the outer size and where it goes.
+function BoughtPanel({ piece }) {
+  const bb = pieceLocalBBox(piece);
+  const [w, d, h] = [0, 1, 2].map((i) => bb.max[i] - bb.min[i]);
+  const placed = scene.placements.filter((pl) => pl.piece === piece.id).length;
+  return (
+    <div className="piece-panel">
+      <h1>{piece.name}</h1>
+      <p className="muted">bought as-is — nothing to cut or build</p>
+      <section>
+        <h2>Overall size</h2>
+        <p className="size-line">
+          {w} × {d} × {h} mm <span className="muted-inline">(width × depth × height)</span>
+        </p>
+      </section>
+      <section>
+        <h2>In the plan</h2>
+        <p className="size-line">placed {placed}×</p>
+      </section>
+    </div>
+  );
+}
+
 function PiecePanel({ piece, hoverIndex, onHoverRow }) {
   const rows = useMemo(() => partRows(piece), [piece]);
   const hw = useMemo(() => hardwareList(piece), [piece]);
@@ -154,7 +178,6 @@ function PiecePanel({ piece, hoverIndex, onHoverRow }) {
   return (
     <div className="piece-panel">
       <h1>{piece.name}</h1>
-      {!piece.buildable && <p className="muted">bought piece — not part of the cut list</p>}
 
       <section>
         <h2>Parts</h2>
@@ -187,12 +210,8 @@ function PiecePanel({ piece, hoverIndex, onHoverRow }) {
             ))}
           </tbody>
         </table>
-        {piece.buildable && (
-          <>
-            <p className="muted">edge banding total: {m(bandTotal)}</p>
-            <button onClick={copyCsv}>Copy cut list CSV</button>
-          </>
-        )}
+        <p className="muted">edge banding total: {m(bandTotal)}</p>
+        <button onClick={copyCsv}>Copy cut list CSV</button>
       </section>
 
       {(hw.hingesTotal > 0 || hw.drawers > 0 || hw.shelves > 0 || hw.rails.length > 0 || hw.hooks > 0) && (
@@ -263,7 +282,12 @@ export default function App() {
           />
         )}
 
-        {piece && <PiecePanel piece={piece} hoverIndex={hoverIndex} onHoverRow={setHighlight} />}
+        {piece &&
+          (piece.buildable ? (
+            <PiecePanel piece={piece} hoverIndex={hoverIndex} onHoverRow={setHighlight} />
+          ) : (
+            <BoughtPanel piece={piece} />
+          ))}
 
         {!piece && report.issues.length > 0 && (
           <div className="issues-chip">
@@ -331,6 +355,7 @@ export default function App() {
                       >
                         <span className="nm">{it.name}</span>
                         {it.count > 1 && <span className="ct">×{it.count}</span>}
+                        {!piecesById[it.id].buildable && <span className="tag">bought</span>}
                       </button>
                     ))}
                   </div>
