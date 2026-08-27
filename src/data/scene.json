@@ -44,6 +44,16 @@
       "rot": 180
     },
     {
+      "piece": "wardrobe-room6",
+      "label": "Wardrobe + desk - room 6",
+      "pos": [
+        10407,
+        3598,
+        0
+      ],
+      "rot": 270
+    },
+    {
       "piece": "bed-180",
       "label": "Master bed",
       "pos": [

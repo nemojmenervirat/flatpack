@@ -40,6 +40,15 @@ _(empty)_
 
 ## Done
 
+- 2026-08-27 — New piece `wardrobe-room6`: built-in wardrobe + work desk L for room 6.
+  Wardrobe 2000 × 600 × 2600 filling the niche in the east wall (back against
+  `niche-east`, front flush with the room's wall plane at x 11596): hanging bay +
+  shelf column behind two-tier doors (2 + 2, split at 1900), and an open shelf bay
+  (6 shelves, one flush with the desk top) at the south end next to the desk. Desk
+  1189 × 600 × 750 along the window wall from the wardrobe to the edge of the bed's
+  500 mm aisle clearance (which caps its length), top butted to the wardrobe front.
+  Placed rot 270 at [10407, 3598]; no external clearance — the L-notch self-reserves
+  chair + door-swing space. Fit report clean.
 - 2026-08-26 — New piece `wardrobe-desk-room5`: L-shaped wardrobe + work desk in one
   connected unit in room 5. Wardrobe 2750 × 600 × 2600 (full ceiling height) along the
   west wall, running wall-to-wall from the south (window) wall up to the bed foot:

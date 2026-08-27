@@ -1,0 +1,38 @@
+{
+  "id": "wardrobe-room6",
+  "name": "Wardrobe + desk (room 6 niche)",
+  "buildable": true,
+  "color": "#c9a36b",
+  "parts": [
+    { "name": "side", "pos": [0, 1189, 0], "size": [18, 600, 2600] },
+    { "name": "side", "pos": [1982, 1189, 0], "size": [18, 600, 2600] },
+    { "name": "bottom", "pos": [18, 1189, 0], "size": [1964, 600, 18] },
+    { "name": "top", "pos": [18, 1189, 2582], "size": [1964, 600, 18] },
+    { "name": "back HDF", "pos": [18, 1786, 18], "size": [1964, 3, 2564], "color": "#b9a98c" },
+    { "name": "partition", "pos": [691, 1189, 18], "size": [18, 597, 2564] },
+    { "name": "partition", "pos": [1382, 1189, 18], "size": [18, 597, 2564] },
+
+    { "name": "shelf hanging bay", "pos": [18, 1189, 1900], "size": [673, 597, 18] },
+    { "name": "shelf column", "pos": [709, 1189, 400], "size": [673, 597, 18] },
+    { "name": "shelf column", "pos": [709, 1189, 800], "size": [673, 597, 18] },
+    { "name": "shelf column", "pos": [709, 1189, 1200], "size": [673, 597, 18] },
+    { "name": "shelf column", "pos": [709, 1189, 1600], "size": [673, 597, 18] },
+    { "name": "shelf column", "pos": [709, 1189, 2000], "size": [673, 597, 18] },
+
+    { "name": "open shelf", "pos": [1400, 1189, 360], "size": [582, 597, 18] },
+    { "name": "open shelf", "pos": [1400, 1189, 732], "size": [582, 597, 18] },
+    { "name": "open shelf", "pos": [1400, 1189, 1100], "size": [582, 597, 18] },
+    { "name": "open shelf", "pos": [1400, 1189, 1450], "size": [582, 597, 18] },
+    { "name": "open shelf", "pos": [1400, 1189, 1800], "size": [582, 597, 18] },
+    { "name": "open shelf", "pos": [1400, 1189, 2150], "size": [582, 597, 18] },
+
+    { "name": "door lower", "pos": [3, 1171, 3], "size": [695, 18, 1894], "color": "#e8e4da" },
+    { "name": "door lower", "pos": [702, 1171, 3], "size": [695, 18, 1894], "color": "#e8e4da" },
+    { "name": "door upper", "pos": [3, 1171, 1903], "size": [695, 18, 694], "color": "#e8e4da" },
+    { "name": "door upper", "pos": [702, 1171, 1903], "size": [695, 18, 694], "color": "#e8e4da" },
+
+    { "name": "desk top", "pos": [1400, 0, 722], "size": [600, 1189, 28], "color": "#b08d5f" },
+    { "name": "desk end panel", "pos": [1400, 0, 0], "size": [600, 18, 722] },
+    { "name": "desk apron", "pos": [1982, 18, 522], "size": [18, 1171, 200] }
+  ]
+}
