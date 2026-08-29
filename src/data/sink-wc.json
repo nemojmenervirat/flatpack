@@ -1,0 +1,18 @@
+{
+  "id": "sink-wc",
+  "name": "Sink wall-hung 500",
+  "buildable": false,
+  "color": "#e8e4da",
+  "clearance": { "front": 600 },
+  "parts": [
+    { "name": "side", "pos": [0, 0, 450], "size": [18, 380, 382] },
+    { "name": "side", "pos": [482, 0, 450], "size": [18, 380, 382] },
+    { "name": "bottom", "pos": [18, 0, 450], "size": [464, 380, 18] },
+    { "name": "counter", "pos": [0, -10, 832], "size": [500, 390, 18], "color": "#b08d5f" },
+    { "name": "door", "pos": [3, -18, 453], "size": [245, 18, 376] },
+    { "name": "door", "pos": [252, -18, 453], "size": [245, 18, 376] },
+    { "name": "basin", "pos": [60, 50, 850], "size": [380, 280, 120], "color": "#f4f2ec" },
+    { "name": "tap", "pos": [220, 340, 850], "size": [60, 40, 240], "color": "#c0c4c8" },
+    { "name": "mirror", "pos": [50, 372, 1300], "size": [400, 8, 600], "color": "#bcd8ee", "opacity": 0.5 }
+  ]
+}

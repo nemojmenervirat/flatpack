@@ -40,6 +40,13 @@ _(empty)_
 
 ## Done
 
+- 2026-08-29 — Bathroom toilet lengthened to 80 cm: new `toilet-80` piece (bowl 650 +
+  cistern chase 150, same 500 width); bath placement moved to keep the chase on the
+  west wall, front clearance overridden to 450 (477 mm free before the tub rim).
+  WC keeps the original 500-deep `toilet`.
+- 2026-08-29 — WC sink replaced with compact wall-hung unit: new `sink-wc` piece
+  (500×380, cabinet floats at 450 mm, counter at 850) instead of the shared 600×470
+  vanity; recentered on the WC north wall. Bathroom keeps `sink`.
 - 2026-08-29 — Show/hide pieces toggle: 🪑 button in the sidebar header hides all
   furniture in the apartment view (bare floor plan — pairs well with the m² overlay).
   Fit report still runs; the issues chip stays visible. State persists.

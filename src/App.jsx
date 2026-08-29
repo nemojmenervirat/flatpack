@@ -17,7 +17,9 @@ import wardrobeRoom6 from './data/wardrobe-room6.json';
 import hallBench from './data/hall-bench.json';
 import shower from './data/shower.json';
 import sink from './data/sink.json';
+import sinkWc from './data/sink-wc.json';
 import toilet from './data/toilet.json';
+import toilet80 from './data/toilet-80.json';
 import bathtub from './data/bathtub.json';
 import washer from './data/washer.json';
 import dryer from './data/dryer.json';
@@ -50,7 +52,9 @@ const piecesById = {
   [hallBench.id]: hallBench,
   [shower.id]: shower,
   [sink.id]: sink,
+  [sinkWc.id]: sinkWc,
   [toilet.id]: toilet,
+  [toilet80.id]: toilet80,
   [bathtub.id]: bathtub,
   [washer.id]: washer,
   [dryer.id]: dryer,

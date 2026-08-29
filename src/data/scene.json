@@ -87,11 +87,11 @@
       "rot": 0
     },
     {
-      "piece": "sink",
+      "piece": "sink-wc",
       "label": "Sink - WC",
       "pos": [
-        10453,
-        8588,
+        10503,
+        8668,
         0
       ],
       "rot": 0
@@ -117,14 +117,17 @@
       "rot": 90
     },
     {
-      "piece": "toilet",
+      "piece": "toilet-80",
       "label": "Toilet - bath",
       "pos": [
-        12297,
+        12597,
         8300,
         0
       ],
-      "rot": 90
+      "rot": 90,
+      "clearance": {
+        "front": 450
+      }
     },
     {
       "piece": "bathtub",

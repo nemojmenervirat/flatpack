@@ -1,0 +1,13 @@
+{
+  "id": "toilet-80",
+  "name": "Toilet 80, concealed cistern",
+  "buildable": false,
+  "color": "#f4f2ec",
+  "clearance": { "front": 600 },
+  "parts": [
+    { "name": "cistern chase", "pos": [0, 650, 0], "size": [500, 150, 1200], "color": "#b8b2a6" },
+    { "name": "bowl", "pos": [65, 0, 250], "size": [370, 650, 170] },
+    { "name": "seat", "pos": [80, 20, 420], "size": [340, 610, 25], "color": "#f7f5ef" },
+    { "name": "flush plate", "pos": [175, 642, 950], "size": [150, 8, 220], "color": "#c0c4c8" }
+  ]
+}
