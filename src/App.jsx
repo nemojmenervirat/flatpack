@@ -4,6 +4,7 @@ import { fitReport, pieceLocalBBox, placeBox } from './geometry.js';
 import { cutList, cutListCsv } from './cutlist.js';
 import { partRows, hardwareList } from './hardware.js';
 import apartment from './data/apartment.json';
+import rooms from './data/rooms.json';
 import scene from './data/scene.json';
 import wardrobeHall from './data/wardrobe-hall.json';
 import bed90 from './data/bed-90.json';
@@ -71,70 +72,32 @@ const piecesById = {
   [deskChair.id]: deskChair,
 };
 
-// Sidebar groups: each piece is bucketed by the room its placements sit in,
-// derived from the apartment's floor rects — nothing to maintain when new
-// furniture is added. A piece placed in several rooms shows up in each.
-const ROOM_LABELS = [
-  ['living', 'Living room & kitchen'],
-  ['hall', 'Hall'],
-  ['room5', 'Room 5'],
-  ['room6', 'Room 6'],
-  ['master', 'Master bedroom'],
-  ['bath', 'Bathroom'],
-  ['wc', 'WC'],
-  ['vestibule', 'Vestibule'],
-  ['loggia', 'Loggias'],
-  ['entry', 'Hall'], // oak-th-entry threshold
-  ['th-l', 'Loggias'], // ceramic-th-l4 / -l7 thresholds
-];
-const ROOM_ORDER = [...new Set(ROOM_LABELS.map(([, label]) => label))];
+// Rooms are final exact polygons: data/rooms.json defines each room as a
+// union of axis-aligned rects (pos = min corner [x, y] mm, size = [w, d])
+// with walls, stubs and door passages already carved out. Nothing is
+// subtracted at runtime — the sidebar groups, m² labels, overlay shapes, and
+// outline dimensions all read these rects as-is.
+const roomDefs = rooms.rooms.map((r) => ({
+  name: r.name,
+  zones: r.rects.map((rc, i) => ({ name: `${r.name} zone ${i + 1}`, pos: rc.pos, size: rc.size })),
+}));
+const ROOM_ORDER = roomDefs.map((r) => r.name);
 
 const roomAt = (x, y) => {
-  const floor = apartment.floors.find(
-    (f) => x >= f.pos[0] && x <= f.pos[0] + f.size[0] && y >= f.pos[1] && y <= f.pos[1] + f.size[1]
+  const room = roomDefs.find((r) =>
+    r.zones.some(
+      (z) => x >= z.pos[0] && x <= z.pos[0] + z.size[0] && y >= z.pos[1] && y <= z.pos[1] + z.size[1]
+    )
   );
-  const hit = floor && ROOM_LABELS.find(([key]) => floor.name.includes(key));
-  return hit ? hit[1] : 'Elsewhere';
+  return room ? room.name : 'Elsewhere';
 };
 
-// Room areas straight from the apartment's floor rects, in m². Each room keeps
-// its rects (for the 3D overlay) and an anchor — the largest rect, where the
-// m² label goes.
-// The overlay keeps a 2 cm padding to every wall: each floor rect becomes a
-// core inset 2 cm on all sides, plus flush "bridge" strips over the exact
-// intervals where the floor continues into an abutting rect (thresholds, zone
-// seams) — so rooms show no gaps mid-floor but never touch a wall. The m²
-// values always use the un-padded rects; padding is presentation only.
+// The 3D overlay is the room polygon eroded 2 cm: a band along every boundary
+// edge (extended past its ends to cover corners) is subtracted from the room
+// rects, so the slab keeps an exact 2 cm gap to walls with no seam pinholes.
+// The m² values use the un-padded rects — padding is presentation only.
 const AREA_PAD = 20;
 const AREA_EPS = 0.5;
-
-// Walls that stand on the floor (not lintels over openings). Some interior
-// walls — stubs, door jambs, shafts, the master niche — sit ON TOP of floor
-// rects, so both the area numbers and the overlay must subtract them.
-const floorWalls = apartment.walls.filter((w) => w.pos[2] < 50);
-
-// Door thresholds (the floor strips under door openings) don't count as room
-// area and don't render in the overlay — a doorway edge pads like a wall edge.
-const isThreshold = (f) => f.name.includes('-th-');
-
-// Door openings cut like walls do: their footprint leaves the count and the
-// overlay even where the passage floor belongs to a room's own rect (the
-// living↔hall doorway sits on the hall's floor rect, not on a threshold).
-const doorFootprints = (apartment.openings || [])
-  .filter((o) => o.type === 'door')
-  .map((o) => [o.pos[0], o.pos[1], o.pos[0] + o.size[0], o.pos[1] + o.size[1]]);
-const doorFootprintsPadded = doorFootprints.map((d) => [
-  d[0] - AREA_PAD,
-  d[1] - AREA_PAD,
-  d[2] + AREA_PAD,
-  d[3] + AREA_PAD,
-]);
-const wallRect = (w, pad = 0) => [
-  w.pos[0] - pad,
-  w.pos[1] - pad,
-  w.pos[0] + w.size[0] + pad,
-  w.pos[1] + w.size[1] + pad,
-];
 
 // rectangle difference: b minus c, as up to 4 rects
 const cutBox = (b, c) => {
@@ -158,88 +121,101 @@ const cutAll = (boxes, cutters) => {
   return out;
 };
 
-// True walkable area of a floor rect: its rectangle minus any wall standing on
-// it (sequential subtraction, so overlapping walls aren't double-counted).
-const netAreaM2 = (f) => {
-  const whole = [f.pos[0], f.pos[1], f.pos[0] + f.size[0], f.pos[1] + f.size[1]];
-  const left = cutAll([whole], [...floorWalls.map((w) => wallRect(w)), ...doorFootprints]);
-  return left.reduce((n, b) => n + (b[2] - b[0]) * (b[3] - b[1]), 0) / 1e6;
+// A boundary edge as its exclusion band: PAD deep toward the room interior,
+// extended PAD past both ends so corner squares are covered too.
+const edgeBand = (e) => {
+  const lo = e.from - AREA_PAD;
+  const hi = e.to + AREA_PAD;
+  if (e.axis === 'v')
+    return e.inward === 1 ? [e.coord, lo, e.coord + AREA_PAD, hi] : [e.coord - AREA_PAD, lo, e.coord, hi];
+  return e.inward === 1 ? [lo, e.coord, hi, e.coord + AREA_PAD] : [lo, e.coord - AREA_PAD, hi, e.coord];
 };
 
-const padRects = (f) => {
-  const EPS = AREA_EPS;
-  const [x0, y0] = f.pos;
-  const [x1, y1] = [x0 + f.size[0], y0 + f.size[1]];
-  const boxes = [[x0 + AREA_PAD, y0 + AREA_PAD, x1 - AREA_PAD, y1 - AREA_PAD]];
-  for (const g of apartment.floors) {
-    if (g === f || isThreshold(g)) continue;
-    const [gx0, gy0] = g.pos;
-    const [gx1, gy1] = [gx0 + g.size[0], gy0 + g.size[1]];
-    // shared interval, pulled in by the pad at both ends: keeps the strip 2 cm
-    // off the walls flanking the seam and flush with the neighbor's inset core
-    const ix0 = Math.max(x0, gx0) + AREA_PAD;
-    const ix1 = Math.min(x1, gx1) - AREA_PAD;
-    const iy0 = Math.max(y0, gy0) + AREA_PAD;
-    const iy1 = Math.min(y1, gy1) - AREA_PAD;
-    if (iy1 - iy0 > EPS) {
-      if (Math.abs(gx1 - x0) < EPS) boxes.push([x0, iy0, x0 + AREA_PAD, iy1]); // continues west
-      if (Math.abs(gx0 - x1) < EPS) boxes.push([x1 - AREA_PAD, iy0, x1, iy1]); // continues east
-    }
-    if (ix1 - ix0 > EPS) {
-      if (Math.abs(gy1 - y0) < EPS) boxes.push([ix0, y0, ix1, y0 + AREA_PAD]); // continues south
-      if (Math.abs(gy0 - y1) < EPS) boxes.push([ix0, y1 - AREA_PAD, ix1, y1]); // continues north
+// Outline edges of a set of non-overlapping rects (the room's NET shape, so
+// notches cut by stub walls, shafts, and doorways are part of the boundary):
+// for every rect side, subtract the intervals where another rect of the set
+// continues (interior seams), then merge collinear touching pieces into
+// single lines. Each line gets one length label on the overlay.
+const roomEdges = (zones) => {
+  const segs = [];
+  for (const f of zones) {
+    const [x0, y0] = f.pos;
+    const [x1, y1] = [x0 + f.size[0], y0 + f.size[1]];
+    const sides = [
+      { axis: 'v', coord: x0, from: y0, to: y1, inward: 1 }, // west
+      { axis: 'v', coord: x1, from: y0, to: y1, inward: -1 }, // east
+      { axis: 'h', coord: y0, from: x0, to: x1, inward: 1 }, // south
+      { axis: 'h', coord: y1, from: x0, to: x1, inward: -1 }, // north
+    ];
+    for (const s of sides) {
+      let pieces = [[s.from, s.to]];
+      for (const g of zones) {
+        if (g === f) continue;
+        const [gx0, gy0] = g.pos;
+        const [gx1, gy1] = [gx0 + g.size[0], gy0 + g.size[1]];
+        const touches =
+          s.axis === 'v'
+            ? Math.abs((s.inward === 1 ? gx1 : gx0) - s.coord) < AREA_EPS
+            : Math.abs((s.inward === 1 ? gy1 : gy0) - s.coord) < AREA_EPS;
+        if (!touches) continue;
+        const c0 = s.axis === 'v' ? gy0 : gx0;
+        const c1 = s.axis === 'v' ? gy1 : gx1;
+        pieces = pieces.flatMap(([a, b]) => {
+          const i0 = Math.max(a, c0);
+          const i1 = Math.min(b, c1);
+          if (i1 - i0 <= AREA_EPS) return [[a, b]];
+          const rest = [];
+          if (i0 - a > AREA_EPS) rest.push([a, i0]);
+          if (b - i1 > AREA_EPS) rest.push([i1, b]);
+          return rest;
+        });
+      }
+      for (const [a, b] of pieces) segs.push({ axis: s.axis, coord: s.coord, from: a, to: b, inward: s.inward });
     }
   }
-  // clear every floor-level wall and door opening by the pad
-  return cutAll(boxes, [...floorWalls.map((w) => wallRect(w, AREA_PAD)), ...doorFootprintsPadded]).map(
-    (b, i) => ({ name: `${f.name}#${i}`, box: b })
-  );
-};
-
-// Coplanar overlay slabs must not overlap (z-fighting): where two boxes from
-// different floor rects share a padded corner, trim the later one by the
-// cheapest cut that removes the overlap. The dark region is unchanged — the
-// earlier box still covers what was trimmed.
-const trimOverlaps = (rects) => {
-  const EPS = 0.5;
-  for (let i = 0; i < rects.length; i++)
-    for (let k = i + 1; k < rects.length; k++) {
-      const a = rects[i].box;
-      const b = rects[k].box;
-      if (Math.min(a[2], b[2]) - Math.max(a[0], b[0]) <= EPS) continue;
-      if (Math.min(a[3], b[3]) - Math.max(a[1], b[1]) <= EPS) continue;
-      const cuts = [
-        [a[2] - b[0], () => (b[0] = a[2])], // push b's west edge east
-        [b[2] - a[0], () => (b[2] = a[0])], // pull b's east edge west
-        [a[3] - b[1], () => (b[1] = a[3])], // push b's south edge north
-        [b[3] - a[1], () => (b[3] = a[1])], // pull b's north edge south
-      ].filter(([loss], j) => loss > 0 && (j < 2 ? b[2] - b[0] : b[3] - b[1]) - loss > EPS);
-      if (cuts.length) cuts.sort((p, q) => p[0] - q[0])[0][1]();
-      else b[2] = b[0]; // b is swallowed by a — collapse it, a already covers it
+  const byLine = new Map();
+  for (const s of segs) {
+    const key = `${s.axis}|${s.coord}|${s.inward}`;
+    if (!byLine.has(key)) byLine.set(key, []);
+    byLine.get(key).push(s);
+  }
+  const edges = [];
+  for (const list of byLine.values()) {
+    list.sort((a, b) => a.from - b.from);
+    let cur = { ...list[0] };
+    for (const s of list.slice(1)) {
+      if (s.from - cur.to < AREA_EPS) cur.to = Math.max(cur.to, s.to);
+      else {
+        edges.push(cur);
+        cur = { ...s };
+      }
     }
+    edges.push(cur);
+  }
+  return edges;
 };
 
 const roomAreas = (() => {
-  const byRoom = new Map();
-  for (const f of apartment.floors) {
-    if (isThreshold(f)) continue;
-    const hit = ROOM_LABELS.find(([key]) => f.name.includes(key));
-    const label = hit ? hit[1] : 'Elsewhere';
-    const entry = byRoom.get(label) || { m2: 0, boxes: [], anchor: f };
-    entry.m2 += netAreaM2(f);
-    entry.boxes.push(...padRects(f));
-    if (f.size[0] * f.size[1] > entry.anchor.size[0] * entry.anchor.size[1]) entry.anchor = f;
-    byRoom.set(label, entry);
-  }
-  trimOverlaps([...byRoom.values()].flatMap((e) => e.boxes));
-  const rows = [...ROOM_ORDER, 'Elsewhere']
-    .filter((label) => byRoom.has(label))
-    .map((label) => {
-      const { m2, boxes, anchor } = byRoom.get(label);
-      const rects = boxes
-        .filter((r) => r.box[2] - r.box[0] > 0.5 && r.box[3] - r.box[1] > 0.5)
-        .map((r) => ({ name: r.name, pos: [r.box[0], r.box[1]], size: [r.box[2] - r.box[0], r.box[3] - r.box[1]] }));
-      return { label, m2, rects, anchor };
+  const rows = roomDefs
+    .filter((r) => r.zones.length > 0)
+    .map(({ name, zones }) => {
+      const edges = roomEdges(zones);
+      const eroded = cutAll(
+        zones.map((z) => [z.pos[0], z.pos[1], z.pos[0] + z.size[0], z.pos[1] + z.size[1]]),
+        edges.map(edgeBand)
+      );
+      return {
+        label: name,
+        m2: zones.reduce((n, z) => n + z.size[0] * z.size[1], 0) / 1e6,
+        rects: eroded.map((b, i) => ({
+          name: `${name}#${i}`,
+          pos: [b[0], b[1]],
+          size: [b[2] - b[0], b[3] - b[1]],
+        })),
+        // label everything except micro-slivers
+        edges: edges.filter((e) => e.to - e.from > 40),
+        anchor: zones.reduce((a, b) => (a.size[0] * a.size[1] >= b.size[0] * b.size[1] ? a : b)),
+      };
     });
   return { rows, total: rows.reduce((n, r) => n + r.m2, 0) };
 })();

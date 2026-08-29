@@ -602,6 +602,19 @@ export default function Viewer({
                 name={room.label}
                 className="area"
               />
+              {(room.edges || []).map((e, i) => {
+                const mid = (e.from + e.to) / 2;
+                const off = e.coord + e.inward * 240;
+                const [x, y] = e.axis === 'v' ? [off, mid] : [mid, off];
+                return (
+                  <DimLabel
+                    key={`${room.label}-e${i}`}
+                    box={aabbOf([x, y, zTop], [1, 1, 4])}
+                    text={cm(e.to - e.from)}
+                    className="area-side"
+                  />
+                );
+              })}
             </group>
           );
         })}

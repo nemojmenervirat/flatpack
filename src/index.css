@@ -381,3 +381,10 @@ button:hover {
 .dim.area {
   background: none;
 }
+
+/* per-side zone dimensions on the area overlay, in cm */
+.dim.area-side {
+  background: none;
+  font-size: 17px;
+  color: #9a958c;
+}

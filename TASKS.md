@@ -43,6 +43,67 @@ _(empty)_
 - 2026-08-29 — Show/hide pieces toggle: 🪑 button in the sidebar header hides all
   furniture in the apartment view (bare floor plan — pairs well with the m² overlay).
   Fit report still runs; the issues chip stays visible. State persists.
+- 2026-08-29 — Area audit script: `node scripts/check-areas.mjs` verifies rooms.json
+  with exact rect arithmetic independent of the app — no rect overlaps within/between
+  rooms, no room area on walls or door footprints, nothing off the apartment floor,
+  all walkable floor claimed by a room (except doorway passages, 0.08 m²), outlines
+  close. Prints per-room m² + total; exits 1 on failure. All checks pass (105.87 m²).
+- 2026-08-29 — Vestibule merged into Bathroom: there is no vestibule — the 1016×598
+  strip at the bathroom entrance is part of the bathroom. rooms.json now lists it as
+  the bathroom's second rect: Bathroom 6.6 → 7.2 m², 9 rooms total, apartment total
+  unchanged (105.9). The washer/dryer and bath pieces keep their sidebar grouping.
+- 2026-08-29 — Room 6 wardrobe niche reassigned from master: the pocket at
+  x 11596–12196 / y 1598–3599 is enclosed by the niche walls on three sides and opens
+  only into room 6, but the generated polygons had split it 201 mm to room 6 + 399 mm
+  to the master (inherited from the floor-material zones) — the orphaned master strip
+  rendered as a detached slab with doubled 200.1 labels behind room 6. rooms.json now
+  gives room 6 the full 600×2001 niche; room 6 9.5 → 10.3 m², master 18.5 → 17.7,
+  total unchanged (105.9). Wardrobe groupings unaffected.
+- 2026-08-29 — Overlay rebuilt as true polygon erosion (fixes seam pinholes): the dots
+  visible in the living room were 2 cm gaps at internal T-junctions of the old
+  core+bridge construction. The slab is now computed as room rects minus a 2 cm band
+  along every boundary edge (bands extended past their ends to cover corners) — an
+  exact L∞ erosion. padRects and trimOverlaps deleted; result is gap-free and disjoint
+  by construction. Verified: 39 boxes, 0 gaps (grid probe), 0 overlaps, 0 wall
+  violations.
+- 2026-08-29 — rooms.json holds final exact polygons: the walkable shapes (walls, stubs,
+  jambs, doorways already carved out) were generated once from the old rects via the
+  wall/door subtraction pipeline, coalesced to 1–5 rects per room, and written into
+  rooms.json as the source of truth. All runtime subtraction deleted from App.jsx
+  (floorWalls, doorFootprints, cutBox/cutAll, netZones — ~70 lines): m² = sum of rect
+  areas, outline dims trace the rects, overlay insets them 2 cm. Verified identical to
+  before: per-room m², total 105.9, piece grouping, 0 overlay overlaps, 0 wall
+  violations. Consequence: wall edits in apartment.json now require matching rect edits
+  in rooms.json (nothing recomputes them).
+- 2026-08-29 — Outline dims trace the net shape: roomEdges now runs on the room's net
+  boxes (rects minus floor-level walls minus door footprints — the same shape the m²
+  measures) instead of the raw rects, so notches cut by the kitchen stub, shafts, door
+  jambs, and the master niche get their own dimension lines; label threshold lowered
+  150 → 40 mm. Living is now 12 labeled lines (stub notch 90/29.6/90 etc.), master 14,
+  hall 6 (door notch 90 + jamb jogs). All 10 room outlines verified closed.
+- 2026-08-29 — Rooms as standalone polygons: rooms.json now carries its own geometry —
+  each room is a union of rects (pos [x,y] mm min corner, size [w,d]) instead of
+  references to apartment.json floor names. Room shapes can now differ from
+  floor-material zones (e.g. a future kitchen split). All 46 placements still bucket to
+  a room, per-room m² and total (105.9) unchanged. Trade-off accepted: moving a wall in
+  apartment.json now requires updating rooms.json rects by hand; walls/doors are still
+  subtracted from the m² automatically, so a small mismatch shows up in the overlay
+  rather than silently inflating areas.
+- 2026-08-29 — Rooms moved to data + loggias split: new `src/data/rooms.json` defines
+  each room as a name + list of floor-rect names from apartment.json; sidebar groups,
+  m² overlay, and outline dims all derive from it (name-matching ROOM_LABELS deleted;
+  floors not listed in any room, e.g. thresholds, are simply excluded). Fixed the
+  "6.1 m² balcony": the two loggias were one merged 'Loggias' room, so each island
+  showed the sum — now Loggia 4 (3.2 m²) and Loggia 7 (3.0 m²) are separate rooms with
+  their own labels; total unchanged at 105.9 m². Zone-seam bridges now only connect
+  floors of the same room.
+- 2026-08-29 — Outline dimensions on the area overlay: each room's zone union is traced
+  as a rectilinear polygon (`roomEdges` in App.jsx — rect sides minus same-room seam
+  intervals, collinear pieces merged) and every outline line gets its length in cm at
+  its midpoint, nudged 240 mm into the room. Living reads as a proper L (699.9 / 560 /
+  565.1 / 259.9 / 134.8 / 300.1); edges < 15 cm unlabeled. Verified all 9 room outlines
+  close (opposite-direction edge sums match). Replaced the first cut (per-zone
+  width/depth labels), which mislabeled merged shapes.
 - 2026-08-29 — Door openings cut from areas too: door footprints from
   apartment.json openings now subtract like walls (exact for m², +20 mm pad for the
   overlay) — catches the living↔hall doorway, whose passage floor is part of the hall
