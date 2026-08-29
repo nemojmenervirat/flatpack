@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, Html } from '@react-three/drei';
-import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace } from 'three';
+import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, ExtrudeGeometry } from 'three';
 import { aabbOf, pieceLocalBBox } from './geometry.js';
 
 // Data space is mm, [x, y, z] with z up.
@@ -187,8 +187,51 @@ function Box({ box, color = '#c9a36b', opacity = 1, hovered = false, ...handlers
   );
 }
 
+// A part with "round": r (mm) renders its footprint as a rounded rectangle,
+// extruded to the part's height. Render-only sugar: geometry.js still sees
+// the part's plain AABB, so fit checks stay conservative.
+function LocalRounded({ part, color, hovered, opacity = 1, ...handlers }) {
+  const geom = useMemo(() => {
+    const [w, d, h] = part.size;
+    const r = Math.min(part.round, w / 2, d / 2) * S;
+    const W = w * S;
+    const D = d * S;
+    const s = new Shape();
+    s.moveTo(r, 0);
+    s.lineTo(W - r, 0);
+    s.absarc(W - r, r, r, -Math.PI / 2, 0);
+    s.lineTo(W, D - r);
+    s.absarc(W - r, D - r, r, 0, Math.PI / 2);
+    s.lineTo(r, D);
+    s.absarc(r, D - r, r, Math.PI / 2, Math.PI);
+    s.lineTo(0, r);
+    s.absarc(r, r, r, Math.PI, Math.PI * 1.5);
+    const g = new ExtrudeGeometry(s, { depth: h * S, bevelEnabled: false, curveSegments: 24 });
+    g.rotateX(-Math.PI / 2); // shape plane (x,y) -> plan (x,-z), extrusion -> up
+    return g;
+  }, [part]);
+  return (
+    <mesh
+      position={[part.pos[0] * S, part.pos[2] * S, -part.pos[1] * S]}
+      geometry={geom}
+      {...handlers}
+    >
+      <meshStandardMaterial
+        color={color}
+        emissive={hovered ? '#4a4638' : '#000000'}
+        transparent={opacity < 1}
+        opacity={opacity}
+        depthWrite={opacity === 1}
+      />
+    </mesh>
+  );
+}
+
 // A part box in piece-local coordinates (rendered inside the placement group).
 function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
+  if (part.round) {
+    return <LocalRounded part={part} color={color} hovered={hovered} opacity={opacity} {...handlers} />;
+  }
   const size = [part.size[0] * S, part.size[2] * S, part.size[1] * S];
   const pos = [
     (part.pos[0] + part.size[0] / 2) * S,

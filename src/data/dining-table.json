@@ -1,13 +1,13 @@
 {
   "id": "dining-table",
-  "name": "Dining table 200x90",
+  "name": "Dining table 160x90 rounded",
   "buildable": false,
-  "color": "#6f5a40",
+  "color": "#3e3222",
   "parts": [
-    { "name": "table top", "pos": [0, 0, 722], "size": [2000, 900, 28], "color": "#b08d5f" },
-    { "name": "table leg", "pos": [40, 40, 0], "size": [80, 80, 722] },
-    { "name": "table leg", "pos": [1880, 40, 0], "size": [80, 80, 722] },
-    { "name": "table leg", "pos": [40, 780, 0], "size": [80, 80, 722] },
-    { "name": "table leg", "pos": [1880, 780, 0], "size": [80, 80, 722] }
+    { "name": "table top", "pos": [0, 0, 722], "size": [1600, 900, 28], "round": 300, "color": "#5a452e" },
+    { "name": "table leg", "pos": [120, 120, 0], "size": [80, 80, 722] },
+    { "name": "table leg", "pos": [1400, 120, 0], "size": [80, 80, 722] },
+    { "name": "table leg", "pos": [120, 700, 0], "size": [80, 80, 722] },
+    { "name": "table leg", "pos": [1400, 700, 0], "size": [80, 80, 722] }
   ]
 }
