@@ -543,7 +543,15 @@ function ArrowKeyPan() {
   return null;
 }
 
-export default function Viewer({ apartment, report, showClearances, onSelectPiece }) {
+export default function Viewer({
+  apartment,
+  report,
+  showClearances,
+  showAreas,
+  showPieces = true,
+  areas,
+  onSelectPiece,
+}) {
   const openingColor = { door: '#7fd17f', window: '#7fb8ff' };
   const woodTex = useMemo(() => makeWoodTexture(), []);
 
@@ -573,6 +581,30 @@ export default function Viewer({ apartment, report, showClearances, onSelectPiec
       {(apartment.floors || []).map((f) => (
         <FloorZone key={f.name} f={f} wood={woodTex} />
       ))}
+      {/* room-area overlay: a plan layer floating above the wall tops, so no
+          wall or furniture ever hides it */}
+      {showAreas &&
+        (areas || []).map((room) => {
+          const zTop = (apartment.height || 2600) + 150;
+          return (
+            <group key={room.label}>
+              {room.rects.map((f) => (
+                <Box
+                  key={f.name}
+                  box={aabbOf([f.pos[0], f.pos[1], zTop], [f.size[0], f.size[1], 4])}
+                  color="#0b0d10"
+                  raycast={() => null}
+                />
+              ))}
+              <DimLabel
+                box={aabbOf([room.anchor.pos[0], room.anchor.pos[1], zTop], [room.anchor.size[0], room.anchor.size[1], 4])}
+                text={`${room.m2.toFixed(1)} m²`}
+                name={room.label}
+                className="area"
+              />
+            </group>
+          );
+        })}
       {apartment.walls.map((w) => {
         const box = aabbOf(w.pos, w.size);
         const info = {
@@ -625,7 +657,8 @@ export default function Viewer({ apartment, report, showClearances, onSelectPiec
         );
       })}
 
-      {report.placed.map((entry) => {
+      {showPieces &&
+        report.placed.map((entry) => {
         const b = entry.bbox;
         const info = {
           key: `p-${entry.id}`,

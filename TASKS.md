@@ -40,6 +40,40 @@ _(empty)_
 
 ## Done
 
+- 2026-08-29 — Show/hide pieces toggle: 🪑 button in the sidebar header hides all
+  furniture in the apartment view (bare floor plan — pairs well with the m² overlay).
+  Fit report still runs; the issues chip stays visible. State persists.
+- 2026-08-29 — Door openings cut from areas too: door footprints from
+  apartment.json openings now subtract like walls (exact for m², +20 mm pad for the
+  overlay) — catches the living↔hall doorway, whose passage floor is part of the hall
+  rect rather than a threshold, so the overlay no longer flowed through that door gap.
+  Hall 11.6 → 11.4 m², total 106.1 → 105.9 m².
+- 2026-08-29 — Doors excluded from areas: door-threshold floor rects (`*-th-*`) no longer
+  count toward room m² or render in the overlay; a doorway edge pads 2 cm like a wall
+  edge, so every room is a closed dark shape. Overlay slabs made opaque (#0b0d10) to make
+  wall overlap errors visible. Total 107.1 → 106.1 m² (hall 11.6, room5 14.1, room6 9.5,
+  master 18.5, bath 6.6, WC 3.6, loggias 6.1). Same-room zone seams (living w/e, nook,
+  niche, master-ne) still bridge.
+- 2026-08-29 — Area overlay lifted above the walls: the slabs render at wall top + 150 mm
+  (apartment height 2600 → z 2750) as a floating plan layer, so no wall or furniture
+  occludes them from any angle; labels ride at the same height.
+- 2026-08-29 — Area overlay 2 cm wall padding + net-area fix: overlay slabs now keep a
+  20 mm gap to every floor-level wall — each floor rect becomes a core inset 20 mm all
+  around plus flush bridge strips over seam intervals (shrunk 20 mm at their ends to
+  clear door jambs), then all boxes are cut by wall footprints inflated 20 mm
+  (`cutBox`/`cutAll` rect-difference in App.jsx). Doing this exposed that some interior
+  walls (kitchen stub, jambs, shafts, master niche) stand ON floor rects, so the m²
+  numbers had counted wall footprint: areas now subtract floor-level walls —
+  total 108.3 → 107.1 m² (living 35.4, hall 11.8, master 18.6, room6 9.6). Verified:
+  81 overlay boxes, 0 overlaps, 0 boxes closer than 20 mm to any floor-level wall.
+- 2026-08-29 — Room areas as a 3D overlay: "m²" toggle in the sidebar header (next to
+  clearances) darkens every room's floor rects in the apartment view and floats a
+  "room name + N.N m²" label over each room (anchored at its largest floor rect);
+  a chip bottom-left shows the total (108.3 m² incl. loggias — net floor area, walls
+  not counted). Areas summed straight from the floor rects in apartment.json using the
+  same room labels as the piece groups (added `entry`→Hall and `th-l`→Loggias aliases
+  so all 22 floor rects map to a room). Overlay meshes don't intercept hover
+  (raycast disabled). Started as a sidebar list, replaced same day with this overlay.
 - 2026-08-27 — Bought vs buildable in the UI: bought pieces (`buildable: false`) now get
   their own panel in the piece view — name, overall W × D × H, and how many are placed —
   instead of the meaningless cut table with banding; the cut-list panel (parts, hardware,

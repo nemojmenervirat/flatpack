@@ -154,6 +154,18 @@ body {
   padding: 0 4px;
 }
 
+.total-chip {
+  position: absolute;
+  bottom: 12px;
+  left: 110px;
+  padding: 6px 10px;
+  border: 1px solid #2c2f36;
+  border-radius: 6px;
+  background: rgba(28, 31, 36, 0.92);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
 .size-line {
   font-size: 15px;
   font-variant-numeric: tabular-nums;
@@ -364,4 +376,8 @@ button:hover {
 
 .dim.piece {
   color: #ffd479;
+}
+
+.dim.area {
+  background: none;
 }
