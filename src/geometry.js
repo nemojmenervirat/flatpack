@@ -88,6 +88,29 @@ export function clearanceLocalBoxes(piece) {
   return out;
 }
 
+// First-person walk collision: slide a circular body (radius mm) in the XY
+// plane from pos by delta against world AABBs (pre-filtered to body height by
+// the caller). Tries the full move, then each axis alone, so the body slides
+// along obstacles instead of sticking to them. Circle-vs-box is approximated
+// by expanding each box by the radius (square corners — fine at 200mm scale).
+export function walkMove(pos, delta, boxes, radius) {
+  const blocked = (x, y) =>
+    boxes.some(
+      (b) =>
+        x > b.min[0] - radius &&
+        x < b.max[0] + radius &&
+        y > b.min[1] - radius &&
+        y < b.max[1] + radius
+    );
+  const [x0, y0] = pos;
+  const x1 = x0 + delta[0];
+  const y1 = y0 + delta[1];
+  if (!blocked(x1, y1)) return [x1, y1];
+  if (!blocked(x1, y0)) return [x1, y0];
+  if (!blocked(x0, y1)) return [x0, y1];
+  return [x0, y0];
+}
+
 export function overlaps(a, b) {
   return [0, 1, 2].every(
     (i) => a.min[i] < b.max[i] - EPS && b.min[i] < a.max[i] - EPS

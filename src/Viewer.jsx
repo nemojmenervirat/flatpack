@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, Html } from '@react-three/drei';
 import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, ExtrudeGeometry } from 'three';
-import { aabbOf, pieceLocalBBox } from './geometry.js';
+import { aabbOf, pieceLocalBBox, walkMove } from './geometry.js';
 
 // Data space is mm, [x, y, z] with z up.
 // Three.js is y-up, meters. Mapping: three.x = x, three.y = z, three.z = -y.
@@ -119,7 +119,8 @@ function makeWoodTexture() {
 }
 
 // One floor zone; zones with texture:"wood" get the plank map, scaled to mm.
-function FloorZone({ f, wood }) {
+// onClick is wired up by walk mode (drop-in / glide targets land on floors).
+function FloorZone({ f, wood, onClick }) {
   const box = aabbOf(f.pos, f.size);
   const tex = useMemo(() => {
     if (f.texture !== 'wood' || !wood) return null;
@@ -130,7 +131,7 @@ function FloorZone({ f, wood }) {
     t.needsUpdate = true;
     return t;
   }, [f, wood]);
-  if (!tex) return <Box box={box} color={f.color || '#57534c'} />;
+  if (!tex) return <Box box={box} color={f.color || '#57534c'} onClick={onClick} />;
   const size = [f.size[0] * S, f.size[2] * S, f.size[1] * S];
   const pos = [
     (f.pos[0] + f.size[0] / 2) * S,
@@ -138,7 +139,7 @@ function FloorZone({ f, wood }) {
     -(f.pos[1] + f.size[1] / 2) * S,
   ];
   return (
-    <mesh position={pos}>
+    <mesh position={pos} onClick={onClick}>
       <boxGeometry args={size} />
       <meshStandardMaterial map={tex} color="#ffffff" />
     </mesh>
@@ -547,6 +548,133 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
   );
 }
 
+// ── First-person walk mode ──────────────────────────────────────────────
+// Trackpad-friendly: drag to look around (grab-the-world), click a floor
+// point to glide there, WASD/arrows to walk (Shift runs), two-finger scroll
+// moves along the view direction, Esc exits. The body is a 200mm-radius
+// circle at fixed eye height; walkMove (geometry.js) slides it along walls
+// and furniture, so doorways work and nothing solid can be crossed.
+const WALK = { eye: 1650, radius: 200, zlo: 100, zhi: 1650, speed: 1400, run: 2800, glide: 2200 };
+const ENTRANCE_SPAWN = { pos: [8647, 6950], yaw: Math.PI }; // just inside the front door, facing the hall
+
+function WalkControls({ spawn, boxes, glideRef, dragRef, onExit }) {
+  const camera = useThree((s) => s.camera);
+  const gl = useThree((s) => s.gl);
+  const pos = useRef(null); // data-space mm [x, y]
+  const look = useRef({ yaw: 0, pitch: 0 });
+  const keys = useRef({});
+
+  // Enter at the spawn point; put the orbit camera back exactly as it was.
+  useEffect(() => {
+    const saved = {
+      pos: camera.position.clone(),
+      quat: camera.quaternion.clone(),
+      fov: camera.fov,
+      order: camera.rotation.order,
+    };
+    const s = spawn || ENTRANCE_SPAWN;
+    pos.current = [...s.pos];
+    look.current = { yaw: s.yaw ?? Math.PI, pitch: 0 };
+    camera.rotation.order = 'YXZ';
+    camera.fov = 65;
+    camera.updateProjectionMatrix();
+    return () => {
+      camera.rotation.order = saved.order;
+      camera.fov = saved.fov;
+      camera.position.copy(saved.pos);
+      camera.quaternion.copy(saved.quat);
+      camera.updateProjectionMatrix();
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    const el = gl.domElement;
+    let drag = null;
+    const down = (e) => {
+      drag = [e.clientX, e.clientY];
+      dragRef.current = 0;
+    };
+    const move = (e) => {
+      if (!drag) return;
+      const dx = e.clientX - drag[0];
+      const dy = e.clientY - drag[1];
+      drag = [e.clientX, e.clientY];
+      dragRef.current += Math.abs(dx) + Math.abs(dy);
+      look.current.yaw += dx * 0.005;
+      look.current.pitch = MathUtils.clamp(look.current.pitch + dy * 0.005, -1.45, 1.45);
+    };
+    const up = () => {
+      drag = null;
+    };
+    const wheel = (e) => {
+      e.preventDefault();
+      if (!pos.current) return;
+      glideRef.current = null;
+      const { yaw } = look.current;
+      const d = MathUtils.clamp(-e.deltaY * 4, -250, 250);
+      pos.current = walkMove(pos.current, [-Math.sin(yaw) * d, Math.cos(yaw) * d], boxes, WALK.radius);
+    };
+    const keydown = (e) => {
+      if (e.key === 'Escape') return onExit();
+      const tag = e.target?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.key.startsWith('Arrow')) e.preventDefault();
+      keys.current[e.key.toLowerCase()] = true;
+    };
+    const keyup = (e) => {
+      keys.current[e.key.toLowerCase()] = false;
+    };
+    el.addEventListener('pointerdown', down);
+    el.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    el.addEventListener('wheel', wheel, { passive: false });
+    window.addEventListener('keydown', keydown);
+    window.addEventListener('keyup', keyup);
+    return () => {
+      el.removeEventListener('pointerdown', down);
+      el.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      el.removeEventListener('wheel', wheel);
+      window.removeEventListener('keydown', keydown);
+      window.removeEventListener('keyup', keyup);
+    };
+  }, [gl, boxes, glideRef, dragRef, onExit]);
+
+  useFrame((_, dtRaw) => {
+    if (!pos.current) return;
+    const dt = Math.min(dtRaw, 0.05); // clamp frame spikes so we can't tunnel
+    const { yaw, pitch } = look.current;
+    const fwd = [-Math.sin(yaw), Math.cos(yaw)]; // data-space heading
+    const right = [Math.cos(yaw), Math.sin(yaw)];
+    const k = keys.current;
+    const mx = (k.d || k.arrowright ? 1 : 0) - (k.a || k.arrowleft ? 1 : 0);
+    const my = (k.w || k.arrowup ? 1 : 0) - (k.s || k.arrowdown ? 1 : 0);
+    if (mx || my) {
+      glideRef.current = null; // keys override an active glide
+      const sp = ((k.shift ? WALK.run : WALK.speed) * dt) / Math.hypot(mx, my);
+      pos.current = walkMove(
+        pos.current,
+        [(fwd[0] * my + right[0] * mx) * sp, (fwd[1] * my + right[1] * mx) * sp],
+        boxes,
+        WALK.radius
+      );
+    } else if (glideRef.current) {
+      const dx = glideRef.current[0] - pos.current[0];
+      const dy = glideRef.current[1] - pos.current[1];
+      const dist = Math.hypot(dx, dy);
+      const step = Math.min(dist, WALK.glide * dt);
+      const before = pos.current;
+      pos.current = walkMove(before, [(dx / dist) * step, (dy / dist) * step], boxes, WALK.radius);
+      const moved = Math.hypot(pos.current[0] - before[0], pos.current[1] - before[1]);
+      if (dist < 60 || moved < step * 0.25) glideRef.current = null; // arrived or stuck
+    }
+    camera.position.set(pos.current[0] * S, WALK.eye * S, -pos.current[1] * S);
+    camera.rotation.set(pitch, yaw, 0);
+  });
+
+  return null;
+}
+
 // Arrow keys glide the view over the ground plane, relative to where the
 // camera is looking. Shift = 4x step. Listens on window so the canvas
 // doesn't need focus.
@@ -594,25 +722,92 @@ export default function Viewer({
   showPieces = true,
   areas,
   onSelectPiece,
+  walk = 'off', // 'off' | 'arm' (click floor to drop in) | 'on' (walking)
+  walkSpawn = null,
+  onWalkEnter,
+  onWalkExit,
 }) {
   const openingColor = { door: '#7fd17f', window: '#7fb8ff' };
   const woodTex = useMemo(() => makeWoodTexture(), []);
+  const walking = walk === 'on';
+
+  // Everything solid at body height blocks walking: walls (lintels sit above
+  // the head and drop out), the entrance door opening (a "closed front door"),
+  // and every placed furniture part box.
+  const walkBoxes = useMemo(() => {
+    const atBody = (b) => b.min[2] < WALK.zhi && b.max[2] > WALK.zlo;
+    return [
+      ...apartment.walls.map((w) => aabbOf(w.pos, w.size)),
+      ...(apartment.openings || [])
+        .filter((o) => o.style === 'entrance')
+        .map((o) => aabbOf(o.pos, o.size)),
+      ...report.placed.flatMap((p) => p.partBoxes),
+    ].filter(atBody);
+  }, [apartment, report]);
+
+  const glideRef = useRef(null); // data-space [x, y] glide target, or null
+  const dragRef = useRef(0); // pointer travel since last pointerdown (px)
+
+  // In arm mode OrbitControls still owns the pointer; track drag distance so
+  // an orbit gesture that ends over a floor doesn't count as a drop-in click.
+  useEffect(() => {
+    if (walk !== 'arm') return;
+    let last = null;
+    const down = (e) => {
+      last = [e.clientX, e.clientY];
+      dragRef.current = 0;
+    };
+    const move = (e) => {
+      if (!last) return;
+      dragRef.current += Math.abs(e.clientX - last[0]) + Math.abs(e.clientY - last[1]);
+      last = [e.clientX, e.clientY];
+    };
+    const up = () => {
+      last = null;
+    };
+    window.addEventListener('pointerdown', down);
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    return () => {
+      window.removeEventListener('pointerdown', down);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+  }, [walk]);
+
+  const onFloorClick = (e) => {
+    if (walk === 'off' || dragRef.current > 8) return;
+    e.stopPropagation();
+    const pt = [e.point.x / S, -e.point.z / S];
+    if (walk === 'arm') {
+      // drop in facing the way the orbit camera was looking
+      const dir = new Vector3();
+      e.camera.getWorldDirection(dir);
+      onWalkEnter?.({ pos: pt, yaw: Math.atan2(-dir.x, -dir.z) });
+    } else {
+      glideRef.current = pt;
+    }
+  };
 
   // hover = { key, box, text, className } for the item under the pointer
   const [hover, setHover] = useState(null);
   const over = (info) => (e) => {
+    if (walking) return; // no dimension labels in first person
     e.stopPropagation();
     setHover(info);
   };
   const out = (key) => () => setHover((h) => (h && h.key === key ? null : h));
+  useEffect(() => {
+    if (walking) setHover(null);
+  }, [walking]);
 
   return (
     <Canvas
-      camera={{ position: [7.5, 11, 14], fov: 45 }}
+      camera={{ position: [7.5, 11, 14], fov: 45, near: 0.05 }}
       style={{ background: '#16181c' }}
     >
       <color attach="background" args={['#16181c']} />
-      <ambientLight intensity={0.7} />
+      <ambientLight intensity={walking ? 0.95 : 0.7} />
       <directionalLight
         position={[10, 14, 2]}
         intensity={1.4}
@@ -622,8 +817,24 @@ export default function Viewer({
         <Box box={aabbOf(apartment.floor.pos, apartment.floor.size)} color="#57534c" />
       )}
       {(apartment.floors || []).map((f) => (
-        <FloorZone key={f.name} f={f} wood={woodTex} />
+        <FloorZone
+          key={f.name}
+          f={f}
+          wood={woodTex}
+          onClick={walk !== 'off' ? onFloorClick : undefined}
+        />
       ))}
+      {/* walking only: a ceiling slab so looking up doesn't show the void */}
+      {walking && apartment.floor && (
+        <Box
+          box={aabbOf(
+            [apartment.floor.pos[0], apartment.floor.pos[1], apartment.height || 2600],
+            [apartment.floor.size[0], apartment.floor.size[1], 40]
+          )}
+          color="#26282d"
+          raycast={() => null}
+        />
+      )}
       {/* room-area overlay: a plan layer floating above the wall tops, so no
           wall or furniture ever hides it */}
       {showAreas &&
@@ -733,6 +944,7 @@ export default function Viewer({
             onPointerOver={over(info)}
             onPointerOut={out(info.key)}
             onDoubleClick={(e) => {
+              if (walking) return; // double-click select would yank us out of the walk
               e.stopPropagation();
               onSelectPiece?.(entry.piece.id);
             }}
@@ -740,12 +952,21 @@ export default function Viewer({
         );
       })}
 
-      {hover && (
+      {hover && !walking && (
         <DimLabel box={hover.box} text={hover.text} name={hover.name} className={hover.className} />
       )}
 
-      <OrbitControls target={[7.5, 0.5, -4.6]} makeDefault />
-      <ArrowKeyPan />
+      {!walking && <OrbitControls target={[7.5, 0.5, -4.6]} makeDefault />}
+      {!walking && <ArrowKeyPan />}
+      {walking && (
+        <WalkControls
+          spawn={walkSpawn}
+          boxes={walkBoxes}
+          glideRef={glideRef}
+          dragRef={dragRef}
+          onExit={onWalkExit}
+        />
+      )}
     </Canvas>
   );
 }

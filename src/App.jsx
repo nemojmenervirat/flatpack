@@ -386,6 +386,8 @@ export default function App() {
   const [filter, setFilter] = useState('');
   const [highlight, setHighlight] = useState(null); // Set of part indices (table -> 3D)
   const [hoverIndex, setHoverIndex] = useState(null); // part index (3D -> table)
+  const [walk, setWalk] = useState('off'); // 'off' | 'arm' | 'on'
+  const [walkSpawn, setWalkSpawn] = useState(null); // { pos:[x,y], yaw } or null = entrance
 
   useEffect(() => lsSet('flatpack.view', view), [view]);
   useEffect(() => lsSet('flatpack.showClearances', showClearances), [showClearances]);
@@ -398,13 +400,22 @@ export default function App() {
   const piece = view !== 'apartment' ? piecesById[view] : null;
   useEffect(() => {
     if (view !== 'apartment' && !piecesById[view]) setView('apartment'); // stale localStorage
+    if (view !== 'apartment') setWalk('off'); // walk mode only exists in the apartment view
   }, [view]);
+
+  // Esc cancels the "click a floor point" arming (WalkControls handles Esc while walking)
+  useEffect(() => {
+    if (walk !== 'arm') return;
+    const onKey = (e) => e.key === 'Escape' && setWalk('off');
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [walk]);
 
   const copyAllCsv = () => navigator.clipboard.writeText(cutListCsv(cutList(scene, piecesById)));
 
   return (
     <div className="app">
-      <div className="canvas-pane">
+      <div className={walk === 'arm' && !piece ? 'canvas-pane walk-arm' : 'canvas-pane'}>
         {piece ? (
           <PieceViewer key={piece.id} piece={piece} highlight={highlight} onHoverPart={setHoverIndex} />
         ) : (
@@ -416,7 +427,27 @@ export default function App() {
             showPieces={showPieces}
             areas={roomAreas.rows}
             onSelectPiece={setView}
+            walk={walk}
+            walkSpawn={walkSpawn}
+            onWalkEnter={(spawn) => {
+              setWalkSpawn(spawn);
+              setWalk('on');
+            }}
+            onWalkExit={() => setWalk('off')}
           />
+        )}
+
+        {!piece && walk === 'arm' && (
+          <div className="walk-chip">
+            <span>click a floor point to drop in</span>
+            <button onClick={() => { setWalkSpawn(null); setWalk('on'); }}>start at entrance</button>
+            <span className="muted-inline">esc cancels</span>
+          </div>
+        )}
+        {!piece && walk === 'on' && (
+          <div className="walk-chip">
+            drag to look · scroll or WASD to move · click floor to glide · esc to exit
+          </div>
         )}
 
         {piece &&
@@ -479,6 +510,16 @@ export default function App() {
             onClick={() => setShowPieces((v) => !v)}
           >
             🪑
+          </button>
+          <button
+            className={walk !== 'off' ? 'active' : ''}
+            data-tip={walk === 'off' ? 'Walk around (first person)' : 'Exit walk mode'}
+            onClick={() => {
+              setView('apartment');
+              setWalk((w) => (w === 'off' ? 'arm' : 'off'));
+            }}
+          >
+            🚶
           </button>
         </div>
         {sideOpen && (

@@ -223,6 +223,26 @@ body {
   left: 12px;
 }
 
+.walk-chip {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 6px 12px;
+  border: 1px solid #2c2f36;
+  border-radius: 6px;
+  background: rgba(28, 31, 36, 0.92);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.walk-arm canvas {
+  cursor: crosshair;
+}
+
 .muted {
   color: #9a958c;
   font-size: 12px;

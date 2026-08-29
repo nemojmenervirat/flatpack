@@ -40,6 +40,22 @@ _(empty)_
 
 ## Done
 
+- 2026-08-29 — First-person walk mode: 🚶 button arms it (click a floor point to drop
+  in facing the camera's heading, or "start at entrance"), Esc exits back to the exact
+  orbit view. Trackpad-first controls: drag to look, click floor to glide there,
+  scroll or WASD/arrows to move (Shift runs). Collision via pure `walkMove` in
+  geometry.js — a 200mm body at 1650 eye height slides along walls, the closed
+  entrance door, and all furniture part boxes at body height (z 100–1650, so lintels
+  clear the head and doorways/loggia doors are walkable). Walking adds a ceiling
+  slab, brighter ambient, fov 65; hover labels and double-click select pause.
+- 2026-08-29 — TV wall-mounted: `tv` piece lost its feet and gained a wall bracket;
+  placement moved back to the west wall face (bracket at x 198) at z 800 — screen
+  center ~1160, 350 mm above the TV cabinet, which stays in place.
+- 2026-08-29 — Dining table 200×90 → 160×90 rounded, dark oak: top gets `"round": 300`
+  (corner radius mm; render-only — fit math still uses the AABB), legs inset inside the
+  radius. Viewer.jsx now renders parts with `round` as an extruded rounded rectangle.
+  Chairs rearranged 3+3 → 2 north + 2 south + 1 per end; the west-end chair sits
+  180 mm south of center to stay out of the oven run's 600 front clearance.
 - 2026-08-29 — Bathroom toilet lengthened to 80 cm: new `toilet-80` piece (bowl 650 +
   cistern chase 150, same 500 width); bath placement moved to keep the chase on the
   west wall, front clearance overridden to 450 (477 mm free before the tub rim).
