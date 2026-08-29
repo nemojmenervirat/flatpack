@@ -290,7 +290,8 @@ function doorLeafParts(style, w, h) {
 
 // A clickable door: pivots on a vertical hinge at its outer edge (the edge
 // farther from the piece's center) and swings open/closed with damping.
-function Door({ part, color, pieceCenterX, hovered }) {
+// attachments = parts riding on the door (bins, inner liner) that swing along.
+function Door({ part, attachments = [], color, pieceCenterX, hovered }) {
   const [open, setOpen] = useState(false);
   const ref = useRef();
   const hingeLeft = part.pos[0] + part.size[0] / 2 < pieceCenterX;
@@ -304,20 +305,28 @@ function Door({ part, color, pieceCenterX, hovered }) {
     }
   });
 
-  const shifted = { ...part, pos: [part.pos[0] - hx, part.pos[1] - hy, part.pos[2]] };
+  const shift = (p) => ({ ...p, pos: [p.pos[0] - hx, p.pos[1] - hy, p.pos[2]] });
+  const handlers = {
+    onClick: (e) => {
+      e.stopPropagation();
+      setOpen((o) => !o);
+    },
+    onPointerOver: () => (document.body.style.cursor = 'pointer'),
+    onPointerOut: () => (document.body.style.cursor = 'auto'),
+  };
   return (
     <group ref={ref} position={[hx * S, 0, -hy * S]}>
-      <LocalBox
-        part={shifted}
-        color={color}
-        hovered={hovered}
-        onClick={(e) => {
-          e.stopPropagation();
-          setOpen((o) => !o);
-        }}
-        onPointerOver={(e) => (document.body.style.cursor = 'pointer')}
-        onPointerOut={() => (document.body.style.cursor = 'auto')}
-      />
+      <LocalBox part={shift(part)} color={color} hovered={hovered} {...handlers} />
+      {attachments.map((a, i) => (
+        <LocalBox
+          key={i}
+          part={shift(a)}
+          color={a.color || color}
+          opacity={a.opacity ?? 1}
+          hovered={hovered}
+          {...handlers}
+        />
+      ))}
     </group>
   );
 }
@@ -412,6 +421,31 @@ function drawerGroups(parts) {
 const drawerPull = (parts, members) =>
   Math.round(0.8 * Math.max(400, ...members.map((i) => parts[i].size[1])));
 
+// Group door-mounted parts for animation, mirroring drawerGroups: parts named
+// 'door bin *' (bins, inner door liners) attach to the door leaf (any other
+// part named 'door*') whose x/z span contains their center, and swing with it.
+function doorGroups(parts) {
+  const isBin = (p) => p.name.startsWith('door bin');
+  const isLeaf = (p) => p.name.startsWith('door') && !isBin(p);
+  const leafIdx = parts.map((p, i) => (isLeaf(p) ? i : -1)).filter((i) => i >= 0);
+  const groups = new Map(leafIdx.map((i) => [i, []]));
+  const consumed = new Set();
+  parts.forEach((p, i) => {
+    if (!isBin(p)) return;
+    const cx = p.pos[0] + p.size[0] / 2;
+    const cz = p.pos[2] + p.size[2] / 2;
+    const f = leafIdx.find((fi) => {
+      const fp = parts[fi];
+      return cx > fp.pos[0] && cx < fp.pos[0] + fp.size[0] && cz > fp.pos[2] && cz < fp.pos[2] + fp.size[2];
+    });
+    if (f !== undefined) {
+      groups.get(f).push(i);
+      consumed.add(i);
+    }
+  });
+  return { groups, consumed };
+}
+
 // A room door: the opening renders as a 40mm leaf that swings on its hinge.
 // opening.hinge ('min'/'max') picks the pivot end, opening.swing (+1 CCW / -1 CW
 // seen from above) picks the direction, both authored in apartment.json.
@@ -481,9 +515,9 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
   const bb = pieceLocalBBox(piece);
   const centerX = (bb.min[0] + bb.max[0]) / 2;
   const rot = (((placement.rot || 0) % 360) + 360) % 360;
-  const isDoor = (p) => p.name.startsWith('door');
   const isFlap = (p) => p.name.startsWith('flap');
   const { groups: drawers, consumed } = useMemo(() => drawerGroups(parts), [parts]);
+  const { groups: doors, consumed: onDoors } = useMemo(() => doorGroups(parts), [parts]);
 
   return (
     <group>
@@ -496,12 +530,13 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
         onDoubleClick={onDoubleClick}
       >
         {parts.map((p, i) => {
-          if (consumed.has(i)) return null; // rendered inside its Drawer
-          if (isDoor(p)) {
+          if (consumed.has(i) || onDoors.has(i)) return null; // rendered inside its Drawer/Door
+          if (doors.has(i)) {
             return (
               <Door
                 key={i}
                 part={p}
+                attachments={doors.get(i).map((ai) => parts[ai])}
                 color={p.color || piece.color || '#c9a36b'}
                 pieceCenterX={centerX}
                 hovered={hovered}
@@ -981,9 +1016,9 @@ export function PieceViewer({ piece, highlight, onHoverPart }) {
     : [{ name: piece.name, pos: [0, 0, 0], size: piece.size, color: piece.color || '#8a93a6' }];
   const bb = pieceLocalBBox(piece);
   const centerX = (bb.min[0] + bb.max[0]) / 2;
-  const isDoor = (p) => p.name.startsWith('door');
   const isFlap = (p) => p.name.startsWith('flap');
   const { groups: drawers, consumed } = useMemo(() => drawerGroups(parts), [parts]);
+  const { groups: doors, consumed: onDoors } = useMemo(() => doorGroups(parts), [parts]);
 
   const [hover, setHover] = useState(null); // part index under the pointer
   const setHovered = (i) => {
@@ -1013,7 +1048,7 @@ export function PieceViewer({ piece, highlight, onHoverPart }) {
       />
 
       {parts.map((p, i) => {
-        if (consumed.has(i)) return null; // rendered inside its Drawer
+        if (consumed.has(i) || onDoors.has(i)) return null; // rendered inside its Drawer/Door
         const lit = hover === i || highlight?.has(i);
         if (drawers.has(i)) {
           return (
@@ -1047,8 +1082,14 @@ export function PieceViewer({ piece, highlight, onHoverPart }) {
             }}
             onPointerOut={() => setHovered(null)}
           >
-            {isDoor(p) ? (
-              <Door part={p} color={p.color || piece.color || '#c9a36b'} pieceCenterX={centerX} hovered={lit} />
+            {doors.has(i) ? (
+              <Door
+                part={p}
+                attachments={doors.get(i).map((ai) => parts[ai])}
+                color={p.color || piece.color || '#c9a36b'}
+                pieceCenterX={centerX}
+                hovered={lit}
+              />
             ) : isFlap(p) ? (
               <Flap part={p} color={p.color || piece.color || '#c9a36b'} hovered={lit} />
             ) : (

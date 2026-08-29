@@ -360,16 +360,6 @@
     },
     {
       "piece": "dining-chair",
-      "label": "Chair west end",
-      "pos": [
-        1560,
-        4695,
-        0
-      ],
-      "rot": 90
-    },
-    {
-      "piece": "dining-chair",
       "label": "Chair east end",
       "pos": [
         3040,

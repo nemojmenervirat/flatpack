@@ -40,6 +40,14 @@ _(empty)_
 
 ## Done
 
+- 2026-08-29 — Fridge restyled as a Samsung Bespoke bottom-freezer: flat sky-blue
+  fronts (no handle), black band between the doors, dark graphite case on small black
+  feet, white interior liner. Opening it shows the real layout — fridge: 3 glass
+  shelves, a sliding crisper, 3 door bins; freezer: 3 translucent pull-out drawers
+  (all use the existing click animations). New Viewer convention `doorGroups`
+  (mirrors drawerGroups): parts named `door bin *` (bins, inner door liner) attach to
+  the door leaf whose x/z span contains their center and swing on its hinge.
+  Fit report clean, 0 internal part overlaps.
 - 2026-08-29 — First-person walk mode: 🚶 button arms it (click a floor point to drop
   in facing the camera's heading, or "start at entrance"), Esc exits back to the exact
   orbit view. Trackpad-first controls: drag to look, click floor to glide there,
@@ -54,8 +62,8 @@ _(empty)_
 - 2026-08-29 — Dining table 200×90 → 160×90 rounded, dark oak: top gets `"round": 300`
   (corner radius mm; render-only — fit math still uses the AABB), legs inset inside the
   radius. Viewer.jsx now renders parts with `round` as an extruded rounded rectangle.
-  Chairs rearranged 3+3 → 2 north + 2 south + 1 per end; the west-end chair sits
-  180 mm south of center to stay out of the oven run's 600 front clearance.
+  Chairs rearranged 3+3 → 2 north + 2 south + 1 east end (5). A west-end chair was
+  tried but removed: it sat in the kitchen aisle by the oven run's front clearance.
 - 2026-08-29 — Bathroom toilet lengthened to 80 cm: new `toilet-80` piece (bowl 650 +
   cistern chase 150, same 500 width); bath placement moved to keep the chase on the
   west wall, front clearance overridden to 450 (477 mm free before the tub rim).
