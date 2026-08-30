@@ -40,6 +40,9 @@ _(empty)_
 
 ## Done
 
+- 2026-08-29 — Living-room door now opens into the hall: `door-living-V2` swing
+  1 → -1 (hinge stays at the south jamb). Hall-side swing arc verified free of
+  furniture (swing arcs still aren't fit-checked).
 - 2026-08-29 — Fridge restyled as a Samsung Bespoke bottom-freezer: flat sky-blue
   fronts (no handle), black band between the doors, dark graphite case on small black
   feet, white interior liner. Opening it shows the real layout — fridge: 3 glass
