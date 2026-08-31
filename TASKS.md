@@ -39,6 +39,30 @@ _(empty)_
 
 ## Done
 
+- 2026-08-31 — Fixed bare-slab gaps visible in the plan view (the "black things" in
+  the WC + the dent beside the entrance): the hall–WC partition (`north-east`,
+  where the WC door is) is a THIN ~10 cm wall per Milan — it stays 100 deep
+  (y 7249–7349), unlike the 199 structural wall line it continues from (hence the
+  step beside the entrance door, which is real). The bug was on the other side: the
+  WC boundary was drawn as if the wall were 199 — `tile-wc` and the rooms.json WC
+  rect started at y 7448, leaving a 99 mm strip of dark base slab inside the room.
+  Boundary moved to the actual wall face: WC is now 2249 × 1699 (3.8 m², total
+  105.9 → 106.1), `door-wc` opening + `tile-th-wc` slimmed to the 100 wall depth,
+  and the shower keeps its original full-depth 1699 tray at y 7349 (a first fix
+  attempt had gone the other way — thickening the wall and shrinking the shower —
+  and was reverted). Also aligned two oak door thresholds with their openings
+  (`oak-th-room5` 28 west to x 7870, `oak-th-room6` 80 east to x 9027). Verified:
+  fit report clean, check-areas passes (106.10 m²), and a 25 mm grid probe finds no
+  uncovered floor inside the apartment (the dark region west of the bathroom wing
+  is exterior — the base slab spans the bounding box; intentional).
+  Follow-up same day: the thin partition alone left a notch in the building corner
+  right of the entrance door (thick wall ended at the door jamb x 9146, thin wall
+  is 99 shallower). Walls re-arranged instead of re-thickened: new `entrance-jamb-e`
+  (x 9146–9246, 199 deep) continues the thick wall from the door jamb to the wing;
+  `wc-west` extended north to the hall wall line (y 7249–9048); the thin
+  `north-east` partition now starts at the WC's interior face (x 9447–10811).
+  Facade corner closes exactly at (9246, 7448). Probe of the whole wall band
+  y 7249–7448: 0 uncovered cells; fit + check-areas still clean.
 - 2026-08-30 — Floor-plan camera: ▦ button in the sidebar header snaps the apartment
   view to a true orthographic top-down plan (north up), auto-fit to the floor bounds
   with an 8% margin (`PlanView` in Viewer.jsx). Rotation is locked in plan view
