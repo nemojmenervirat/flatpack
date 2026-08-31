@@ -18,7 +18,6 @@ _(empty)_
   a damped swing animation, hinge auto-picked on the outer edge. Room doors too: door
   openings render as 40mm leaves swinging per `hinge`/`swing` fields in apartment.json.
   Fit-report arcs still open.)
-- Top-down floor-plan camera + front elevation views (canned camera buttons).
 
 ## Later
 
@@ -40,6 +39,16 @@ _(empty)_
 
 ## Done
 
+- 2026-08-30 — Floor-plan camera: ▦ button in the sidebar header snaps the apartment
+  view to a true orthographic top-down plan (north up), auto-fit to the floor bounds
+  with an 8% margin (`PlanView` in Viewer.jsx). Rotation is locked in plan view
+  (pan/zoom stay live); clicking ▦ again, or entering walk mode, returns to the free
+  orbit view, whose perspective camera comes back exactly as drei restores it. Active
+  view persists in localStorage. Built 2026-08-30 with N/S/E/W exterior elevation
+  buttons too; those were removed 2026-08-31 as not useful (they only show facades —
+  the walls hide everything inside). Gotcha hit and worked around: drei's makeDefault
+  restore captures the render-time default camera, so a keyed/remounting ortho camera
+  can "restore" the wrong camera — the plan camera mounts un-keyed exactly once.
 - 2026-08-29 — Living-room door now opens into the hall: `door-living-V2` swing
   1 → -1 (hinge stays at the south jamb). Hall-side swing arc verified free of
   furniture (swing arcs still aren't fit-checked).

@@ -383,6 +383,7 @@ export default function App() {
   const [showAreas, setShowAreas] = useState(() => lsGet('flatpack.showAreas', false));
   const [showPieces, setShowPieces] = useState(() => lsGet('flatpack.showPieces', true));
   const [sideOpen, setSideOpen] = useState(() => lsGet('flatpack.sideOpen', true));
+  const [cam, setCam] = useState(() => (lsGet('flatpack.cam', 'free') === 'plan' ? 'plan' : 'free')); // 'free' | 'plan'
   const [filter, setFilter] = useState('');
   const [highlight, setHighlight] = useState(null); // Set of part indices (table -> 3D)
   const [hoverIndex, setHoverIndex] = useState(null); // part index (3D -> table)
@@ -394,6 +395,7 @@ export default function App() {
   useEffect(() => lsSet('flatpack.showAreas', showAreas), [showAreas]);
   useEffect(() => lsSet('flatpack.showPieces', showPieces), [showPieces]);
   useEffect(() => lsSet('flatpack.sideOpen', sideOpen), [sideOpen]);
+  useEffect(() => lsSet('flatpack.cam', cam), [cam]);
 
   const report = useMemo(() => fitReport(scene, piecesById, apartment), []);
 
@@ -427,6 +429,7 @@ export default function App() {
             showPieces={showPieces}
             areas={roomAreas.rows}
             onSelectPiece={setView}
+            cam={walk === 'off' ? cam : 'free'}
             walk={walk}
             walkSpawn={walkSpawn}
             onWalkEnter={(spawn) => {
@@ -520,6 +523,17 @@ export default function App() {
             }}
           >
             🚶
+          </button>
+          <button
+            className={cam === 'plan' ? 'active' : ''}
+            data-tip={cam === 'plan' ? 'Back to orbit view' : 'Floor plan (top-down)'}
+            onClick={() => {
+              setView('apartment');
+              setWalk('off');
+              setCam((c) => (c === 'plan' ? 'free' : 'plan'));
+            }}
+          >
+            ▦
           </button>
         </div>
         {sideOpen && (

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
-import { OrbitControls, Html } from '@react-three/drei';
+import { OrbitControls, OrthographicCamera, Html } from '@react-three/drei';
 import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, ExtrudeGeometry } from 'three';
 import { aabbOf, pieceLocalBBox, walkMove } from './geometry.js';
 
@@ -710,6 +710,42 @@ function WalkControls({ spawn, boxes, glideRef, dragRef, onExit }) {
   return null;
 }
 
+// ── Floor-plan camera ───────────────────────────────────────────────────
+// Orthographic top-down view, north (data +y) up on screen, auto-fit to the
+// apartment floor with a small margin. Rotation is locked (pan/zoom stay
+// live) so it remains a true plan; drei's makeDefault restore hands back the
+// orbit camera untouched on exit.
+const CAM_MARGIN = 1.08;
+const CAM_DIST = 30; // camera height (m) — anywhere above the geometry
+
+function PlanView({ apartment }) {
+  const size = useThree((s) => s.size);
+  const view = useMemo(() => {
+    const f = apartment.floor;
+    const [w, d] = [f.size[0] * S, f.size[1] * S];
+    const cx = f.pos[0] * S + w / 2;
+    const cz = -(f.pos[1] * S + d / 2); // three.z of the apartment center (z = -y)
+    return { pos: [cx, CAM_DIST, cz], target: [cx, 0, cz], fit: [w, d] };
+  }, [apartment]);
+  const zoom = useMemo(
+    () => Math.min(size.width / view.fit[0], size.height / view.fit[1]) / CAM_MARGIN,
+    [size, view]
+  );
+  return (
+    <>
+      <OrthographicCamera
+        makeDefault
+        position={view.pos}
+        up={[0, 0, -1]}
+        zoom={zoom}
+        near={0.1}
+        far={100}
+      />
+      <OrbitControls makeDefault target={view.target} enableRotate={false} />
+    </>
+  );
+}
+
 // Arrow keys glide the view over the ground plane, relative to where the
 // camera is looking. Shift = 4x step. Listens on window so the canvas
 // doesn't need focus.
@@ -757,6 +793,7 @@ export default function Viewer({
   showPieces = true,
   areas,
   onSelectPiece,
+  cam = 'free', // 'free' orbit | 'plan' top-down
   walk = 'off', // 'off' | 'arm' (click floor to drop in) | 'on' (walking)
   walkSpawn = null,
   onWalkEnter,
@@ -991,8 +1028,9 @@ export default function Viewer({
         <DimLabel box={hover.box} text={hover.text} name={hover.name} className={hover.className} />
       )}
 
-      {!walking && <OrbitControls target={[7.5, 0.5, -4.6]} makeDefault />}
-      {!walking && <ArrowKeyPan />}
+      {!walking && cam === 'free' && <OrbitControls target={[7.5, 0.5, -4.6]} makeDefault />}
+      {!walking && cam === 'free' && <ArrowKeyPan />}
+      {!walking && cam !== 'free' && <PlanView apartment={apartment} />}
       {walking && (
         <WalkControls
           spawn={walkSpawn}
