@@ -39,6 +39,13 @@ _(empty)_
 
 ## Done
 
+- 2026-08-31 — Kitchen wall tiles to 150 cm: new `wallTiles` array in apartment.json
+  (6 strips, 8mm proud, z 0–1500) lining every wall face around the kitchen zone —
+  west wall, south stub, NW corner (both faces), north wall, shaft-hall-1 west face.
+  Rendered by `WallTileZone` in Viewer.jsx with the same 59×59 cement tile map as the
+  kitchen floor, grout grid anchored to world coords. Purely visual — not walls, not
+  in the fit report; counters overlap the 8mm strip harmlessly behind their backs.
+
 - 2026-08-31 — Windows render as real PVC windows (Viewer.jsx `RoomWindow`), replacing
   the flat translucent blue boxes: white outer frame (70) + sash frame (80) + glass,
   centered in the wall thickness, vertical handle bar. Openings ≤ 1200 wide are a

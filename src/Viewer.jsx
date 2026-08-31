@@ -239,6 +239,34 @@ function FloorZone({ f, wood, tile, onClick }) {
   );
 }
 
+// Tiled wainscot strip on a wall face (apartment.json "wallTiles"): a thin box
+// carrying the 59×59 cement tile map on its faces. Repeat follows the strip's
+// run length and height; offset anchors the grout grid to world coordinates
+// (u from the strip's start along its run, v from its base height).
+function WallTileZone({ f, tile }) {
+  const tex = useMemo(() => {
+    const run = Math.max(f.size[0], f.size[1]);
+    const u0 = f.size[0] >= f.size[1] ? f.pos[0] : f.pos[1];
+    const t = tile.clone();
+    t.repeat.set(run / CERAMIC_GRID_MM, f.size[2] / CERAMIC_GRID_MM);
+    t.offset.set(u0 / CERAMIC_GRID_MM, f.pos[2] / CERAMIC_GRID_MM);
+    t.needsUpdate = true;
+    return t;
+  }, [f, tile]);
+  const size = [f.size[0] * S, f.size[2] * S, f.size[1] * S];
+  const pos = [
+    (f.pos[0] + f.size[0] / 2) * S,
+    (f.pos[2] + f.size[2] / 2) * S,
+    -(f.pos[1] + f.size[1] / 2) * S,
+  ];
+  return (
+    <mesh position={pos}>
+      <boxGeometry args={size} />
+      <meshStandardMaterial map={tex} color="#ffffff" />
+    </mesh>
+  );
+}
+
 // Floating label at the top center of a data-space box.
 // distanceFactor only under a perspective camera: for an orthographic camera
 // drei scales Html by camera.zoom * distanceFactor (~576x in the fitted plan
@@ -1144,6 +1172,9 @@ export default function Viewer({
           tile={tileTex}
           onClick={walk !== 'off' ? onFloorClick : undefined}
         />
+      ))}
+      {(apartment.wallTiles || []).map((f) => (
+        <WallTileZone key={f.name} f={f} tile={tileTex} />
       ))}
       {/* walking only: a ceiling slab so looking up doesn't show the void */}
       {walking && apartment.floor && (

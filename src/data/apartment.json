@@ -1634,5 +1634,85 @@
       ],
       "color": "#4b4d50"
     }
+  ],
+  "wallTiles": [
+    {
+      "name": "tilewall-kitchen-w",
+      "pos": [
+        198,
+        5149,
+        0
+      ],
+      "size": [
+        8,
+        1614,
+        1500
+      ]
+    },
+    {
+      "name": "tilewall-kitchen-stub",
+      "pos": [
+        198,
+        5149,
+        0
+      ],
+      "size": [
+        900,
+        8,
+        1500
+      ]
+    },
+    {
+      "name": "tilewall-kitchen-nw-s",
+      "pos": [
+        198,
+        6755,
+        0
+      ],
+      "size": [
+        296,
+        8,
+        1500
+      ]
+    },
+    {
+      "name": "tilewall-kitchen-nw-e",
+      "pos": [
+        494,
+        6763,
+        0
+      ],
+      "size": [
+        8,
+        486,
+        1500
+      ]
+    },
+    {
+      "name": "tilewall-kitchen-n",
+      "pos": [
+        494,
+        7241,
+        0
+      ],
+      "size": [
+        5304,
+        8,
+        1500
+      ]
+    },
+    {
+      "name": "tilewall-kitchen-e",
+      "pos": [
+        5790,
+        6649,
+        0
+      ],
+      "size": [
+        8,
+        600,
+        1500
+      ]
+    }
   ]
 }
