@@ -416,6 +416,79 @@ function doorLeafParts(style, w, h) {
   }
 }
 
+// PVC window in "leaf plane" coordinates (u along the width, z up, t = depth,
+// centered in the wall). Openings ≤ WIN_SINGLE_MAX wide get one sash (handle on
+// the latch stile); wider ones get two sashes split by a center mullion, with
+// both handles beside it. Static — windows don't open.
+const WIN_SINGLE_MAX = 1201; // nominal 120cm cutoff; loggia7/bath are 1201 and single in reality
+const WIN_FRAME = 70; // outer frame profile
+const WIN_SASH = 80; // sash frame profile
+const WIN_MULLION = 90;
+const WIN_PVC = '#e3e4e6';
+const WIN_SASH_PVC = '#f4f4f2';
+
+function windowParts(w, h) {
+  const F = WIN_FRAME;
+  const parts = [
+    { u: 0, du: F, z: 0, dz: h, t: 84, color: WIN_PVC },
+    { u: w - F, du: F, z: 0, dz: h, t: 84, color: WIN_PVC },
+    { u: F, du: w - 2 * F, z: 0, dz: F, t: 84, color: WIN_PVC },
+    { u: F, du: w - 2 * F, z: h - F, dz: F, t: 84, color: WIN_PVC },
+  ];
+  // one sash spanning [u0, u0+sw] inside the outer frame; handleU = handle center
+  const sash = (u0, sw, handleU) => {
+    const Sf = WIN_SASH;
+    parts.push(
+      { u: u0, du: Sf, z: F, dz: h - 2 * F, t: 96, color: WIN_SASH_PVC },
+      { u: u0 + sw - Sf, du: Sf, z: F, dz: h - 2 * F, t: 96, color: WIN_SASH_PVC },
+      { u: u0 + Sf, du: sw - 2 * Sf, z: F, dz: Sf, t: 96, color: WIN_SASH_PVC },
+      { u: u0 + Sf, du: sw - 2 * Sf, z: h - F - Sf, dz: Sf, t: 96, color: WIN_SASH_PVC },
+      { u: u0 + Sf, du: sw - 2 * Sf, z: F + Sf, dz: h - 2 * F - 2 * Sf, t: 20, color: DOOR_GLASS, opacity: 0.35 },
+      { u: handleU - 16, du: 32, z: h / 2 - 85, dz: 170, t: 120, color: '#d8dadc' }
+    );
+  };
+  if (w <= WIN_SINGLE_MAX) {
+    sash(F, w - 2 * F, F + WIN_SASH / 2); // handle on the left stile
+  } else {
+    const sw = (w - 2 * F - WIN_MULLION) / 2;
+    parts.push({ u: F + sw, du: WIN_MULLION, z: F, dz: h - 2 * F, t: 84, color: WIN_PVC });
+    sash(F, sw, F + sw - WIN_SASH / 2); // handles flank the mullion
+    sash(F + sw + WIN_MULLION, sw, F + sw + WIN_MULLION + WIN_SASH / 2);
+  }
+  return parts;
+}
+
+// A window opening: frame + sash(es) + glass, centered in the wall thickness.
+function RoomWindow({ opening, hovered, onPointerOver, onPointerOut }) {
+  const [sx, sy, sz] = opening.size;
+  const horiz = sx >= sy;
+  const w = horiz ? sx : sy;
+  const parts = windowParts(w, sz);
+  const ox = horiz ? opening.pos[0] : opening.pos[0] + sx / 2;
+  const oy = horiz ? opening.pos[1] + sy / 2 : opening.pos[1];
+  return (
+    <group
+      position={[ox * S, opening.pos[2] * S, -oy * S]}
+      onPointerOver={onPointerOver}
+      onPointerOut={onPointerOut}
+    >
+      {parts.map((p, i) => (
+        <LocalBox
+          key={i}
+          part={
+            horiz
+              ? { pos: [p.u, -p.t / 2, p.z], size: [p.du, p.t, p.dz] }
+              : { pos: [-p.t / 2, p.u, p.z], size: [p.t, p.du, p.dz] }
+          }
+          color={p.color}
+          opacity={p.opacity ?? 1}
+          hovered={hovered}
+        />
+      ))}
+    </group>
+  );
+}
+
 // Flat architrave casing around an inner door opening: two legs and a head on
 // each wall face. Same leaf-plane coords as doorLeafParts, static (no swing).
 const CASING_W = 70;
@@ -1140,6 +1213,17 @@ export default function Viewer({
         if (o.type === 'door') {
           return (
             <RoomDoor
+              key={o.name}
+              opening={o}
+              hovered={hover?.key === info.key}
+              onPointerOver={over(info)}
+              onPointerOut={out(info.key)}
+            />
+          );
+        }
+        if (o.type === 'window') {
+          return (
+            <RoomWindow
               key={o.name}
               opening={o}
               hovered={hover?.key === info.key}

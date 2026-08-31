@@ -39,6 +39,13 @@ _(empty)_
 
 ## Done
 
+- 2026-08-31 — Windows render as real PVC windows (Viewer.jsx `RoomWindow`), replacing
+  the flat translucent blue boxes: white outer frame (70) + sash frame (80) + glass,
+  centered in the wall thickness, vertical handle bar. Openings ≤ 1200 wide are a
+  single sash (handle on the left stile); wider ones get two sashes split by a 90
+  mullion, handles flanking it. Static (no tilt/turn animation). Cutoff is 1201, not
+  1200: `window-loggia7` and `window-bath` are 120.1 cm and single in the real apartment.
+
 - 2026-08-31 — Living↔hall doorway wall thinned to 12 cm: `lintel-door-living`,
   `living-hall-jamb-s` and `living-hall-jamb-n` are now 120 thick, centered in the
   old 201 wall line (x 5839–5959); the shaft walls north of the jamb stay full
