@@ -47,12 +47,14 @@ _(empty)_
   1200: `window-loggia7` and `window-bath` are 120.1 cm and single in the real apartment.
 
 - 2026-08-31 — Living↔hall doorway wall thinned to 12 cm: `lintel-door-living`,
-  `living-hall-jamb-s` and `living-hall-jamb-n` are now 120 thick, centered in the
-  old 201 wall line (x 5839–5959); the shaft walls north of the jamb stay full
-  thickness. `oak-hall-w` already runs under the whole doorway strip, so the newly
-  exposed floor beside the thin jambs stays wood (verified). rooms.json left as-is —
-  the 4 cm walkable slivers beside the jambs are ~0.03 m² and not worth the outline
-  noise.
+  `living-hall-jamb-s` and `living-hall-jamb-n` are now 120 thick, flush with the
+  living-room face of `living-room5` (x 5798–5918; originally centered in the old
+  201 wall line, re-aligned same day). `door-living-V2` thinned to 120 to match, so
+  the leaf/casing center in the thin wall. The shaft walls north of the jamb stay
+  full thickness. `oak-hall-w` already runs under the whole doorway strip, so the
+  exposed floor beside the thin jambs stays wood (verified, fit report clean).
+  rooms.json left as-is — the walkable sliver beside the jambs is tiny and not worth
+  the outline noise.
 - 2026-08-31 — Floors render real materials: procedural cement-limestone 59×59 tile
   texture in Viewer.jsx (`texture: "tile"`, 590 tiles + 3mm grout, per-tile cloudy
   tones like the reference photo), world-anchored like the oak planks so the grid

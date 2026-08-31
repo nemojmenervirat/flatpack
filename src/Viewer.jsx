@@ -489,23 +489,34 @@ function RoomWindow({ opening, hovered, onPointerOver, onPointerOut }) {
   );
 }
 
-// Flat architrave casing around an inner door opening: two legs and a head on
-// each wall face. Same leaf-plane coords as doorLeafParts, static (no swing).
+// Frame around a door opening: a liner covering the reveal (the raw wall edge
+// inside the opening, visible when the leaf is open) plus, for architrave
+// styles, flat casing legs and a head on each wall face. Same leaf-plane
+// coords as doorLeafParts, static (no swing).
 const CASING_W = 70;
 const CASING_T = 18;
-function doorCasingParts(horiz, away, w, h, wall) {
+const LINER_T = 20;
+function doorCasingParts(horiz, away, w, h, wall, architrave = true) {
   const boxes = [];
-  for (const face of [-wall / 2 - CASING_T, wall / 2]) {
-    boxes.push(
-      { u: away - CASING_W, du: CASING_W, z: 0, dz: h + CASING_W, y: face },
-      { u: away + w, du: CASING_W, z: 0, dz: h + CASING_W, y: face },
-      { u: away, du: w, z: h, dz: CASING_W, y: face }
-    );
+  if (architrave) {
+    for (const face of [-wall / 2 - CASING_T, wall / 2]) {
+      boxes.push(
+        { u: away - CASING_W, du: CASING_W, z: 0, dz: h + CASING_W, y: face },
+        { u: away + w, du: CASING_W, z: 0, dz: h + CASING_W, y: face },
+        { u: away, du: w, z: h, dz: CASING_W, y: face }
+      );
+    }
   }
+  // reveal liner: two legs and a head lining the opening, full wall depth
+  boxes.push(
+    { u: away, du: LINER_T, z: 0, dz: h, y: -wall / 2, dy: wall },
+    { u: away + w - LINER_T, du: LINER_T, z: 0, dz: h, y: -wall / 2, dy: wall },
+    { u: away + LINER_T, du: w - 2 * LINER_T, z: h - LINER_T, dz: LINER_T, y: -wall / 2, dy: wall }
+  );
   return boxes.map((b) =>
     horiz
-      ? { pos: [b.u, b.y, b.z], size: [b.du, CASING_T, b.dz] }
-      : { pos: [b.y, b.u, b.z], size: [CASING_T, b.du, b.dz] }
+      ? { pos: [b.u, b.y, b.z], size: [b.du, b.dy ?? CASING_T, b.dz] }
+      : { pos: [b.y, b.u, b.z], size: [b.dy ?? CASING_T, b.du, b.dz] }
   );
 }
 
@@ -695,9 +706,10 @@ function RoomDoor({ opening, hovered, onPointerOver, onPointerOut }) {
 
   const leafParts = doorLeafParts(opening.style, w, sz);
   const entrance = opening.style === 'entrance';
-  const casing = opening.style !== 'balcony'
-    ? doorCasingParts(horiz, away, w, sz, horiz ? sy : sx)
-    : [];
+  const casing = doorCasingParts(
+    horiz, away, w, sz, horiz ? sy : sx,
+    opening.style !== 'balcony' // balcony: PVC liner only, no architraves
+  );
   const casingColor = entrance ? '#4b4e54' : DOOR_WHITE; // steel frame vs white architrave
   return (
     <group position={[hx * S, opening.pos[2] * S, -hy * S]}>
