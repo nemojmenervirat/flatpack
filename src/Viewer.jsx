@@ -147,14 +147,19 @@ function FloorZone({ f, wood, onClick }) {
 }
 
 // Floating label at the top center of a data-space box.
+// distanceFactor only under a perspective camera: for an orthographic camera
+// drei scales Html by camera.zoom * distanceFactor (~576x in the fitted plan
+// view — one label glyph covers the whole screen), so the plan view gets
+// natural-size labels instead.
 function DimLabel({ box, text, name, className = '' }) {
+  const ortho = useThree((s) => s.camera.isOrthographicCamera);
   const pos = [
     ((box.min[0] + box.max[0]) / 2) * S,
     box.max[2] * S + 0.03,
     (-(box.min[1] + box.max[1]) / 2) * S,
   ];
   return (
-    <Html position={pos} center distanceFactor={6} zIndexRange={[10, 0]}>
+    <Html position={pos} center distanceFactor={ortho ? undefined : 6} zIndexRange={[10, 0]}>
       <div className={`dim ${className}`}>
         {name && <div className="dim-name">{name}</div>}
         {text}

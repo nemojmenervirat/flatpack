@@ -39,6 +39,12 @@ _(empty)_
 
 ## Done
 
+- 2026-08-31 — Fixed the m² overlay in plan view: drei `<Html>` scales labels by
+  `camera.zoom × distanceFactor` under an orthographic camera (~576× at the plan
+  view's fitted zoom), so with areas on, one giant label glyph covered the whole
+  canvas and the view looked broken/dead. `DimLabel` now passes `distanceFactor`
+  only under a perspective camera; in plan view labels render at natural CSS size.
+  Plan + m² now reads like a real annotated floor plan; orbit + m² unchanged.
 - 2026-08-31 — Fixed bare-slab gaps visible in the plan view (the "black things" in
   the WC + the dent beside the entrance): the hall–WC partition (`north-east`,
   where the WC door is) is a THIN ~10 cm wall per Milan — it stays 100 deep
