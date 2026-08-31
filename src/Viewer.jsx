@@ -239,17 +239,131 @@ function FloorZone({ f, wood, tile, onClick }) {
   );
 }
 
+// Procedural calacatta-style marble wall tile texture: large-format 1200×600
+// tiles in a stacked grid with tight light joints. Each tile gets a near-white
+// warm ground, soft grey-blue and cream clouds, one dominant horizontal taupe
+// vein band with a dark core and branches, and thin gold/grey hairline veins.
+// Canvas covers WALLTILE_GRID_MM × WALLTILE_GRID_MM (2 columns × 4 rows).
+const WALLTILE_GRID_MM = 2400;
+function makeWallTileTexture() {
+  const px = 2048;
+  const c = document.createElement('canvas');
+  c.width = c.height = px;
+  const ctx = c.getContext('2d');
+  let seed = 21;
+  const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+
+  const tw = (1200 * px) / WALLTILE_GRID_MM; // 1024
+  const th = (600 * px) / WALLTILE_GRID_MM;
+  const joint = (3 * px) / WALLTILE_GRID_MM; // tight 3mm joints
+
+  // grout fills the canvas; tiles are drawn inset
+  ctx.fillStyle = 'rgb(224,221,215)';
+  ctx.fillRect(0, 0, px, px);
+
+  // a wandering stroked path from (x0,y0) heading roughly +x, jittering in y
+  const vein = (x0, y0, len, amp, width, color) => {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.beginPath();
+    ctx.moveTo(x0, y0);
+    let vx = x0;
+    let vy = y0;
+    const steps = 6 + ((rnd() * 4) | 0);
+    for (let s = 0; s < steps; s++) {
+      const nx = vx + len / steps;
+      const ny = vy + (rnd() - 0.5) * amp;
+      ctx.quadraticCurveTo(vx + len / steps / 2, vy + (rnd() - 0.5) * amp, nx, ny);
+      vx = nx;
+      vy = ny;
+    }
+    ctx.stroke();
+    return [vx, vy];
+  };
+
+  for (let row = 0; row < 4; row++) {
+    for (let col = 0; col < 2; col++) {
+      const x = col * tw + joint / 2;
+      const y = row * th + joint / 2;
+      const w = tw - joint;
+      const h = th - joint;
+      const t = 0.985 + rnd() * 0.02;
+      ctx.fillStyle = `rgb(${(248 * t) | 0},${(245 * t) | 0},${(240 * t) | 0})`;
+      ctx.fillRect(x, y, w, h);
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(x, y, w, h);
+      ctx.clip();
+
+      // soft grey-blue and warm cream clouds
+      const blobs = 6 + ((rnd() * 5) | 0);
+      for (let b = 0; b < blobs; b++) {
+        const bx = x + rnd() * w;
+        const by = y + rnd() * h;
+        const br = w * (0.1 + rnd() * 0.22);
+        const g = ctx.createRadialGradient(bx, by, 0, bx, by, br);
+        g.addColorStop(0, rnd() > 0.5 ? `rgba(196,204,212,${0.08 + rnd() * 0.1})` : `rgba(240,228,210,${0.08 + rnd() * 0.1})`);
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = g;
+        ctx.fillRect(x, y, w, h);
+      }
+
+      // dominant horizontal vein band: soft halo, taupe body, broken dark core
+      const vy0 = y + h * (0.35 + rnd() * 0.3);
+      ctx.save();
+      ctx.filter = 'blur(6px)';
+      vein(x - 20, vy0, w + 40, h * 0.22, 26 + rnd() * 14, 'rgba(176,168,156,0.35)');
+      ctx.filter = 'none';
+      ctx.restore();
+      vein(x - 20, vy0 + (rnd() - 0.5) * 12, w + 40, h * 0.18, 5 + rnd() * 4, 'rgba(150,140,126,0.5)');
+      // broken core: short dark dashes riding the same band
+      const chunks = 4 + ((rnd() * 3) | 0);
+      for (let k = 0; k < chunks; k++) {
+        const cx0 = x + (k / chunks) * w + rnd() * (w / chunks) * 0.4;
+        vein(cx0, vy0 + (rnd() - 0.5) * h * 0.1, w / chunks * (0.4 + rnd() * 0.4), h * 0.08, 2 + rnd() * 2.5, `rgba(122,112,100,${0.4 + rnd() * 0.25})`);
+      }
+      // branches leaving the band diagonally
+      const branches = 2 + ((rnd() * 3) | 0);
+      for (let k = 0; k < branches; k++) {
+        const bx0 = x + rnd() * w;
+        vein(bx0, vy0 + (rnd() - 0.5) * h * 0.12, w * (0.15 + rnd() * 0.2), h * (0.25 + rnd() * 0.3), 1.2 + rnd() * 1.6, 'rgba(160,150,136,0.4)');
+      }
+
+      // thin gold and grey hairlines wandering across the tile
+      const hairs = 5 + ((rnd() * 4) | 0);
+      for (let k = 0; k < hairs; k++) {
+        const gold = rnd() > 0.45;
+        vein(
+          x + rnd() * w * 0.6 - 20,
+          y + rnd() * h,
+          w * (0.3 + rnd() * 0.6),
+          h * (0.15 + rnd() * 0.35),
+          0.8 + rnd() * 1.2,
+          gold ? `rgba(214,182,140,${0.25 + rnd() * 0.2})` : `rgba(184,190,198,${0.2 + rnd() * 0.18})`
+        );
+      }
+      ctx.restore();
+    }
+  }
+
+  const tex = new CanvasTexture(c);
+  tex.wrapS = tex.wrapT = RepeatWrapping;
+  tex.colorSpace = SRGBColorSpace;
+  tex.anisotropy = 8;
+  return tex;
+}
+
 // Tiled wainscot strip on a wall face (apartment.json "wallTiles"): a thin box
-// carrying the 59×59 cement tile map on its faces. Repeat follows the strip's
-// run length and height; offset anchors the grout grid to world coordinates
-// (u from the strip's start along its run, v from its base height).
+// carrying the travertine wall tile map on its faces. Repeat follows the
+// strip's run length and height; offset anchors the grout grid to world
+// coordinates (u from the strip's start along its run, v from its base height).
 function WallTileZone({ f, tile }) {
   const tex = useMemo(() => {
     const run = Math.max(f.size[0], f.size[1]);
     const u0 = f.size[0] >= f.size[1] ? f.pos[0] : f.pos[1];
     const t = tile.clone();
-    t.repeat.set(run / CERAMIC_GRID_MM, f.size[2] / CERAMIC_GRID_MM);
-    t.offset.set(u0 / CERAMIC_GRID_MM, f.pos[2] / CERAMIC_GRID_MM);
+    t.repeat.set(run / WALLTILE_GRID_MM, f.size[2] / WALLTILE_GRID_MM);
+    t.offset.set(u0 / WALLTILE_GRID_MM, f.pos[2] / WALLTILE_GRID_MM);
     t.needsUpdate = true;
     return t;
   }, [f, tile]);
@@ -1077,6 +1191,7 @@ export default function Viewer({
   const openingColor = { door: '#7fd17f', window: '#7fb8ff' };
   const woodTex = useMemo(() => makeWoodTexture(), []);
   const tileTex = useMemo(() => makeTileTexture(), []);
+  const wallTileTex = useMemo(() => makeWallTileTexture(), []);
   const walking = walk === 'on';
 
   // Everything solid at body height blocks walking: walls (lintels sit above
@@ -1174,7 +1289,7 @@ export default function Viewer({
         />
       ))}
       {(apartment.wallTiles || []).map((f) => (
-        <WallTileZone key={f.name} f={f} tile={tileTex} />
+        <WallTileZone key={f.name} f={f} tile={wallTileTex} />
       ))}
       {/* walking only: a ceiling slab so looking up doesn't show the void */}
       {walking && apartment.floor && (
