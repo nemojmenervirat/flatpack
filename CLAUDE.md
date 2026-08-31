@@ -30,6 +30,9 @@ view is read-only.** When he asks for a new piece or a change, edit the JSON.
 
 ## Rules
 
+- **Do not use the claude-in-chrome browser tools in this project for now.** Verify
+  changes with node scripts / `vite build` instead; Milan checks the app himself.
+
 - Plain JavaScript, not TypeScript. Keep dependencies minimal (react, three, fiber, drei —
   nothing heavy without asking).
 - Keep `geometry.js` and `cutlist.js` pure (no rendering, no DOM) — they should stay

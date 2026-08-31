@@ -118,19 +118,112 @@ function makeWoodTexture() {
   return tex;
 }
 
-// One floor zone; zones with texture:"wood" get the plank map, scaled to mm.
+// Procedural cement/limestone tile texture ("Cement Limestone 59×59"): the
+// canvas covers a 4×4 grid of 590mm tiles with 3mm grout joints. Each tile
+// gets a per-tile base tone, soft cloudy blotches and faint trowel sweeps
+// like honed cement, plus fine speckle. World-aligned in FloorZone, so the
+// grid is anchored to apartment coordinates, runs continuously across zones,
+// and tiles are cut wherever a zone edge lands.
+const CERAMIC_MM = 593; // 590 tile + 3 grout
+const CERAMIC_GRID_MM = CERAMIC_MM * 4;
+function makeTileTexture() {
+  const px = 2048;
+  const cell = px / 4;
+  const joint = (3 * px) / CERAMIC_GRID_MM; // 3mm in canvas px
+  const c = document.createElement('canvas');
+  c.width = c.height = px;
+  const ctx = c.getContext('2d');
+  let seed = 7;
+  const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+
+  // grout fills the canvas; tiles are drawn inset so joints show between them
+  ctx.fillStyle = 'rgb(139,132,120)';
+  ctx.fillRect(0, 0, px, px);
+
+  const grey = (t) => `rgb(${(181 * t) | 0},${(174 * t) | 0},${(162 * t) | 0})`;
+  for (let row = 0; row < 4; row++) {
+    for (let col = 0; col < 4; col++) {
+      const x = col * cell + joint / 2;
+      const y = row * cell + joint / 2;
+      const w = cell - joint;
+      ctx.fillStyle = grey(0.96 + rnd() * 0.07);
+      ctx.fillRect(x, y, w, w);
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(x, y, w, w);
+      ctx.clip();
+
+      // large soft cloudy patches, lighter and darker
+      const blobs = 6 + ((rnd() * 5) | 0);
+      for (let b = 0; b < blobs; b++) {
+        const bx = x + rnd() * w;
+        const by = y + rnd() * w;
+        const br = w * (0.18 + rnd() * 0.35);
+        const g = ctx.createRadialGradient(bx, by, 0, bx, by, br);
+        g.addColorStop(0, rnd() > 0.5 ? `rgba(207,201,191,${0.14 + rnd() * 0.1})` : `rgba(141,134,122,${0.1 + rnd() * 0.08})`);
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = g;
+        ctx.fillRect(x, y, w, w);
+      }
+
+      // faint broad trowel sweeps
+      const sweeps = 4 + ((rnd() * 4) | 0);
+      for (let s = 0; s < sweeps; s++) {
+        ctx.strokeStyle =
+          rnd() > 0.45
+            ? `rgba(210,204,194,${0.05 + rnd() * 0.06})`
+            : `rgba(135,128,116,${0.04 + rnd() * 0.05})`;
+        ctx.lineWidth = 8 + rnd() * 22;
+        const x0 = x + rnd() * w;
+        const y0 = y + rnd() * w;
+        ctx.beginPath();
+        ctx.moveTo(x0, y0);
+        ctx.bezierCurveTo(
+          x0 + (rnd() - 0.5) * w, y0 + (rnd() - 0.5) * w,
+          x0 + (rnd() - 0.5) * w, y0 + (rnd() - 0.5) * w,
+          x + rnd() * w, y + rnd() * w
+        );
+        ctx.stroke();
+      }
+
+      // fine speckle / pits
+      const dots = 70 + ((rnd() * 60) | 0);
+      for (let d = 0; d < dots; d++) {
+        ctx.fillStyle = rnd() > 0.5 ? `rgba(126,119,107,${0.1 + rnd() * 0.2})` : `rgba(214,208,198,${0.1 + rnd() * 0.2})`;
+        ctx.fillRect(x + rnd() * w, y + rnd() * w, 1 + rnd() * 1.5, 1 + rnd() * 1.5);
+      }
+
+      // slightly darker rim so joints still read from far away
+      ctx.strokeStyle = 'rgba(120,113,101,0.35)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x + 1, y + 1, w - 2, w - 2);
+      ctx.restore();
+    }
+  }
+
+  const tex = new CanvasTexture(c);
+  tex.wrapS = tex.wrapT = RepeatWrapping;
+  tex.colorSpace = SRGBColorSpace;
+  tex.anisotropy = 8;
+  return tex;
+}
+
+// One floor zone; texture:"wood" gets the plank map, texture:"tile" the
+// 59×59 cement tile map, both scaled to mm and anchored to world coordinates.
 // onClick is wired up by walk mode (drop-in / glide targets land on floors).
-function FloorZone({ f, wood, onClick }) {
+function FloorZone({ f, wood, tile, onClick }) {
   const box = aabbOf(f.pos, f.size);
   const tex = useMemo(() => {
-    if (f.texture !== 'wood' || !wood) return null;
-    const t = wood.clone();
-    t.repeat.set(f.size[0] / WOOD_TILE_MM, f.size[1] / WOOD_TILE_MM);
-    // world-aligned offset so the plank pattern runs continuously across zones
-    t.offset.set(f.pos[0] / WOOD_TILE_MM, f.pos[1] / WOOD_TILE_MM);
+    const src = f.texture === 'wood' ? wood : f.texture === 'tile' ? tile : null;
+    if (!src) return null;
+    const mm = f.texture === 'wood' ? WOOD_TILE_MM : CERAMIC_GRID_MM;
+    const t = src.clone();
+    t.repeat.set(f.size[0] / mm, f.size[1] / mm);
+    // world-aligned offset so the pattern runs continuously across zones
+    t.offset.set(f.pos[0] / mm, f.pos[1] / mm);
     t.needsUpdate = true;
     return t;
-  }, [f, wood]);
+  }, [f, wood, tile]);
   if (!tex) return <Box box={box} color={f.color || '#57534c'} onClick={onClick} />;
   const size = [f.size[0] * S, f.size[2] * S, f.size[1] * S];
   const pos = [
@@ -806,6 +899,7 @@ export default function Viewer({
 }) {
   const openingColor = { door: '#7fd17f', window: '#7fb8ff' };
   const woodTex = useMemo(() => makeWoodTexture(), []);
+  const tileTex = useMemo(() => makeTileTexture(), []);
   const walking = walk === 'on';
 
   // Everything solid at body height blocks walking: walls (lintels sit above
@@ -898,6 +992,7 @@ export default function Viewer({
           key={f.name}
           f={f}
           wood={woodTex}
+          tile={tileTex}
           onClick={walk !== 'off' ? onFloorClick : undefined}
         />
       ))}

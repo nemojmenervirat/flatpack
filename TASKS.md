@@ -39,6 +39,32 @@ _(empty)_
 
 ## Done
 
+- 2026-08-31 — Living↔hall doorway wall thinned to 12 cm: `lintel-door-living`,
+  `living-hall-jamb-s` and `living-hall-jamb-n` are now 120 thick, centered in the
+  old 201 wall line (x 5839–5959); the shaft walls north of the jamb stay full
+  thickness. `oak-hall-w` already runs under the whole doorway strip, so the newly
+  exposed floor beside the thin jambs stays wood (verified). rooms.json left as-is —
+  the 4 cm walkable slivers beside the jambs are ~0.03 m² and not worth the outline
+  noise.
+- 2026-08-31 — Floors render real materials: procedural cement-limestone 59×59 tile
+  texture in Viewer.jsx (`texture: "tile"`, 590 tiles + 3mm grout, per-tile cloudy
+  tones like the reference photo), world-anchored like the oak planks so the grid
+  runs continuously across zones and tiles are cut where a zone edge lands. All
+  `tile-*` floor zones in apartment.json tagged. Verified in the plan view.
+
+- 2026-08-31 — Tiled entry strip in the hall connecting entrance → WC → bathroom
+  (rest of the hall stays oak). `tile-entry` covers x 8148–11696 (entrance door's
+  west jamb to the bathroom wall) × y 6249–7249 (bath door's south jamb to the north
+  wall), spanning all three door openings; `oak-th-entry` → `tile-th-entry` so tile
+  starts at the apartment door. Old `oak-hall` split into `oak-hall-w` + `oak-hall-s`
+  around the tile rect (exact coverage, no overlap, verified). Room 5/6/master/living
+  doorways stay oak; all tile zones form one connected region.
+- 2026-08-31 — Kitchen tile strip, 900 mm from the wall: L-shaped tile zone under the
+  kitchen runs (`tile-kitchen-w` x 198–1098 along the west wall from the kitchen stub,
+  `tile-kitchen-n` y 6349–7249 along the north wall out to the hall wall x 5798, plus
+  the small `tile-kitchen-nw` corner rect beside `west-nw-corner`). Living oak split
+  into `oak-living-w` / `oak-living-n` / `oak-living-e` around it. Verified: no floor
+  overlaps, areas conserve, and both kitchen bases + both fridges sit fully on tile.
 - 2026-08-31 — Fixed the m² overlay in plan view: drei `<Html>` scales labels by
   `camera.zoom × distanceFactor` under an orthographic camera (~576× at the plan
   view's fitted zoom), so with areas on, one giant label glyph covered the whole

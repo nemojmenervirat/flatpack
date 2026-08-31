@@ -303,12 +303,12 @@
     {
       "name": "living-hall-jamb-s",
       "pos": [
-        5798,
+        5839,
         5199,
         0
       ],
       "size": [
-        201,
+        120,
         200,
         2600
       ]
@@ -316,12 +316,12 @@
     {
       "name": "living-hall-jamb-n",
       "pos": [
-        5798,
+        5839,
         6299,
         0
       ],
       "size": [
-        201,
+        120,
         350,
         2600
       ]
@@ -329,12 +329,12 @@
     {
       "name": "lintel-door-living",
       "pos": [
-        5798,
+        5839,
         5399,
         2100
       ],
       "size": [
-        201,
+        120,
         900,
         500
       ]
@@ -1227,7 +1227,22 @@
       ],
       "size": [
         3001,
-        6999,
+        4899,
+        10
+      ],
+      "color": "#c08a55",
+      "texture": "wood"
+    },
+    {
+      "name": "oak-living-n",
+      "pos": [
+        1098,
+        5149,
+        -10
+      ],
+      "size": [
+        2101,
+        1200,
         10
       ],
       "color": "#c08a55",
@@ -1242,26 +1257,101 @@
       ],
       "size": [
         2599,
-        5651,
+        4751,
         10
       ],
       "color": "#c08a55",
       "texture": "wood"
     },
     {
-      "name": "oak-hall",
+      "name": "tile-kitchen-w",
+      "pos": [
+        198,
+        5149,
+        -10
+      ],
+      "size": [
+        900,
+        1200,
+        10
+      ],
+      "color": "#b8b2a6",
+      "texture": "tile"
+    },
+    {
+      "name": "tile-kitchen-nw",
+      "pos": [
+        198,
+        6349,
+        -10
+      ],
+      "size": [
+        296,
+        414,
+        10
+      ],
+      "color": "#b8b2a6",
+      "texture": "tile"
+    },
+    {
+      "name": "tile-kitchen-n",
+      "pos": [
+        494,
+        6349,
+        -10
+      ],
+      "size": [
+        5304,
+        900,
+        10
+      ],
+      "color": "#b8b2a6",
+      "texture": "tile"
+    },
+    {
+      "name": "oak-hall-w",
       "pos": [
         5798,
         5199,
         -10
       ],
       "size": [
-        5898,
+        2350,
         2050,
         10
       ],
       "color": "#c08a55",
       "texture": "wood"
+    },
+    {
+      "name": "oak-hall-s",
+      "pos": [
+        8148,
+        5199,
+        -10
+      ],
+      "size": [
+        3548,
+        1050,
+        10
+      ],
+      "color": "#c08a55",
+      "texture": "wood"
+    },
+    {
+      "name": "tile-entry",
+      "pos": [
+        8148,
+        6249,
+        -10
+      ],
+      "size": [
+        3548,
+        1000,
+        10
+      ],
+      "color": "#b8b2a6",
+      "texture": "tile"
     },
     {
       "name": "oak-room5",
@@ -1399,7 +1489,7 @@
       "texture": "wood"
     },
     {
-      "name": "oak-th-entry",
+      "name": "tile-th-entry",
       "pos": [
         8148,
         7249,
@@ -1410,8 +1500,8 @@
         199,
         10
       ],
-      "color": "#c08a55",
-      "texture": "wood"
+      "color": "#b8b2a6",
+      "texture": "tile"
     },
     {
       "name": "tile-vestibule",
@@ -1425,7 +1515,8 @@
         598,
         10
       ],
-      "color": "#b8b2a6"
+      "color": "#b8b2a6",
+      "texture": "tile"
     },
     {
       "name": "tile-th-bath",
@@ -1439,7 +1530,8 @@
         800,
         10
       ],
-      "color": "#b8b2a6"
+      "color": "#b8b2a6",
+      "texture": "tile"
     },
     {
       "name": "tile-bath",
@@ -1453,7 +1545,8 @@
         2201,
         10
       ],
-      "color": "#b8b2a6"
+      "color": "#b8b2a6",
+      "texture": "tile"
     },
     {
       "name": "tile-wc",
@@ -1467,7 +1560,8 @@
         1699,
         10
       ],
-      "color": "#b8b2a6"
+      "color": "#b8b2a6",
+      "texture": "tile"
     },
     {
       "name": "tile-th-wc",
@@ -1481,7 +1575,8 @@
         100,
         10
       ],
-      "color": "#b8b2a6"
+      "color": "#b8b2a6",
+      "texture": "tile"
     },
     {
       "name": "ceramic-loggia4",
