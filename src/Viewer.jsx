@@ -355,23 +355,51 @@ function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
 // u = along the width (0 at the hinge), z = up, t = leaf thickness.
 const DOOR_WHITE = '#f2f1ed';
 const DOOR_GLASS = '#bcd8ee';
+const DOOR_METAL = '#9aa0a8';
+
+// Hinges + lever handle + key rosette shared by the white hinged-door styles.
+function doorHardware(w) {
+  const parts = [];
+  for (const z of [250, 1005, 1760]) {
+    parts.push({ u: 0, du: 12, z, dz: 90, t: 56, color: DOOR_METAL }); // hinge knuckle
+  }
+  parts.push(
+    { u: w - 190, du: 130, z: 1030, dz: 24, t: 116, color: DOOR_METAL }, // lever bar, both faces
+    { u: w - 92, du: 34, z: 955, dz: 44, t: 104, color: DOOR_METAL } // key rosette
+  );
+  return parts;
+}
+
 function doorLeafParts(style, w, h) {
   switch (style) {
-    case 'entrance': // strong solid brown door
-      return [{ u: 0, du: w, z: 0, dz: h, t: 54, color: '#6b4a2f' }];
+    case 'entrance': {
+      // security door: walnut slab, lever handle, two locks, peephole
+      const metal = DOOR_METAL;
+      return [
+        { u: 0, du: w, z: 0, dz: h, t: 54, color: '#7d5a3e' },
+        { u: w - 190, du: 130, z: 1030, dz: 24, t: 130, color: metal }, // lever bar
+        { u: w - 90, du: 44, z: 935, dz: 44, t: 120, color: metal }, // lower cylinder
+        { u: w - 86, du: 36, z: 1125, dz: 54, t: 118, color: metal }, // upper lock plate
+        { u: w / 2 - 12, du: 24, z: 1500, dz: 24, t: 60, color: '#3a3d42' }, // peephole
+      ];
+    }
     case 'balcony': {
-      // glass door with a white border all around
+      // white PVC glass door: full-height glass, vertical window handle
       const f = 90;
+      const pvc = '#e6e7e9';
       return [
         { u: 0, du: f, z: 0, dz: h, t: 44, color: DOOR_WHITE },
         { u: w - f, du: f, z: 0, dz: h, t: 44, color: DOOR_WHITE },
         { u: f, du: w - 2 * f, z: 0, dz: 120, t: 44, color: DOOR_WHITE },
         { u: f, du: w - 2 * f, z: h - 120, dz: 120, t: 44, color: DOOR_WHITE },
         { u: f, du: w - 2 * f, z: 120, dz: h - 240, t: 12, color: DOOR_GLASS, opacity: 0.35 },
+        { u: w - f / 2 - 16, du: 32, z: 970, dz: 170, t: 96, color: pvc }, // vertical handle on latch stile
+        { u: 0, du: 12, z: 150, dz: 90, t: 56, color: '#cfd2d6' }, // hinge caps top + bottom
+        { u: 0, du: 12, z: h - 240, dz: 90, t: 56, color: '#cfd2d6' },
       ];
     }
     case 'living': {
-      // white door with a glass panel in the middle
+      // like the inner door, but with a glass panel in the middle
       const s = 140, bottom = 350, top = 250;
       return [
         { u: 0, du: s, z: 0, dz: h, t: 44, color: DOOR_WHITE },
@@ -379,11 +407,33 @@ function doorLeafParts(style, w, h) {
         { u: s, du: w - 2 * s, z: 0, dz: bottom, t: 44, color: DOOR_WHITE },
         { u: s, du: w - 2 * s, z: h - top, dz: top, t: 44, color: DOOR_WHITE },
         { u: s, du: w - 2 * s, z: bottom, dz: h - bottom - top, t: 12, color: DOOR_GLASS, opacity: 0.4 },
+        ...doorHardware(w),
       ];
     }
-    default: // 'inner' — simple white door
-      return [{ u: 0, du: w, z: 0, dz: h, t: 40, color: '#e8e6e1' }];
+    default:
+      // 'inner' — simple white slab with hinges and a lever handle
+      return [{ u: 0, du: w, z: 0, dz: h, t: 40, color: '#e8e6e1' }, ...doorHardware(w)];
   }
+}
+
+// Flat architrave casing around an inner door opening: two legs and a head on
+// each wall face. Same leaf-plane coords as doorLeafParts, static (no swing).
+const CASING_W = 70;
+const CASING_T = 18;
+function doorCasingParts(horiz, away, w, h, wall) {
+  const boxes = [];
+  for (const face of [-wall / 2 - CASING_T, wall / 2]) {
+    boxes.push(
+      { u: away - CASING_W, du: CASING_W, z: 0, dz: h + CASING_W, y: face },
+      { u: away + w, du: CASING_W, z: 0, dz: h + CASING_W, y: face },
+      { u: away, du: w, z: h, dz: CASING_W, y: face }
+    );
+  }
+  return boxes.map((b) =>
+    horiz
+      ? { pos: [b.u, b.y, b.z], size: [b.du, CASING_T, b.dz] }
+      : { pos: [b.y, b.u, b.z], size: [CASING_T, b.du, b.dz] }
+  );
 }
 
 // A clickable door: pivots on a vertical hinge at its outer edge (the edge
@@ -571,9 +621,18 @@ function RoomDoor({ opening, hovered, onPointerOver, onPointerOut }) {
   });
 
   const leafParts = doorLeafParts(opening.style, w, sz);
+  const entrance = opening.style === 'entrance';
+  const casing = opening.style !== 'balcony'
+    ? doorCasingParts(horiz, away, w, sz, horiz ? sy : sx)
+    : [];
+  const casingColor = entrance ? '#4b4e54' : DOOR_WHITE; // steel frame vs white architrave
   return (
-    <group ref={ref} position={[hx * S, opening.pos[2] * S, -hy * S]}>
+    <group position={[hx * S, opening.pos[2] * S, -hy * S]}>
+      {casing.map((p, i) => (
+        <LocalBox key={i} part={p} color={casingColor} hovered={hovered} />
+      ))}
       <group
+        ref={ref}
         onClick={(e) => {
           e.stopPropagation();
           setOpen((o) => !o);
@@ -587,19 +646,24 @@ function RoomDoor({ opening, hovered, onPointerOver, onPointerOut }) {
           onPointerOut?.(e);
         }}
       >
-        {leafParts.map((p, i) => (
+        {leafParts.map((p, i) => {
+          // leaf-plane u has 0 at the hinge; with hinge='max' the leaf extends
+          // in -u from the pivot, so mirror u to keep hardware on the right edge
+          const u = hinge === 'max' ? w - p.u - p.du : p.u;
+          return (
           <LocalBox
             key={i}
             part={
               horiz
-                ? { pos: [away + p.u, -p.t / 2, p.z], size: [p.du, p.t, p.dz] }
-                : { pos: [-p.t / 2, away + p.u, p.z], size: [p.t, p.du, p.dz] }
+                ? { pos: [away + u, -p.t / 2, p.z], size: [p.du, p.t, p.dz] }
+                : { pos: [-p.t / 2, away + u, p.z], size: [p.t, p.du, p.dz] }
             }
             color={p.color}
             opacity={p.opacity ?? 1}
             hovered={hovered}
           />
-        ))}
+          );
+        })}
       </group>
     </group>
   );
