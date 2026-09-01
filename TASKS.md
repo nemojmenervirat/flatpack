@@ -39,6 +39,18 @@ _(empty)_
 
 ## Done
 
+- 2026-09-01 — Sink vanities remodeled as white gloss wall-hung units (`sink` 600,
+  `sink-wc` 500): ceramic basin top with rounded front corners overhanging 30mm,
+  stadium bowl recess (shadow-tone inset), two-part chrome mixer, two clickable doors
+  under a fixed apron with a recessed grip groove (no handles), wooden counter gone.
+  Mirrors kept. Basin overhang extends bbox front by 12mm (−18 → −30); fit clean.
+
+- 2026-09-01 — Toilets remodeled as wall-hung with concealed cistern (both `toilet`
+  and `toilet-80`): floating bowl with rounded nose (per-corner `round`, 250mm air
+  gap below), tapered body + rim + slim white seat stack, greige cistern chase, black
+  flush plate with two buttons. Footprints and bboxes unchanged (500×500 / 500×800),
+  so placements and clearances stayed put; fit report clean.
+
 - 2026-08-31 — Bathtub remodeled as AQUAESTIL METAURO Free Corner 160×75 (left):
   1600×750×560 glossy white shell with a 240 radius on the exposed SW corner and 80
   on the NW (back and east end stay square against the walls), stadium-shaped basin

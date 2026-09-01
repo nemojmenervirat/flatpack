@@ -1,13 +1,34 @@
 {
   "id": "toilet",
-  "name": "Toilet, concealed cistern",
+  "name": "Toilet wall-hung, concealed cistern",
   "buildable": false,
-  "color": "#f4f2ec",
+  "color": "#fdfdfb",
   "clearance": { "front": 600 },
   "parts": [
-    { "name": "cistern chase", "pos": [0, 350, 0], "size": [500, 150, 1200], "color": "#b8b2a6" },
-    { "name": "bowl", "pos": [65, 0, 250], "size": [370, 350, 170] },
-    { "name": "seat", "pos": [80, 20, 420], "size": [340, 310, 25], "color": "#f7f5ef" },
-    { "name": "flush plate", "pos": [175, 342, 950], "size": [150, 8, 220], "color": "#c0c4c8" }
+    { "name": "cistern chase", "pos": [0, 350, 0], "size": [500, 150, 1200], "color": "#d6d3cc" },
+    {
+      "name": "bowl",
+      "pos": [85, 30, 250],
+      "size": [330, 320, 150],
+      "round": [165, 165, 30, 30],
+      "color": "#fbfbf9"
+    },
+    {
+      "name": "rim",
+      "pos": [65, 0, 400],
+      "size": [370, 350, 35],
+      "round": [175, 175, 30, 30],
+      "color": "#fdfdfb"
+    },
+    {
+      "name": "seat",
+      "pos": [70, 5, 435],
+      "size": [360, 340, 20],
+      "round": [172, 172, 30, 30],
+      "color": "#ffffff"
+    },
+    { "name": "flush plate", "pos": [140, 342, 980], "size": [220, 8, 150], "color": "#2b2c2e" },
+    { "name": "flush button l", "pos": [180, 339, 1027], "size": [50, 3, 55], "color": "#45464a" },
+    { "name": "flush button r", "pos": [270, 339, 1027], "size": [50, 3, 55], "color": "#45464a" }
   ]
 }

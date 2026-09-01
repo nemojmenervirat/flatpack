@@ -1,18 +1,33 @@
 {
   "id": "sink",
-  "name": "Sink vanity 600",
+  "name": "Sink vanity 600 wall-hung",
   "buildable": false,
-  "color": "#e8e4da",
+  "color": "#f2f1ee",
   "clearance": { "front": 600 },
   "parts": [
     { "name": "side", "pos": [0, 0, 250], "size": [18, 460, 552] },
     { "name": "side", "pos": [582, 0, 250], "size": [18, 460, 552] },
     { "name": "bottom", "pos": [18, 0, 250], "size": [564, 460, 18] },
-    { "name": "counter", "pos": [0, -10, 802], "size": [600, 470, 18], "color": "#b08d5f" },
-    { "name": "door", "pos": [3, -18, 253], "size": [295, 18, 546] },
-    { "name": "door", "pos": [302, -18, 253], "size": [295, 18, 546] },
-    { "name": "basin", "pos": [75, 60, 820], "size": [450, 350, 140], "color": "#f4f2ec" },
-    { "name": "tap", "pos": [270, 415, 820], "size": [60, 45, 280], "color": "#c0c4c8" },
+    { "name": "apron", "pos": [3, -18, 719], "size": [594, 18, 80] },
+    { "name": "groove", "pos": [3, -10, 699], "size": [594, 10, 20], "color": "#c9c8c4" },
+    { "name": "door", "pos": [3, -18, 253], "size": [295, 18, 444], "color": "#f6f5f2" },
+    { "name": "door", "pos": [302, -18, 253], "size": [295, 18, 444], "color": "#f6f5f2" },
+    {
+      "name": "basin",
+      "pos": [0, -30, 802],
+      "size": [600, 490, 130],
+      "round": [60, 60, 0, 0],
+      "color": "#fbfbf9"
+    },
+    {
+      "name": "basin bowl",
+      "pos": [60, 30, 870],
+      "size": [480, 370, 63],
+      "round": 120,
+      "color": "#e7e9e8"
+    },
+    { "name": "tap riser", "pos": [272, 390, 932], "size": [56, 50, 150], "color": "#c9ccd0" },
+    { "name": "tap spout", "pos": [276, 285, 1052], "size": [48, 130, 30], "color": "#c9ccd0" },
     { "name": "mirror", "pos": [50, 452, 1300], "size": [500, 8, 700], "color": "#bcd8ee", "opacity": 0.5 }
   ]
 }
