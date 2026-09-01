@@ -27,6 +27,13 @@ view is read-only.** When he asks for a new piece or a change, edit the JSON.
 - `src/App.jsx` — layout, panels.
 - `src/data/` — apartment, pieces, scene. New furniture = new JSON file here,
   registered in `piecesById` in App.jsx.
+- `src/materials.js` + `src/data/materials.json` — the real-board registry (Elgrad
+  price list + swatch colours). **Generated — never hand-edit materials.json**;
+  rebuild with `node scripts/build-materials.mjs`. A piece or part can carry
+  `"material": "<decor id>"` instead of a `color`; `partColor()` resolves it.
+- `src/MaterialsPanel.jsx` — the ▩ browser for that registry.
+- `scripts/parse-cjenovnik.mjs` — price-list PDF → raw table (word coordinates, not
+  `pdftotext -layout`, which drops cells).
 
 ## Rules
 

@@ -29,7 +29,8 @@ _(empty)_
 - Delivery-path check: can the assembled piece travel from the apartment door to its
   target room (corridor widths, turns)?
 - Board count / cost estimate: given board size and price, compute boards needed and
-  rough cost directly in the app (before cutlistoptimizer).
+  rough cost directly in the app (before cutlistoptimizer). Prices are now in
+  materials.json — this needs the cut list to know each part's material.
 - Wall openings by subtraction (CSG) instead of hand-split wall segments.
 - Hardware/banding as authored data on the piece where the derived rule is wrong
   (hardware.js currently derives everything by convention).
@@ -38,6 +39,21 @@ _(empty)_
 - Export scene as PNG snapshot.
 
 ## Done
+
+- 2026-09-01 — Material registry: `src/data/materials.json` now holds all 348 board
+  decors from the Elgrad price list (348 entries, 321 with a colour sampled from the
+  supplier's own swatch photo, 3.7 MB of 240px swatches in `public/swatches/`).
+  `scripts/parse-cjenovnik.mjs` reads the PDF by word coordinates — `-layout` collapses
+  blank cells and slides prices under the wrong columns — handling multiple sub-tables
+  per page, two-line rows, and footnotes; every one of the 1084 prices on the board
+  pages is accounted for. `scripts/build-materials.mjs` resolves each decor against
+  elgrad.ba's WordPress REST API, downloads and samples the swatch, and is
+  incremental (cached swatches are not re-fetched). Pieces and parts can now carry
+  `"material": "<id>"` instead of an invented hex; `partColor()` in `src/materials.js`
+  resolves it and the Viewer uses it everywhere. New ▩ panel browses the registry with
+  search, colour-family and thickness filters, per-decor price tables and supplier
+  links. Nothing in the scene has been switched to a real decor yet — the invented
+  colours are still in place until Milan picks.
 
 - 2026-09-01 — Kitchen sink modelled from Milan's reference photo: black nano-steel
   drop-in bowl, 600 x 450 outer x 230 deep, centred in the sink bay (x 700-1300,

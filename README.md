@@ -55,6 +55,36 @@ The app computes:
 - `clearance` on a piece declares free space it needs: `{ "front": 600 }` means
   600 mm in front must stay empty (door swing, drawer pull, walking space).
 
+## Materials
+
+`src/data/materials.json` is a registry of boards you can actually buy: every decor
+in the Elgrad retail price list (`inputs/BiH-cjenovnik-MPC-*.pdf`), with prices per
+thickness, the ABS edging options, and — for the ones with a swatch photo on
+elgrad.ba — the **real colour**, sampled as the mean of that photo.
+
+Open it with the **▩** button in the sidebar: search, filter by colour family or
+thickness, click a decor for its full price table and a link to the supplier.
+
+A piece or a part can then name a decor instead of inventing a hex:
+
+```json
+{ "id": "kitchen-north", "material": "U708 ST9 · Svijetlo siva",
+  "parts": [ { "name": "door sink", "material": "6029 OW", ... } ] }
+```
+
+Resolution order is explicit `color`, then the part's `material`, then the piece's
+`material`, then the piece `color` (`src/materials.js`).
+
+Rebuild the registry when the price list changes (drop the new PDF in `inputs/`):
+
+```
+node scripts/build-materials.mjs            # parse + fetch any new swatches
+node scripts/build-materials.mjs --offline  # prices only, no network
+```
+
+Colours are the average of a supplier photo, not a colorimetric match — good enough
+to tell a warm oak from a cool one, not a substitute for a physical sample.
+
 ## Typical workflow
 
 1. Measure the room once, write `apartment.json`.

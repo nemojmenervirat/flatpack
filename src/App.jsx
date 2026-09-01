@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import MaterialsPanel from './MaterialsPanel.jsx';
 import Viewer, { PieceViewer } from './Viewer.jsx';
 import { fitReport, pieceLocalBBox, placeBox } from './geometry.js';
 import { cutList, cutListCsv } from './cutlist.js';
@@ -389,6 +390,7 @@ export default function App() {
   const [hoverIndex, setHoverIndex] = useState(null); // part index (3D -> table)
   const [walk, setWalk] = useState('off'); // 'off' | 'arm' | 'on'
   const [walkSpawn, setWalkSpawn] = useState(null); // { pos:[x,y], yaw } or null = entrance
+  const [materialsOpen, setMaterialsOpen] = useState(false);
 
   useEffect(() => lsSet('flatpack.view', view), [view]);
   useEffect(() => lsSet('flatpack.showClearances', showClearances), [showClearances]);
@@ -398,6 +400,20 @@ export default function App() {
   useEffect(() => lsSet('flatpack.cam', cam), [cam]);
 
   const report = useMemo(() => fitReport(scene, piecesById, apartment), []);
+
+  // Which pieces name each decor, so the browser can flag what is already used.
+  const materialUsage = useMemo(() => {
+    const used = {};
+    const add = (id, name) => {
+      if (!id) return;
+      (used[id] = used[id] || []).includes(name) || used[id].push(name);
+    };
+    for (const p of Object.values(piecesById)) {
+      add(p.material, p.name);
+      for (const part of p.parts || []) add(part.material, p.name);
+    }
+    return used;
+  }, []);
 
   const piece = view !== 'apartment' ? piecesById[view] : null;
   useEffect(() => {
@@ -417,8 +433,10 @@ export default function App() {
 
   return (
     <div className="app">
-      <div className={walk === 'arm' && !piece ? 'canvas-pane walk-arm' : 'canvas-pane'}>
-        {piece ? (
+      <div className={walk === 'arm' && !piece && !materialsOpen ? 'canvas-pane walk-arm' : 'canvas-pane'}>
+        {materialsOpen ? (
+          <MaterialsPanel usage={materialUsage} />
+        ) : piece ? (
           <PieceViewer key={piece.id} piece={piece} highlight={highlight} onHoverPart={setHoverIndex} />
         ) : (
           <Viewer
@@ -440,27 +458,27 @@ export default function App() {
           />
         )}
 
-        {!piece && walk === 'arm' && (
+        {!materialsOpen && !piece && walk === 'arm' && (
           <div className="walk-chip">
             <span>click a floor point to drop in</span>
             <button onClick={() => { setWalkSpawn(null); setWalk('on'); }}>start at entrance</button>
             <span className="muted-inline">esc cancels</span>
           </div>
         )}
-        {!piece && walk === 'on' && (
+        {!materialsOpen && !piece && walk === 'on' && (
           <div className="walk-chip">
             drag to look · scroll or WASD to move · click floor to glide · esc to exit
           </div>
         )}
 
-        {piece &&
+        {!materialsOpen && piece &&
           (piece.buildable ? (
             <PiecePanel piece={piece} hoverIndex={hoverIndex} onHoverRow={setHighlight} />
           ) : (
             <BoughtPanel piece={piece} />
           ))}
 
-        {!piece && report.issues.length > 0 && (
+        {!materialsOpen && !piece && report.issues.length > 0 && (
           <div className="issues-chip">
             <ul className="issues">
               {report.issues.map((issue, i) => (
@@ -471,12 +489,12 @@ export default function App() {
             </ul>
           </div>
         )}
-        {!piece && (
+        {!materialsOpen && !piece && (
           <button className="csv-chip" onClick={copyAllCsv} title="Copy the full cut list as CSV">
             ⧉ cut list
           </button>
         )}
-        {!piece && showAreas && (
+        {!materialsOpen && !piece && showAreas && (
           <div className="total-chip">total {roomAreas.total.toFixed(1)} m²</div>
         )}
       </div>
@@ -489,7 +507,10 @@ export default function App() {
           <button
             className={view === 'apartment' ? 'active' : ''}
             data-tip="Whole apartment"
-            onClick={() => setView('apartment')}
+            onClick={() => {
+              setMaterialsOpen(false);
+              setView('apartment');
+            }}
           >
             🏠
           </button>
@@ -523,6 +544,13 @@ export default function App() {
             }}
           >
             🚶
+          </button>
+          <button
+            className={materialsOpen ? 'active' : ''}
+            data-tip={materialsOpen ? 'Back to the model' : 'Materials (Elgrad price list)'}
+            onClick={() => setMaterialsOpen((v) => !v)}
+          >
+            ▩
           </button>
           <button
             className={cam === 'plan' ? 'active' : ''}
@@ -560,7 +588,10 @@ export default function App() {
                         key={it.id}
                         className={view === it.id ? 'piece-btn active' : 'piece-btn'}
                         title={it.name}
-                        onClick={() => setView(it.id)}
+                        onClick={() => {
+                          setMaterialsOpen(false);
+                          setView(it.id);
+                        }}
                       >
                         <span className="nm">{it.name}</span>
                         {it.count > 1 && <span className="ct">×{it.count}</span>}

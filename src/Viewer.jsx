@@ -3,6 +3,7 @@ import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, OrthographicCamera, Html } from '@react-three/drei';
 import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, Path, ExtrudeGeometry } from 'three';
 import { aabbOf, pieceLocalBBox, walkMove } from './geometry.js';
+import { partColor } from './materials.js';
 
 // Data space is mm, [x, y, z] with z up.
 // Three.js is y-up, meters. Mapping: three.x = x, three.y = z, three.z = -y.
@@ -1073,7 +1074,7 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
                 key={i}
                 part={p}
                 attachments={doors.get(i).map((ai) => parts[ai])}
-                color={p.color || piece.color || '#c9a36b'}
+                color={partColor(p, piece)}
                 pieceCenterX={centerX}
                 hovered={hovered}
               />
@@ -1081,7 +1082,7 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
           }
           if (isFlap(p)) {
             return (
-              <Flap key={i} part={p} color={p.color || piece.color || '#c9a36b'} hovered={hovered} />
+              <Flap key={i} part={p} color={partColor(p, piece)} hovered={hovered} />
             );
           }
           if (drawers.has(i)) {
@@ -1091,7 +1092,7 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
                   <LocalBox
                     key={pi}
                     part={parts[pi]}
-                    color={parts[pi].color || piece.color || '#c9a36b'}
+                    color={partColor(parts[pi], piece)}
                     opacity={parts[pi].opacity ?? 1}
                     hovered={hovered}
                   />
@@ -1103,7 +1104,7 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
             <LocalBox
               key={i}
               part={p}
-              color={p.color || piece.color || '#c9a36b'}
+              color={partColor(p, piece)}
               opacity={p.opacity ?? 1}
               hovered={hovered}
             />
@@ -1655,7 +1656,7 @@ export function PieceViewer({ piece, highlight, onHoverPart }) {
                 >
                   <LocalBox
                     part={parts[pi]}
-                    color={parts[pi].color || piece.color || '#c9a36b'}
+                    color={partColor(parts[pi], piece)}
                     opacity={parts[pi].opacity ?? 1}
                     hovered={hover === pi || highlight?.has(pi)}
                   />
@@ -1677,14 +1678,14 @@ export function PieceViewer({ piece, highlight, onHoverPart }) {
               <Door
                 part={p}
                 attachments={doors.get(i).map((ai) => parts[ai])}
-                color={p.color || piece.color || '#c9a36b'}
+                color={partColor(p, piece)}
                 pieceCenterX={centerX}
                 hovered={lit}
               />
             ) : isFlap(p) ? (
-              <Flap part={p} color={p.color || piece.color || '#c9a36b'} hovered={lit} />
+              <Flap part={p} color={partColor(p, piece)} hovered={lit} />
             ) : (
-              <LocalBox part={p} color={p.color || piece.color || '#c9a36b'} opacity={p.opacity ?? 1} hovered={lit} />
+              <LocalBox part={p} color={partColor(p, piece)} opacity={p.opacity ?? 1} hovered={lit} />
             )}
           </group>
         );
