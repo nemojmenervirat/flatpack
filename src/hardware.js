@@ -6,6 +6,7 @@
 // named door* are hinged doors, drawer bottoms mark drawer boxes, ...).
 
 import { pieceLocalBBox } from './geometry.js';
+import { findMaterial } from './materials.js';
 
 const sortedDims = (size) => [...size].sort((a, b) => b - a); // [L, W, T]
 
@@ -91,4 +92,60 @@ export function hardwareList(piece) {
     .reduce((n, p) => n + Math.max(3, Math.round(sortedDims(p.size)[0] / 280)), 0);
 
   return { hinges, hingesTotal, drawers, slideBoxDepth, shelves, shelfPins: shelves * 4, rails, hooks };
+}
+
+// Board + edge-banding cost from the materials registry (Elgrad KM prices).
+// Boards are priced by cut area x the panel price for the part's thickness;
+// banding uses the same edge rule as the parts table and the material's
+// cheapest tape. Parts whose material (own or piece-level) has no price for
+// their thickness land in `unpriced` instead of silently costing 0. Hardware
+// parts (legs, runners) are counted but not priced - bought separately.
+export function priceEstimate(piece) {
+  const boards = new Map(); // material|thickness -> row
+  const tapes = new Map(); // material -> meters
+  const unpriced = new Map(); // name|cut -> row
+  const hardware = new Map(); // name -> qty
+  for (const p of piece.parts || []) {
+    if (p.appliance) continue;
+    const [L, W, T] = sortedDims(p.size);
+    if (p.hardware) {
+      hardware.set(p.name, (hardware.get(p.name) || 0) + 1);
+      continue;
+    }
+    const mat = findMaterial(p.material || piece.material);
+    const perM2 = mat?.panel?.[String(T)];
+    if (!perM2) {
+      const key = `${p.name}|${L}x${W}x${T}`;
+      const row = unpriced.get(key) || {
+        name: p.name,
+        cut: `${L} × ${W} × ${T}`,
+        qty: 0,
+        reason: mat ? `no ${T}mm price for ${mat.id}` : 'no material set',
+      };
+      row.qty += 1;
+      unpriced.set(key, row);
+      continue;
+    }
+    const key = `${mat.id}|${T}`;
+    const row = boards.get(key) || { material: mat.id, thickness: T, m2: 0, perM2 };
+    row.m2 += (L * W) / 1e6;
+    boards.set(key, row);
+    const band = banding(p);
+    if (band.length) tapes.set(mat.id, (tapes.get(mat.id) || 0) + band.length / 1000);
+  }
+  const boardRows = [...boards.values()].map((r) => ({ ...r, cost: r.m2 * r.perM2 }));
+  const tapeRows = [...tapes.entries()].map(([id, meters]) => {
+    const prices = Object.values(findMaterial(id)?.tape || {});
+    const perM = prices.length ? Math.min(...prices) : null;
+    return { material: id, meters, perM, cost: perM ? meters * perM : 0 };
+  });
+  const total =
+    boardRows.reduce((n, r) => n + r.cost, 0) + tapeRows.reduce((n, r) => n + r.cost, 0);
+  return {
+    boardRows,
+    tapeRows,
+    unpriced: [...unpriced.values()],
+    hardware: [...hardware.entries()].map(([name, qty]) => ({ name, qty })),
+    total,
+  };
 }

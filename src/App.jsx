@@ -3,7 +3,7 @@ import MaterialsPanel from './MaterialsPanel.jsx';
 import Viewer, { PieceViewer } from './Viewer.jsx';
 import { fitReport, pieceLocalBBox, placeBox } from './geometry.js';
 import { cutList, cutListCsv } from './cutlist.js';
-import { partRows, hardwareList } from './hardware.js';
+import { partRows, hardwareList, priceEstimate } from './hardware.js';
 import apartment from './data/apartment.json';
 import rooms from './data/rooms.json';
 import scene from './data/scene.json';
@@ -301,6 +301,7 @@ function BoughtPanel({ piece }) {
 function PiecePanel({ piece, hoverIndex, onHoverRow }) {
   const rows = useMemo(() => partRows(piece), [piece]);
   const hw = useMemo(() => hardwareList(piece), [piece]);
+  const price = useMemo(() => priceEstimate(piece), [piece]);
   const bandTotal = rows.reduce((n, r) => n + r.banding.length * r.qty, 0);
 
   const copyCsv = () =>
@@ -344,6 +345,59 @@ function PiecePanel({ piece, hoverIndex, onHoverRow }) {
         <p className="muted">edge banding total: {m(bandTotal)}</p>
         <button onClick={copyCsv}>Copy cut list CSV</button>
       </section>
+
+      {(price.boardRows.length > 0 || price.unpriced.length > 0) && (
+        <section>
+          <h2>Price estimate</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Material</th>
+                <th>Thk</th>
+                <th>m²</th>
+                <th>KM/m²</th>
+                <th>KM</th>
+              </tr>
+            </thead>
+            <tbody>
+              {price.boardRows.map((r, i) => (
+                <tr key={i}>
+                  <td>{r.material}</td>
+                  <td>{r.thickness}</td>
+                  <td>{r.m2.toFixed(2)}</td>
+                  <td>{r.perM2.toFixed(2)}</td>
+                  <td>{r.cost.toFixed(2)}</td>
+                </tr>
+              ))}
+              {price.tapeRows.map((r, i) => (
+                <tr key={`t${i}`}>
+                  <td>{r.material} — tape</td>
+                  <td></td>
+                  <td>{r.meters.toFixed(1)} m</td>
+                  <td>{r.perM != null ? r.perM.toFixed(2) : '—'}</td>
+                  <td>{r.cost.toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="size-line">
+            boards + banding: {price.total.toFixed(0)} KM
+            <span className="muted-inline"> · with ~15% offcut waste: {(price.total * 1.15).toFixed(0)} KM</span>
+          </p>
+          {price.unpriced.length > 0 && (
+            <p className="muted">
+              not priced:{' '}
+              {price.unpriced.map((u) => `${u.qty} × ${u.name} (${u.reason})`).join(', ')}
+            </p>
+          )}
+          {price.hardware.length > 0 && (
+            <p className="muted">
+              bought separately:{' '}
+              {price.hardware.map((h) => `${h.qty} × ${h.name}`).join(', ')} — plus hinges/pins below
+            </p>
+          )}
+        </section>
+      )}
 
       {(hw.hingesTotal > 0 || hw.drawers > 0 || hw.shelves > 0 || hw.rails.length > 0 || hw.hooks > 0) && (
         <section>

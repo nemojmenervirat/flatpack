@@ -8,7 +8,7 @@ export function cutList(scene, piecesById) {
     const piece = piecesById[pl.piece];
     if (!piece?.buildable || !piece.parts) continue;
     for (const p of piece.parts) {
-      if (p.appliance) continue; // bought appliances inside a buildable piece
+      if (p.appliance || p.hardware) continue; // bought appliances / hardware (runners, hinges)
 
       const dims = [...p.size].sort((a, b) => b - a); // [L, W, T]
       const key = `${piece.id}|${p.name}|${dims.join('x')}`;

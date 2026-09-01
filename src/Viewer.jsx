@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
-import { OrbitControls, OrthographicCamera, Html } from '@react-three/drei';
+import { OrbitControls, OrthographicCamera, Html, Edges } from '@react-three/drei';
 import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, Path, ExtrudeGeometry } from 'three';
 import { aabbOf, pieceLocalBBox, walkMove } from './geometry.js';
 import { partColor } from './materials.js';
@@ -635,6 +635,11 @@ function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
         opacity={opacity}
         depthWrite={opacity === 1}
       />
+      {opacity === 1 && !part.fabric && (
+        <Edges>
+          <lineBasicMaterial color="#000000" transparent opacity={0.22} />
+        </Edges>
+      )}
     </mesh>
   );
 }
@@ -834,9 +839,50 @@ function Door({ part, attachments = [], color, pieceCenterX, hovered }) {
     onPointerOver: () => (document.body.style.cursor = 'pointer'),
     onPointerOut: () => (document.body.style.cursor = 'auto'),
   };
+
+  // Vertical bar handle on the free edge, at grab height: ~1050mm from the
+  // floor where the leaf allows, else clamped toward the reachable edge (base
+  // doors get it near their top, wall/upper doors near their bottom).
+  const handle = useMemo(() => {
+    const w = part.size[0];
+    const h = part.size[2];
+    const zBot = part.pos[2];
+    const zTop = zBot + h;
+    const zc =
+      h < 320 ? zBot + h / 2 : Math.min(Math.max(1050, zBot + 120), zTop - 120);
+    const len = Math.min(160, h - 60);
+    return {
+      name: 'handle',
+      pos: [hingeLeft ? w - 47 : -w + 35, -48, zc - len / 2],
+      size: [12, 30, len],
+      metal: true,
+    };
+  }, [part, hingeLeft]);
+
+  // Euro hinges on the hinge edge: cup + arm as one metal block on the door's
+  // inner face (protrudes into the carcass when closed, swings with the leaf).
+  // Count scales with leaf height; centers 100mm in from top and bottom.
+  const hinges = useMemo(() => {
+    const h = part.size[2];
+    const n = h < 900 ? 2 : h < 1600 ? 3 : h < 2100 ? 4 : 5;
+    return Array.from({ length: n }, (_, i) => {
+      const zc = n === 1 ? h / 2 : 100 + ((h - 200) * i) / (n - 1);
+      return {
+        name: 'hinge',
+        pos: [hingeLeft ? 4 : -59, 0, part.pos[2] + zc - 25],
+        size: [55, 14, 50],
+        metal: true,
+      };
+    });
+  }, [part, hingeLeft]);
+
   return (
     <group ref={ref} position={[hx * S, 0, -hy * S]}>
       <LocalBox part={shift(part)} color={color} hovered={hovered} {...handlers} />
+      {hinges.map((hp, i) => (
+        <LocalBox key={`h${i}`} part={hp} color="#9aa0a8" hovered={hovered} {...handlers} />
+      ))}
+      <LocalBox part={handle} color="#9aa0a8" hovered={hovered} {...handlers} />
       {attachments.map((a, i) => (
         <LocalBox
           key={i}
@@ -1051,6 +1097,7 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
   const centerX = (bb.min[0] + bb.max[0]) / 2;
   const rot = (((placement.rot || 0) % 360) + 360) % 360;
   const isFlap = (p) => p.name.startsWith('flap');
+  const isPullout = (p) => p.name.startsWith('pullout');
   const { groups: drawers, consumed } = useMemo(() => drawerGroups(parts), [parts]);
   const { groups: doors, consumed: onDoors } = useMemo(() => doorGroups(parts), [parts]);
 
@@ -1095,6 +1142,13 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
                     hovered={hovered}
                   />
                 ))}
+              </Drawer>
+            );
+          }
+          if (isPullout(p)) {
+            return (
+              <Drawer key={i} pullMm={Math.round(0.8 * p.size[1])}>
+                <LocalBox part={p} color={partColor(p, piece)} opacity={p.opacity ?? 1} hovered={hovered} />
               </Drawer>
             );
           }
@@ -1607,6 +1661,7 @@ export function PieceViewer({ piece, highlight, onHoverPart }) {
   const bb = pieceLocalBBox(piece);
   const centerX = (bb.min[0] + bb.max[0]) / 2;
   const isFlap = (p) => p.name.startsWith('flap');
+  const isPullout = (p) => p.name.startsWith('pullout');
   const { groups: drawers, consumed } = useMemo(() => drawerGroups(parts), [parts]);
   const { groups: doors, consumed: onDoors } = useMemo(() => doorGroups(parts), [parts]);
 
@@ -1682,6 +1737,10 @@ export function PieceViewer({ piece, highlight, onHoverPart }) {
               />
             ) : isFlap(p) ? (
               <Flap part={p} color={partColor(p, piece)} hovered={lit} />
+            ) : isPullout(p) ? (
+              <Drawer pullMm={Math.round(0.8 * p.size[1])}>
+                <LocalBox part={p} color={partColor(p, piece)} opacity={p.opacity ?? 1} hovered={lit} />
+              </Drawer>
             ) : (
               <LocalBox part={p} color={partColor(p, piece)} opacity={p.opacity ?? 1} hovered={lit} />
             )}
@@ -1699,6 +1758,7 @@ export function PieceViewer({ piece, highlight, onHoverPart }) {
       )}
 
       <OrbitControls target={c} makeDefault />
+      <ArrowKeyPan />
     </Canvas>
   );
 }
