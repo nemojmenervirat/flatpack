@@ -39,6 +39,19 @@ _(empty)_
 
 ## Done
 
+- 2026-09-01 — Kitchen sink modelled from Milan's reference photo: black nano-steel
+  drop-in bowl, 600 x 450 outer x 230 deep, centred in the sink bay (x 700-1300,
+  y 40-490 local). Thin 26mm flange on the worktop folding into 8mm bowl walls with
+  R10 inner corners, flat floor, off-centre front drain + strainer, and a black
+  square-profile mixer behind the right of the bowl (stadium base, chrome lever trim,
+  228 riser, 106 forward spout with a dropped nose + chrome aerator). Two new
+  render-only part flags in Viewer.jsx: `cutout: [x0,y0,x1,y1]` (+ `cutoutRound`)
+  punches a rectangular hole through an extruded part, authored in PIECE-local mm —
+  used for the worktop sink hole and for the bowl walls themselves; and
+  `metal: true` (metalness 0.5 / roughness 0.28) so the steel reads glossy, not flat.
+  Cut list unchanged (worktop stays one 4000x600x28 board with a cut-out; every sink
+  and tap part is `appliance`).
+
 - 2026-09-01 — Corner sofa restyled to the greige chaise-sofa reference (3 passes on
   Milan's screenshots): black blade feet with a 140mm shadow gap under a slim
   platform, LOW back rail (640) with plump back pillows cresting 100 above it — the

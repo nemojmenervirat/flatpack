@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, OrthographicCamera, Html } from '@react-three/drei';
-import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, ExtrudeGeometry } from 'three';
+import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, Path, ExtrudeGeometry } from 'three';
 import { aabbOf, pieceLocalBBox, walkMove } from './geometry.js';
 
 // Data space is mm, [x, y, z] with z up.
@@ -510,28 +510,53 @@ function getFabricTexture(kind) {
   return tex;
 }
 
-// A part with "round" renders its footprint as a rounded rectangle, extruded
-// to the part's height. round: r (mm) rounds all four corners; round:
-// [r0, r1, r2, r3] gives each corner its own radius, in plan order
-// (minX,minY) → (maxX,minY) → (maxX,maxY) → (minX,maxY). Render-only sugar:
-// geometry.js still sees the part's plain AABB, so fit checks stay conservative.
+// A rounded rectangle in the extrude plane (x = width, y = depth, already
+// scaled, offset by ox/oy). r is one radius or four, in plan order
+// (minX,minY) -> (maxX,minY) -> (maxX,maxY) -> (minX,maxY). Ctor is Shape for
+// an outline, Path for a hole.
+function roundedRect(Ctor, ox, oy, W, D, r) {
+  const [a, b, c, d] = (Array.isArray(r) ? r : [r, r, r, r]).map((v) =>
+    Math.max(0, Math.min(v, W / 2, D / 2))
+  );
+  const s = new Ctor();
+  s.moveTo(ox + a, oy);
+  s.lineTo(ox + W - b, oy);
+  if (b) s.absarc(ox + W - b, oy + b, b, -Math.PI / 2, 0);
+  s.lineTo(ox + W, oy + D - c);
+  if (c) s.absarc(ox + W - c, oy + D - c, c, 0, Math.PI / 2);
+  s.lineTo(ox + d, oy + D);
+  if (d) s.absarc(ox + d, oy + D - d, d, Math.PI / 2, Math.PI);
+  s.lineTo(ox, oy + a);
+  if (a) s.absarc(ox + a, oy + a, a, Math.PI, Math.PI * 1.5);
+  return s;
+}
+
+// A part with "round" and/or "cutout" renders its footprint as a rounded
+// rectangle, extruded to the part's height. round: r (mm) rounds all four
+// corners; round: [r0, r1, r2, r3] gives each corner its own radius, in plan
+// order (minX,minY) -> (maxX,minY) -> (maxX,maxY) -> (minX,maxY).
+// cutout: [x0, y0, x1, y1] punches a rectangular hole straight through, in
+// PIECE-local mm (not part-local) so a sink/hob opening is authored in the
+// same numbers as the thing that drops into it; "cutoutRound" rounds its
+// corners. Render-only sugar: geometry.js still sees the part's plain AABB,
+// so fit checks stay conservative.
 function LocalRounded({ part, color, hovered, opacity = 1, ...handlers }) {
   const geom = useMemo(() => {
     const [w, d, h] = part.size;
-    const rr = Array.isArray(part.round) ? part.round : [part.round, part.round, part.round, part.round];
-    const [r0, r1, r2, r3] = rr.map((r) => Math.min(r, w / 2, d / 2) * S);
-    const W = w * S;
-    const D = d * S;
-    const s = new Shape();
-    s.moveTo(r0, 0);
-    s.lineTo(W - r1, 0);
-    s.absarc(W - r1, r1, r1, -Math.PI / 2, 0);
-    s.lineTo(W, D - r2);
-    s.absarc(W - r2, D - r2, r2, 0, Math.PI / 2);
-    s.lineTo(r3, D);
-    s.absarc(r3, D - r3, r3, Math.PI / 2, Math.PI);
-    s.lineTo(0, r0);
-    s.absarc(r0, r0, r0, Math.PI, Math.PI * 1.5);
+    const s = roundedRect(Shape, 0, 0, w * S, d * S, (part.round ?? 0) * S);
+    if (part.cutout) {
+      const [cx0, cy0, cx1, cy1] = part.cutout;
+      s.holes.push(
+        roundedRect(
+          Path,
+          (cx0 - part.pos[0]) * S,
+          (cy0 - part.pos[1]) * S,
+          (cx1 - cx0) * S,
+          (cy1 - cy0) * S,
+          (part.cutoutRound ?? 0) * S
+        )
+      );
+    }
     const g = new ExtrudeGeometry(s, { depth: h * S, bevelEnabled: false, curveSegments: 24 });
     g.rotateX(-Math.PI / 2); // shape plane (x,y) -> plan (x,-z), extrusion -> up
     return g;
@@ -546,6 +571,8 @@ function LocalRounded({ part, color, hovered, opacity = 1, ...handlers }) {
         map={part.fabric ? getFabricTexture(part.fabric) : null}
         color={color}
         emissive={hovered ? '#4a4638' : '#000000'}
+        metalness={part.metal ? 0.5 : 0}
+        roughness={part.metal ? 0.28 : 1}
         transparent={opacity < 1}
         opacity={opacity}
         depthWrite={opacity === 1}
@@ -572,6 +599,8 @@ function LocalDisc({ part, color, hovered, opacity = 1, ...handlers }) {
       <meshStandardMaterial
         color={color}
         emissive={hovered ? '#4a4638' : '#000000'}
+        metalness={part.metal ? 0.5 : 0}
+        roughness={part.metal ? 0.28 : 1}
         transparent={opacity < 1}
         opacity={opacity}
         depthWrite={opacity === 1}
@@ -585,7 +614,7 @@ function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
   if (part.disc) {
     return <LocalDisc part={part} color={color} hovered={hovered} opacity={opacity} {...handlers} />;
   }
-  if (part.round) {
+  if (part.round || part.cutout) {
     return <LocalRounded part={part} color={color} hovered={hovered} opacity={opacity} {...handlers} />;
   }
   const size = [part.size[0] * S, part.size[2] * S, part.size[1] * S];
@@ -601,6 +630,8 @@ function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
         map={part.fabric ? getFabricTexture(part.fabric) : null}
         color={color}
         emissive={hovered ? '#4a4638' : '#000000'}
+        metalness={part.metal ? 0.5 : 0}
+        roughness={part.metal ? 0.28 : 1}
         transparent={opacity < 1}
         opacity={opacity}
         depthWrite={opacity === 1}

@@ -19,7 +19,7 @@
     { "name": "back HDF", "pos": [18, 557, 168], "size": [1982, 3, 702], "color": "#31353a" },
     { "name": "back HDF", "pos": [2000, 557, 168], "size": [1982, 3, 702], "color": "#31353a" },
     { "name": "shelf corner", "pos": [18, 0, 510], "size": [582, 557, 18] },
-    { "name": "worktop", "pos": [0, -18, 870], "size": [4000, 600, 28], "color": "#b08d5f" },
+    { "name": "worktop", "pos": [0, -18, 870], "size": [4000, 600, 28], "color": "#b08d5f", "cutout": [714, 56, 1286, 474], "cutoutRound": 14 },
 
     { "name": "corner panel", "pos": [3, -18, 153], "size": [594, 18, 714], "color": "#e8e4da" },
     { "name": "door sink", "pos": [601, -18, 153], "size": [396, 18, 714], "color": "#e8e4da" },
@@ -55,8 +55,19 @@
 
     { "name": "flap dishwasher", "pos": [1401, -18, 153], "size": [598, 18, 714], "color": "#e8e4da" },
 
-    { "name": "sink basin", "pos": [750, 90, 898], "size": [500, 400, 8], "color": "#b9bec4", "appliance": true },
-    { "name": "tap", "pos": [985, 505, 898], "size": [30, 30, 260], "color": "#b9bec4", "appliance": true },
+    { "name": "sink rim", "pos": [700, 40, 898], "size": [600, 450, 6], "round": 14, "cutout": [726, 68, 1274, 462], "cutoutRound": 10, "color": "#2c3035", "metal": true, "appliance": true },
+    { "name": "sink bowl", "pos": [718, 60, 674], "size": [564, 410, 224], "round": 14, "cutout": [726, 68, 1274, 462], "cutoutRound": 10, "color": "#22262a", "metal": true, "appliance": true },
+    { "name": "sink bowl floor", "pos": [726, 68, 674], "size": [548, 394, 8], "round": 10, "color": "#1b1e22", "metal": true, "appliance": true },
+    { "name": "sink drain", "pos": [992, 132, 681], "size": [96, 96, 4], "round": 48, "color": "#3a4045", "metal": true, "appliance": true },
+    { "name": "sink strainer", "pos": [1006, 146, 683], "size": [68, 68, 3], "round": 34, "color": "#5b6268", "metal": true, "appliance": true },
+
+    { "name": "tap base", "pos": [1130, 492, 898], "size": [60, 88, 14], "round": 30, "color": "#1b1d20", "metal": true, "appliance": true },
+    { "name": "tap trim", "pos": [1142, 484, 924], "size": [36, 26, 26], "round": 13, "color": "#c6cbd0", "metal": true, "appliance": true },
+    { "name": "tap lever", "pos": [1146, 462, 944], "size": [28, 50, 22], "round": 11, "color": "#1b1d20", "metal": true, "appliance": true },
+    { "name": "tap riser", "pos": [1136, 508, 912], "size": [48, 48, 228], "round": 14, "color": "#1b1d20", "metal": true, "appliance": true },
+    { "name": "tap spout", "pos": [1136, 402, 1110], "size": [48, 106, 30], "round": 12, "color": "#1b1d20", "metal": true, "appliance": true },
+    { "name": "tap spout tip", "pos": [1140, 396, 1094], "size": [40, 26, 20], "round": 9, "color": "#1b1d20", "metal": true, "appliance": true },
+    { "name": "tap aerator", "pos": [1146, 400, 1090], "size": [28, 18, 5], "round": 9, "color": "#c6cbd0", "metal": true, "appliance": true },
     { "name": "dishwasher", "pos": [1402, 0, 0], "size": [596, 542, 850], "color": "#2e3338", "appliance": true }
   ]
 }
