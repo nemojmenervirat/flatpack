@@ -1,12 +1,26 @@
 {
   "id": "water-heater",
-  "name": "Water heater 100l",
+  "name": "Water heater Bosch flat 57×32×90",
   "buildable": false,
-  "color": "#eceae4",
+  "color": "#f9f9f7",
   "parts": [
-    { "name": "tank", "pos": [0, 0, 0], "size": [500, 500, 950] },
-    { "name": "dial", "pos": [200, -8, 80], "size": [100, 8, 100], "color": "#2e3338" },
-    { "name": "pipe", "pos": [140, 400, -120], "size": [40, 40, 120], "color": "#c0c4c8" },
-    { "name": "pipe", "pos": [320, 400, -120], "size": [40, 40, 120], "color": "#c0c4c8" }
+    {
+      "name": "body",
+      "pos": [0, 0, 40],
+      "size": [569, 316, 862],
+      "round": 60,
+      "color": "#f9f9f7"
+    },
+    {
+      "name": "base cap",
+      "pos": [20, 20, 0],
+      "size": [529, 276, 40],
+      "round": 50,
+      "color": "#9aa0a3"
+    },
+    { "name": "display", "pos": [234, -14, 70], "size": [140, 14, 140], "disc": true, "color": "#17181a" },
+    { "name": "logo", "pos": [244, -4, 760], "size": [80, 4, 18], "color": "#55585c" },
+    { "name": "pipe", "pos": [150, 260, -120], "size": [40, 40, 120], "color": "#c0c4c8" },
+    { "name": "pipe", "pos": [370, 260, -120], "size": [40, 40, 120], "color": "#c0c4c8" }
   ]
 }

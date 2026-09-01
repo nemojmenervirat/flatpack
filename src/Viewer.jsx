@@ -471,8 +471,37 @@ function LocalRounded({ part, color, hovered, opacity = 1, ...handlers }) {
   );
 }
 
+// A part with "disc": true renders as a cylinder lying along local y (the
+// front/back axis) — a porthole or dial face. Radius comes from the x/z
+// footprint, length from the y size. Render-only sugar like "round":
+// geometry.js still sees the plain AABB.
+function LocalDisc({ part, color, hovered, opacity = 1, ...handlers }) {
+  const [sx, sy, sz] = part.size;
+  const r = (Math.min(sx, sz) / 2) * S;
+  const pos = [
+    (part.pos[0] + sx / 2) * S,
+    (part.pos[2] + sz / 2) * S,
+    -(part.pos[1] + sy / 2) * S,
+  ];
+  return (
+    <mesh position={pos} rotation={[Math.PI / 2, 0, 0]} {...handlers}>
+      <cylinderGeometry args={[r, r, sy * S, 48]} />
+      <meshStandardMaterial
+        color={color}
+        emissive={hovered ? '#4a4638' : '#000000'}
+        transparent={opacity < 1}
+        opacity={opacity}
+        depthWrite={opacity === 1}
+      />
+    </mesh>
+  );
+}
+
 // A part box in piece-local coordinates (rendered inside the placement group).
 function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
+  if (part.disc) {
+    return <LocalDisc part={part} color={color} hovered={hovered} opacity={opacity} {...handlers} />;
+  }
   if (part.round) {
     return <LocalRounded part={part} color={color} hovered={hovered} opacity={opacity} {...handlers} />;
   }

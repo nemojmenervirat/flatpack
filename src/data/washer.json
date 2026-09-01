@@ -1,12 +1,21 @@
 {
   "id": "washer",
-  "name": "Washing machine",
+  "name": "Washing machine LG 9kg",
   "buildable": false,
-  "color": "#eceae4",
+  "color": "#f7f7f5",
   "clearance": { "front": 600 },
   "parts": [
-    { "name": "body", "pos": [0, 0, 0], "size": [600, 600, 850] },
-    { "name": "drum door", "pos": [100, -20, 200], "size": [400, 20, 400], "color": "#2e3338", "opacity": 0.85 },
-    { "name": "control panel", "pos": [40, -12, 760], "size": [520, 12, 60], "color": "#c9c5bd" }
+    { "name": "body", "pos": [0, 0, 30], "size": [600, 600, 820] },
+    { "name": "foot", "pos": [30, 30, 0], "size": [40, 40, 30], "color": "#7a7d80" },
+    { "name": "foot", "pos": [530, 30, 0], "size": [40, 40, 30], "color": "#7a7d80" },
+    { "name": "foot", "pos": [30, 530, 0], "size": [40, 40, 30], "color": "#7a7d80" },
+    { "name": "foot", "pos": [530, 530, 0], "size": [40, 40, 30], "color": "#7a7d80" },
+    { "name": "control panel", "pos": [0, -6, 760], "size": [600, 6, 90], "color": "#f2f2f0" },
+    { "name": "dial", "pos": [250, -26, 770], "size": [80, 20, 80], "disc": true, "color": "#c6c9cd" },
+    { "name": "display", "pos": [420, -10, 780], "size": [130, 4, 50], "color": "#26272b" },
+    { "name": "porthole ring", "pos": [45, -18, 145], "size": [510, 18, 510], "disc": true, "color": "#c6c9cd" },
+    { "name": "porthole door", "pos": [60, -48, 160], "size": [480, 34, 480], "disc": true, "color": "#23262a" },
+    { "name": "porthole glass", "pos": [150, -58, 250], "size": [300, 14, 300], "disc": true, "color": "#15171c" },
+    { "name": "service flap", "pos": [380, -4, 70], "size": [160, 4, 110], "color": "#efefec" }
   ]
 }

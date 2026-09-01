@@ -39,6 +39,38 @@ _(empty)_
 
 ## Done
 
+- 2026-09-01 — WC toilet resized to real bowl dims 36×55×30: ceramic 360 wide, 550
+  projection from the chase, 300 high (z 130–430, seat top 450, 130 air gap). Piece
+  depth 500 → 700; placement moved to y 8348 so the chase stays on the north wall.
+  Then unified: `toilet-80` deleted, the bath placement now uses the same `toilet`
+  piece (pos.x 12597 → 12497 so the chase stays on the bath west wall at the new
+  depth; its rot 90 and front-450 clearance override kept). Fit clean.
+
+- 2026-09-01 — New piece `eloblock` — Vaillant eloBLOCK electric wall boiler for the
+  floor heating, 410×315×740: white rounded body, bottom control band (blue LCD, two
+  buttons, dial knob disc), 3 chrome pipes below. Hung on the bath south wall next to
+  the water heater (50mm gap west of it, above the washer), bottoms aligned at z 1150,
+  rot 180, back flush at y 6847. Registered in piecesById; fit report clean. Note:
+  the decorative remodels (sinks/tub/washer/dryer) intentionally overlap parts
+  (inset bowls, porthole discs) — all buildable:false, so no cut-list impact.
+
+- 2026-09-01 — Water heater remodeled as Bosch Tronic-style flat boiler, real dims
+  569×316×902 (was a 500×500×950 box): white slab with 60mm rounded vertical edges,
+  grey base cap, round black touch display (disc) low on the front, logo strip,
+  chrome pipes below. Placement y re-seated (7347 → 7163) so the back stays flush
+  on the bath-south wall face at the new 316 depth; mount height unchanged. Fit clean.
+
+- 2026-09-01 — Dryer remodeled as Bosch-style condenser dryer using the `disc` sugar:
+  flat white door disc with silver emblem and grip bar, dark dial + display on the
+  top panel, filter tray recess top-left, round dark vent grille bottom-right, 4
+  feet. Fit clean.
+
+- 2026-09-01 — Washer remodeled as LG-style front-loader: white body on 4 feet,
+  circular porthole (silver ring + bulging black door + dark glass, 58mm proud),
+  top panel with silver dial disc and dark display, service flap bottom-right.
+  New render sugar in Viewer.jsx: part `\"disc\": true` renders as a cylinder along
+  local y (porthole/dial faces); AABB unchanged for geometry.js. Fit clean.
+
 - 2026-09-01 — Sink vanities remodeled as white gloss wall-hung units (`sink` 600,
   `sink-wc` 500): ceramic basin top with rounded front corners overhanging 30mm,
   stadium bowl recess (shadow-tone inset), two-part chrome mixer, two clickable doors

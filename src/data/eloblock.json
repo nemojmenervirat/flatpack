@@ -1,0 +1,24 @@
+{
+  "id": "eloblock",
+  "name": "Vaillant eloBLOCK 41×32×74 (central heating)",
+  "buildable": false,
+  "color": "#f9f9f7",
+  "parts": [
+    {
+      "name": "body",
+      "pos": [0, 0, 0],
+      "size": [410, 315, 740],
+      "round": 30,
+      "color": "#f9f9f7"
+    },
+    { "name": "control panel", "pos": [55, -8, 60], "size": [300, 8, 150], "color": "#f1f1ef" },
+    { "name": "lcd", "pos": [175, -12, 140], "size": [90, 4, 55], "color": "#3f6fd8" },
+    { "name": "button", "pos": [150, -11, 125], "size": [40, 3, 14], "color": "#8b8e92" },
+    { "name": "button", "pos": [220, -11, 125], "size": [40, 3, 14], "color": "#8b8e92" },
+    { "name": "knob", "pos": [180, -26, 66], "size": [50, 18, 50], "disc": true, "color": "#dcdedf" },
+    { "name": "logo", "pos": [155, -4, 600], "size": [100, 4, 20], "color": "#9b9ea2" },
+    { "name": "pipe", "pos": [90, 240, -110], "size": [30, 30, 110], "color": "#c0c4c8" },
+    { "name": "pipe", "pos": [185, 240, -110], "size": [30, 30, 110], "color": "#c0c4c8" },
+    { "name": "pipe", "pos": [280, 240, -110], "size": [30, 30, 110], "color": "#c0c4c8" }
+  ]
+}

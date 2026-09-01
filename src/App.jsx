@@ -19,11 +19,11 @@ import shower from './data/shower.json';
 import sink from './data/sink.json';
 import sinkWc from './data/sink-wc.json';
 import toilet from './data/toilet.json';
-import toilet80 from './data/toilet-80.json';
 import bathtub from './data/bathtub.json';
 import washer from './data/washer.json';
 import dryer from './data/dryer.json';
 import waterHeater from './data/water-heater.json';
+import eloBlock from './data/eloblock.json';
 import kitchenWest from './data/kitchen-west.json';
 import kitchenNorth from './data/kitchen-north.json';
 import kitchenUpperWest from './data/kitchen-upper-west.json';
@@ -54,11 +54,11 @@ const piecesById = {
   [sink.id]: sink,
   [sinkWc.id]: sinkWc,
   [toilet.id]: toilet,
-  [toilet80.id]: toilet80,
   [bathtub.id]: bathtub,
   [washer.id]: washer,
   [dryer.id]: dryer,
   [waterHeater.id]: waterHeater,
+  [eloBlock.id]: eloBlock,
   [kitchenWest.id]: kitchenWest,
   [kitchenNorth.id]: kitchenNorth,
   [kitchenUpperWest.id]: kitchenUpperWest,

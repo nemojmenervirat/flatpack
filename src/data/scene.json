@@ -101,7 +101,7 @@
       "label": "Toilet - WC",
       "pos": [
         11160,
-        8548,
+        8348,
         0
       ],
       "rot": 0
@@ -117,10 +117,10 @@
       "rot": 90
     },
     {
-      "piece": "toilet-80",
+      "piece": "toilet",
       "label": "Toilet - bath",
       "pos": [
-        12597,
+        12497,
         8300,
         0
       ],
@@ -164,7 +164,17 @@
       "label": "Water heater - bath",
       "pos": [
         14747,
-        7347,
+        7163,
+        1150
+      ],
+      "rot": 180
+    },
+    {
+      "piece": "eloblock",
+      "label": "eloBLOCK - bath",
+      "pos": [
+        14128,
+        7162,
         1150
       ],
       "rot": 180
