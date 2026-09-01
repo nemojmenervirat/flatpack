@@ -1360,8 +1360,15 @@ function ArrowKeyPan() {
       const forward = new Vector3();
       camera.getWorldDirection(forward);
       forward.y = 0;
+      if (forward.lengthSq() < 1e-6) {
+        // looking straight down (plan view): pan in screen directions instead
+        forward.setFromMatrixColumn(camera.matrix, 1); // camera-local up
+        forward.y = 0;
+      }
       forward.normalize();
-      const right = new Vector3().crossVectors(forward, new Vector3(0, 1, 0));
+      const right = new Vector3().setFromMatrixColumn(camera.matrix, 0); // camera-local right
+      right.y = 0;
+      right.normalize();
       const offset = right.multiplyScalar(dx * step).add(forward.multiplyScalar(dz * step));
       camera.position.add(offset);
       controls.target.add(offset);
@@ -1635,8 +1642,8 @@ export default function Viewer({
       )}
 
       {!walking && cam === 'free' && <OrbitControls target={[7.5, 0.5, -4.6]} makeDefault />}
-      {!walking && cam === 'free' && <ArrowKeyPan />}
       {!walking && cam !== 'free' && <PlanView apartment={apartment} />}
+      {!walking && <ArrowKeyPan />}
       {walking && (
         <WalkControls
           spawn={walkSpawn}
