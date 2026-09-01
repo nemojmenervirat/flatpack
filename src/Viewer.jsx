@@ -428,25 +428,28 @@ function Box({ box, color = '#c9a36b', opacity = 1, hovered = false, ...handlers
   );
 }
 
-// A part with "round": r (mm) renders its footprint as a rounded rectangle,
-// extruded to the part's height. Render-only sugar: geometry.js still sees
-// the part's plain AABB, so fit checks stay conservative.
+// A part with "round" renders its footprint as a rounded rectangle, extruded
+// to the part's height. round: r (mm) rounds all four corners; round:
+// [r0, r1, r2, r3] gives each corner its own radius, in plan order
+// (minX,minY) → (maxX,minY) → (maxX,maxY) → (minX,maxY). Render-only sugar:
+// geometry.js still sees the part's plain AABB, so fit checks stay conservative.
 function LocalRounded({ part, color, hovered, opacity = 1, ...handlers }) {
   const geom = useMemo(() => {
     const [w, d, h] = part.size;
-    const r = Math.min(part.round, w / 2, d / 2) * S;
+    const rr = Array.isArray(part.round) ? part.round : [part.round, part.round, part.round, part.round];
+    const [r0, r1, r2, r3] = rr.map((r) => Math.min(r, w / 2, d / 2) * S);
     const W = w * S;
     const D = d * S;
     const s = new Shape();
-    s.moveTo(r, 0);
-    s.lineTo(W - r, 0);
-    s.absarc(W - r, r, r, -Math.PI / 2, 0);
-    s.lineTo(W, D - r);
-    s.absarc(W - r, D - r, r, 0, Math.PI / 2);
-    s.lineTo(r, D);
-    s.absarc(r, D - r, r, Math.PI / 2, Math.PI);
-    s.lineTo(0, r);
-    s.absarc(r, r, r, Math.PI, Math.PI * 1.5);
+    s.moveTo(r0, 0);
+    s.lineTo(W - r1, 0);
+    s.absarc(W - r1, r1, r1, -Math.PI / 2, 0);
+    s.lineTo(W, D - r2);
+    s.absarc(W - r2, D - r2, r2, 0, Math.PI / 2);
+    s.lineTo(r3, D);
+    s.absarc(r3, D - r3, r3, Math.PI / 2, Math.PI);
+    s.lineTo(0, r0);
+    s.absarc(r0, r0, r0, Math.PI, Math.PI * 1.5);
     const g = new ExtrudeGeometry(s, { depth: h * S, bevelEnabled: false, curveSegments: 24 });
     g.rotateX(-Math.PI / 2); // shape plane (x,y) -> plan (x,-z), extrusion -> up
     return g;

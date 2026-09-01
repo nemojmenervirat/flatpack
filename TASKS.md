@@ -39,6 +39,14 @@ _(empty)_
 
 ## Done
 
+- 2026-08-31 — Bathtub remodeled as AQUAESTIL METAURO Free Corner 160×75 (left):
+  1600×750×560 glossy white shell with a 240 radius on the exposed SW corner and 80
+  on the NW (back and east end stay square against the walls), stadium-shaped basin
+  recess (shadow-tone inset slab), chrome drain and tap. Placement moved to x 13194
+  to stay flush with the east wall at the new length. Viewer's `round` sugar extended:
+  accepts [r0,r1,r2,r3] per-corner radii (plan order from min-x/min-y CCW) alongside
+  the old single number.
+
 - 2026-08-31 — WC & bathroom wall tiles floor-to-ceiling: 16 more `wallTiles` strips
   (z 0–2600) lining every wall face of both rooms with the same marble map. Split
   around openings: bands above the WC and bath door lintels (z 2100–2600), and around

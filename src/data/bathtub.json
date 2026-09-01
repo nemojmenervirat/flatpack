@@ -1,12 +1,25 @@
 {
   "id": "bathtub",
-  "name": "Bathtub 1700",
+  "name": "Kada METAURO Free Corner 160×75",
   "buildable": false,
-  "color": "#f4f2ec",
+  "color": "#fdfdfb",
   "clearance": { "front": 600 },
   "parts": [
-    { "name": "tub", "pos": [0, 0, 0], "size": [1700, 750, 540] },
-    { "name": "rim", "pos": [-20, -20, 540], "size": [1720, 770, 60], "color": "#f7f5ef" },
-    { "name": "tap", "pos": [1560, 620, 600], "size": [60, 60, 180], "color": "#c0c4c8" }
+    {
+      "name": "shell",
+      "pos": [0, 0, 0],
+      "size": [1600, 750, 560],
+      "round": [240, 0, 0, 80],
+      "color": "#fdfdfb"
+    },
+    {
+      "name": "basin",
+      "pos": [90, 90, 470],
+      "size": [1420, 570, 71],
+      "round": 285,
+      "color": "#e7e9e8"
+    },
+    { "name": "drain", "pos": [300, 340, 541], "size": [70, 70, 3], "round": 35, "color": "#b9bdc1" },
+    { "name": "tap", "pos": [1470, 620, 560], "size": [60, 60, 200], "color": "#c0c4c8" }
   ]
 }
