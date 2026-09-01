@@ -39,6 +39,34 @@ _(empty)_
 
 ## Done
 
+- 2026-09-01 — Corner sofa restyled to the greige chaise-sofa reference (3 passes on
+  Milan's screenshots): black blade feet with a 140mm shadow gap under a slim
+  platform, LOW back rail (640) with plump back pillows cresting 100 above it — the
+  backrest reads as a row of pillows, no loose throw pillows. West arm kept low (560)
+  so the left end doesn't stick up. 3 seat cushions + one big chaise cushion, flush
+  seams through the corner. New Viewer part flag `\"fabric\": true` maps a shared
+  subtle woven-weave CanvasTexture onto a part (works on boxes and rounded parts) —
+  used on all sofa upholstery so it isn't flat color. Same 2000×3000 L footprint;
+  zero overlaps; fit clean. 4th pass to the sand-velvet reference: thin black plinth
+  (fabric nearly to floor, no open legs), sand/beige palette, taller back pillows
+  (to 780), and a second fabric kind \"quilt\" (tufted square grid texture) on the
+  arms + chaise seat; `fabric` now takes \"weave\" or \"quilt\". 5th pass: the chaise's
+  full-height east backrest (640) + its back pillow replaced by a low quilted
+  \"arm east\" (top 560, mirroring arm west) so the chaise reads as an open lounger
+  with a low arm along its outer side, like the reference. 6th pass (Milan's
+  screenshot showed a harsh tile-grid quilt and slab-flat cushions): quilt texture
+  softened to velvet tufting — seam lines 0.30→0.09 alpha, cell shading ~0.07, plus
+  a small stitch dimple at every grid intersection (halves tile across the repeat
+  seam); cushions got real 12mm seams (seats 526/524/526 between the arms, back
+  pillows aligned above them), and the chaise cushion widened/lengthened to
+  788×1988 so only a 12mm shadow gap separates it from the east arm — no more bare
+  base around a floating mattress. Fit clean, no overlaps, build OK. 7th pass: the
+  runs were swapped vs the reference — seating was on the 2m side. Rebuilt on the
+  same L footprint with the back run along the 3m east edge (x 1800..2000), three
+  859-ish seats + back pillows facing west (toward the TV), quilted arms at the
+  north (1800 long, along the chaise) and south ends, and the quilted chaise
+  cushion (988×800) projecting west at the north end. Fit clean, no overlaps.
+
 - 2026-09-01 — WC toilet resized to real bowl dims 36×55×30: ceramic 360 wide, 550
   projection from the chase, 300 high (z 130–430, seat top 450, 130 air gap). Piece
   depth 500 → 700; placement moved to y 8348 so the chase stays on the north wall.

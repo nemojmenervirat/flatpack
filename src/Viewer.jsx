@@ -428,6 +428,88 @@ function Box({ box, color = '#c9a36b', opacity = 1, hovered = false, ...handlers
   );
 }
 
+// Fabric textures for parts flagged "fabric": true|"weave"|"quilt". Near-white
+// maps so the part's color tints them; noise-like, so the differing UV scales
+// of box faces and extruded shapes don't show. "weave" is a subtle cloth
+// grain; "quilt" adds a tufted square grid (velvet waffle stitching).
+// Created lazily once per kind.
+const fabricTexCache = {};
+function getFabricTexture(kind) {
+  const k = kind === 'quilt' ? 'quilt' : 'weave';
+  if (fabricTexCache[k]) return fabricTexCache[k];
+  const px = k === 'quilt' ? 512 : 256;
+  const c = document.createElement('canvas');
+  c.width = c.height = px;
+  const ctx = c.getContext('2d');
+  let seed = 5;
+  const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+  ctx.fillStyle = 'rgb(247,245,242)';
+  ctx.fillRect(0, 0, px, px);
+  for (let y = 0; y < px; y += 3) {
+    ctx.fillStyle = `rgba(118,110,100,${0.05 + rnd() * 0.06})`;
+    ctx.fillRect(0, y, px, 1.5);
+  }
+  for (let x = 0; x < px; x += 3) {
+    ctx.fillStyle = `rgba(255,255,255,${0.07 + rnd() * 0.07})`;
+    ctx.fillRect(x, 0, 1.5, px);
+  }
+  for (let d = 0; d < 900; d++) {
+    ctx.fillStyle = rnd() > 0.5 ? `rgba(255,255,255,${0.1 + rnd() * 0.12})` : `rgba(120,112,102,${0.06 + rnd() * 0.08})`;
+    ctx.fillRect(rnd() * px, rnd() * px, 1 + rnd(), 1 + rnd());
+  }
+  if (k === 'quilt') {
+    // tufted velvet: faint puffed cells, whisper-thin seams, and a small
+    // dimple at every stitch point — kept low-contrast so it reads as
+    // upholstery, not a tile grid.
+    const cells = 4;
+    const cw = px / cells;
+    for (let row = 0; row < cells; row++) {
+      for (let col = 0; col < cells; col++) {
+        const x = col * cw;
+        const y = row * cw;
+        const g = ctx.createRadialGradient(x + cw / 2, y + cw / 2, cw * 0.1, x + cw / 2, y + cw / 2, cw * 0.72);
+        g.addColorStop(0, 'rgba(255,255,255,0.06)');
+        g.addColorStop(0.7, 'rgba(0,0,0,0)');
+        g.addColorStop(1, 'rgba(88,80,70,0.07)');
+        ctx.fillStyle = g;
+        ctx.fillRect(x, y, cw, cw);
+      }
+    }
+    ctx.strokeStyle = 'rgba(84,76,66,0.09)';
+    ctx.lineWidth = 2;
+    for (let i = 0; i <= cells; i++) {
+      ctx.beginPath();
+      ctx.moveTo(0, i * cw);
+      ctx.lineTo(px, i * cw);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(i * cw, 0);
+      ctx.lineTo(i * cw, px);
+      ctx.stroke();
+    }
+    for (let row = 0; row <= cells; row++) {
+      for (let col = 0; col <= cells; col++) {
+        const x = col * cw; // 0 and px halves tile together across the repeat seam
+        const y = row * cw;
+        const r = cw * 0.09;
+        const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+        g.addColorStop(0, 'rgba(70,63,54,0.28)');
+        g.addColorStop(0.6, 'rgba(70,63,54,0.10)');
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = g;
+        ctx.fillRect(x - r, y - r, r * 2, r * 2);
+      }
+    }
+  }
+  const tex = new CanvasTexture(c);
+  tex.wrapS = tex.wrapT = RepeatWrapping;
+  tex.repeat.set(k === 'quilt' ? 1.5 : 3, k === 'quilt' ? 1.5 : 3);
+  tex.colorSpace = SRGBColorSpace;
+  tex.anisotropy = 4;
+  fabricTexCache[k] = tex;
+  return tex;
+}
+
 // A part with "round" renders its footprint as a rounded rectangle, extruded
 // to the part's height. round: r (mm) rounds all four corners; round:
 // [r0, r1, r2, r3] gives each corner its own radius, in plan order
@@ -461,6 +543,7 @@ function LocalRounded({ part, color, hovered, opacity = 1, ...handlers }) {
       {...handlers}
     >
       <meshStandardMaterial
+        map={part.fabric ? getFabricTexture(part.fabric) : null}
         color={color}
         emissive={hovered ? '#4a4638' : '#000000'}
         transparent={opacity < 1}
@@ -515,6 +598,7 @@ function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
     <mesh position={pos} {...handlers}>
       <boxGeometry args={size} />
       <meshStandardMaterial
+        map={part.fabric ? getFabricTexture(part.fabric) : null}
         color={color}
         emissive={hovered ? '#4a4638' : '#000000'}
         transparent={opacity < 1}
