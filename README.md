@@ -98,5 +98,3 @@ to tell a warm oak from a cool one, not a substitute for a physical sample.
 Vite + React + [@react-three/fiber](https://github.com/pmndrs/react-three-fiber) +
 [@react-three/drei](https://github.com/pmndrs/drei). Plain JavaScript, no backend,
 no build magic.
-
-Roadmap lives in [TASKS.md](TASKS.md).

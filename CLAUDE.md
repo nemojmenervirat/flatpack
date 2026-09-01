@@ -44,8 +44,6 @@ view is read-only.** When he asks for a new piece or a change, edit the JSON.
   nothing heavy without asking).
 - Keep `geometry.js` and `cutlist.js` pure (no rendering, no DOM) — they should stay
   trivially testable.
-- Planned work goes in **TASKS.md**. When asked to add a feature, check TASKS.md first;
-  when finishing one, move it to Done with the date.
 - Never `git commit` or `git push` unless explicitly told to.
 - When generating a new piece JSON: parts must not overlap the carcass geometry
   incorrectly, fronts at negative y, include a sensible `clearance`, and verify the

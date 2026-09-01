@@ -7,7 +7,7 @@ description: Create a new furniture piece for flatpack — design the JSON, plac
 
 The JSON is the source of truth; the 3D view is read-only. A new piece means:
 piece JSON in `src/data/`, a placement in `src/data/scene.json`, registration in
-`src/App.jsx`, verification via `geometry.js`, and a TASKS.md Done entry.
+`src/App.jsx`, verification via `geometry.js`.
 
 ## Order of work
 
@@ -23,7 +23,6 @@ piece JSON in `src/data/`, a placement in `src/data/scene.json`, registration in
 4. Place it in `scene.json`, register it in `piecesById` in `App.jsx` (import + entry).
 5. **Verify with the check command** (below) — fit report must be clean and parts must
    not overlap each other. Also hand-check that cut sizes add up to the outer size.
-6. Move/append the item in TASKS.md → Done with today's date.
 
 ## Schema
 
