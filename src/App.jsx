@@ -445,6 +445,7 @@ export default function App() {
   const [walk, setWalk] = useState('off'); // 'off' | 'arm' | 'on'
   const [walkSpawn, setWalkSpawn] = useState(null); // { pos:[x,y], yaw } or null = entrance
   const [materialsOpen, setMaterialsOpen] = useState(false);
+  const [explode, setExplode] = useState(0); // 0..1, single-piece exploded view
 
   useEffect(() => lsSet('flatpack.view', view), [view]);
   useEffect(() => lsSet('flatpack.showClearances', showClearances), [showClearances]);
@@ -473,6 +474,7 @@ export default function App() {
   useEffect(() => {
     if (view !== 'apartment' && !piecesById[view]) setView('apartment'); // stale localStorage
     if (view !== 'apartment') setWalk('off'); // walk mode only exists in the apartment view
+    setExplode(0); // come back assembled
   }, [view]);
 
   // Esc cancels the "click a floor point" arming (WalkControls handles Esc while walking)
@@ -491,7 +493,7 @@ export default function App() {
         {materialsOpen ? (
           <MaterialsPanel usage={materialUsage} />
         ) : piece ? (
-          <PieceViewer key={piece.id} piece={piece} highlight={highlight} onHoverPart={setHoverIndex} />
+          <PieceViewer key={piece.id} piece={piece} highlight={highlight} onHoverPart={setHoverIndex} explode={explode} />
         ) : (
           <Viewer
             apartment={apartment}
@@ -522,6 +524,21 @@ export default function App() {
         {!materialsOpen && !piece && walk === 'on' && (
           <div className="walk-chip">
             drag to look · scroll or WASD to move · click floor to glide · esc to exit
+          </div>
+        )}
+
+        {!materialsOpen && piece && (
+          <div className="explode-chip">
+            <span>explode</span>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={explode}
+              onChange={(e) => setExplode(Number(e.target.value))}
+            />
+            {explode > 0 && <button onClick={() => setExplode(0)}>assemble</button>}
           </div>
         )}
 

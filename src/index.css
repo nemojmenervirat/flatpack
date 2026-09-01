@@ -666,3 +666,39 @@ button:hover {
   line-height: 1.4;
   color: #d8d3c6;
 }
+
+.explode-chip {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 6px 12px;
+  border: 1px solid #2c2f36;
+  border-radius: 6px;
+  background: rgba(28, 31, 36, 0.92);
+  font-size: 13px;
+  white-space: nowrap;
+  color: #9a958c;
+}
+
+.explode-chip input[type='range'] {
+  width: 150px;
+  accent-color: #ffd479;
+}
+
+.explode-chip button {
+  border: 1px solid #34383f;
+  border-radius: 4px;
+  background: #24272d;
+  color: #e6e4df;
+  font-size: 12px;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+
+.explode-chip button:hover {
+  background: #2c2f36;
+}

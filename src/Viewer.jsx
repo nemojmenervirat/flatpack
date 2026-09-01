@@ -1095,6 +1095,18 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
     : [{ name: piece.name, pos: [0, 0, 0], size: piece.size, color: piece.color || '#8a93a6' }];
   const bb = pieceLocalBBox(piece);
   const centerX = (bb.min[0] + bb.max[0]) / 2;
+  // Exploded view: each part slides away from the piece center (mm, data space),
+  // proportional to the slider. z explodes from the bottom so nothing sinks below
+  // the grid. At 0 every offset is 0.
+  const centerY = (bb.min[1] + bb.max[1]) / 2;
+  const explodeOffset = (p) => {
+    const k = explode * 1.2;
+    return [
+      (p.pos[0] + p.size[0] / 2 - centerX) * k,
+      (p.pos[1] + p.size[1] / 2 - centerY) * k,
+      (p.pos[2] + p.size[2] / 2 - bb.min[2]) * k,
+    ];
+  };
   const rot = (((placement.rot || 0) % 360) + 360) % 360;
   const isFlap = (p) => p.name.startsWith('flap');
   const isPullout = (p) => p.name.startsWith('pullout');
@@ -1661,12 +1673,24 @@ export default function Viewer({
 // highlight = Set of part indices to light up (driven by the parts table);
 // onHoverPart reports the hovered part index back so the table can follow.
 // Remount (key it by piece id) when the piece changes so the camera reframes.
-export function PieceViewer({ piece, highlight, onHoverPart }) {
+export function PieceViewer({ piece, highlight, onHoverPart, explode = 0 }) {
   const parts = piece.parts?.length
     ? piece.parts
     : [{ name: piece.name, pos: [0, 0, 0], size: piece.size, color: piece.color || '#8a93a6' }];
   const bb = pieceLocalBBox(piece);
   const centerX = (bb.min[0] + bb.max[0]) / 2;
+  // Exploded view: each part slides away from the piece center (mm, data space),
+  // proportional to the slider. z explodes from the bottom so nothing sinks below
+  // the grid. At 0 every offset is 0.
+  const centerY = (bb.min[1] + bb.max[1]) / 2;
+  const explodeOffset = (p) => {
+    const k = explode * 1.2;
+    return [
+      (p.pos[0] + p.size[0] / 2 - centerX) * k,
+      (p.pos[1] + p.size[1] / 2 - centerY) * k,
+      (p.pos[2] + p.size[2] / 2 - bb.min[2]) * k,
+    ];
+  };
   const isFlap = (p) => p.name.startsWith('flap');
   const isPullout = (p) => p.name.startsWith('pullout');
   const { groups: drawers, consumed } = useMemo(() => drawerGroups(parts), [parts]);
@@ -1699,7 +1723,32 @@ export function PieceViewer({ piece, highlight, onHoverPart }) {
         position={[c[0], -0.001, c[2]]}
       />
 
-      {parts.map((p, i) => {
+      {explode > 0 &&
+        parts.map((p, i) => {
+          // scattered: every part on its own, no drawer/door grouping or animation
+          const off = explodeOffset(p);
+          return (
+            <group
+              key={i}
+              position={[off[0] * S, off[2] * S, -off[1] * S]}
+              onPointerOver={(e) => {
+                e.stopPropagation();
+                setHovered(i);
+              }}
+              onPointerOut={() => setHovered(null)}
+            >
+              <LocalBox
+                part={p}
+                color={partColor(p, piece)}
+                opacity={p.opacity ?? 1}
+                hovered={hover === i || highlight?.has(i)}
+              />
+            </group>
+          );
+        })}
+
+      {explode === 0 &&
+        parts.map((p, i) => {
         if (consumed.has(i) || onDoors.has(i)) return null; // rendered inside its Drawer/Door
         const lit = hover === i || highlight?.has(i);
         if (drawers.has(i)) {
@@ -1757,7 +1806,10 @@ export function PieceViewer({ piece, highlight, onHoverPart }) {
 
       {hoveredPart && (
         <DimLabel
-          box={aabbOf(hoveredPart.pos, hoveredPart.size)}
+          box={aabbOf(
+            hoveredPart.pos.map((v, a) => v + explodeOffset(hoveredPart)[a]),
+            hoveredPart.size
+          )}
           name={hoveredPart.name}
           text={[...hoveredPart.size].sort((a, b) => b - a).join(' × ')}
           className="piece"
