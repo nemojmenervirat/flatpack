@@ -20,7 +20,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { tmpdir } from 'os';
 import { inflateSync } from 'zlib';
-import { parsePages } from './parse-cjenovnik.mjs';
+import { parsePages, parseServices } from './parse-cjenovnik.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = 'https://elgrad.ba';
@@ -75,6 +75,7 @@ function readPriceList() {
   const xml = join(tmpdir(), 'flatpack-cjenovnik.xml');
   execFileSync('pdftotext', ['-bbox-layout', pdf, xml]);
   const { rows, tables } = parsePages(xml);
+  const services = readServices(xml);
   rmSync(xml, { force: true });
 
   const byId = Object.fromEntries(tables.map((t) => [t.id, t]));
@@ -136,7 +137,34 @@ function readPriceList() {
       if (!Object.keys(e[k]).length) delete e[k];
     }
   }
-  return { decors, rows: rows.length, unclassified, pdf: pdf.split('/').pop() };
+  return { decors, services, rows: rows.length, unclassified, pdf: pdf.split('/').pop() };
+}
+
+// Page 12 labour prices. Cutting rows are keyed by board class so the price
+// estimate can pick one from a part's thickness and material; banding rows are
+// kept as the printed grid (board thickness band x tape thickness).
+const CUT_KEYS = [
+  [/WSM|W908/, 'panel-thin-white'],
+  [/ostali/i, 'panel-thin'],
+  [/25\s*mm/, 'panel-25'],
+  [/38\s*mm/, 'panel-38'],
+  [/sjaj/i, 'gloss'],
+  [/acryl/i, 'acryl'],
+  [/HDF/, 'thin'],
+  [/KUH/, 'worktop'],
+  [/laminat/i, 'laminate'],
+  [/COMPACT/i, 'compact'],
+];
+function readServices(xml) {
+  const raw = parseServices(xml);
+  if (!raw) return null;
+  const cutting = {};
+  for (const c of raw.cutting) {
+    const hit = CUT_KEYS.find(([re]) => re.test(c.label));
+    if (hit) cutting[hit[1]] = { label: `Usluga rezanja ${c.label}`, price: c.price };
+    else console.warn(`  ! cutting row not classified: ${c.label}`);
+  }
+  return { unit: 'KM/m¹', cutting, banding: raw.banding };
 }
 
 // ------------------------------------------------------------------ the site
@@ -305,8 +333,11 @@ async function swatchFor(id, url) {
 
 // ---------------------------------------------------------------------- main
 
-const { decors, rows, unclassified, pdf } = readPriceList();
+const { decors, services, rows, unclassified, pdf } = readPriceList();
 console.log(`price list: ${rows} rows -> ${decors.size} decors (${unclassified} cells unclassified)`);
+console.log(
+  `services: ${Object.keys(services?.cutting || {}).length} cutting classes, ${services?.banding?.length || 0} banding rows`
+);
 
 const previous = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : { materials: {} };
 const materials = {};
@@ -349,7 +380,10 @@ if (!offline) {
 for (const [id, d] of decors) {
   // Keep colours from an earlier run for decors skipped this time.
   const old = previous.materials?.[id];
-  if (!d.color && old?.color) Object.assign(d, { color: old.color, range: old.range, swatch: old.swatch, source: old.source, brand: old.brand, match: old.match });
+  // Same field order as the online path (source, match, brand, then the
+  // sampled colour) so an offline rebuild does not reshuffle every entry.
+  if (!d.color && old?.color)
+    Object.assign(d, { source: old.source, match: old.match, brand: old.brand, color: old.color, range: old.range, swatch: old.swatch });
   materials[id] = d;
 }
 
@@ -361,6 +395,7 @@ writeFileSync(
       currency: 'KM',
       units: { panel: 'KM/m²', worktop: 'KM/m¹', laminate: 'KM/m²', tape: 'KM/m¹' },
       note: 'Prices as printed in the Elgrad retail price list. Colours are the mean of the supplier swatch photo, not a colorimetric match.',
+      services,
       materials,
     },
     null,

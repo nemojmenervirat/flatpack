@@ -387,6 +387,43 @@ function PiecePanel({ piece, hoverIndex, onHoverRow }) {
         <button onClick={copyCsv}>Copy cut list CSV</button>
       </section>
 
+      {(hw.hingesTotal > 0 || hw.drawers > 0 || hw.shelves > 0 || hw.rails.length > 0 || hw.hooks > 0 || hw.extras.length > 0) && (
+        <section>
+          <h2>Hardware</h2>
+          <ul className="hardware">
+            {hw.hinges.map((g, i) => (
+              <li key={`h${i}`}>
+                {g.doors * g.perDoor} × hinge — {g.doors} door{g.doors > 1 ? 's' : ''} {g.doorW}×{g.doorH},{' '}
+                {g.perDoor} each, hinge {g.side}
+              </li>
+            ))}
+            {hw.hingesTotal > 0 && <li className="muted">hinges total: {hw.hingesTotal}</li>}
+            {hw.drawers > 0 && (
+              <li>
+                {hw.drawers} × drawer slide pair{hw.drawers > 1 ? 's' : ''}
+                {hw.slideBoxDepth ? ` (box depth ${hw.slideBoxDepth})` : ''}
+              </li>
+            )}
+            {hw.shelves > 0 && (
+              <li>
+                {hw.shelfPins} × shelf support ({hw.shelves} shelves × 4)
+              </li>
+            )}
+            {hw.rails.map((r, i) => (
+              <li key={`r${i}`}>1 × hanging rail, {r.length} mm</li>
+            ))}
+            {hw.hooks > 0 && <li>{hw.hooks} × coat hook</li>}
+            {hw.extras.map((x, i) => (
+              <li key={`x${i}`}>
+                {x.qty} × {x.name} — {x.size.join(' × ')} mm
+                {x.product && <span className="muted-inline"> · {x.product}</span>}
+                {x.price != null && <span className="muted-inline"> · {x.price.toFixed(2)} KM each</span>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       {(price.boardRows.length > 0 || price.unpriced.length > 0) && (
         <section>
           <h2>Price estimate</h2>
@@ -419,11 +456,36 @@ function PiecePanel({ piece, hoverIndex, onHoverRow }) {
                   <td>{r.cost.toFixed(2)}</td>
                 </tr>
               ))}
+              {price.serviceRows.map((r, i) => (
+                <tr key={`s${i}`}>
+                  <td>{r.name}</td>
+                  <td></td>
+                  <td>{r.meters.toFixed(1)} m</td>
+                  <td>{r.perM.toFixed(2)}</td>
+                  <td>{r.cost.toFixed(2)}</td>
+                </tr>
+              ))}
+              {price.hardware
+                .filter((h) => h.cost != null)
+                .map((h, i) => (
+                  <tr key={`h${i}`}>
+                    <td>
+                      {h.name} — {h.product}
+                    </td>
+                    <td></td>
+                    <td>{h.qty} pcs</td>
+                    <td>{h.price.toFixed(2)}</td>
+                    <td>{h.cost.toFixed(2)}</td>
+                  </tr>
+                ))}
             </tbody>
           </table>
           <p className="size-line">
-            boards + banding: {price.total.toFixed(0)} KM
-            <span className="muted-inline"> · with ~15% offcut waste: {(price.total * 1.15).toFixed(0)} KM</span>
+            materials {price.materialsTotal.toFixed(0)} KM + services {price.servicesTotal.toFixed(0)} KM
+            {price.hardwareTotal > 0 && <> + hardware {price.hardwareTotal.toFixed(0)} KM</>} = {price.total.toFixed(0)} KM
+            <span className="muted-inline">
+              {' '}· with ~15% board offcut waste: {(price.total + 0.15 * price.boardsTotal).toFixed(0)} KM
+            </span>
           </p>
           {price.unpriced.length > 0 && (
             <p className="muted">
@@ -431,47 +493,16 @@ function PiecePanel({ piece, hoverIndex, onHoverRow }) {
               {price.unpriced.map((u) => `${u.qty} × ${u.name} (${u.reason})`).join(', ')}
             </p>
           )}
-          {price.hardware.length > 0 && (
+          {price.hardware.some((h) => h.cost == null) && (
             <p className="muted">
-              bought separately:{' '}
-              {price.hardware.map((h) => `${h.qty} × ${h.name}`).join(', ')} — plus hinges/pins below
+              bought separately, no price yet:{' '}
+              {price.hardware
+                .filter((h) => h.cost == null)
+                .map((h) => `${h.qty} × ${h.name}`)
+                .join(', ')}
             </p>
           )}
-        </section>
-      )}
-
-      {(hw.hingesTotal > 0 || hw.drawers > 0 || hw.shelves > 0 || hw.rails.length > 0 || hw.hooks > 0 || hw.extras.length > 0) && (
-        <section>
-          <h2>Hardware</h2>
-          <ul className="hardware">
-            {hw.hinges.map((g, i) => (
-              <li key={`h${i}`}>
-                {g.doors * g.perDoor} × hinge — {g.doors} door{g.doors > 1 ? 's' : ''} {g.doorW}×{g.doorH},{' '}
-                {g.perDoor} each, hinge {g.side}
-              </li>
-            ))}
-            {hw.hingesTotal > 0 && <li className="muted">hinges total: {hw.hingesTotal}</li>}
-            {hw.drawers > 0 && (
-              <li>
-                {hw.drawers} × drawer slide pair{hw.drawers > 1 ? 's' : ''}
-                {hw.slideBoxDepth ? ` (box depth ${hw.slideBoxDepth})` : ''}
-              </li>
-            )}
-            {hw.shelves > 0 && (
-              <li>
-                {hw.shelfPins} × shelf support ({hw.shelves} shelves × 4)
-              </li>
-            )}
-            {hw.rails.map((r, i) => (
-              <li key={`r${i}`}>1 × hanging rail, {r.length} mm</li>
-            ))}
-            {hw.hooks > 0 && <li>{hw.hooks} × coat hook</li>}
-            {hw.extras.map((x, i) => (
-              <li key={`x${i}`}>
-                {x.qty} × {x.name} — {x.size.join(' × ')} mm
-              </li>
-            ))}
-          </ul>
+          <p className="muted">drawer slides and shelf pins above are not priced yet</p>
         </section>
       )}
     </div>

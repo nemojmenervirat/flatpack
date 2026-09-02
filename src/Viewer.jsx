@@ -621,9 +621,39 @@ function LocalDisc({ part, color, hovered, opacity = 1, ...handlers }) {
 // because at that scale the lines pile up and make every piece look busy.
 const EdgesContext = createContext(true);
 
+// An adjustable plastic furniture leg (the FE.9020 "nogice" in the hardware
+// catalogue): round mounting plate, socket, column and the knurled adjuster
+// foot, stacked inside the part's box. Any hardware part named leg* gets this.
+function Leg({ part, color, hovered, ...handlers }) {
+  const [sx, sy, h] = part.size;
+  const cx = (part.pos[0] + sx / 2) * S;
+  const cz = -(part.pos[1] + sy / 2) * S;
+  const z0 = part.pos[2];
+  const rMax = Math.min(sx, sy) / 2;
+  const segs = [
+    { r: rMax, z: h - 4, dz: 4 }, // mounting plate
+    { r: Math.min(18, rMax), z: h - 24, dz: 20 }, // socket
+    { r: Math.min(13, rMax), z: 14, dz: Math.max(h - 38, 1) }, // column
+    { r: Math.min(23, rMax), z: 0, dz: 14 }, // adjuster foot
+  ];
+  return (
+    <group {...handlers}>
+      {segs.map((sg, i) => (
+        <mesh key={i} position={[cx, (z0 + sg.z + sg.dz / 2) * S, cz]}>
+          <cylinderGeometry args={[sg.r * S, sg.r * S, sg.dz * S, 32]} />
+          <meshStandardMaterial color={color} emissive={hovered ? '#4a4638' : '#000000'} roughness={0.6} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
 // A part box in piece-local coordinates (rendered inside the placement group).
 function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
   const showEdges = useContext(EdgesContext);
+  if (part.hardware && part.name.startsWith('leg')) {
+    return <Leg part={part} color={color} hovered={hovered} {...handlers} />;
+  }
   if (part.disc) {
     return <LocalDisc part={part} color={color} hovered={hovered} opacity={opacity} {...handlers} />;
   }

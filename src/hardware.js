@@ -6,9 +6,18 @@
 // named door* are hinged doors, drawer bottoms mark drawer boxes, ...).
 
 import { pieceLocalBBox } from './geometry.js';
-import { findMaterial } from './materials.js';
+import { findMaterial, cuttingRate, tapeSpec, bandingRate } from './materials.js';
+import hardwareCatalogue from './data/hardware.json';
+
+// Bought hardware by part name: the real product and its price per piece.
+export const hardwareItem = (name) => hardwareCatalogue.items[name] || null;
 
 const sortedDims = (size) => [...size].sort((a, b) => b - a); // [L, W, T]
+
+// Raw HDF for backs and drawer bottoms (3-6 mm). The price list has no decor
+// row for it, so thin boards without a decor price are charged this flat rate.
+const HDF_PER_M2 = 8; // KM/m²
+const HDF_ID = 'HDF (raw)';
 
 // Edge banding by rule:
 //  - 3/6mm boards (HDF backs, drawer bottoms) are never banded
@@ -28,7 +37,7 @@ function banding(part) {
 export function partRows(piece) {
   const rows = new Map();
   (piece.parts || []).forEach((p, i) => {
-    if (p.appliance) return; // bought appliances — not cut, not banded
+    if (p.appliance || p.hardware) return; // bought appliances / hardware (legs, hooks) — not cut, not banded
     const [L, W, T] = sortedDims(p.size);
     const key = `${p.name}|${L}x${W}x${T}`;
     const row =
@@ -101,7 +110,9 @@ export function hardwareList(piece) {
   for (const p of parts) {
     if (!p.hardware || p.name.includes('hook') || p.name.includes('hanging')) continue;
     const key = `${p.name}|${p.size.join('x')}`;
-    const row = extras.get(key) || { name: p.name, size: [...p.size], qty: 0 };
+    const item = hardwareItem(p.name);
+    const row =
+      extras.get(key) || { name: p.name, size: [...p.size], qty: 0, product: item?.product || null, price: item?.price ?? null };
     row.qty += 1;
     extras.set(key, row);
   }
@@ -119,26 +130,49 @@ export function hardwareList(piece) {
   };
 }
 
-// Board + edge-banding cost from the materials registry (Elgrad KM prices).
-// Boards are priced by cut area x the panel price for the part's thickness;
-// banding uses the same edge rule as the parts table and the material's
-// cheapest tape. Parts whose material (own or piece-level) has no price for
-// their thickness land in `unpriced` instead of silently costing 0. Hardware
-// parts (legs, runners) are counted but not priced - bought separately.
+// Board, edge-banding tape and labour cost from the materials registry (Elgrad
+// KM prices). Boards are priced by cut area x the panel price for the part's
+// thickness; tape uses the same edge rule as the parts table and the
+// material's cheapest tape. Labour comes from the price list's services page:
+// cutting is charged per metre of cut, taken as each part's perimeter (the
+// usual way a cutting service is quoted); banding labour per metre of banded
+// edge, by board thickness and the tape's thickness. Parts whose material (own
+// or piece-level) has no price for their thickness land in `unpriced` instead
+// of silently costing 0 - they are still cut, so they still carry cutting
+// labour. Hardware parts (legs, runners) are priced per piece from
+// data/hardware.json when the part name is listed there, else just counted.
 export function priceEstimate(piece) {
   const boards = new Map(); // material|thickness -> row
   const tapes = new Map(); // material -> meters
+  const cutting = new Map(); // cutting class -> row
+  const bandLabour = new Map(); // thickness band|tape -> row
   const unpriced = new Map(); // name|cut -> row
   const hardware = new Map(); // name -> qty
+  const cheapestTape = (mat) =>
+    Object.entries(mat?.tape || {}).sort((a, b) => a[1] - b[1])[0] || null;
+
   for (const p of piece.parts || []) {
     if (p.appliance) continue;
     const [L, W, T] = sortedDims(p.size);
     if (p.hardware) {
-      hardware.set(p.name, (hardware.get(p.name) || 0) + 1);
+      const item = hardwareItem(p.name);
+      const row = hardware.get(p.name) || { name: p.name, qty: 0, product: item?.product || null, price: item?.price ?? null };
+      row.qty += 1;
+      hardware.set(p.name, row);
       continue;
     }
     const mat = findMaterial(p.material || piece.material);
-    const perM2 = mat?.panel?.[String(T)];
+
+    const cut = cuttingRate(mat, T);
+    if (cut) {
+      const row = cutting.get(cut.key) || { name: `cutting — ${cut.label.replace(/^Usluga rezanja\s*/, '')}`, meters: 0, perM: cut.price };
+      row.meters += (2 * (L + W)) / 1000;
+      cutting.set(cut.key, row);
+    }
+
+    const decorPrice = mat?.panel?.[String(T)];
+    const rawHdf = !decorPrice && T <= 6;
+    const perM2 = decorPrice ?? (rawHdf ? HDF_PER_M2 : null);
     if (!perM2) {
       const key = `${p.name}|${L}x${W}x${T}`;
       const row = unpriced.get(key) || {
@@ -151,26 +185,57 @@ export function priceEstimate(piece) {
       unpriced.set(key, row);
       continue;
     }
-    const key = `${mat.id}|${T}`;
-    const row = boards.get(key) || { material: mat.id, thickness: T, m2: 0, perM2 };
+    const matId = rawHdf ? HDF_ID : mat.id;
+    const key = `${matId}|${T}`;
+    const row = boards.get(key) || { material: matId, thickness: T, m2: 0, perM2 };
     row.m2 += (L * W) / 1e6;
     boards.set(key, row);
+    if (rawHdf) continue; // never banded, no tape
+
     const band = banding(p);
-    if (band.length) tapes.set(mat.id, (tapes.get(mat.id) || 0) + band.length / 1000);
+    if (!band.length) continue;
+    tapes.set(mat.id, (tapes.get(mat.id) || 0) + band.length / 1000);
+    const tape = cheapestTape(mat);
+    const rate = tape && bandingRate(T, tapeSpec(tape[0]));
+    if (rate) {
+      const k = `${rate.maxThickness}|${rate.tape}|${rate.glue}`;
+      const r = bandLabour.get(k) || {
+        name: `banding labour — board ≤${rate.maxThickness} mm, ${rate.tape} mm ABS${rate.glue === 'laser' ? ' laser' : ''}`,
+        meters: 0,
+        perM: rate.price,
+      };
+      r.meters += band.length / 1000;
+      bandLabour.set(k, r);
+    }
   }
+
   const boardRows = [...boards.values()].map((r) => ({ ...r, cost: r.m2 * r.perM2 }));
   const tapeRows = [...tapes.entries()].map(([id, meters]) => {
-    const prices = Object.values(findMaterial(id)?.tape || {});
-    const perM = prices.length ? Math.min(...prices) : null;
+    const tape = cheapestTape(findMaterial(id));
+    const perM = tape ? tape[1] : null;
     return { material: id, meters, perM, cost: perM ? meters * perM : 0 };
   });
-  const total =
-    boardRows.reduce((n, r) => n + r.cost, 0) + tapeRows.reduce((n, r) => n + r.cost, 0);
+  const serviceRows = [...cutting.values(), ...bandLabour.values()].map((r) => ({ ...r, cost: r.meters * r.perM }));
+  const boardsTotal = boardRows.reduce((n, r) => n + r.cost, 0);
+  const materialsTotal = boardsTotal + tapeRows.reduce((n, r) => n + r.cost, 0);
+  const servicesTotal = serviceRows.reduce((n, r) => n + r.cost, 0);
+  // Derived hardware (hinges by door height) is priced from the catalogue too.
+  const hw = hardwareList(piece);
+  const hinge = hardwareItem('hinge');
+  if (hw.hingesTotal > 0)
+    hardware.set('hinge', { name: 'hinge', qty: hw.hingesTotal, product: hinge?.product || null, price: hinge?.price ?? null });
+  const hardwareRows = [...hardware.values()].map((r) => ({ ...r, cost: r.price != null ? r.qty * r.price : null }));
+  const hardwareTotal = hardwareRows.reduce((n, r) => n + (r.cost || 0), 0);
   return {
     boardRows,
     tapeRows,
+    serviceRows,
     unpriced: [...unpriced.values()],
-    hardware: [...hardware.entries()].map(([name, qty]) => ({ name, qty })),
-    total,
+    hardware: hardwareRows,
+    boardsTotal,
+    materialsTotal,
+    servicesTotal,
+    hardwareTotal,
+    total: materialsTotal + servicesTotal + hardwareTotal,
   };
 }

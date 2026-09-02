@@ -22,6 +22,47 @@ export const materialsMeta = {
 
 export const materialIds = Object.keys(materials);
 
+// Labour prices (page 12 of the price list, KM per running metre): cutting by
+// board class, edge banding by board-thickness band x tape thickness.
+export const services = registry.services || null;
+
+// Cutting class for a part: worktops and gloss boards have their own rate,
+// otherwise it goes by thickness, with the basic whites (W960 / W908 / 116)
+// a little cheaper in the 10-18 mm band.
+export function cuttingRate(mat, thickness) {
+  const c = services?.cutting;
+  if (!c) return null;
+  const pick = (key) => (c[key] ? { key, ...c[key] } : null);
+  if (mat?.worktopSection || mat?.section === 'worktop') return pick('worktop');
+  if (mat?.section === 'gloss') return pick('gloss');
+  if (thickness <= 8) return pick('thin');
+  if (thickness <= 18) return (/^(W960|W908|116)$/.test(mat?.code || '') && pick('panel-thin-white')) || pick('panel-thin');
+  if (thickness <= 28) return pick('panel-25');
+  return pick('panel-38');
+}
+
+// Tape keys read "<thickness>/<width>": "0,8/23", "2 (1,5)/43", "laser 1/23".
+export function tapeSpec(key) {
+  const m = String(key).replace(/laser/i, '').trim().match(/^(\d+(?:,\d+)?)/);
+  return { thickness: m ? Number(m[1].replace(',', '.')) : 1, laser: /laser/i.test(key) };
+}
+
+// Banding labour per metre: the thinnest board band that fits, standard glue
+// (laser rows for laser tape), ABS column of the tape's thickness or the next
+// one up (there is no 0.4 mm column, so 0.4 mm tape is charged as 0.5).
+export function bandingRate(thickness, tape) {
+  const rows = services?.banding;
+  if (!rows) return null;
+  const fits = (glue) =>
+    rows.filter((r) => r.glue === glue && r.maxThickness >= thickness).sort((a, b) => a.maxThickness - b.maxThickness)[0];
+  const row = (tape.laser && fits('laser')) || fits('standard');
+  if (!row) return null;
+  const cols = Object.keys(row.abs).map(Number).sort((a, b) => a - b);
+  if (!cols.length) return null;
+  const col = cols.find((c) => c >= tape.thickness) ?? cols[cols.length - 1];
+  return { price: row.abs[String(col)], maxThickness: row.maxThickness, tape: col, glue: row.glue };
+}
+
 // Ids carry the decor name after "·" when a code has variants, so a piece may
 // name either the full id or just the code+texture, whichever reads better.
 export function findMaterial(id) {

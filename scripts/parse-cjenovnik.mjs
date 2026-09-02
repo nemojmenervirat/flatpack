@@ -290,6 +290,88 @@ export function parsePages(xmlPath) {
   return { rows, tables };
 }
 
+// Page 12, "USLUGE": labour prices per running metre. Two blocks matter for a
+// cut list: "USLUGE REZANJA" (cutting, one price per board class) and "USLUGE
+// KANTIRANJA" (edge banding, a grid of board-thickness rows x tape columns).
+// Returned raw: cutting rows as printed labels, banding rows by thickness band.
+export function parseServices(xmlPath) {
+  const xml = readFileSync(xmlPath, 'utf8');
+  const pages = xml.split(/<page /).slice(1);
+  const pageXml = pages.find((p) => p.includes('KANTIRANJA'));
+  if (!pageXml) return null;
+  const lines = toLines(pageWords(pageXml));
+  const lineText = (l) => l.words.map((w) => w.text).join(' ');
+  const yOf = (re) => lines.find((l) => re.test(lineText(l)))?.yc ?? null;
+
+  // Cutting: "Usluga rezanja <what> <price>", two per printed line. Walk each
+  // line left to right; a price closes the label collected since the last one.
+  const cutting = [];
+  const cutTop = yOf(/USLUGE REZANJA/);
+  const cutBottom = yOf(/USLUGE OBRADE/);
+  for (const l of lines) {
+    if (l.yc <= cutTop || l.yc >= cutBottom) continue;
+    let label = [];
+    for (const w of l.words) {
+      if (num(w.text) !== null && isolated(w)) {
+        const text = label.join(' ').replace(/^Usluga rezanja\s*/i, '').trim();
+        if (text) cutting.push({ label: text, price: num(w.text) });
+        label = [];
+      } else label.push(w.text);
+    }
+  }
+
+  // Banding: header line "Debljina ploče za kantiranje" carries the ABS tape
+  // thickness columns ("0,5 mm" ...) and the PUR columns (labelled "PUR", their
+  // thickness printed on the line above), then "Laminat" and "Krivolinijsko".
+  const header = lines.find((l) => /Debljina ploče za kantiranje/.test(lineText(l)));
+  const hasMm = (l) => l.words.some((w, i) => num(w.text) !== null && l.words[i + 1]?.text === 'mm');
+  const above = lines.filter((l) => l.yc < header.yc - 3 && hasMm(l)).pop();
+  const cols = [];
+  header.words.forEach((w, i) => {
+    const next = header.words[i + 1];
+    if (num(w.text) !== null && next?.text === 'mm') cols.push({ x: w.x0, kind: 'abs', tape: num(w.text) });
+    if (w.text === 'PUR') {
+      const thk = above.words
+        .filter((a) => num(a.text) !== null)
+        .sort((a, b) => Math.abs(a.x0 - w.x0) - Math.abs(b.x0 - w.x0))[0];
+      cols.push({ x: w.x0, kind: 'pur', tape: num(thk.text) });
+    }
+    if (w.text === 'Laminat' || /^Laminat/.test(w.text)) cols.push({ x: w.x0, kind: 'laminate' });
+    if (/^Krivolinijsko/.test(w.text)) cols.push({ x: w.x0, kind: 'curved' });
+  });
+  // "Laminat" sits on its own line just above the header.
+  if (!cols.some((c) => c.kind === 'laminate')) {
+    const lam = lines.flatMap((l) => l.words).find((w) => w.text === 'Laminat' && Math.abs(w.yc - header.yc) < 12);
+    if (lam) cols.push({ x: lam.x0, kind: 'laminate' });
+  }
+  const firstCol = Math.min(...cols.map((c) => c.x));
+
+  const banding = [];
+  const bandBottom = yOf(/Sve cijene/);
+  for (const l of lines) {
+    if (l.yc <= header.yc || l.yc >= bandBottom) continue;
+    const label = l.words.filter((w) => w.x0 < firstCol - 10).map((w) => w.text).join(' ');
+    const compact = label.replace(/\s+/g, '');
+    const max = compact.match(/do(\d+)mm/i);
+    if (!max) continue;
+    const row = {
+      maxThickness: +max[1],
+      glue: /^Laser/i.test(compact) ? 'laser' : /bijelim/i.test(compact) ? 'white' : 'standard',
+      abs: {},
+      pur: {},
+    };
+    for (const w of l.words) {
+      if (w.x0 < firstCol - 10 || num(w.text) === null) continue;
+      const col = [...cols].sort((a, b) => Math.abs(a.x - w.x0) - Math.abs(b.x - w.x0))[0];
+      const v = num(w.text);
+      if (col.kind === 'abs' || col.kind === 'pur') row[col.kind][String(col.tape)] = v;
+      else row[col.kind] = v;
+    }
+    banding.push(row);
+  }
+  return { cutting, banding };
+}
+
 if (process.argv[1] && process.argv[1].endsWith('parse-cjenovnik.mjs')) {
   const parsed = parsePages(process.argv[2]);
   process.stdout.write(JSON.stringify(parsed, null, 2) + '\n');

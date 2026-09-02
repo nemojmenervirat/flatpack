@@ -75,6 +75,15 @@ A piece or a part can then name a decor instead of inventing a hex:
 Resolution order is explicit `color`, then the part's `material`, then the piece's
 `material`, then the piece `color` (`src/materials.js`).
 
+The registry also carries the price list's **services** page (`services`): cutting
+per metre by board class and edge-banding labour by board thickness and tape
+thickness. The piece panel's price estimate adds both to boards and tape — cutting
+as each part's perimeter, banding labour on the same edges the parts table bands.
+Thin boards without a decor price (HDF backs, drawer bottoms) are charged a flat raw-HDF
+rate set in `src/hardware.js`. Hardware parts (`"hardware": true`) are listed under
+Hardware and never cut; `src/data/hardware.json` names the bought product and its
+per-piece price by part name (legs today), and the estimate adds those.
+
 Rebuild the registry when the price list changes (drop the new PDF in `inputs/`):
 
 ```

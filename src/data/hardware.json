@@ -1,0 +1,15 @@
+{
+  "note": "Bought hardware by part name (parts flagged \"hardware\": true) or by derived item (hinge). Prices in KM per piece.",
+  "items": {
+    "leg": {
+      "product": "Nogice za namještaj podesive 120mm 4/1 crne FE.9020",
+      "price": 1.95,
+      "note": "adjustable plastic leg, wound down to 100 mm to sit behind the 100 mm plinth"
+    },
+    "hinge": {
+      "product": "cabinet hinge, approx.",
+      "price": 3.0,
+      "note": "rough price per hinge; count is derived per door height in hardware.js"
+    }
+  }
+}
