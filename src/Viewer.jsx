@@ -5,6 +5,9 @@ import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shap
 import { aabbOf, pieceLocalBBox, walkMove } from './geometry.js';
 import { partColor } from './materials.js';
 
+// Wall paint: RAL 9001 Cream (sRGB approximation of the RAL Classic swatch).
+const WALL_PAINT = '#fdf4e3';
+
 // Data space is mm, [x, y, z] with z up.
 // Three.js is y-up, meters. Mapping: three.x = x, three.y = z, three.z = -y.
 // (z must be NEGATED: three.z = +y flips handedness and mirrors the plan.)
@@ -1583,7 +1586,7 @@ export default function Viewer({
           <Box
             key={w.name}
             box={box}
-            color="#a3a09a"
+            color={WALL_PAINT}
             hovered={hover?.key === info.key}
             onPointerOver={over(info)}
             onPointerOut={out(info.key)}
