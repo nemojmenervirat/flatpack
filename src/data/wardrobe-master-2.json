@@ -3,61 +3,781 @@
   "name": "Master wardrobe 2 (east wall)",
   "buildable": true,
   "color": "#c9a36b",
-  "clearance": { "front": 600 },
+  "clearance": {
+    "front": 600
+  },
   "parts": [
-    { "name": "leg", "pos": [30, 50, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [30, 470, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [704, 50, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [704, 470, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [1379, 50, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [1379, 470, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "side lower", "pos": [0, 0, 100], "size": [18, 600, 1800], "material": "W960 SM · Klasična bijela" },
-    { "name": "side lower", "pos": [1441, 0, 100], "size": [18, 600, 1800], "material": "W960 SM · Klasična bijela" },
-    { "name": "bottom lower", "pos": [18, 0, 100], "size": [1423, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "top lower", "pos": [18, 0, 1882], "size": [1423, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "back HDF lower", "pos": [18, 597, 118], "size": [1423, 3, 1764], "color": "#ffffff" },
-    { "name": "side upper", "pos": [0, 0, 1900], "size": [18, 600, 600], "material": "W960 SM · Klasična bijela" },
-    { "name": "side upper", "pos": [1441, 0, 1900], "size": [18, 600, 600], "material": "W960 SM · Klasična bijela" },
-    { "name": "bottom upper", "pos": [18, 0, 1900], "size": [1423, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "top upper", "pos": [18, 0, 2482], "size": [1423, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "back HDF upper", "pos": [18, 597, 1918], "size": [1423, 3, 564], "color": "#ffffff" },
-    { "name": "leg", "pos": [1489, 50, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [1489, 470, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [2163, 50, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [2163, 470, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [2838, 50, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [2838, 470, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "side lower", "pos": [1459, 0, 100], "size": [18, 600, 1800], "material": "W960 SM · Klasična bijela" },
-    { "name": "side lower", "pos": [2900, 0, 100], "size": [18, 600, 1800], "material": "W960 SM · Klasična bijela" },
-    { "name": "bottom lower", "pos": [1477, 0, 100], "size": [1423, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "top lower", "pos": [1477, 0, 1882], "size": [1423, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "back HDF lower", "pos": [1477, 597, 118], "size": [1423, 3, 1764], "color": "#ffffff" },
-    { "name": "side upper", "pos": [1459, 0, 1900], "size": [18, 600, 600], "material": "W960 SM · Klasična bijela" },
-    { "name": "side upper", "pos": [2900, 0, 1900], "size": [18, 600, 600], "material": "W960 SM · Klasična bijela" },
-    { "name": "bottom upper", "pos": [1477, 0, 1900], "size": [1423, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "top upper", "pos": [1477, 0, 2482], "size": [1423, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "back HDF upper", "pos": [1477, 597, 1918], "size": [1423, 3, 564], "color": "#ffffff" },
-    { "name": "partition lower", "pos": [2180, 0, 118], "size": [18, 597, 1764], "material": "W960 SM · Klasična bijela" },
-    { "name": "partition upper", "pos": [2180, 0, 1918], "size": [18, 597, 564], "material": "W960 SM · Klasična bijela" },
-    { "name": "hanging rail", "pos": [48, 285, 1720], "size": [1363, 30, 30], "color": "#9aa0a8", "metal": true, "hardware": true },
-    { "name": "hanging rail", "pos": [1507, 285, 1720], "size": [643, 30, 30], "color": "#9aa0a8", "metal": true, "hardware": true },
-    { "name": "shelf column", "pos": [2199, 3, 400], "size": [700, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "shelf column", "pos": [2199, 3, 800], "size": [700, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "shelf column", "pos": [2199, 3, 1200], "size": [700, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "shelf column", "pos": [2199, 3, 1600], "size": [700, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "shelf upper", "pos": [19, 3, 2191], "size": [1421, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "shelf upper", "pos": [1478, 3, 2191], "size": [701, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "shelf upper", "pos": [2199, 3, 2191], "size": [700, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "plinth", "pos": [3, -18, 0], "size": [2912, 18, 100], "material": "U156 ST9" },
-    { "name": "top filler front", "pos": [0, -18, 2500], "size": [2918, 18, 100], "material": "U156 ST9" },
-    { "name": "filler backer front", "pos": [0, 0, 2500], "size": [2918, 18, 90], "material": "W960 SM · Klasična bijela" },
-    { "name": "door lower", "pos": [3, -18, 103], "size": [724, 18, 1794], "material": "U156 ST9" },
-    { "name": "door lower", "pos": [731, -18, 103], "size": [725, 18, 1794], "material": "U156 ST9" },
-    { "name": "door upper", "pos": [3, -18, 1903], "size": [724, 18, 594], "material": "U156 ST9" },
-    { "name": "door upper", "pos": [731, -18, 1903], "size": [725, 18, 594], "material": "U156 ST9" },
-    { "name": "door lower", "pos": [1462, -18, 103], "size": [724, 18, 1794], "material": "U156 ST9" },
-    { "name": "door lower", "pos": [2190, -18, 103], "size": [725, 18, 1794], "material": "U156 ST9" },
-    { "name": "door upper", "pos": [1462, -18, 1903], "size": [724, 18, 594], "material": "U156 ST9" },
-    { "name": "door upper", "pos": [2190, -18, 1903], "size": [725, 18, 594], "material": "U156 ST9" }
+    {
+      "name": "leg",
+      "pos": [
+        30,
+        50,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        30,
+        470,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        704,
+        50,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        704,
+        470,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        1379,
+        50,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        1379,
+        470,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "side lower",
+      "pos": [
+        0,
+        0,
+        118
+      ],
+      "size": [
+        18,
+        600,
+        1764
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "side lower",
+      "pos": [
+        1441,
+        0,
+        118
+      ],
+      "size": [
+        18,
+        600,
+        1764
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "bottom lower",
+      "pos": [
+        0,
+        0,
+        100
+      ],
+      "size": [
+        1459,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "top lower",
+      "pos": [
+        0,
+        0,
+        1882
+      ],
+      "size": [
+        1459,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "back HDF lower",
+      "pos": [
+        18,
+        597,
+        118
+      ],
+      "size": [
+        1423,
+        3,
+        1764
+      ],
+      "color": "#ffffff"
+    },
+    {
+      "name": "side upper",
+      "pos": [
+        0,
+        0,
+        1918
+      ],
+      "size": [
+        18,
+        600,
+        564
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "side upper",
+      "pos": [
+        1441,
+        0,
+        1918
+      ],
+      "size": [
+        18,
+        600,
+        564
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "bottom upper",
+      "pos": [
+        0,
+        0,
+        1900
+      ],
+      "size": [
+        1459,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "top upper",
+      "pos": [
+        0,
+        0,
+        2482
+      ],
+      "size": [
+        1459,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "back HDF upper",
+      "pos": [
+        18,
+        597,
+        1918
+      ],
+      "size": [
+        1423,
+        3,
+        564
+      ],
+      "color": "#ffffff"
+    },
+    {
+      "name": "leg",
+      "pos": [
+        1489,
+        50,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        1489,
+        470,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        2163,
+        50,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        2163,
+        470,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        2838,
+        50,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        2838,
+        470,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "side lower",
+      "pos": [
+        1459,
+        0,
+        118
+      ],
+      "size": [
+        18,
+        600,
+        1764
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "side lower",
+      "pos": [
+        2900,
+        0,
+        118
+      ],
+      "size": [
+        18,
+        600,
+        1764
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "bottom lower",
+      "pos": [
+        1459,
+        0,
+        100
+      ],
+      "size": [
+        1459,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "top lower",
+      "pos": [
+        1459,
+        0,
+        1882
+      ],
+      "size": [
+        1459,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "back HDF lower",
+      "pos": [
+        1477,
+        597,
+        118
+      ],
+      "size": [
+        1423,
+        3,
+        1764
+      ],
+      "color": "#ffffff"
+    },
+    {
+      "name": "side upper",
+      "pos": [
+        1459,
+        0,
+        1918
+      ],
+      "size": [
+        18,
+        600,
+        564
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "side upper",
+      "pos": [
+        2900,
+        0,
+        1918
+      ],
+      "size": [
+        18,
+        600,
+        564
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "bottom upper",
+      "pos": [
+        1459,
+        0,
+        1900
+      ],
+      "size": [
+        1459,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "top upper",
+      "pos": [
+        1459,
+        0,
+        2482
+      ],
+      "size": [
+        1459,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "back HDF upper",
+      "pos": [
+        1477,
+        597,
+        1918
+      ],
+      "size": [
+        1423,
+        3,
+        564
+      ],
+      "color": "#ffffff"
+    },
+    {
+      "name": "partition lower",
+      "pos": [
+        2180,
+        0,
+        118
+      ],
+      "size": [
+        18,
+        597,
+        1764
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "partition upper",
+      "pos": [
+        2180,
+        0,
+        1918
+      ],
+      "size": [
+        18,
+        597,
+        564
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "hanging rail",
+      "pos": [
+        48,
+        285,
+        1720
+      ],
+      "size": [
+        1363,
+        30,
+        30
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "hanging rail",
+      "pos": [
+        1507,
+        285,
+        1720
+      ],
+      "size": [
+        643,
+        30,
+        30
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf column",
+      "pos": [
+        2199,
+        3,
+        400
+      ],
+      "size": [
+        700,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "shelf column",
+      "pos": [
+        2199,
+        3,
+        800
+      ],
+      "size": [
+        700,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "shelf column",
+      "pos": [
+        2199,
+        3,
+        1200
+      ],
+      "size": [
+        700,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "shelf column",
+      "pos": [
+        2199,
+        3,
+        1600
+      ],
+      "size": [
+        700,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "shelf upper",
+      "pos": [
+        19,
+        3,
+        2191
+      ],
+      "size": [
+        1421,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "shelf upper",
+      "pos": [
+        1478,
+        3,
+        2191
+      ],
+      "size": [
+        701,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "shelf upper",
+      "pos": [
+        2199,
+        3,
+        2191
+      ],
+      "size": [
+        700,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "plinth",
+      "pos": [
+        3,
+        -18,
+        0
+      ],
+      "size": [
+        2912,
+        18,
+        100
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "top filler front",
+      "pos": [
+        0,
+        -18,
+        2500
+      ],
+      "size": [
+        2918,
+        18,
+        100
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "filler backer front",
+      "pos": [
+        0,
+        0,
+        2500
+      ],
+      "size": [
+        2918,
+        18,
+        90
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "door lower",
+      "pos": [
+        3,
+        -18,
+        103
+      ],
+      "size": [
+        724,
+        18,
+        1794
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "door lower",
+      "pos": [
+        731,
+        -18,
+        103
+      ],
+      "size": [
+        725,
+        18,
+        1794
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "door upper",
+      "pos": [
+        3,
+        -18,
+        1903
+      ],
+      "size": [
+        724,
+        18,
+        594
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "door upper",
+      "pos": [
+        731,
+        -18,
+        1903
+      ],
+      "size": [
+        725,
+        18,
+        594
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "door lower",
+      "pos": [
+        1462,
+        -18,
+        103
+      ],
+      "size": [
+        724,
+        18,
+        1794
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "door lower",
+      "pos": [
+        2190,
+        -18,
+        103
+      ],
+      "size": [
+        725,
+        18,
+        1794
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "door upper",
+      "pos": [
+        1462,
+        -18,
+        1903
+      ],
+      "size": [
+        724,
+        18,
+        594
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "door upper",
+      "pos": [
+        2190,
+        -18,
+        1903
+      ],
+      "size": [
+        725,
+        18,
+        594
+      ],
+      "material": "U156 ST9"
+    }
   ]
 }

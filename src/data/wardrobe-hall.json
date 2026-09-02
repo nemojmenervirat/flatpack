@@ -3,91 +3,1209 @@
   "name": "Hall wardrobe 1700",
   "buildable": true,
   "color": "#3f4449",
-  "clearance": { "front": 600 },
+  "clearance": {
+    "front": 600
+  },
   "parts": [
-    { "name": "leg", "pos": [30, 50, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [30, 470, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [468, 50, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [468, 470, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [578, 50, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [578, 470, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [1016, 50, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [1016, 470, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [1126, 50, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [1126, 470, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [1540, 50, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "leg", "pos": [1540, 470, 0], "size": [50, 50, 100], "color": "#2a2d31", "hardware": true },
-    { "name": "side lower", "pos": [0, 0, 100], "size": [18, 600, 1800], "material": "W960 SM · Klasična bijela" },
-    { "name": "side lower", "pos": [530, 0, 100], "size": [18, 600, 1800], "material": "W960 SM · Klasična bijela" },
-    { "name": "bottom lower", "pos": [18, 0, 100], "size": [512, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "top lower", "pos": [18, 0, 1882], "size": [512, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "back HDF lower", "pos": [18, 597, 118], "size": [512, 3, 1764], "color": "#ffffff" },
-    { "name": "side lower", "pos": [548, 0, 100], "size": [18, 600, 1800], "material": "W960 SM · Klasična bijela" },
-    { "name": "side lower", "pos": [1078, 0, 100], "size": [18, 600, 1800], "material": "W960 SM · Klasična bijela" },
-    { "name": "bottom lower", "pos": [566, 0, 100], "size": [512, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "top lower", "pos": [566, 0, 1882], "size": [512, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "back HDF lower", "pos": [566, 597, 118], "size": [512, 3, 1764], "color": "#ffffff" },
-    { "name": "side lower", "pos": [1096, 0, 100], "size": [18, 600, 1800], "material": "W960 SM · Klasična bijela" },
-    { "name": "side lower", "pos": [1602, 0, 100], "size": [18, 600, 1800], "material": "W960 SM · Klasična bijela" },
-    { "name": "bottom lower", "pos": [1114, 0, 100], "size": [488, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "top lower", "pos": [1114, 0, 1882], "size": [488, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "back HDF lower", "pos": [1114, 597, 118], "size": [488, 3, 1764], "color": "#ffffff" },
-    { "name": "side upper", "pos": [0, 0, 1900], "size": [18, 600, 600], "material": "W960 SM · Klasična bijela" },
-    { "name": "side upper", "pos": [530, 0, 1900], "size": [18, 600, 600], "material": "W960 SM · Klasična bijela" },
-    { "name": "bottom upper", "pos": [18, 0, 1900], "size": [512, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "top upper", "pos": [18, 0, 2482], "size": [512, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "back HDF upper", "pos": [18, 597, 1918], "size": [512, 3, 564], "color": "#ffffff" },
-    { "name": "side upper", "pos": [548, 0, 1900], "size": [18, 600, 600], "material": "W960 SM · Klasična bijela" },
-    { "name": "side upper", "pos": [1078, 0, 1900], "size": [18, 600, 600], "material": "W960 SM · Klasična bijela" },
-    { "name": "bottom upper", "pos": [566, 0, 1900], "size": [512, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "top upper", "pos": [566, 0, 2482], "size": [512, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "back HDF upper", "pos": [566, 597, 1918], "size": [512, 3, 564], "color": "#ffffff" },
-    { "name": "side upper", "pos": [1096, 0, 1900], "size": [18, 600, 600], "material": "W960 SM · Klasična bijela" },
-    { "name": "side upper", "pos": [1602, 0, 1900], "size": [18, 600, 600], "material": "W960 SM · Klasična bijela" },
-    { "name": "bottom upper", "pos": [1114, 0, 1900], "size": [488, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "top upper", "pos": [1114, 0, 2482], "size": [488, 600, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "back HDF upper", "pos": [1114, 597, 1918], "size": [488, 3, 564], "color": "#ffffff" },
-    { "name": "shelf upper", "pos": [19, 3, 2191], "size": [510, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "shelf upper", "pos": [567, 3, 2191], "size": [510, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "shelf upper", "pos": [1115, 3, 2191], "size": [486, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "shelf vacuum bay", "pos": [19, 3, 718], "size": [510, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "shelf vacuum bay", "pos": [19, 3, 1118], "size": [510, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "shelf vacuum bay", "pos": [19, 3, 1500], "size": [510, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "shelf shoe bay", "pos": [567, 3, 550], "size": [510, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "shelf shoe bay", "pos": [567, 3, 750], "size": [510, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "shelf shoe bay", "pos": [567, 3, 950], "size": [510, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "shelf shoe bay", "pos": [567, 3, 1150], "size": [510, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "shelf shoe bay", "pos": [567, 3, 1350], "size": [510, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "shelf shoe bay", "pos": [567, 3, 1550], "size": [510, 592, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "pullout shoe shelf", "pos": [1127, 20, 550], "size": [462, 550, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "runner", "pos": [1114, 20, 537], "size": [13, 500, 45], "color": "#9aa0a6", "hardware": true },
-    { "name": "runner", "pos": [1589, 20, 537], "size": [13, 500, 45], "color": "#9aa0a6", "hardware": true },
-    { "name": "pullout shoe shelf", "pos": [1127, 20, 750], "size": [462, 550, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "runner", "pos": [1114, 20, 737], "size": [13, 500, 45], "color": "#9aa0a6", "hardware": true },
-    { "name": "runner", "pos": [1589, 20, 737], "size": [13, 500, 45], "color": "#9aa0a6", "hardware": true },
-    { "name": "pullout shoe shelf", "pos": [1127, 20, 950], "size": [462, 550, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "runner", "pos": [1114, 20, 937], "size": [13, 500, 45], "color": "#9aa0a6", "hardware": true },
-    { "name": "runner", "pos": [1589, 20, 937], "size": [13, 500, 45], "color": "#9aa0a6", "hardware": true },
-    { "name": "pullout shoe shelf", "pos": [1127, 20, 1150], "size": [462, 550, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "runner", "pos": [1114, 20, 1137], "size": [13, 500, 45], "color": "#9aa0a6", "hardware": true },
-    { "name": "runner", "pos": [1589, 20, 1137], "size": [13, 500, 45], "color": "#9aa0a6", "hardware": true },
-    { "name": "pullout shoe shelf", "pos": [1127, 20, 1350], "size": [462, 550, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "runner", "pos": [1114, 20, 1337], "size": [13, 500, 45], "color": "#9aa0a6", "hardware": true },
-    { "name": "runner", "pos": [1589, 20, 1337], "size": [13, 500, 45], "color": "#9aa0a6", "hardware": true },
-    { "name": "pullout shoe shelf", "pos": [1127, 20, 1550], "size": [462, 550, 18], "material": "W960 SM · Klasična bijela" },
-    { "name": "runner", "pos": [1114, 20, 1537], "size": [13, 500, 45], "color": "#9aa0a6", "hardware": true },
-    { "name": "runner", "pos": [1589, 20, 1537], "size": [13, 500, 45], "color": "#9aa0a6", "hardware": true },
-    { "name": "end panel", "pos": [1620, -18, 0], "size": [18, 618, 2500], "material": "U156 ST9" },
-    { "name": "filler backer front", "pos": [0, 0, 2500], "size": [1602, 18, 90], "material": "W960 SM · Klasična bijela" },
-    { "name": "filler backer right", "pos": [1602, 0, 2500], "size": [18, 600, 90], "material": "W960 SM · Klasična bijela" },
-    { "name": "top filler front", "pos": [0, -18, 2500], "size": [1620, 18, 100], "material": "U156 ST9" },
-    { "name": "top filler right", "pos": [1620, -18, 2500], "size": [18, 618, 100], "material": "U156 ST9" },
-    { "name": "plinth", "pos": [3, -18, 0], "size": [1614, 18, 100], "material": "U156 ST9" },
-    { "name": "door lower", "pos": [3, -18, 103], "size": [545, 18, 1794], "material": "U156 ST9" },
-    { "name": "door lower", "pos": [551, -18, 103], "size": [545, 18, 1794], "material": "U156 ST9" },
-    { "name": "door lower", "pos": [1099, -18, 103], "size": [518, 18, 1794], "material": "U156 ST9" },
-    { "name": "door upper", "pos": [3, -18, 1903], "size": [545, 18, 594], "material": "U156 ST9" },
-    { "name": "door upper", "pos": [551, -18, 1903], "size": [545, 18, 594], "material": "U156 ST9" },
-    { "name": "door upper", "pos": [1099, -18, 1903], "size": [518, 18, 594], "material": "U156 ST9" }
+    {
+      "name": "leg",
+      "pos": [
+        30,
+        50,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        30,
+        470,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        468,
+        50,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        468,
+        470,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        578,
+        50,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        578,
+        470,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        1016,
+        50,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        1016,
+        470,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        1126,
+        50,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        1126,
+        470,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        1540,
+        50,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        1540,
+        470,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#2a2d31",
+      "hardware": true
+    },
+    {
+      "name": "side lower",
+      "pos": [
+        0,
+        0,
+        118
+      ],
+      "size": [
+        18,
+        600,
+        1764
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "side lower",
+      "pos": [
+        530,
+        0,
+        118
+      ],
+      "size": [
+        18,
+        600,
+        1764
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "bottom lower",
+      "pos": [
+        0,
+        0,
+        100
+      ],
+      "size": [
+        548,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "top lower",
+      "pos": [
+        0,
+        0,
+        1882
+      ],
+      "size": [
+        548,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "back HDF lower",
+      "pos": [
+        18,
+        597,
+        118
+      ],
+      "size": [
+        512,
+        3,
+        1764
+      ],
+      "color": "#ffffff"
+    },
+    {
+      "name": "side lower",
+      "pos": [
+        548,
+        0,
+        118
+      ],
+      "size": [
+        18,
+        600,
+        1764
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "side lower",
+      "pos": [
+        1078,
+        0,
+        118
+      ],
+      "size": [
+        18,
+        600,
+        1764
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "bottom lower",
+      "pos": [
+        548,
+        0,
+        100
+      ],
+      "size": [
+        548,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "top lower",
+      "pos": [
+        548,
+        0,
+        1882
+      ],
+      "size": [
+        548,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "back HDF lower",
+      "pos": [
+        566,
+        597,
+        118
+      ],
+      "size": [
+        512,
+        3,
+        1764
+      ],
+      "color": "#ffffff"
+    },
+    {
+      "name": "side lower",
+      "pos": [
+        1096,
+        0,
+        118
+      ],
+      "size": [
+        18,
+        600,
+        1764
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "side lower",
+      "pos": [
+        1602,
+        0,
+        118
+      ],
+      "size": [
+        18,
+        600,
+        1764
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "bottom lower",
+      "pos": [
+        1096,
+        0,
+        100
+      ],
+      "size": [
+        524,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "top lower",
+      "pos": [
+        1096,
+        0,
+        1882
+      ],
+      "size": [
+        524,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "back HDF lower",
+      "pos": [
+        1114,
+        597,
+        118
+      ],
+      "size": [
+        488,
+        3,
+        1764
+      ],
+      "color": "#ffffff"
+    },
+    {
+      "name": "side upper",
+      "pos": [
+        0,
+        0,
+        1918
+      ],
+      "size": [
+        18,
+        600,
+        564
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "side upper",
+      "pos": [
+        530,
+        0,
+        1918
+      ],
+      "size": [
+        18,
+        600,
+        564
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "bottom upper",
+      "pos": [
+        0,
+        0,
+        1900
+      ],
+      "size": [
+        548,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "top upper",
+      "pos": [
+        0,
+        0,
+        2482
+      ],
+      "size": [
+        548,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "back HDF upper",
+      "pos": [
+        18,
+        597,
+        1918
+      ],
+      "size": [
+        512,
+        3,
+        564
+      ],
+      "color": "#ffffff"
+    },
+    {
+      "name": "side upper",
+      "pos": [
+        548,
+        0,
+        1918
+      ],
+      "size": [
+        18,
+        600,
+        564
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "side upper",
+      "pos": [
+        1078,
+        0,
+        1918
+      ],
+      "size": [
+        18,
+        600,
+        564
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "bottom upper",
+      "pos": [
+        548,
+        0,
+        1900
+      ],
+      "size": [
+        548,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "top upper",
+      "pos": [
+        548,
+        0,
+        2482
+      ],
+      "size": [
+        548,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "back HDF upper",
+      "pos": [
+        566,
+        597,
+        1918
+      ],
+      "size": [
+        512,
+        3,
+        564
+      ],
+      "color": "#ffffff"
+    },
+    {
+      "name": "side upper",
+      "pos": [
+        1096,
+        0,
+        1918
+      ],
+      "size": [
+        18,
+        600,
+        564
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "side upper",
+      "pos": [
+        1602,
+        0,
+        1918
+      ],
+      "size": [
+        18,
+        600,
+        564
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "bottom upper",
+      "pos": [
+        1096,
+        0,
+        1900
+      ],
+      "size": [
+        524,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "top upper",
+      "pos": [
+        1096,
+        0,
+        2482
+      ],
+      "size": [
+        524,
+        600,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "back HDF upper",
+      "pos": [
+        1114,
+        597,
+        1918
+      ],
+      "size": [
+        488,
+        3,
+        564
+      ],
+      "color": "#ffffff"
+    },
+    {
+      "name": "shelf upper",
+      "pos": [
+        19,
+        3,
+        2191
+      ],
+      "size": [
+        510,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "shelf upper",
+      "pos": [
+        567,
+        3,
+        2191
+      ],
+      "size": [
+        510,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "shelf upper",
+      "pos": [
+        1115,
+        3,
+        2191
+      ],
+      "size": [
+        486,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "shelf vacuum bay",
+      "pos": [
+        19,
+        3,
+        718
+      ],
+      "size": [
+        510,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "shelf vacuum bay",
+      "pos": [
+        19,
+        3,
+        1118
+      ],
+      "size": [
+        510,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "shelf vacuum bay",
+      "pos": [
+        19,
+        3,
+        1500
+      ],
+      "size": [
+        510,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "shelf shoe bay",
+      "pos": [
+        567,
+        3,
+        550
+      ],
+      "size": [
+        510,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "shelf shoe bay",
+      "pos": [
+        567,
+        3,
+        750
+      ],
+      "size": [
+        510,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "shelf shoe bay",
+      "pos": [
+        567,
+        3,
+        950
+      ],
+      "size": [
+        510,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "shelf shoe bay",
+      "pos": [
+        567,
+        3,
+        1150
+      ],
+      "size": [
+        510,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "shelf shoe bay",
+      "pos": [
+        567,
+        3,
+        1350
+      ],
+      "size": [
+        510,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "shelf shoe bay",
+      "pos": [
+        567,
+        3,
+        1550
+      ],
+      "size": [
+        510,
+        592,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "pullout shoe shelf",
+      "pos": [
+        1127,
+        20,
+        550
+      ],
+      "size": [
+        462,
+        550,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "runner",
+      "pos": [
+        1114,
+        20,
+        537
+      ],
+      "size": [
+        13,
+        500,
+        45
+      ],
+      "color": "#9aa0a6",
+      "hardware": true
+    },
+    {
+      "name": "runner",
+      "pos": [
+        1589,
+        20,
+        537
+      ],
+      "size": [
+        13,
+        500,
+        45
+      ],
+      "color": "#9aa0a6",
+      "hardware": true
+    },
+    {
+      "name": "pullout shoe shelf",
+      "pos": [
+        1127,
+        20,
+        750
+      ],
+      "size": [
+        462,
+        550,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "runner",
+      "pos": [
+        1114,
+        20,
+        737
+      ],
+      "size": [
+        13,
+        500,
+        45
+      ],
+      "color": "#9aa0a6",
+      "hardware": true
+    },
+    {
+      "name": "runner",
+      "pos": [
+        1589,
+        20,
+        737
+      ],
+      "size": [
+        13,
+        500,
+        45
+      ],
+      "color": "#9aa0a6",
+      "hardware": true
+    },
+    {
+      "name": "pullout shoe shelf",
+      "pos": [
+        1127,
+        20,
+        950
+      ],
+      "size": [
+        462,
+        550,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "runner",
+      "pos": [
+        1114,
+        20,
+        937
+      ],
+      "size": [
+        13,
+        500,
+        45
+      ],
+      "color": "#9aa0a6",
+      "hardware": true
+    },
+    {
+      "name": "runner",
+      "pos": [
+        1589,
+        20,
+        937
+      ],
+      "size": [
+        13,
+        500,
+        45
+      ],
+      "color": "#9aa0a6",
+      "hardware": true
+    },
+    {
+      "name": "pullout shoe shelf",
+      "pos": [
+        1127,
+        20,
+        1150
+      ],
+      "size": [
+        462,
+        550,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "runner",
+      "pos": [
+        1114,
+        20,
+        1137
+      ],
+      "size": [
+        13,
+        500,
+        45
+      ],
+      "color": "#9aa0a6",
+      "hardware": true
+    },
+    {
+      "name": "runner",
+      "pos": [
+        1589,
+        20,
+        1137
+      ],
+      "size": [
+        13,
+        500,
+        45
+      ],
+      "color": "#9aa0a6",
+      "hardware": true
+    },
+    {
+      "name": "pullout shoe shelf",
+      "pos": [
+        1127,
+        20,
+        1350
+      ],
+      "size": [
+        462,
+        550,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "runner",
+      "pos": [
+        1114,
+        20,
+        1337
+      ],
+      "size": [
+        13,
+        500,
+        45
+      ],
+      "color": "#9aa0a6",
+      "hardware": true
+    },
+    {
+      "name": "runner",
+      "pos": [
+        1589,
+        20,
+        1337
+      ],
+      "size": [
+        13,
+        500,
+        45
+      ],
+      "color": "#9aa0a6",
+      "hardware": true
+    },
+    {
+      "name": "pullout shoe shelf",
+      "pos": [
+        1127,
+        20,
+        1550
+      ],
+      "size": [
+        462,
+        550,
+        18
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "runner",
+      "pos": [
+        1114,
+        20,
+        1537
+      ],
+      "size": [
+        13,
+        500,
+        45
+      ],
+      "color": "#9aa0a6",
+      "hardware": true
+    },
+    {
+      "name": "runner",
+      "pos": [
+        1589,
+        20,
+        1537
+      ],
+      "size": [
+        13,
+        500,
+        45
+      ],
+      "color": "#9aa0a6",
+      "hardware": true
+    },
+    {
+      "name": "end panel",
+      "pos": [
+        1620,
+        -18,
+        0
+      ],
+      "size": [
+        18,
+        618,
+        2500
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "filler backer front",
+      "pos": [
+        0,
+        0,
+        2500
+      ],
+      "size": [
+        1602,
+        18,
+        90
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "filler backer right",
+      "pos": [
+        1602,
+        0,
+        2500
+      ],
+      "size": [
+        18,
+        600,
+        90
+      ],
+      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+    },
+    {
+      "name": "top filler front",
+      "pos": [
+        0,
+        -18,
+        2500
+      ],
+      "size": [
+        1620,
+        18,
+        100
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "top filler right",
+      "pos": [
+        1620,
+        -18,
+        2500
+      ],
+      "size": [
+        18,
+        618,
+        100
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "plinth",
+      "pos": [
+        3,
+        -18,
+        0
+      ],
+      "size": [
+        1614,
+        18,
+        100
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "door lower",
+      "pos": [
+        3,
+        -18,
+        103
+      ],
+      "size": [
+        545,
+        18,
+        1794
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "door lower",
+      "pos": [
+        551,
+        -18,
+        103
+      ],
+      "size": [
+        545,
+        18,
+        1794
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "door lower",
+      "pos": [
+        1099,
+        -18,
+        103
+      ],
+      "size": [
+        518,
+        18,
+        1794
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "door upper",
+      "pos": [
+        3,
+        -18,
+        1903
+      ],
+      "size": [
+        545,
+        18,
+        594
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "door upper",
+      "pos": [
+        551,
+        -18,
+        1903
+      ],
+      "size": [
+        545,
+        18,
+        594
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "door upper",
+      "pos": [
+        1099,
+        -18,
+        1903
+      ],
+      "size": [
+        518,
+        18,
+        594
+      ],
+      "material": "U156 ST9"
+    }
   ]
 }
