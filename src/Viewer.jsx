@@ -542,7 +542,10 @@ function roundedRect(Ctor, ox, oy, W, D, r) {
 function LocalRounded({ part, color, hovered, opacity = 1, ...handlers }) {
   const geom = useMemo(() => {
     const [w, d, h] = part.size;
-    const s = roundedRect(Shape, 0, 0, w * S, d * S, (part.round ?? 0) * S);
+    // round is one radius or four — scale each, never the array itself (NaN).
+    const r = part.round ?? 0;
+    const rS = Array.isArray(r) ? r.map((v) => v * S) : r * S;
+    const s = roundedRect(Shape, 0, 0, w * S, d * S, rS);
     if (part.cutout) {
       const [cx0, cy0, cx1, cy1] = part.cutout;
       s.holes.push(
@@ -552,7 +555,9 @@ function LocalRounded({ part, color, hovered, opacity = 1, ...handlers }) {
           (cy0 - part.pos[1]) * S,
           (cx1 - cx0) * S,
           (cy1 - cy0) * S,
-          (part.cutoutRound ?? 0) * S
+          Array.isArray(part.cutoutRound)
+            ? part.cutoutRound.map((v) => v * S)
+            : (part.cutoutRound ?? 0) * S
         )
       );
     }

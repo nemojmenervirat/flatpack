@@ -43,29 +43,61 @@ body {
 
 .side-head {
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  padding: 8px;
+  align-items: center;
+  gap: 0;
+  padding: 6px 7px;
   border-bottom: 1px solid #2c2f36;
 }
 
 .side.collapsed .side-head {
   flex-direction: column;
-  align-items: center;
+  padding: 8px 0;
   border-bottom: none;
+}
+
+/* thin divider between button groups: vertical in the row, horizontal in the strip */
+.side-sep {
+  flex: none;
+  width: 1px;
+  height: 16px;
+  margin: 0 2px;
+  background: #2c2f36;
+}
+
+.side.collapsed .side-sep {
+  width: 16px;
+  height: 1px;
+  margin: 4px 0;
 }
 
 .side-head button {
   position: relative;
-  width: 28px;
-  height: 28px;
+  flex: none;
+  width: 26px;
+  height: 26px;
   padding: 0;
-  font-size: 13px;
-  line-height: 1;
-  border-radius: 6px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #9a958c;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background 0.12s, color 0.12s;
+}
+
+.side.collapsed .side-head button {
+  width: 30px;
+  height: 30px;
+}
+
+.side-head button:hover {
+  background: #2c2f36;
+  color: #e6e4df;
+}
+
+.side-head button .ico {
+  display: block;
 }
 
 .side-head button[data-tip]:hover::after {
@@ -85,10 +117,51 @@ body {
   z-index: 20;
 }
 
+/* navigation buttons: the current view is a filled amber pill (like a tab) */
 .side-head button.active {
-  background: #4a4638;
-  border-color: #ffd479;
+  background: rgba(255, 212, 121, 0.14);
   color: #ffd479;
+}
+
+.side-head button.active:hover {
+  background: rgba(255, 212, 121, 0.22);
+}
+
+/* on/off flags: no pill — they read as switches with a small status dot.
+   off = dim icon + hollow dot, on = bright icon + lit amber dot */
+.side-head button.toggle {
+  color: #6b675f;
+}
+
+.side-head button.toggle::before {
+  content: '';
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  border: 1px solid #55514a;
+  background: transparent;
+  transition: background 0.12s, border-color 0.12s, box-shadow 0.12s;
+}
+
+.side-head button.toggle:hover {
+  color: #b8b3aa;
+}
+
+.side-head button.toggle.on {
+  color: #e6e4df;
+}
+
+.side-head button.toggle.on:hover {
+  color: #fff;
+}
+
+.side-head button.toggle.on::before {
+  background: #ffd479;
+  border-color: #ffd479;
+  box-shadow: 0 0 5px rgba(255, 212, 121, 0.6);
 }
 
 .side-filter {

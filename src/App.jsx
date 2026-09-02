@@ -88,6 +88,47 @@ const roomDefs = rooms.rooms.map((r) => ({
 }));
 const ROOM_ORDER = roomDefs.map((r) => r.name);
 
+// Monochrome stroke icons for the side strip — one visual language instead of
+// mixed emoji / text glyphs. All 24-unit viewBox, currentColor stroke.
+const ICONS = {
+  collapse: <path d="M13 6l6 6-6 6M5 6l6 6-6 6" />,
+  expand: <path d="M11 6l-6 6 6 6M19 6l-6 6 6 6" />,
+  home: <path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10" />,
+  clearance: <path d="M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4M9 9h6v6H9z" />,
+  areas: (
+    <>
+      <path d="M4 4h16v16H4z" />
+      <path d="M8 16l8-8M8 8l2.5 2.5M16 16l-2.5-2.5" />
+    </>
+  ),
+  pieces: <path d="M6 11V5a2 2 0 012-2h8a2 2 0 012 2v6M4 13a2 2 0 012-2h12a2 2 0 012 2v3H4zM6 16v5M18 16v5" />,
+  walk: (
+    <>
+      <circle cx="13" cy="4" r="1.8" />
+      <path d="M9.5 21l2-6.5-2.5-1.5v-4l3.5-1.5 2.5 3 3 1M15.5 21l-2.5-6M8 12l-2.5 2" />
+    </>
+  ),
+  materials: <path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" />,
+  plan: <path d="M3 3h18v18H3zM3 12h9M12 3v9M12 12v9M12 12h9M15 21v-4" />,
+};
+
+const Icon = ({ name }) => (
+  <svg
+    className="ico"
+    viewBox="0 0 24 24"
+    width="16"
+    height="16"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.7"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    {ICONS[name]}
+  </svg>
+);
+
 const roomAt = (x, y) => {
   const room = roomDefs.find((r) =>
     r.zones.some(
@@ -580,55 +621,18 @@ export default function App() {
       <nav className={sideOpen ? 'side' : 'side collapsed'}>
         <div className="side-head">
           <button data-tip={sideOpen ? 'Collapse' : 'Pieces'} onClick={() => setSideOpen((v) => !v)}>
-            {sideOpen ? '»' : '«'}
+            <Icon name={sideOpen ? 'collapse' : 'expand'} />
           </button>
+          <span className="side-sep" />
           <button
-            className={view === 'apartment' ? 'active' : ''}
+            className={view === 'apartment' && !materialsOpen ? 'active' : ''}
             data-tip="Whole apartment"
             onClick={() => {
               setMaterialsOpen(false);
               setView('apartment');
             }}
           >
-            🏠
-          </button>
-          <button
-            className={showClearances ? 'active' : ''}
-            data-tip={`Clearance zones: ${showClearances ? 'on' : 'off'}`}
-            onClick={() => setShowClearances((v) => !v)}
-          >
-            ⛶
-          </button>
-          <button
-            className={showAreas ? 'active' : ''}
-            data-tip={`Room areas: ${showAreas ? 'on' : 'off'}`}
-            onClick={() => setShowAreas((v) => !v)}
-          >
-            m²
-          </button>
-          <button
-            className={showPieces ? 'active' : ''}
-            data-tip={`Pieces: ${showPieces ? 'shown' : 'hidden'}`}
-            onClick={() => setShowPieces((v) => !v)}
-          >
-            🪑
-          </button>
-          <button
-            className={walk !== 'off' ? 'active' : ''}
-            data-tip={walk === 'off' ? 'Walk around (first person)' : 'Exit walk mode'}
-            onClick={() => {
-              setView('apartment');
-              setWalk((w) => (w === 'off' ? 'arm' : 'off'));
-            }}
-          >
-            🚶
-          </button>
-          <button
-            className={materialsOpen ? 'active' : ''}
-            data-tip={materialsOpen ? 'Back to the model' : 'Materials (Elgrad price list)'}
-            onClick={() => setMaterialsOpen((v) => !v)}
-          >
-            ▩
+            <Icon name="home" />
           </button>
           <button
             className={cam === 'plan' ? 'active' : ''}
@@ -639,7 +643,47 @@ export default function App() {
               setCam((c) => (c === 'plan' ? 'free' : 'plan'));
             }}
           >
-            ▦
+            <Icon name="plan" />
+          </button>
+          <button
+            className={walk !== 'off' ? 'active' : ''}
+            data-tip={walk === 'off' ? 'Walk around (first person)' : 'Exit walk mode'}
+            onClick={() => {
+              setView('apartment');
+              setWalk((w) => (w === 'off' ? 'arm' : 'off'));
+            }}
+          >
+            <Icon name="walk" />
+          </button>
+          <span className="side-sep" />
+          <button
+            className={showPieces ? 'toggle on' : 'toggle'}
+            data-tip={`Pieces: ${showPieces ? 'shown' : 'hidden'}`}
+            onClick={() => setShowPieces((v) => !v)}
+          >
+            <Icon name="pieces" />
+          </button>
+          <button
+            className={showClearances ? 'toggle on' : 'toggle'}
+            data-tip={`Clearance zones: ${showClearances ? 'on' : 'off'}`}
+            onClick={() => setShowClearances((v) => !v)}
+          >
+            <Icon name="clearance" />
+          </button>
+          <button
+            className={showAreas ? 'toggle on' : 'toggle'}
+            data-tip={`Room areas: ${showAreas ? 'on' : 'off'}`}
+            onClick={() => setShowAreas((v) => !v)}
+          >
+            <Icon name="areas" />
+          </button>
+          <span className="side-sep" />
+          <button
+            className={materialsOpen ? 'active' : ''}
+            data-tip={materialsOpen ? 'Back to the model' : 'Materials (Elgrad price list)'}
+            onClick={() => setMaterialsOpen((v) => !v)}
+          >
+            <Icon name="materials" />
           </button>
         </div>
         {sideOpen && (
