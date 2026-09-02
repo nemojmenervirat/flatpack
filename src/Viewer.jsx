@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, OrthographicCamera, Html, Edges } from '@react-three/drei';
 import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, Path, ExtrudeGeometry } from 'three';
@@ -613,8 +613,14 @@ function LocalDisc({ part, color, hovered, opacity = 1, ...handlers }) {
   );
 }
 
+// Whether part boxes draw their faint black edge outlines. On by default (the
+// single-piece view reads better with them); the apartment view turns them off
+// because at that scale the lines pile up and make every piece look busy.
+const EdgesContext = createContext(true);
+
 // A part box in piece-local coordinates (rendered inside the placement group).
 function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
+  const showEdges = useContext(EdgesContext);
   if (part.disc) {
     return <LocalDisc part={part} color={color} hovered={hovered} opacity={opacity} {...handlers} />;
   }
@@ -640,7 +646,7 @@ function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
         opacity={opacity}
         depthWrite={opacity === 1}
       />
-      {opacity === 1 && !part.fabric && (
+      {showEdges && opacity === 1 && !part.fabric && (
         <Edges>
           <lineBasicMaterial color="#000000" transparent opacity={0.22} />
         </Edges>
@@ -1493,6 +1499,7 @@ export default function Viewer({
       camera={{ position: [7.5, 11, 14], fov: 45, near: 0.05 }}
       style={{ background: '#16181c' }}
     >
+      <EdgesContext.Provider value={false}>
       <color attach="background" args={['#16181c']} />
       <ambientLight intensity={walking ? 0.95 : 0.7} />
       <directionalLight
@@ -1670,6 +1677,7 @@ export default function Viewer({
           onExit={onWalkExit}
         />
       )}
+      </EdgesContext.Provider>
     </Canvas>
   );
 }
