@@ -1718,10 +1718,6 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0 }) {
       <color attach="background" args={['#16181c']} />
       <ambientLight intensity={0.75} />
       <directionalLight position={[4, 8, 5]} intensity={1.3} />
-      <gridHelper
-        args={[Math.ceil(span * 3), Math.ceil(span * 3) * 2, '#3a3e46', '#24272d']}
-        position={[c[0], -0.001, c[2]]}
-      />
 
       {explode > 0 &&
         parts.map((p, i) => {

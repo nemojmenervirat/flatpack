@@ -702,3 +702,12 @@ button:hover {
 .explode-chip button:hover {
   background: #2c2f36;
 }
+
+.explode-chip button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.explode-chip button:disabled:hover {
+  background: #24272d;
+}

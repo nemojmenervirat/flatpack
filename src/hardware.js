@@ -95,7 +95,28 @@ export function hardwareList(piece) {
       .filter((p) => p.name.includes('hook') && !p.hardware)
       .reduce((n, p) => n + Math.max(3, Math.round(sortedDims(p.size)[0] / 280)), 0);
 
-  return { hinges, hingesTotal, drawers, slideBoxDepth, shelves, shelfPins: shelves * 4, rails, hooks };
+  // other explicitly modeled hardware parts (legs, runners, ...) — hooks and
+  // hanging rails are counted above, everything else is listed by name + size
+  const extras = new Map();
+  for (const p of parts) {
+    if (!p.hardware || p.name.includes('hook') || p.name.includes('hanging')) continue;
+    const key = `${p.name}|${p.size.join('x')}`;
+    const row = extras.get(key) || { name: p.name, size: [...p.size], qty: 0 };
+    row.qty += 1;
+    extras.set(key, row);
+  }
+
+  return {
+    hinges,
+    hingesTotal,
+    drawers,
+    slideBoxDepth,
+    shelves,
+    shelfPins: shelves * 4,
+    rails,
+    hooks,
+    extras: [...extras.values()],
+  };
 }
 
 // Board + edge-banding cost from the materials registry (Elgrad KM prices).

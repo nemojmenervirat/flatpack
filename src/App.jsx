@@ -399,7 +399,7 @@ function PiecePanel({ piece, hoverIndex, onHoverRow }) {
         </section>
       )}
 
-      {(hw.hingesTotal > 0 || hw.drawers > 0 || hw.shelves > 0 || hw.rails.length > 0 || hw.hooks > 0) && (
+      {(hw.hingesTotal > 0 || hw.drawers > 0 || hw.shelves > 0 || hw.rails.length > 0 || hw.hooks > 0 || hw.extras.length > 0) && (
         <section>
           <h2>Hardware</h2>
           <ul className="hardware">
@@ -425,6 +425,11 @@ function PiecePanel({ piece, hoverIndex, onHoverRow }) {
               <li key={`r${i}`}>1 × hanging rail, {r.length} mm</li>
             ))}
             {hw.hooks > 0 && <li>{hw.hooks} × coat hook</li>}
+            {hw.extras.map((x, i) => (
+              <li key={`x${i}`}>
+                {x.qty} × {x.name} — {x.size.join(' × ')} mm
+              </li>
+            ))}
           </ul>
         </section>
       )}
@@ -538,7 +543,9 @@ export default function App() {
               value={explode}
               onChange={(e) => setExplode(Number(e.target.value))}
             />
-            {explode > 0 && <button onClick={() => setExplode(0)}>assemble</button>}
+            <button disabled={explode === 0} onClick={() => setExplode(0)}>
+              assemble
+            </button>
           </div>
         )}
 
