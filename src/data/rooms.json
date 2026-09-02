@@ -1,5 +1,5 @@
 {
-  "comment": "Rooms as FINAL exact polygons: each room is a union of axis-aligned rects (pos = min corner [x, y] mm, size = [width, depth]) describing the walkable floor exactly \u2014 walls, stubs, jambs and door passages are already carved out. Nothing is subtracted at runtime: m\u00b2 = sum of rect areas, outline dims trace these rects, the overlay insets them 2 cm. If a wall moves in apartment.json, update these rects to match.",
+  "comment": "Rooms as FINAL exact polygons: each room is a union of axis-aligned rects (pos = min corner [x, y] mm, size = [width, depth]) describing the walkable floor exactly — walls, stubs, jambs and door passages are already carved out. Nothing is subtracted at runtime: m² = sum of rect areas, outline dims trace these rects, the overlay insets them 2 cm. If a wall moves in apartment.json, update these rects to match.",
   "rooms": [
     {
       "name": "Living room & kitchen",
@@ -61,11 +61,11 @@
       "rects": [
         {
           "pos": [
-            5999,
+            5918,
             5199
           ],
           "size": [
-            5697,
+            5778,
             1450
           ]
         },
@@ -232,21 +232,11 @@
         {
           "pos": [
             3398,
-            250
-          ],
-          "size": [
-            2400,
-            1148
-          ]
-        },
-        {
-          "pos": [
-            3400,
             80
           ],
           "size": [
-            2398,
-            170
+            2400,
+            1318
           ]
         }
       ]
@@ -257,21 +247,11 @@
         {
           "pos": [
             9347,
-            250
-          ],
-          "size": [
-            2249,
-            1148
-          ]
-        },
-        {
-          "pos": [
-            9350,
             80
           ],
           "size": [
-            2246,
-            170
+            2249,
+            1318
           ]
         }
       ]
