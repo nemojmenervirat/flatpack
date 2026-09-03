@@ -535,9 +535,11 @@ export default function App() {
   const [walkSpawn, setWalkSpawn] = useState(null); // { pos:[x,y], yaw } or null = entrance
   const [materialsOpen, setMaterialsOpen] = useState(false);
   const [explode, setExplode] = useState(0); // 0..1, single-piece exploded view
+  const [hideAppliances, setHideAppliances] = useState(() => lsGet('flatpack.hideAppliances', false)); // single-piece: strip oven/sink/hob
 
   useEffect(() => lsSet('flatpack.view', view), [view]);
   useEffect(() => lsSet('flatpack.showClearances', showClearances), [showClearances]);
+  useEffect(() => lsSet('flatpack.hideAppliances', hideAppliances), [hideAppliances]);
   useEffect(() => lsSet('flatpack.showAreas', showAreas), [showAreas]);
   useEffect(() => lsSet('flatpack.showPieces', showPieces), [showPieces]);
   useEffect(() => lsSet('flatpack.sideOpen', sideOpen), [sideOpen]);
@@ -582,7 +584,14 @@ export default function App() {
         {materialsOpen ? (
           <MaterialsPanel usage={materialUsage} />
         ) : piece ? (
-          <PieceViewer key={piece.id} piece={piece} highlight={highlight} onHoverPart={setHoverIndex} explode={explode} />
+          <PieceViewer
+            key={piece.id}
+            piece={piece}
+            highlight={highlight}
+            onHoverPart={setHoverIndex}
+            explode={explode}
+            hideAppliances={hideAppliances}
+          />
         ) : (
           <Viewer
             apartment={apartment}
@@ -630,6 +639,15 @@ export default function App() {
             <button disabled={explode === 0} onClick={() => setExplode(0)}>
               assemble
             </button>
+            {piece.parts?.some((p) => p.appliance) && (
+              <button
+                className={hideAppliances ? 'on' : ''}
+                title="Hide bought appliances (oven, sink, hob...) to see the carcass they drop into"
+                onClick={() => setHideAppliances((v) => !v)}
+              >
+                {hideAppliances ? 'show appliances' : 'hide appliances'}
+              </button>
+            )}
           </div>
         )}
 

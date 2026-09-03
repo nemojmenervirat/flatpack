@@ -1736,7 +1736,7 @@ export default function Viewer({
 // highlight = Set of part indices to light up (driven by the parts table);
 // onHoverPart reports the hovered part index back so the table can follow.
 // Remount (key it by piece id) when the piece changes so the camera reframes.
-export function PieceViewer({ piece, highlight, onHoverPart, explode = 0 }) {
+export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAppliances = false }) {
   const parts = piece.parts?.length
     ? piece.parts
     : [{ name: piece.name, pos: [0, 0, 0], size: piece.size, color: piece.color || '#8a93a6' }];
@@ -1756,6 +1756,10 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0 }) {
   };
   const isFlap = (p) => p.name.startsWith('flap');
   const isPullout = (p) => p.name.startsWith('pullout');
+  // "Hide appliances" strips parts flagged appliance (oven, sink, hob...) so the
+  // carcass they drop into can be inspected. Indices stay those of piece.parts
+  // so table hover/highlight keep lining up.
+  const hidden = (p) => hideAppliances && p.appliance;
   const { groups: drawers, consumed } = useMemo(() => drawerGroups(parts), [parts]);
   const { groups: doors, consumed: onDoors } = useMemo(() => doorGroups(parts), [parts]);
 
@@ -1785,6 +1789,7 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0 }) {
       {explode > 0 &&
         parts.map((p, i) => {
           // scattered: every part on its own, no drawer/door grouping or animation
+          if (hidden(p)) return null;
           const off = explodeOffset(p);
           return (
             <group
@@ -1809,11 +1814,12 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0 }) {
       {explode === 0 &&
         parts.map((p, i) => {
         if (consumed.has(i) || onDoors.has(i)) return null; // rendered inside its Drawer/Door
+        if (hidden(p)) return null;
         const lit = hover === i || highlight?.has(i);
         if (drawers.has(i)) {
           return (
             <Drawer key={i} pullMm={drawerPull(parts, drawers.get(i))}>
-              {[i, ...drawers.get(i)].map((pi) => (
+              {[i, ...drawers.get(i)].filter((pi) => !hidden(parts[pi])).map((pi) => (
                 <group
                   key={pi}
                   onPointerOver={(e) => {
@@ -1845,7 +1851,7 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0 }) {
             {doors.has(i) ? (
               <Door
                 part={p}
-                attachments={doors.get(i).map((ai) => parts[ai])}
+                attachments={doors.get(i).map((ai) => parts[ai]).filter((a) => !hidden(a))}
                 color={partColor(p, piece)}
                 bbox={bb}
                 hovered={lit}
