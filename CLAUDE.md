@@ -16,7 +16,9 @@ view is read-only.** When he asks for a new piece or a change, edit the JSON.
   All boxes stay axis-aligned; all placement math is AABB min/max arithmetic in
   `geometry.js`. Don't introduce arbitrary angles without a plan.
 - Piece "front" (doors/drawer fronts) faces **−y** locally. Fronts sit at negative y
-  (they overlay the carcass).
+  (they overlay the carcass). A door/flap in a combined piece whose run faces another
+  way sets `"face": "+x" | "-x" | "+y"` (`frontFrame()` in geometry.js); a door may pin
+  its swing with `"hinge": "left" | "right"` (seen from the front). Drawers are −y only.
 - Part thickness = smallest dimension; the other two are the cut size (`cutlist.js`).
 
 ## Files

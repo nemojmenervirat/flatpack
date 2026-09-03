@@ -68,7 +68,7 @@ thickness, click a decor for its full price table and a link to the supplier.
 A piece or a part can then name a decor instead of inventing a hex:
 
 ```json
-{ "id": "kitchen-north", "material": "U708 ST9 · Svijetlo siva",
+{ "id": "kitchen", "material": "U708 ST9 · Svijetlo siva",
   "parts": [ { "name": "door sink", "material": "6029 OW", ... } ] }
 ```
 

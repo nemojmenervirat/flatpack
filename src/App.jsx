@@ -8,6 +8,7 @@ import apartment from './data/apartment.json';
 import rooms from './data/rooms.json';
 import scene from './data/scene.json';
 import wardrobeHall from './data/wardrobe-hall.json';
+import kitchen from './data/kitchen.json';
 import bed90 from './data/bed-90.json';
 import bed180 from './data/bed-180.json';
 import wardrobeMaster1 from './data/wardrobe-master-1.json';
@@ -25,11 +26,6 @@ import washer from './data/washer.json';
 import dryer from './data/dryer.json';
 import waterHeater from './data/water-heater.json';
 import eloBlock from './data/eloblock.json';
-import kitchenWest from './data/kitchen-west.json';
-import kitchenNorth from './data/kitchen-north.json';
-import kitchenUpperWest from './data/kitchen-upper-west.json';
-import kitchenUpperNorth from './data/kitchen-upper-north.json';
-import kitchenUpperFridge from './data/kitchen-upper-fridge.json';
 import fridge from './data/fridge.json';
 import sofaCorner from './data/sofa-corner.json';
 import deskLiving from './data/desk-living.json';
@@ -60,11 +56,7 @@ const piecesById = {
   [dryer.id]: dryer,
   [waterHeater.id]: waterHeater,
   [eloBlock.id]: eloBlock,
-  [kitchenWest.id]: kitchenWest,
-  [kitchenNorth.id]: kitchenNorth,
-  [kitchenUpperWest.id]: kitchenUpperWest,
-  [kitchenUpperNorth.id]: kitchenUpperNorth,
-  [kitchenUpperFridge.id]: kitchenUpperFridge,
+  [kitchen.id]: kitchen,
   [fridge.id]: fridge,
   [sofaCorner.id]: sofaCorner,
   [deskLiving.id]: deskLiving,
@@ -401,6 +393,7 @@ function PiecePanel({ piece, hoverIndex, onHoverRow }) {
               </li>
             ))}
             {hw.hingesTotal > 0 && <li className="muted">hinges total: {hw.hingesTotal}</li>}
+            {hw.handles > 0 && <li>{hw.handles} × handle — one per door</li>}
             {hw.drawers > 0 && (
               <li>
                 {hw.drawers} × drawer slide pair{hw.drawers > 1 ? 's' : ''}

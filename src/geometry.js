@@ -42,6 +42,49 @@ export function placeBox(local, placement) {
   };
 }
 
+// Frame of a door / flap front. Fronts face local -y by default; a part may set
+// "face": "+x" | "-x" | "+y" for a side-facing front (an L-shaped kitchen has
+// runs whose fronts open toward different walls). Everything downstream works
+// in the front's canonical frame - facing -y, width along x, origin at the left
+// end (seen from the front) of the back plane - and turns it by `alpha` (CCW
+// degrees) about `origin` to land in piece space:
+//   w, t, h, z0   width along the face, thickness, height, bottom z
+//   hingeLeft     explicit "hinge": "left" | "right" (seen from the front) wins,
+//                 else the edge farther from the piece bbox centre
+//   toLocal(box)  a piece-local AABB expressed in the canonical frame
+export const FACE_ANGLE = { '-y': 0, '+x': 90, '+y': 180, '-x': 270 };
+export function frontFrame(part, bbox) {
+  const face = FACE_ANGLE[part.face] !== undefined ? part.face : '-y';
+  const alpha = FACE_ANGLE[face];
+  const [p0, p1, z0] = part.pos;
+  const [s0, s1, h] = part.size;
+  const sideways = alpha === 90 || alpha === 270;
+  const w = sideways ? s1 : s0;
+  const t = sideways ? s0 : s1;
+  const origin = {
+    '-y': [p0, p1 + s1],
+    '+x': [p0, p1],
+    '+y': [p0 + s0, p1],
+    '-x': [p0 + s0, p1 + s1],
+  }[face];
+  const toLocalPt = ([x, y]) => rotXY([x - origin[0], y - origin[1]], -alpha);
+  const toLocal = (box) => {
+    const a = toLocalPt(box.min);
+    const b = toLocalPt(box.max);
+    return {
+      min: [Math.min(a[0], b[0]), Math.min(a[1], b[1]), box.min[2]],
+      max: [Math.max(a[0], b[0]), Math.max(a[1], b[1]), box.max[2]],
+    };
+  };
+  let hingeLeft = true;
+  if (part.hinge) hingeLeft = part.hinge === 'left';
+  else if (bbox) {
+    const c = toLocalPt([(bbox.min[0] + bbox.max[0]) / 2, (bbox.min[1] + bbox.max[1]) / 2]);
+    hingeLeft = w / 2 < c[0];
+  }
+  return { face, alpha, origin, w, t, h, z0, hingeLeft, toLocal, toLocalPt };
+}
+
 // Local bounding box of a piece: union of its parts, or its plain size.
 export function pieceLocalBBox(piece) {
   if (piece.parts && piece.parts.length) {
@@ -56,11 +99,17 @@ export function pieceLocalBBox(piece) {
 
 // Clearance zones as piece-local boxes adjacent to the bbox.
 // "front" is the -y side (where drawer fronts / doors face), "back" is +y,
-// "left" is -x, "right" is +x. Values are mm of free space required.
+// "left" is -x, "right" is +x. Values are mm of free space required. A piece
+// whose fronts don't all share one bbox side (an L-shaped kitchen) lists
+// explicit boxes instead: "zones": [{ "name", "pos", "size" }] in local mm.
 export function clearanceLocalBoxes(piece) {
   const c = piece.clearance || {};
   const bb = pieceLocalBBox(piece);
   const out = [];
+  for (const z of c.zones || []) {
+    const b = aabbOf(z.pos, z.size);
+    out.push({ side: z.name || 'zone', min: b.min, max: b.max });
+  }
   if (c.front)
     out.push({
       side: 'front',

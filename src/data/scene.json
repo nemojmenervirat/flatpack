@@ -209,21 +209,11 @@
       "rot": 0
     },
     {
-      "piece": "kitchen-west",
-      "label": "Kitchen base west - oven + stove",
+      "piece": "kitchen",
+      "label": "Kitchen",
       "pos": [
-        780,
+        198,
         5149,
-        0
-      ],
-      "rot": 90
-    },
-    {
-      "piece": "kitchen-north",
-      "label": "Kitchen base north - sink + dishwasher",
-      "pos": [
-        494,
-        6667,
         0
       ],
       "rot": 0
@@ -244,36 +234,6 @@
       "pos": [
         5158,
         6619,
-        0
-      ],
-      "rot": 0
-    },
-    {
-      "piece": "kitchen-upper-west",
-      "label": "Kitchen uppers west - hood",
-      "pos": [
-        530,
-        5149,
-        0
-      ],
-      "rot": 90
-    },
-    {
-      "piece": "kitchen-upper-north",
-      "label": "Kitchen uppers north",
-      "pos": [
-        494,
-        6917,
-        0
-      ],
-      "rot": 0
-    },
-    {
-      "piece": "kitchen-upper-fridge",
-      "label": "Kitchen uppers - over fridges",
-      "pos": [
-        4494,
-        6667,
         0
       ],
       "rot": 0

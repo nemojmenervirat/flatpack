@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState } from 
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, OrthographicCamera, Html, Edges } from '@react-three/drei';
 import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, Path, ExtrudeGeometry } from 'three';
-import { aabbOf, pieceLocalBBox, walkMove } from './geometry.js';
+import { aabbOf, pieceLocalBBox, walkMove, frontFrame } from './geometry.js';
 import { partColor } from './materials.js';
 
 // Glow added to a part while it is hovered in the 3D view or in the parts
@@ -863,13 +863,17 @@ function doorCasingParts(horiz, away, w, h, wall, architrave = true) {
 
 // A clickable door: pivots on a vertical hinge at its outer edge (the edge
 // farther from the piece's center) and swings open/closed with damping.
-// attachments = parts riding on the door (bins, inner liner) that swing along.
-function Door({ part, attachments = [], color, pieceCenterX, hovered }) {
+// A clickable hinged door leaf. Fronts face local -y by default; a side-facing
+// leaf ("face": "+x" etc.) is built in its canonical frame (frontFrame: facing
+// -y, width along x, origin at the left end of the back plane) and the outer
+// group turns the whole thing into place. attachments = parts riding on the
+// door (bins, inner liner) that swing along.
+function Door({ part, attachments = [], color, bbox, hovered }) {
   const [open, setOpen] = useState(false);
   const ref = useRef();
-  const hingeLeft = part.pos[0] + part.size[0] / 2 < pieceCenterX;
-  const hx = hingeLeft ? part.pos[0] : part.pos[0] + part.size[0];
-  const hy = part.pos[1] + part.size[1]; // door's back plane = carcass front
+  const f = useMemo(() => frontFrame(part, bbox), [part, bbox]);
+  const { w, t, h, z0, hingeLeft, alpha, origin } = f;
+  const hx = hingeLeft ? 0 : w; // hinge edge in the canonical frame (back plane is y = 0)
   const target = open ? (hingeLeft ? -1 : 1) * MathUtils.degToRad(90) : 0;
 
   useFrame((_, dt) => {
@@ -878,7 +882,16 @@ function Door({ part, attachments = [], color, pieceCenterX, hovered }) {
     }
   });
 
-  const shift = (p) => ({ ...p, pos: [p.pos[0] - hx, p.pos[1] - hy, p.pos[2]] });
+  // Canonical leaf and riders, shifted so the hinge edge sits at the origin.
+  const leaf = { ...part, pos: [-hx, -t, z0], size: [w, t, h] };
+  const riders = attachments.map((a) => {
+    const lb = f.toLocal(aabbOf(a.pos, a.size));
+    return {
+      ...a,
+      pos: [lb.min[0] - hx, lb.min[1], lb.min[2]],
+      size: [lb.max[0] - lb.min[0], lb.max[1] - lb.min[1], lb.max[2] - lb.min[2]],
+    };
+  });
   const handlers = {
     onClick: (e) => {
       e.stopPropagation();
@@ -892,66 +905,64 @@ function Door({ part, attachments = [], color, pieceCenterX, hovered }) {
   // floor where the leaf allows, else clamped toward the reachable edge (base
   // doors get it near their top, wall/upper doors near their bottom).
   const handle = useMemo(() => {
-    const w = part.size[0];
-    const h = part.size[2];
-    const zBot = part.pos[2];
-    const zTop = zBot + h;
-    const zc =
-      h < 320 ? zBot + h / 2 : Math.min(Math.max(1050, zBot + 120), zTop - 120);
+    const zTop = z0 + h;
+    const zc = h < 320 ? z0 + h / 2 : Math.min(Math.max(1050, z0 + 120), zTop - 120);
     const len = Math.min(160, h - 60);
     return {
       name: 'handle',
-      pos: [hingeLeft ? w - 47 : -w + 35, -48, zc - len / 2],
+      pos: [hingeLeft ? w - 47 : -w + 35, -(t + 30), zc - len / 2],
       size: [12, 30, len],
       metal: true,
     };
-  }, [part, hingeLeft]);
+  }, [w, t, h, z0, hingeLeft]);
 
   // Euro hinges on the hinge edge: cup + arm as one metal block on the door's
   // inner face (protrudes into the carcass when closed, swings with the leaf).
   // Count scales with leaf height; centers 100mm in from top and bottom.
   const hinges = useMemo(() => {
-    const h = part.size[2];
     const n = h < 900 ? 2 : h < 1600 ? 3 : h < 2100 ? 4 : 5;
     return Array.from({ length: n }, (_, i) => {
       const zc = n === 1 ? h / 2 : 100 + ((h - 200) * i) / (n - 1);
       return {
         name: 'hinge',
-        pos: [hingeLeft ? 4 : -59, 0, part.pos[2] + zc - 25],
+        pos: [hingeLeft ? 4 : -59, 0, z0 + zc - 25],
         size: [55, 14, 50],
         metal: true,
       };
     });
-  }, [part, hingeLeft]);
+  }, [h, z0, hingeLeft]);
 
   return (
-    <group ref={ref} position={[hx * S, 0, -hy * S]}>
-      <LocalBox part={shift(part)} color={color} hovered={hovered} {...handlers} />
-      {hinges.map((hp, i) => (
-        <LocalBox key={`h${i}`} part={hp} color="#9aa0a8" hovered={hovered} {...handlers} />
-      ))}
-      <LocalBox part={handle} color="#9aa0a8" hovered={hovered} {...handlers} />
-      {attachments.map((a, i) => (
-        <LocalBox
-          key={i}
-          part={shift(a)}
-          color={a.color || color}
-          opacity={a.opacity ?? 1}
-          hovered={hovered}
-          {...handlers}
-        />
-      ))}
+    <group position={[origin[0] * S, 0, -origin[1] * S]} rotation={[0, MathUtils.degToRad(alpha), 0]}>
+      <group ref={ref} position={[hx * S, 0, 0]}>
+        <LocalBox part={leaf} color={color} hovered={hovered} {...handlers} />
+        {hinges.map((hp, i) => (
+          <LocalBox key={`h${i}`} part={hp} color="#9aa0a8" hovered={hovered} {...handlers} />
+        ))}
+        <LocalBox part={handle} color="#9aa0a8" hovered={hovered} {...handlers} />
+        {riders.map((a, i) => (
+          <LocalBox
+            key={i}
+            part={a}
+            color={a.color || color}
+            opacity={a.opacity ?? 1}
+            hovered={hovered}
+            {...handlers}
+          />
+        ))}
+      </group>
     </group>
   );
 }
 
 // A clickable bottom-hinged flap (dishwasher / oven front): pivots on its
 // bottom edge at the carcass front plane and tilts forward to horizontal.
+// Same canonical-frame treatment as Door, so a side-facing flap works too.
 function Flap({ part, color, hovered }) {
   const [open, setOpen] = useState(false);
   const ref = useRef();
-  const hy = part.pos[1] + part.size[1]; // back plane = carcass front
-  const hz = part.pos[2]; // bottom edge
+  const f = useMemo(() => frontFrame(part), [part]);
+  const { w, t, h, z0, alpha, origin } = f;
   const target = open ? MathUtils.degToRad(88) : 0;
 
   useFrame((_, dt) => {
@@ -960,20 +971,22 @@ function Flap({ part, color, hovered }) {
     }
   });
 
-  const shifted = { ...part, pos: [part.pos[0], part.pos[1] - hy, part.pos[2] - hz] };
+  const shifted = { ...part, pos: [0, -t, 0], size: [w, t, h] };
   return (
-    <group ref={ref} position={[0, hz * S, -hy * S]}>
-      <LocalBox
-        part={shifted}
-        color={color}
-        hovered={hovered}
-        onClick={(e) => {
-          e.stopPropagation();
-          setOpen((o) => !o);
-        }}
-        onPointerOver={(e) => (document.body.style.cursor = 'pointer')}
-        onPointerOut={() => (document.body.style.cursor = 'auto')}
-      />
+    <group position={[origin[0] * S, 0, -origin[1] * S]} rotation={[0, MathUtils.degToRad(alpha), 0]}>
+      <group ref={ref} position={[0, z0 * S, 0]}>
+        <LocalBox
+          part={shifted}
+          color={color}
+          hovered={hovered}
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpen((o) => !o);
+          }}
+          onPointerOver={(e) => (document.body.style.cursor = 'pointer')}
+          onPointerOut={() => (document.body.style.cursor = 'auto')}
+        />
+      </group>
     </group>
   );
 }
@@ -1038,9 +1051,8 @@ const drawerPull = (parts, members) =>
 // Group door-mounted parts for animation, mirroring drawerGroups: parts named
 // 'door bin *' (bins, inner door liners) attach to the door leaf (any other
 // part named 'door*') whose x/z span contains their center, and swing with it.
-// Riders: door bins and handles sit on a leaf (by centre) and swing with it.
 function doorGroups(parts) {
-  const isBin = (p) => p.name.startsWith('door bin') || p.name.startsWith('handle');
+  const isBin = (p) => p.name.startsWith('door bin');
   const isLeaf = (p) => p.name.startsWith('door') && !isBin(p);
   const leafIdx = parts.map((p, i) => (isLeaf(p) ? i : -1)).filter((i) => i >= 0);
   const groups = new Map(leafIdx.map((i) => [i, []]));
@@ -1181,7 +1193,7 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
                 part={p}
                 attachments={doors.get(i).map((ai) => parts[ai])}
                 color={partColor(p, piece)}
-                pieceCenterX={centerX}
+                bbox={bb}
                 hovered={hovered}
               />
             );
@@ -1835,7 +1847,7 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0 }) {
                 part={p}
                 attachments={doors.get(i).map((ai) => parts[ai])}
                 color={partColor(p, piece)}
-                pieceCenterX={centerX}
+                bbox={bb}
                 hovered={lit}
               />
             ) : isFlap(p) ? (

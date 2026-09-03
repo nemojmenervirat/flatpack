@@ -5,7 +5,7 @@
 // parts by convention (fronts face -y, thickness = smallest dimension, parts
 // named door* are hinged doors, drawer bottoms mark drawer boxes, ...).
 
-import { pieceLocalBBox } from './geometry.js';
+import { pieceLocalBBox, frontFrame } from './geometry.js';
 import { findMaterial, cuttingRate, tapeSpec, bandingRate } from './materials.js';
 import hardwareCatalogue from './data/hardware.json';
 
@@ -69,14 +69,12 @@ const hingesPerDoor = (h) => (h <= 900 ? 2 : h <= 1600 ? 3 : h <= 2100 ? 4 : 5);
 export function hardwareList(piece) {
   const parts = piece.parts || [];
   const bb = pieceLocalBBox(piece);
-  const centerX = (bb.min[0] + bb.max[0]) / 2;
 
   const hingeGroups = new Map();
   for (const p of parts) {
-    if (!p.name.startsWith('door')) continue;
-    const w = p.size[0];
-    const h = p.size[2];
-    const side = p.pos[0] + w / 2 < centerX ? 'left' : 'right';
+    if (!p.name.startsWith('door') || p.name.startsWith('door bin')) continue;
+    const { w, h, hingeLeft } = frontFrame(p, bb);
+    const side = hingeLeft ? 'left' : 'right';
     const key = `${w}x${h}|${side}`;
     const row =
       hingeGroups.get(key) || { doorW: w, doorH: h, side, doors: 0, perDoor: hingesPerDoor(h) };
@@ -85,6 +83,7 @@ export function hardwareList(piece) {
   }
   const hinges = [...hingeGroups.values()];
   const hingesTotal = hinges.reduce((n, g) => n + g.doors * g.perDoor, 0);
+  const handles = hinges.reduce((n, g) => n + g.doors, 0); // one bar handle per leaf (the viewer draws it)
 
   const bottoms = parts.filter((p) => p.name === 'drawer bottom');
   const drawers = bottoms.length || parts.filter((p) => p.name.startsWith('drawer front')).length;
@@ -120,6 +119,7 @@ export function hardwareList(piece) {
   return {
     hinges,
     hingesTotal,
+    handles,
     drawers,
     slideBoxDepth,
     shelves,
@@ -232,6 +232,7 @@ export function priceEstimate(piece) {
     hardware.set(name, { name, qty, product: item?.product || null, price: item?.price ?? null });
   };
   derived('hinge', hw.hingesTotal);
+  derived('handle', hw.handles);
   derived('drawer slide pair', hw.drawers);
   derived('shelf support', hw.shelfPins);
   if (![...hardware.keys()].some((k) => k.includes('hook'))) derived('coat hook', hw.hooks);

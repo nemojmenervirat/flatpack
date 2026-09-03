@@ -4,7 +4,7 @@
 //
 // A piece or a part can name a decor instead of inventing a colour:
 //
-//   { "id": "kitchen-north", "material": "U708 ST9 · Svijetlo siva", ... }
+//   { "id": "kitchen", "material": "U708 ST9 · Svijetlo siva", ... }
 //   { "name": "door sink", "material": "6029 OW", ... }
 //
 // Resolution order for a part is explicit colour, then the part's material,
