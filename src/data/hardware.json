@@ -10,6 +10,26 @@
       "product": "cabinet hinge, approx.",
       "price": 3.0,
       "note": "rough price per hinge; count is derived per door height in hardware.js"
+    },
+    "shelf support": {
+      "product": "shelf support pins, 3 KM per 100",
+      "price": 0.03,
+      "note": "3 KM per pack of 100, so 0.03 per pin; 4 per shelf"
+    },
+    "drawer slide pair": {
+      "product": "Klizač za ladicu 450mm 35mm, 2 per drawer",
+      "price": 17.0,
+      "note": "roller slide, 450 mm long, 35 mm high; 8.50 KM per piece, a drawer needs two"
+    },
+    "runner": {
+      "product": "Klizač za ladicu 450mm 35mm",
+      "price": 8.5,
+      "note": "8.50 KM per piece; modelled runners are one part per side"
+    },
+    "handle": {
+      "product": "door / drawer bar handle",
+      "price": 9.0,
+      "note": "9 KM per piece; modelled as hardware parts named handle"
     }
   }
 }

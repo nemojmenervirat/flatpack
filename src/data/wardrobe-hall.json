@@ -798,8 +798,8 @@
       ],
       "size": [
         13,
-        500,
-        45
+        450,
+        35
       ],
       "color": "#9aa0a6",
       "hardware": true
@@ -813,8 +813,8 @@
       ],
       "size": [
         13,
-        500,
-        45
+        450,
+        35
       ],
       "color": "#9aa0a6",
       "hardware": true
@@ -842,8 +842,8 @@
       ],
       "size": [
         13,
-        500,
-        45
+        450,
+        35
       ],
       "color": "#9aa0a6",
       "hardware": true
@@ -857,8 +857,8 @@
       ],
       "size": [
         13,
-        500,
-        45
+        450,
+        35
       ],
       "color": "#9aa0a6",
       "hardware": true
@@ -886,8 +886,8 @@
       ],
       "size": [
         13,
-        500,
-        45
+        450,
+        35
       ],
       "color": "#9aa0a6",
       "hardware": true
@@ -901,8 +901,8 @@
       ],
       "size": [
         13,
-        500,
-        45
+        450,
+        35
       ],
       "color": "#9aa0a6",
       "hardware": true
@@ -930,8 +930,8 @@
       ],
       "size": [
         13,
-        500,
-        45
+        450,
+        35
       ],
       "color": "#9aa0a6",
       "hardware": true
@@ -945,8 +945,8 @@
       ],
       "size": [
         13,
-        500,
-        45
+        450,
+        35
       ],
       "color": "#9aa0a6",
       "hardware": true
@@ -974,8 +974,8 @@
       ],
       "size": [
         13,
-        500,
-        45
+        450,
+        35
       ],
       "color": "#9aa0a6",
       "hardware": true
@@ -989,8 +989,8 @@
       ],
       "size": [
         13,
-        500,
-        45
+        450,
+        35
       ],
       "color": "#9aa0a6",
       "hardware": true
@@ -1018,8 +1018,8 @@
       ],
       "size": [
         13,
-        500,
-        45
+        450,
+        35
       ],
       "color": "#9aa0a6",
       "hardware": true
@@ -1033,8 +1033,8 @@
       ],
       "size": [
         13,
-        500,
-        45
+        450,
+        35
       ],
       "color": "#9aa0a6",
       "hardware": true
@@ -1206,6 +1206,102 @@
         594
       ],
       "material": "U156 ST9"
+    },
+    {
+      "name": "handle",
+      "pos": [
+        496,
+        -50,
+        920
+      ],
+      "size": [
+        12,
+        32,
+        160
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "handle",
+      "pos": [
+        591,
+        -50,
+        920
+      ],
+      "size": [
+        12,
+        32,
+        160
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "handle",
+      "pos": [
+        1139,
+        -50,
+        920
+      ],
+      "size": [
+        12,
+        32,
+        160
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "handle",
+      "pos": [
+        496,
+        -50,
+        1963
+      ],
+      "size": [
+        12,
+        32,
+        160
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "handle",
+      "pos": [
+        591,
+        -50,
+        1963
+      ],
+      "size": [
+        12,
+        32,
+        160
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "handle",
+      "pos": [
+        1139,
+        -50,
+        1963
+      ],
+      "size": [
+        12,
+        32,
+        160
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
     }
   ]
 }

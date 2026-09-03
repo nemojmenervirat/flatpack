@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import MaterialsPanel from './MaterialsPanel.jsx';
 import Viewer, { PieceViewer } from './Viewer.jsx';
 import { fitReport, pieceLocalBBox, placeBox } from './geometry.js';
@@ -313,7 +313,8 @@ const lsSet = (key, value) => {
 const m = (mm) => (mm >= 1000 ? `${(mm / 1000).toFixed(2)} m` : `${mm} mm`);
 
 const bandingText = (b) =>
-  b.edges === 'none' ? '—' : b.edges === 'all' ? `all 4 edges, ${m(b.length)}` : `front edge, ${m(b.length)}`;
+  b.edges === 'none' ? '—' : b.edges === 'all' ? `all 4 · ${m(b.length)}` : `front · ${m(b.length)}`;
+const km = (v) => v.toFixed(2);
 
 // Bought pieces aren't cut from boards — the parts only model how the thing
 // looks. All that matters for shopping is the outer size and where it goes.
@@ -354,13 +355,13 @@ function PiecePanel({ piece, hoverIndex, onHoverRow }) {
 
       <section>
         <h2>Parts</h2>
-        <table>
+        <table className="parts">
           <thead>
             <tr>
               <th>Part</th>
-              <th>Cut (mm)</th>
-              <th>Thk</th>
-              <th>Qty</th>
+              <th className="num">Cut (mm)</th>
+              <th className="num">Thk</th>
+              <th className="num">Qty</th>
               <th>Edge band</th>
             </tr>
           </thead>
@@ -373,18 +374,20 @@ function PiecePanel({ piece, hoverIndex, onHoverRow }) {
                 onMouseLeave={() => onHoverRow(null)}
               >
                 <td>{r.name}</td>
-                <td>
+                <td className="num">
                   {r.length} × {r.width}
                 </td>
-                <td>{r.thickness}</td>
-                <td>{r.qty}</td>
-                <td>{bandingText(r.banding)}</td>
+                <td className="num">{r.thickness}</td>
+                <td className="num">{r.qty}</td>
+                <td className="nowrap">{bandingText(r.banding)}</td>
               </tr>
             ))}
           </tbody>
         </table>
-        <p className="muted">edge banding total: {m(bandTotal)}</p>
-        <button onClick={copyCsv}>Copy cut list CSV</button>
+        <div className="row-between">
+          <span className="muted">edge banding total: {m(bandTotal)}</span>
+          <button onClick={copyCsv}>Copy cut list CSV</button>
+        </div>
       </section>
 
       {(hw.hingesTotal > 0 || hw.drawers > 0 || hw.shelves > 0 || hw.rails.length > 0 || hw.hooks > 0 || hw.extras.length > 0) && (
@@ -427,82 +430,94 @@ function PiecePanel({ piece, hoverIndex, onHoverRow }) {
       {(price.boardRows.length > 0 || price.unpriced.length > 0) && (
         <section>
           <h2>Price estimate</h2>
-          <table>
+          <table className="price">
             <thead>
               <tr>
-                <th>Material</th>
-                <th>Thk</th>
-                <th>m²</th>
-                <th>KM/m²</th>
-                <th>KM</th>
+                <th>Item</th>
+                <th className="num">Qty</th>
+                <th className="num">Unit</th>
+                <th className="num">KM</th>
               </tr>
             </thead>
             <tbody>
-              {price.boardRows.map((r, i) => (
-                <tr key={i}>
-                  <td>{r.material}</td>
-                  <td>{r.thickness}</td>
-                  <td>{r.m2.toFixed(2)}</td>
-                  <td>{r.perM2.toFixed(2)}</td>
-                  <td>{r.cost.toFixed(2)}</td>
-                </tr>
-              ))}
-              {price.tapeRows.map((r, i) => (
-                <tr key={`t${i}`}>
-                  <td>{r.material} — tape</td>
-                  <td></td>
-                  <td>{r.meters.toFixed(1)} m</td>
-                  <td>{r.perM != null ? r.perM.toFixed(2) : '—'}</td>
-                  <td>{r.cost.toFixed(2)}</td>
-                </tr>
-              ))}
-              {price.serviceRows.map((r, i) => (
-                <tr key={`s${i}`}>
-                  <td>{r.name}</td>
-                  <td></td>
-                  <td>{r.meters.toFixed(1)} m</td>
-                  <td>{r.perM.toFixed(2)}</td>
-                  <td>{r.cost.toFixed(2)}</td>
-                </tr>
-              ))}
-              {price.hardware
-                .filter((h) => h.cost != null)
-                .map((h, i) => (
-                  <tr key={`h${i}`}>
-                    <td>
-                      {h.name} — {h.product}
-                    </td>
-                    <td></td>
-                    <td>{h.qty} pcs</td>
-                    <td>{h.price.toFixed(2)}</td>
-                    <td>{h.cost.toFixed(2)}</td>
-                  </tr>
+              {[
+                {
+                  label: 'Boards',
+                  rows: price.boardRows.map((r) => ({
+                    name: r.material || r.part,
+                    sub: r.material ? `${r.thickness} mm` : `${r.thickness} mm · ${r.reason}`,
+                    qty: `${r.m2.toFixed(2)} m²`,
+                    unit: r.perM2,
+                    cost: r.cost,
+                  })),
+                },
+                {
+                  label: 'Edge tape',
+                  rows: price.tapeRows.map((r) => ({ name: r.material, qty: `${r.meters.toFixed(1)} m`, unit: r.perM, cost: r.cost })),
+                },
+                {
+                  label: 'Cutting',
+                  rows: price.serviceRows
+                    .filter((r) => r.kind === 'cutting')
+                    .map((r) => ({ name: r.name, qty: `${r.meters.toFixed(1)} m`, unit: r.perM, cost: r.cost })),
+                },
+                {
+                  label: 'Edge banding labour',
+                  rows: price.serviceRows
+                    .filter((r) => r.kind === 'banding')
+                    .map((r) => ({ name: r.name, qty: `${r.meters.toFixed(1)} m`, unit: r.perM, cost: r.cost })),
+                },
+                {
+                  label: 'Hardware',
+                  rows: price.hardware.map((h) => ({
+                    name: h.name,
+                    sub: h.product || (h.price == null ? 'no price yet' : null),
+                    qty: `${h.qty} pcs`,
+                    unit: h.price,
+                    cost: h.cost,
+                  })),
+                },
+              ]
+                .filter((g) => g.rows.length)
+                .map((g) => (
+                  <Fragment key={g.label}>
+                    <tr className="group">
+                      <td colSpan={4}>{g.label}</td>
+                    </tr>
+                    {g.rows.map((r, i) => (
+                      <tr key={i} className={r.unit == null ? 'unpriced' : ''}>
+                        <td>
+                          {r.name}
+                          {r.sub && <span className="sub"> · {r.sub}</span>}
+                        </td>
+                        <td className="num">{r.qty}</td>
+                        <td className="num">{r.unit != null ? km(r.unit) : '—'}</td>
+                        <td className="num">{km(r.cost)}</td>
+                      </tr>
+                    ))}
+                  </Fragment>
                 ))}
             </tbody>
           </table>
-          <p className="size-line">
-            materials {price.materialsTotal.toFixed(0)} KM + services {price.servicesTotal.toFixed(0)} KM
-            {price.hardwareTotal > 0 && <> + hardware {price.hardwareTotal.toFixed(0)} KM</>} = {price.total.toFixed(0)} KM
-            <span className="muted-inline">
-              {' '}· with ~15% board offcut waste: {(price.total + 0.15 * price.boardsTotal).toFixed(0)} KM
-            </span>
-          </p>
-          {price.unpriced.length > 0 && (
-            <p className="muted">
-              not priced:{' '}
-              {price.unpriced.map((u) => `${u.qty} × ${u.name} (${u.reason})`).join(', ')}
-            </p>
+          <dl className="totals">
+            <dt>materials</dt>
+            <dd>{price.materialsTotal.toFixed(0)} KM</dd>
+            <dt>services</dt>
+            <dd>{price.servicesTotal.toFixed(0)} KM</dd>
+            {price.hardwareTotal > 0 && (
+              <>
+                <dt>hardware</dt>
+                <dd>{price.hardwareTotal.toFixed(0)} KM</dd>
+              </>
+            )}
+            <dt className="total">total</dt>
+            <dd className="total">{price.total.toFixed(0)} KM</dd>
+            <dt className="faint">with ~15% board offcut waste</dt>
+            <dd className="faint">{(price.total + 0.15 * price.boardsTotal).toFixed(0)} KM</dd>
+          </dl>
+          {(price.boardRows.some((r) => r.perM2 == null) || price.hardware.some((h) => h.price == null)) && (
+            <p className="muted">rows marked — have no price yet and count as 0</p>
           )}
-          {price.hardware.some((h) => h.cost == null) && (
-            <p className="muted">
-              bought separately, no price yet:{' '}
-              {price.hardware
-                .filter((h) => h.cost == null)
-                .map((h) => `${h.qty} × ${h.name}`)
-                .join(', ')}
-            </p>
-          )}
-          <p className="muted">drawer slides and shelf pins above are not priced yet</p>
         </section>
       )}
     </div>

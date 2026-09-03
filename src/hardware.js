@@ -165,7 +165,7 @@ export function priceEstimate(piece) {
 
     const cut = cuttingRate(mat, T);
     if (cut) {
-      const row = cutting.get(cut.key) || { name: `cutting — ${cut.label.replace(/^Usluga rezanja\s*/, '')}`, meters: 0, perM: cut.price };
+      const row = cutting.get(cut.key) || { kind: 'cutting', name: cut.label.replace(/^Usluga rezanja\s*/, ''), meters: 0, perM: cut.price };
       row.meters += (2 * (L + W)) / 1000;
       cutting.set(cut.key, row);
     }
@@ -174,15 +174,17 @@ export function priceEstimate(piece) {
     const rawHdf = !decorPrice && T <= 6;
     const perM2 = decorPrice ?? (rawHdf ? HDF_PER_M2 : null);
     if (!perM2) {
-      const key = `${p.name}|${L}x${W}x${T}`;
-      const row = unpriced.get(key) || {
-        name: p.name,
-        cut: `${L} × ${W} × ${T}`,
-        qty: 0,
-        reason: mat ? `no ${T}mm price for ${mat.id}` : 'no material set',
-      };
-      row.qty += 1;
-      unpriced.set(key, row);
+      // Still a board row (area, thickness, 0 KM) so the estimate lists every
+      // part; the reason says what is missing.
+      const reason = mat ? `no ${T}mm price for ${mat.id}` : 'no material set';
+      const key = `?${p.name}|${T}|${reason}`;
+      const row = boards.get(key) || { material: null, part: p.name, thickness: T, m2: 0, perM2: null, reason };
+      row.m2 += (L * W) / 1e6;
+      boards.set(key, row);
+      const uk = `${p.name}|${L}x${W}x${T}`;
+      const u = unpriced.get(uk) || { name: p.name, cut: `${L} × ${W} × ${T}`, qty: 0, reason };
+      u.qty += 1;
+      unpriced.set(uk, u);
       continue;
     }
     const matId = rawHdf ? HDF_ID : mat.id;
@@ -200,7 +202,8 @@ export function priceEstimate(piece) {
     if (rate) {
       const k = `${rate.maxThickness}|${rate.tape}|${rate.glue}`;
       const r = bandLabour.get(k) || {
-        name: `banding labour — board ≤${rate.maxThickness} mm, ${rate.tape} mm ABS${rate.glue === 'laser' ? ' laser' : ''}`,
+        kind: 'banding',
+        name: `board ≤${rate.maxThickness} mm · ${rate.tape} mm ABS${rate.glue === 'laser' ? ' laser' : ''}`,
         meters: 0,
         perM: rate.price,
       };
@@ -209,7 +212,7 @@ export function priceEstimate(piece) {
     }
   }
 
-  const boardRows = [...boards.values()].map((r) => ({ ...r, cost: r.m2 * r.perM2 }));
+  const boardRows = [...boards.values()].map((r) => ({ ...r, cost: r.perM2 ? r.m2 * r.perM2 : 0 }));
   const tapeRows = [...tapes.entries()].map(([id, meters]) => {
     const tape = cheapestTape(findMaterial(id));
     const perM = tape ? tape[1] : null;
@@ -219,12 +222,22 @@ export function priceEstimate(piece) {
   const boardsTotal = boardRows.reduce((n, r) => n + r.cost, 0);
   const materialsTotal = boardsTotal + tapeRows.reduce((n, r) => n + r.cost, 0);
   const servicesTotal = serviceRows.reduce((n, r) => n + r.cost, 0);
-  // Derived hardware (hinges by door height) is priced from the catalogue too.
+  // Derived hardware (hinges by door height, slides per drawer, pins per
+  // shelf, hooks) is listed too, priced from the catalogue when it has an
+  // entry there. Hooks modelled as hardware parts are already in the map.
   const hw = hardwareList(piece);
-  const hinge = hardwareItem('hinge');
-  if (hw.hingesTotal > 0)
-    hardware.set('hinge', { name: 'hinge', qty: hw.hingesTotal, product: hinge?.product || null, price: hinge?.price ?? null });
-  const hardwareRows = [...hardware.values()].map((r) => ({ ...r, cost: r.price != null ? r.qty * r.price : null }));
+  const derived = (name, qty) => {
+    if (qty <= 0 || hardware.has(name)) return;
+    const item = hardwareItem(name);
+    hardware.set(name, { name, qty, product: item?.product || null, price: item?.price ?? null });
+  };
+  derived('hinge', hw.hingesTotal);
+  derived('drawer slide pair', hw.drawers);
+  derived('shelf support', hw.shelfPins);
+  if (![...hardware.keys()].some((k) => k.includes('hook'))) derived('coat hook', hw.hooks);
+  // Unpriced hardware still shows as a row at 0 KM (price stays null so the
+  // UI can mark it as missing).
+  const hardwareRows = [...hardware.values()].map((r) => ({ ...r, cost: r.price != null ? r.qty * r.price : 0 }));
   const hardwareTotal = hardwareRows.reduce((n, r) => n + (r.cost || 0), 0);
   return {
     boardRows,

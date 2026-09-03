@@ -5,6 +5,10 @@ import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shap
 import { aabbOf, pieceLocalBBox, walkMove } from './geometry.js';
 import { partColor } from './materials.js';
 
+// Glow added to a part while it is hovered in the 3D view or in the parts
+// table. Warm and bright enough to read on white boards under full light.
+const HOVER_EMISSIVE = '#b08a2e';
+
 // Wall paint: RAL 9001 Cream (sRGB approximation of the RAL Classic swatch).
 const WALL_PAINT = '#fdf4e3';
 
@@ -421,7 +425,7 @@ function Box({ box, color = '#c9a36b', opacity = 1, hovered = false, ...handlers
       <boxGeometry args={size} />
       <meshStandardMaterial
         color={color}
-        emissive={hovered ? '#4a4638' : '#000000'}
+        emissive={hovered ? HOVER_EMISSIVE : '#000000'}
         transparent={opacity < 1}
         opacity={opacity}
         depthWrite={opacity === 1}
@@ -577,7 +581,7 @@ function LocalRounded({ part, color, hovered, opacity = 1, ...handlers }) {
       <meshStandardMaterial
         map={part.fabric ? getFabricTexture(part.fabric) : null}
         color={color}
-        emissive={hovered ? '#4a4638' : '#000000'}
+        emissive={hovered ? HOVER_EMISSIVE : '#000000'}
         metalness={part.metal ? 0.5 : 0}
         roughness={part.metal ? 0.28 : 1}
         transparent={opacity < 1}
@@ -605,7 +609,7 @@ function LocalDisc({ part, color, hovered, opacity = 1, ...handlers }) {
       <cylinderGeometry args={[r, r, sy * S, 48]} />
       <meshStandardMaterial
         color={color}
-        emissive={hovered ? '#4a4638' : '#000000'}
+        emissive={hovered ? HOVER_EMISSIVE : '#000000'}
         metalness={part.metal ? 0.5 : 0}
         roughness={part.metal ? 0.28 : 1}
         transparent={opacity < 1}
@@ -641,7 +645,7 @@ function Leg({ part, color, hovered, ...handlers }) {
       {segs.map((sg, i) => (
         <mesh key={i} position={[cx, (z0 + sg.z + sg.dz / 2) * S, cz]}>
           <cylinderGeometry args={[sg.r * S, sg.r * S, sg.dz * S, 32]} />
-          <meshStandardMaterial color={color} emissive={hovered ? '#4a4638' : '#000000'} roughness={0.6} />
+          <meshStandardMaterial color={color} emissive={hovered ? HOVER_EMISSIVE : '#000000'} roughness={0.6} />
         </mesh>
       ))}
     </group>
@@ -672,7 +676,7 @@ function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
       <meshStandardMaterial
         map={part.fabric ? getFabricTexture(part.fabric) : null}
         color={color}
-        emissive={hovered ? '#4a4638' : '#000000'}
+        emissive={hovered ? HOVER_EMISSIVE : '#000000'}
         metalness={part.metal ? 0.5 : 0}
         roughness={part.metal ? 0.28 : 1}
         transparent={opacity < 1}
@@ -1034,8 +1038,9 @@ const drawerPull = (parts, members) =>
 // Group door-mounted parts for animation, mirroring drawerGroups: parts named
 // 'door bin *' (bins, inner door liners) attach to the door leaf (any other
 // part named 'door*') whose x/z span contains their center, and swing with it.
+// Riders: door bins and handles sit on a leaf (by centre) and swing with it.
 function doorGroups(parts) {
-  const isBin = (p) => p.name.startsWith('door bin');
+  const isBin = (p) => p.name.startsWith('door bin') || p.name.startsWith('handle');
   const isLeaf = (p) => p.name.startsWith('door') && !isBin(p);
   const leafIdx = parts.map((p, i) => (isLeaf(p) ? i : -1)).filter((i) => i >= 0);
   const groups = new Map(leafIdx.map((i) => [i, []]));
