@@ -150,6 +150,18 @@ export function priceEstimate(piece) {
   const hardware = new Map(); // name -> qty
   const cheapestTape = (mat) =>
     Object.entries(mat?.tape || {}).sort((a, b) => a[1] - b[1])[0] || null;
+  // Worktops are sold by the running metre in fixed depth x thickness formats
+  // (mat.worktop["600x38"]). A part named worktop* is priced by its length in
+  // the narrowest format at least as deep as the part, nearest thickness.
+  const worktopFormat = (mat, depth, T) => {
+    const keys = Object.keys(mat?.worktop || {})
+      .map((k) => k.split('x').map(Number))
+      .filter(([d]) => d >= depth)
+      .sort((a, b) => a[0] - b[0] || Math.abs(a[1] - T) - Math.abs(b[1] - T));
+    if (!keys.length) return null;
+    const [d, t] = keys[0];
+    return { depth: d, thickness: t, perM: mat.worktop[`${d}x${t}`] };
+  };
 
   for (const p of piece.parts || []) {
     if (p.appliance) continue;
@@ -162,14 +174,25 @@ export function priceEstimate(piece) {
       continue;
     }
     const mat = findMaterial(p.material || piece.material);
+    const isWorktop = p.name.startsWith('worktop');
+    const wt = isWorktop ? worktopFormat(mat, W, T) : null;
 
-    const cut = cuttingRate(mat, T);
+    const cut = cuttingRate(wt ? { ...mat, worktopSection: true } : mat, T);
     if (cut) {
       const row = cutting.get(cut.key) || { kind: 'cutting', name: cut.label.replace(/^Usluga rezanja\s*/, ''), meters: 0, perM: cut.price };
       row.meters += (2 * (L + W)) / 1000;
       cutting.set(cut.key, row);
     }
 
+    if (wt) {
+      // postformed worktop: priced per metre, finished front edge, no tape
+      const key = `${mat.id}|wt${wt.depth}x${wt.thickness}`;
+      const row =
+        boards.get(key) || { material: mat.id, thickness: wt.thickness, worktop: `${wt.depth} × ${wt.thickness} mm worktop`, meters: 0, perM: wt.perM };
+      row.meters += L / 1000;
+      boards.set(key, row);
+      continue;
+    }
     const decorPrice = mat?.panel?.[String(T)];
     const rawHdf = !decorPrice && T <= 6;
     const perM2 = decorPrice ?? (rawHdf ? HDF_PER_M2 : null);
@@ -212,7 +235,10 @@ export function priceEstimate(piece) {
     }
   }
 
-  const boardRows = [...boards.values()].map((r) => ({ ...r, cost: r.perM2 ? r.m2 * r.perM2 : 0 }));
+  const boardRows = [...boards.values()].map((r) => ({
+    ...r,
+    cost: r.worktop ? r.meters * r.perM : r.perM2 ? r.m2 * r.perM2 : 0,
+  }));
   const tapeRows = [...tapes.entries()].map(([id, meters]) => {
     const tape = cheapestTape(findMaterial(id));
     const perM = tape ? tape[1] : null;

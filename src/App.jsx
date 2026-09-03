@@ -436,13 +436,17 @@ function PiecePanel({ piece, hoverIndex, onHoverRow }) {
               {[
                 {
                   label: 'Boards',
-                  rows: price.boardRows.map((r) => ({
-                    name: r.material || r.part,
-                    sub: r.material ? `${r.thickness} mm` : `${r.thickness} mm · ${r.reason}`,
-                    qty: `${r.m2.toFixed(2)} m²`,
-                    unit: r.perM2,
-                    cost: r.cost,
-                  })),
+                  rows: price.boardRows.map((r) =>
+                    r.worktop
+                      ? { name: r.material, sub: r.worktop, qty: `${r.meters.toFixed(2)} m`, unit: r.perM, cost: r.cost }
+                      : {
+                          name: r.material || r.part,
+                          sub: r.material ? `${r.thickness} mm` : `${r.thickness} mm · ${r.reason}`,
+                          qty: `${r.m2.toFixed(2)} m²`,
+                          unit: r.perM2,
+                          cost: r.cost,
+                        }
+                  ),
                 },
                 {
                   label: 'Edge tape',
