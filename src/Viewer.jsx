@@ -991,16 +991,27 @@ function Flap({ part, color, hovered }) {
   );
 }
 
+// Drawer fronts face -y by default; like doors, a front in a combined piece
+// whose run faces another way sets "face". FACE_DIR is the pull direction in
+// data space (x, y); DRAWER_AXES picks the axis along the front's width and
+// the axis along the pull.
+const FACE_DIR = { '-y': [0, -1], '+x': [1, 0], '+y': [0, 1], '-x': [-1, 0] };
+const drawerFace = (p) => (FACE_DIR[p.face] ? p.face : '-y');
+const drawerAxes = (face) => (face === '+x' || face === '-x' ? { w: 1, pull: 0 } : { w: 0, pull: 1 });
+
 // A clickable drawer: the front and its box slide out along the front
-// direction (local -y, which is three.js +z inside the placement group).
-function Drawer({ pullMm, children }) {
+// direction (data-space FACE_DIR, converted to three.js: x -> x, y -> -z).
+function Drawer({ pullMm, face = '-y', children }) {
   const [open, setOpen] = useState(false);
   const ref = useRef();
+  const t = useRef(0);
   const target = open ? pullMm * S : 0;
+  const [dx, dy] = FACE_DIR[face] ?? FACE_DIR['-y'];
 
   useFrame((_, dt) => {
     if (ref.current) {
-      ref.current.position.z = MathUtils.damp(ref.current.position.z, target, 6, dt);
+      t.current = MathUtils.damp(t.current, target, 6, dt);
+      ref.current.position.set(dx * t.current, 0, -dy * t.current);
     }
   });
 
@@ -1021,8 +1032,9 @@ function Drawer({ pullMm, children }) {
 
 // Group drawer parts for animation: each 'drawer front' takes along the box
 // parts (drawer bottom / box sides / box front / box back) whose center falls
-// inside the front's x/z span. Returns the members per front index and the
-// set of member indices (so the normal render loop skips them).
+// inside the front's width/height span and lies behind it (on the carcass
+// side of the front, per its face). Returns the members per front index and
+// the set of member indices (so the normal render loop skips them).
 function drawerGroups(parts) {
   const isFront = (p) => p.name.startsWith('drawer front');
   const frontIdx = parts.map((p, i) => (isFront(p) ? i : -1)).filter((i) => i >= 0);
@@ -1030,11 +1042,16 @@ function drawerGroups(parts) {
   const consumed = new Set();
   parts.forEach((p, i) => {
     if (isFront(p) || !p.name.startsWith('drawer')) return;
-    const cx = p.pos[0] + p.size[0] / 2;
-    const cz = p.pos[2] + p.size[2] / 2;
+    const c = [0, 1, 2].map((a) => p.pos[a] + p.size[a] / 2);
     const f = frontIdx.find((fi) => {
       const fp = parts[fi];
-      return cx > fp.pos[0] && cx < fp.pos[0] + fp.size[0] && cz > fp.pos[2] && cz < fp.pos[2] + fp.size[2];
+      const face = drawerFace(fp);
+      const { w, pull } = drawerAxes(face);
+      const inWidth = c[w] > fp.pos[w] && c[w] < fp.pos[w] + fp.size[w];
+      const inHeight = c[2] > fp.pos[2] && c[2] < fp.pos[2] + fp.size[2];
+      const dir = FACE_DIR[face][pull];
+      const behind = dir > 0 ? c[pull] < fp.pos[pull] : c[pull] > fp.pos[pull] + fp.size[pull];
+      return inWidth && inHeight && behind;
     });
     if (f !== undefined) {
       groups.get(f).push(i);
@@ -1044,9 +1061,12 @@ function drawerGroups(parts) {
   return { groups, consumed };
 }
 
-// Pull-out distance: 80% of the box depth (falls back to 400mm front-only).
-const drawerPull = (parts, members) =>
-  Math.round(0.8 * Math.max(400, ...members.map((i) => parts[i].size[1])));
+// Pull-out distance: 80% of the box depth along the front's pull axis (falls
+// back to 400mm front-only).
+const drawerPull = (parts, front, members) => {
+  const { pull } = drawerAxes(drawerFace(front));
+  return Math.round(0.8 * Math.max(400, ...members.map((i) => parts[i].size[pull])));
+};
 
 // Group door-mounted parts for animation, mirroring drawerGroups: parts named
 // 'door bin *' (bins, inner door liners) attach to the door leaf (any other
@@ -1205,7 +1225,7 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
           }
           if (drawers.has(i)) {
             return (
-              <Drawer key={i} pullMm={drawerPull(parts, drawers.get(i))}>
+              <Drawer key={i} face={drawerFace(p)} pullMm={drawerPull(parts, p, drawers.get(i))}>
                 {[i, ...drawers.get(i)].map((pi) => (
                   <LocalBox
                     key={pi}
@@ -1220,7 +1240,7 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
           }
           if (isPullout(p)) {
             return (
-              <Drawer key={i} pullMm={Math.round(0.8 * p.size[1])}>
+              <Drawer key={i} face={drawerFace(p)} pullMm={Math.round(0.8 * p.size[drawerAxes(drawerFace(p)).pull])}>
                 <LocalBox part={p} color={partColor(p, piece)} opacity={p.opacity ?? 1} hovered={hovered} />
               </Drawer>
             );
@@ -1818,7 +1838,7 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAp
         const lit = hover === i || highlight?.has(i);
         if (drawers.has(i)) {
           return (
-            <Drawer key={i} pullMm={drawerPull(parts, drawers.get(i))}>
+            <Drawer key={i} face={drawerFace(p)} pullMm={drawerPull(parts, p, drawers.get(i))}>
               {[i, ...drawers.get(i)].filter((pi) => !hidden(parts[pi])).map((pi) => (
                 <group
                   key={pi}
@@ -1859,7 +1879,7 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAp
             ) : isFlap(p) ? (
               <Flap part={p} color={partColor(p, piece)} hovered={lit} />
             ) : isPullout(p) ? (
-              <Drawer pullMm={Math.round(0.8 * p.size[1])}>
+              <Drawer face={drawerFace(p)} pullMm={Math.round(0.8 * p.size[drawerAxes(drawerFace(p)).pull])}>
                 <LocalBox part={p} color={partColor(p, piece)} opacity={p.opacity ?? 1} hovered={lit} />
               </Drawer>
             ) : (

@@ -18,7 +18,9 @@ view is read-only.** When he asks for a new piece or a change, edit the JSON.
 - Piece "front" (doors/drawer fronts) faces **−y** locally. Fronts sit at negative y
   (they overlay the carcass). A door/flap in a combined piece whose run faces another
   way sets `"face": "+x" | "-x" | "+y"` (`frontFrame()` in geometry.js); a door may pin
-  its swing with `"hinge": "left" | "right"` (seen from the front). Drawers are −y only.
+  its swing with `"hinge": "left" | "right"` (seen from the front). A drawer front may
+  also set `"face"`; its box parts are grouped by the front's width/height span and must
+  sit behind it (`drawerGroups()` in Viewer.jsx), and it slides out along that face.
 - Part thickness = smallest dimension; the other two are the cut size (`cutlist.js`).
 
 ## Files
