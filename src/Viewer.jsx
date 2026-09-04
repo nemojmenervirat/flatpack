@@ -537,8 +537,52 @@ function roundedRect(Ctor, ox, oy, W, D, r) {
   return s;
 }
 
-// A part with "round" and/or "cutout" renders its footprint as a rounded
-// rectangle, extruded to the part's height. round: r (mm) rounds all four
+// Outline of a rectangle W x D (mm) minus one or more edge notches
+// [x0, y0, x1, y1] (part-local mm): the notches split the rectangle into a
+// grid of cells, the cells inside a notch are dropped, and the boundary of
+// what is left is traced (cell edges shared by two kept cells cancel out).
+// Returns a three.js Shape scaled by S. Notches must reach an edge - an
+// interior rectangle is a "cutout", not a notch.
+function notchedOutline(W, D, notches) {
+  const uniq = (vals, max) => [...new Set(vals.filter((v) => v > 0 && v < max))].concat([0, max]).sort((a, b) => a - b);
+  const xs = uniq(notches.flatMap((n) => [n[0], n[2]]), W);
+  const ys = uniq(notches.flatMap((n) => [n[1], n[3]]), D);
+  const inNotch = (cx, cy) => notches.some(([x0, y0, x1, y1]) => cx > x0 && cx < x1 && cy > y0 && cy < y1);
+  const edges = new Map(); // undirected key -> directed [from, to]
+  const addEdge = (p, q) => {
+    const k = [p, q].map((v) => v.join(',')).sort().join('|');
+    if (edges.has(k)) edges.delete(k); // shared by two kept cells: interior
+    else edges.set(k, [p, q]);
+  };
+  for (let i = 0; i + 1 < xs.length; i++)
+    for (let j = 0; j + 1 < ys.length; j++) {
+      const [x0, x1, y0, y1] = [xs[i], xs[i + 1], ys[j], ys[j + 1]];
+      if (inNotch((x0 + x1) / 2, (y0 + y1) / 2)) continue;
+      addEdge([x0, y0], [x1, y0]);
+      addEdge([x1, y0], [x1, y1]);
+      addEdge([x1, y1], [x0, y1]);
+      addEdge([x0, y1], [x0, y0]);
+    }
+  const byStart = new Map([...edges.values()].map(([p, q]) => [p.join(','), q]));
+  const first = edges.values().next().value;
+  const s = new Shape();
+  if (!first) return s;
+  let p = first[0];
+  s.moveTo(p[0] * S, p[1] * S);
+  for (let n = 0; n < byStart.size; n++) {
+    const q = byStart.get(p.join(','));
+    if (!q || (q[0] === first[0][0] && q[1] === first[0][1])) break;
+    s.lineTo(q[0] * S, q[1] * S);
+    p = q;
+  }
+  return s;
+}
+
+// A part with "round", "cutout" and/or "notch" renders its footprint as a
+// rounded / notched rectangle, extruded to the part's height. notch: [x0, y0,
+// x1, y1] (or a list of them) in PIECE-local mm, like cutout, removes that
+// rectangle from the part's edge - an L-shaped worktop is still one cut part.
+// round is ignored when a notch is present. round: r (mm) rounds all four
 // corners; round: [r0, r1, r2, r3] gives each corner its own radius, in plan
 // order (minX,minY) -> (maxX,minY) -> (maxX,maxY) -> (minX,maxY).
 // cutout: [x0, y0, x1, y1] punches a rectangular hole straight through, in
@@ -552,7 +596,10 @@ function LocalRounded({ part, color, hovered, opacity = 1, ...handlers }) {
     // round is one radius or four — scale each, never the array itself (NaN).
     const r = part.round ?? 0;
     const rS = Array.isArray(r) ? r.map((v) => v * S) : r * S;
-    const s = roundedRect(Shape, 0, 0, w * S, d * S, rS);
+    const notches = part.notch ? (Array.isArray(part.notch[0]) ? part.notch : [part.notch]) : null;
+    const s = notches
+      ? notchedOutline(w, d, notches.map(([x0, y0, x1, y1]) => [x0 - part.pos[0], y0 - part.pos[1], x1 - part.pos[0], y1 - part.pos[1]]))
+      : roundedRect(Shape, 0, 0, w * S, d * S, rS);
     if (part.cutout) {
       const [cx0, cy0, cx1, cy1] = part.cutout;
       s.holes.push(
@@ -661,7 +708,7 @@ function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
   if (part.disc) {
     return <LocalDisc part={part} color={color} hovered={hovered} opacity={opacity} {...handlers} />;
   }
-  if (part.round || part.cutout) {
+  if (part.round || part.cutout || part.notch) {
     return <LocalRounded part={part} color={color} hovered={hovered} opacity={opacity} {...handlers} />;
   }
   const size = [part.size[0] * S, part.size[2] * S, part.size[1] * S];
