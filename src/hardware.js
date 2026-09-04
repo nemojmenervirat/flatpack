@@ -83,7 +83,10 @@ export function hardwareList(piece) {
   }
   const hinges = [...hingeGroups.values()];
   const hingesTotal = hinges.reduce((n, g) => n + g.doors * g.perDoor, 0);
-  const handles = hinges.reduce((n, g) => n + g.doors, 0); // one bar handle per leaf (the viewer draws it)
+  // one bar handle per door leaf, drawer front and (non-appliance) flap - the viewer draws them
+  const handles =
+    hinges.reduce((n, g) => n + g.doors, 0) +
+    parts.filter((p) => p.name.startsWith('drawer front') || (p.name.startsWith('flap') && !p.appliance)).length;
 
   const bottoms = parts.filter((p) => p.name === 'drawer bottom');
   const drawers = bottoms.length || parts.filter((p) => p.name.startsWith('drawer front')).length;

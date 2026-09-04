@@ -1019,20 +1019,23 @@ function Flap({ part, color, hovered }) {
   });
 
   const shifted = { ...part, pos: [0, -t, 0], size: [w, t, h] };
+  // bar handle along the top edge: a furniture bar on a panel flap (dishwasher),
+  // an almost full-width oven-style bar on an appliance flap
+  const len = part.appliance ? w - 60 : Math.min(160, w - 60);
+  const handle = { name: 'handle', pos: [w / 2 - len / 2, -(t + 30), h - 56], size: [len, 30, 12], metal: true };
+  const handlers = {
+    onClick: (e) => {
+      e.stopPropagation();
+      setOpen((o) => !o);
+    },
+    onPointerOver: () => (document.body.style.cursor = 'pointer'),
+    onPointerOut: () => (document.body.style.cursor = 'auto'),
+  };
   return (
     <group position={[origin[0] * S, 0, -origin[1] * S]} rotation={[0, MathUtils.degToRad(alpha), 0]}>
       <group ref={ref} position={[0, z0 * S, 0]}>
-        <LocalBox
-          part={shifted}
-          color={color}
-          hovered={hovered}
-          onClick={(e) => {
-            e.stopPropagation();
-            setOpen((o) => !o);
-          }}
-          onPointerOver={(e) => (document.body.style.cursor = 'pointer')}
-          onPointerOut={() => (document.body.style.cursor = 'auto')}
-        />
+        <LocalBox part={shifted} color={color} hovered={hovered} {...handlers} />
+        <LocalBox part={handle} color="#9aa0a8" hovered={hovered} {...handlers} />
       </group>
     </group>
   );
@@ -1045,6 +1048,24 @@ function Flap({ part, color, hovered }) {
 const FACE_DIR = { '-y': [0, -1], '+x': [1, 0], '+y': [0, 1], '-x': [-1, 0] };
 const drawerFace = (p) => (FACE_DIR[p.face] ? p.face : '-y');
 const drawerAxes = (face) => (face === '+x' || face === '-x' ? { w: 1, pull: 0 } : { w: 0, pull: 1 });
+
+// Horizontal bar handle on a drawer front: centred, 50 mm under the top edge
+// (centred on fronts under 120 high), protruding 30 mm along the front's
+// face. Piece-local box, drawn by the viewer like door handles - not a part.
+function barHandle(front) {
+  const face = drawerFace(front);
+  const { w, pull } = drawerAxes(face);
+  const dir = FACE_DIR[face][pull];
+  const len = Math.min(160, front.size[w] - 60);
+  const h = front.size[2];
+  const pos = [0, 0, front.pos[2] + (h < 120 ? h / 2 : h - 50) - 6];
+  const size = [0, 0, 12];
+  pos[w] = front.pos[w] + front.size[w] / 2 - len / 2;
+  size[w] = len;
+  pos[pull] = dir > 0 ? front.pos[pull] + front.size[pull] : front.pos[pull] - 30;
+  size[pull] = 30;
+  return { name: 'handle', pos, size, metal: true };
+}
 
 // A clickable drawer: the front and its box slide out along the front
 // direction (data-space FACE_DIR, converted to three.js: x -> x, y -> -z).
@@ -1282,6 +1303,7 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
                     hovered={hovered}
                   />
                 ))}
+                <LocalBox part={barHandle(p)} color="#9aa0a8" hovered={hovered} />
               </Drawer>
             );
           }
@@ -1903,6 +1925,7 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAp
                   />
                 </group>
               ))}
+              <LocalBox part={barHandle(p)} color="#9aa0a8" hovered={hover === i || highlight?.has(i)} />
             </Drawer>
           );
         }

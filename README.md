@@ -62,18 +62,21 @@ is actually built, so the cut list can go straight to the board shop:
 
 - **Separate cabinets**, each with its own two sides; runs are never one long carcass.
   Every part fits a 2800 × 2070 board; worktops come in 4100 × 600 × 38.
-- **Base cabinets**: sides 720 × 540, bottom between the sides, two 100 mm top rails on
-  edge (front + back) instead of a full top, 3 mm HDF nailed on the back. The carcass
+- **Base cabinets**: a full-width bottom with the sides standing on it (the legs screw into
+  the bottom) and two full-width top rails lying flat on the sides (100 front, 80 back) instead
+  of a full top, so the sides are 764 × 540; the sink cabinet has no front rail (bowl), 3 mm HDF nailed on the back. The carcass
   stands 19 mm off the wall for pipes and plaster; the 600 worktop overhangs the fronts
-  by 20 mm. Oven housing: no front rail (hob body) and no back (oven body, cable).
-- **Legs and plinth**: 150 mm adjustable legs, 4 per cabinet (6 over 1200 wide), 40 mm
-  in from the sides; plinth recessed 50 mm, none in front of the dishwasher.
+  by 20 mm. Oven housing: a drawer below, the oven on a fixed shelf in a 600 niche up to the worktop, no rails (hob body above, oven behind; worktop on angle brackets) and no back.
+- **Legs and plinth**: the same 120 mm adjustable legs as the wardrobes, wound down to a
+  100 mm plinth (carcass top 900, worktop 938), 4 per cabinet (6 over 1200 wide), 40 mm in
+  from the sides; plinth recessed 50 mm, none in front of the dishwasher. The dishwasher
+  must be a built-in model that adjusts down to 815 mm.
 - **Fronts**: 18 mm, 3 mm reveal at cabinet edges, 4 mm between fronts. Drawer boxes
-  450 deep for the 450 roller runners, 13 mm runner clearance per side, 196 high boxes
-  behind 355 fronts. A sink cabinet gets doors, not drawers.
+  450 deep for the 450 roller runners, 13 mm runner clearance per side, 250 high boxes
+  behind 395 fronts. A sink cabinet gets doors, not drawers.
 - **Corners**: the run that reaches the corner is a blind cabinet with a fixed panel; the
   first opening front on either run starts 63 mm past the other run's front plane.
-- **Wall cabinets**: 332 deep, bottom at 1450 (537 above the worktop, 537 above the hob),
+- **Wall cabinets**: 332 deep, bottom at 1450 (512 above the worktop, 507 above the hob),
   top at 2500 so a 100 mm top filler with a backer closes the gap to the 2600 ceiling.
   HDF sits 20 mm in from the back edge; a 100 mm hanger rail and two hangers per
   cabinet hook a steel wall rail in that recess. Doors over 900 high get 3 hinges.
