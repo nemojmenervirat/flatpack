@@ -55,6 +55,33 @@ The app computes:
 - `clearance` on a piece declares free space it needs: `{ "front": 600 }` means
   600 mm in front must stay empty (door swing, drawer pull, walking space).
 
+## Kitchen build rules
+
+`src/data/kitchen.json` is drawn the way an iverica (18 mm melamine chipboard) kitchen
+is actually built, so the cut list can go straight to the board shop:
+
+- **Separate cabinets**, each with its own two sides; runs are never one long carcass.
+  Every part fits a 2800 × 2070 board; worktops come in 4100 × 600 × 38.
+- **Base cabinets**: sides 720 × 540, bottom between the sides, two 100 mm top rails on
+  edge (front + back) instead of a full top, 3 mm HDF nailed on the back. The carcass
+  stands 19 mm off the wall for pipes and plaster; the 600 worktop overhangs the fronts
+  by 20 mm. Oven housing: no front rail (hob body) and no back (oven body, cable).
+- **Legs and plinth**: 150 mm adjustable legs, 4 per cabinet (6 over 1200 wide), 40 mm
+  in from the sides; plinth recessed 50 mm, none in front of the dishwasher.
+- **Fronts**: 18 mm, 3 mm reveal at cabinet edges, 4 mm between fronts. Drawer boxes
+  450 deep for the 450 roller runners, 13 mm runner clearance per side, 196 high boxes
+  behind 355 fronts. A sink cabinet gets doors, not drawers.
+- **Corners**: the run that reaches the corner is a blind cabinet with a fixed panel; the
+  first opening front on either run starts 63 mm past the other run's front plane.
+- **Wall cabinets**: 332 deep, bottom at 1450 (537 above the worktop, 537 above the hob),
+  top at 2500 so a 100 mm top filler with a backer closes the gap to the 2600 ceiling.
+  HDF sits 20 mm in from the back edge; a 100 mm hanger rail and two hangers per
+  cabinet hook a steel wall rail in that recess. Doors over 900 high get 3 hinges.
+- **Fillers**: 30 mm scribe filler with a cleat at every wall end so doors clear the plaster.
+- **Appliances** (`"appliance": true`) are modelled at their real installation sizes: AEG
+  oven 559 × 548 × 576 with 595 × 594 fascia, 583 × 513 hob over a 560 × 490 cutout,
+  Electrolux LFP326AB hood inside a 600 niche, 600 dishwasher on the floor.
+
 ## Materials
 
 `src/data/materials.json` is a registry of boards you can actually buy: every decor

@@ -22,6 +22,9 @@ view is read-only.** When he asks for a new piece or a change, edit the JSON.
   also set `"face"`; its box parts are grouped by the front's width/height span and must
   sit behind it (`drawerGroups()` in Viewer.jsx), and it slides out along that face.
 - Part thickness = smallest dimension; the other two are the cut size (`cutlist.js`).
+- Boards are 2800 × 2070: no cut part longer than 2790 or wider than 2060 (worktops:
+  4100 × 600). Runs are built from separate cabinets, never one long carcass — see
+  "Kitchen build rules" in README.md before touching kitchen.json.
 
 ## Files
 

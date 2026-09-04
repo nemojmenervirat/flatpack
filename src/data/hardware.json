@@ -30,6 +30,21 @@
       "product": "door / drawer bar handle",
       "price": 9.0,
       "note": "9 KM per piece; modelled as hardware parts named handle"
+    },
+    "leg 150": {
+      "product": "podesiva nogica za kuhinjske elemente 150 mm (to source; the wardrobe's 120 mm leg does not reach 150)",
+      "price": 2.0,
+      "note": "approx. price; 4 per base cabinet, 6 when wider than 1200; the 150 plinth clips onto the front pair"
+    },
+    "cabinet hanger": {
+      "product": "ovjes za viseće elemente (Camar/Häfele type), 2 per wall cabinet",
+      "price": 3.5,
+      "note": "approx. price; screws into the 100 mm hanger rail inside the cabinet, hooks a steel wall rail in the 20 mm recess behind the HDF"
+    },
+    "wall rail": {
+      "product": "čelična šina za ovjes, per cabinet section",
+      "price": 4.0,
+      "note": "approx. price per section (sold in 2 m lengths, cut per cabinet)"
     }
   }
 }
