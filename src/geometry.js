@@ -137,6 +137,21 @@ export function clearanceLocalBoxes(piece) {
   return out;
 }
 
+// Everything solid at body height that blocks a first-person walk: walls
+// (lintels above the head drop out), the entrance door opening (a "closed
+// front door") and every placed furniture part box. Inner room doors are not
+// obstacles - the walker (or the tour) passes through them.
+export function walkObstacles(apartment, placed, zlo, zhi) {
+  const atBody = (b) => b.min[2] < zhi && b.max[2] > zlo;
+  return [
+    ...apartment.walls.map((w) => aabbOf(w.pos, w.size)),
+    ...(apartment.openings || [])
+      .filter((o) => o.style === 'entrance')
+      .map((o) => aabbOf(o.pos, o.size)),
+    ...placed.flatMap((p) => p.partBoxes),
+  ].filter(atBody);
+}
+
 // First-person walk collision: slide a circular body (radius mm) in the XY
 // plane from pos by delta against world AABBs (pre-filtered to body height by
 // the caller). Tries the full move, then each axis alone, so the body slides
@@ -154,6 +169,9 @@ export function walkMove(pos, delta, boxes, radius) {
   const [x0, y0] = pos;
   const x1 = x0 + delta[0];
   const y1 = y0 + delta[1];
+  // already inside an expanded box (the slimmer tour body squeezed through a
+  // gap, then the user took over): let it walk out instead of pinning it
+  if (blocked(x0, y0)) return [x1, y1];
   if (!blocked(x1, y1)) return [x1, y1];
   if (!blocked(x1, y0)) return [x1, y0];
   if (!blocked(x0, y1)) return [x0, y1];

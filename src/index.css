@@ -317,6 +317,13 @@ body {
   cursor: crosshair;
 }
 
+/* scripted tour: the current room label leads the chip */
+.tour-chip .tour-cap {
+  font-weight: 600;
+  color: #e6c46a;
+  letter-spacing: 0.01em;
+}
+
 .muted {
   color: #9a958c;
   font-size: 12px;

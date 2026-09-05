@@ -2,7 +2,8 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState } from 
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, OrthographicCamera, Html, Edges } from '@react-three/drei';
 import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, Path, ExtrudeGeometry } from 'three';
-import { aabbOf, pieceLocalBBox, walkMove, frontFrame } from './geometry.js';
+import { aabbOf, pieceLocalBBox, walkMove, walkObstacles, frontFrame } from './geometry.js';
+import { TOUR, createTour, tickTour, endTour, resolveTarget, doorGeometry } from './tour.js';
 import { partColor } from './materials.js';
 
 // Glow added to a part while it is hovered in the 3D view or in the parts
@@ -672,6 +673,20 @@ function LocalDisc({ part, color, hovered, opacity = 1, ...handlers }) {
 // because at that scale the lines pile up and make every piece look busy.
 const EdgesContext = createContext(true);
 
+// Registry of everything that opens (doors, drawers, flaps, pull-outs, room
+// doors) so the scripted tour can drive them: a Map of key -> record
+// { key, kind, piece, pieceId, part, center:[x,y,z] mm, setOpen }. Null in
+// the single-piece viewer, where nothing registers.
+const OpenablesContext = createContext(null);
+function useOpenable(meta, setOpen) {
+  const reg = useContext(OpenablesContext);
+  useEffect(() => {
+    if (!reg || !meta) return undefined;
+    reg.set(meta.key, { ...meta, setOpen });
+    return () => reg.delete(meta.key);
+  }, [reg, meta, setOpen]);
+}
+
 // An adjustable plastic furniture leg (the FE.9020 "nogice" in the hardware
 // catalogue): round mounting plate, socket, column and the knurled adjuster
 // foot, stacked inside the part's box. Any hardware part named leg* gets this.
@@ -915,8 +930,9 @@ function doorCasingParts(horiz, away, w, h, wall, architrave = true) {
 // -y, width along x, origin at the left end of the back plane) and the outer
 // group turns the whole thing into place. attachments = parts riding on the
 // door (bins, inner liner) that swing along.
-function Door({ part, attachments = [], color, bbox, hovered }) {
+function Door({ part, attachments = [], color, bbox, hovered, openable }) {
   const [open, setOpen] = useState(false);
+  useOpenable(openable, setOpen);
   const ref = useRef();
   const f = useMemo(() => frontFrame(part, bbox), [part, bbox]);
   const { w, t, h, z0, hingeLeft, alpha, origin } = f;
@@ -1005,8 +1021,9 @@ function Door({ part, attachments = [], color, bbox, hovered }) {
 // A clickable bottom-hinged flap (dishwasher / oven front): pivots on its
 // bottom edge at the carcass front plane and tilts forward to horizontal.
 // Same canonical-frame treatment as Door, so a side-facing flap works too.
-function Flap({ part, color, hovered }) {
+function Flap({ part, color, hovered, openable }) {
   const [open, setOpen] = useState(false);
+  useOpenable(openable, setOpen);
   const ref = useRef();
   const f = useMemo(() => frontFrame(part), [part]);
   const { w, t, h, z0, alpha, origin } = f;
@@ -1069,8 +1086,9 @@ function barHandle(front) {
 
 // A clickable drawer: the front and its box slide out along the front
 // direction (data-space FACE_DIR, converted to three.js: x -> x, y -> -z).
-function Drawer({ pullMm, face = '-y', children }) {
+function Drawer({ pullMm, face = '-y', openable, children }) {
   const [open, setOpen] = useState(false);
+  useOpenable(openable, setOpen);
   const ref = useRef();
   const t = useRef(0);
   const target = open ? pullMm * S : 0;
@@ -1166,6 +1184,18 @@ function doorGroups(parts) {
 // seen from above) picks the direction, both authored in apartment.json.
 function RoomDoor({ opening, hovered, onPointerOver, onPointerOut }) {
   const [open, setOpen] = useState(false);
+  const meta = useMemo(
+    () => ({
+      key: `opening:${opening.name}`,
+      kind: 'roomdoor',
+      piece: '',
+      pieceId: '',
+      part: opening.name,
+      center: [0, 1, 2].map((a) => opening.pos[a] + opening.size[a] / 2),
+    }),
+    [opening]
+  );
+  useOpenable(meta, setOpen);
   const ref = useRef();
   const [sx, sy, sz] = opening.size;
   const horiz = sx >= sy;
@@ -1261,6 +1291,24 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
   const isPullout = (p) => p.name.startsWith('pullout');
   const { groups: drawers, consumed } = useMemo(() => drawerGroups(parts), [parts]);
   const { groups: doors, consumed: onDoors } = useMemo(() => doorGroups(parts), [parts]);
+  // tour registry records for the animated fronts, keyed by placement + part index
+  const openMeta = useMemo(
+    () =>
+      parts.map((p, i) => {
+        const kind = doors.has(i) ? 'door' : isFlap(p) ? 'flap' : drawers.has(i) ? 'drawer' : isPullout(p) ? 'pullout' : null;
+        if (!kind) return null;
+        const b = entry.partBoxes[i];
+        return {
+          key: `${entry.id}:${i}`,
+          kind,
+          piece: entry.name,
+          pieceId: piece.id,
+          part: p.name,
+          center: [0, 1, 2].map((a) => (b.min[a] + b.max[a]) / 2),
+        };
+      }),
+    [parts, entry, piece, doors, drawers] // eslint-disable-line react-hooks/exhaustive-deps
+  );
 
   return (
     <group>
@@ -1283,17 +1331,18 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
                 color={partColor(p, piece)}
                 bbox={bb}
                 hovered={hovered}
+                openable={openMeta[i]}
               />
             );
           }
           if (isFlap(p)) {
             return (
-              <Flap key={i} part={p} color={partColor(p, piece)} hovered={hovered} />
+              <Flap key={i} part={p} color={partColor(p, piece)} hovered={hovered} openable={openMeta[i]} />
             );
           }
           if (drawers.has(i)) {
             return (
-              <Drawer key={i} face={drawerFace(p)} pullMm={drawerPull(parts, p, drawers.get(i))}>
+              <Drawer key={i} face={drawerFace(p)} pullMm={drawerPull(parts, p, drawers.get(i))} openable={openMeta[i]}>
                 {[i, ...drawers.get(i)].map((pi) => (
                   <LocalBox
                     key={pi}
@@ -1309,7 +1358,7 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
           }
           if (isPullout(p)) {
             return (
-              <Drawer key={i} face={drawerFace(p)} pullMm={Math.round(0.8 * p.size[drawerAxes(drawerFace(p)).pull])}>
+              <Drawer key={i} face={drawerFace(p)} pullMm={Math.round(0.8 * p.size[drawerAxes(drawerFace(p)).pull])} openable={openMeta[i]}>
                 <LocalBox part={p} color={partColor(p, piece)} opacity={p.opacity ?? 1} hovered={hovered} />
               </Drawer>
             );
@@ -1340,15 +1389,50 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
 // moves along the view direction, Esc exits. The body is a 200mm-radius
 // circle at fixed eye height; walkMove (geometry.js) slides it along walls
 // and furniture, so doorways work and nothing solid can be crossed.
+//
+// With a `tour` script (src/data/tour.js) the runner in src/tour.js drives the
+// body instead: it walks the route, opens and closes fronts through the
+// openables registry and posts captions. Any manual input (drag, wheel, keys,
+// floor click) hands control back; onTourEnd tells the app.
 const WALK = { eye: 1650, radius: 200, zlo: 100, zhi: 1650, speed: 1400, run: 2800, glide: 2200 };
 const ENTRANCE_SPAWN = { pos: [8647, 6950], yaw: Math.PI }; // just inside the front door, facing the hall
 
-function WalkControls({ spawn, boxes, glideRef, dragRef, onExit }) {
+function WalkControls({ spawn, boxes, glideRef, dragRef, onExit, tour, onTourEnd, openables, doors, resolve, onCaption }) {
   const camera = useThree((s) => s.camera);
   const gl = useThree((s) => s.gl);
   const pos = useRef(null); // data-space mm [x, y]
   const look = useRef({ yaw: 0, pitch: 0 });
   const keys = useRef({});
+  const tourRef = useRef(null); // { state, ctx } while a tour runs
+  const stopTour = () => {
+    if (!tourRef.current) return;
+    tourRef.current = null;
+    onTourEnd?.();
+  };
+
+  // Start the scripted tour when a script arrives; ending it (script cleared,
+  // walk exited) closes everything the tour opened.
+  useEffect(() => {
+    if (!tour || !openables) return undefined;
+    const ctx = {
+      body: { pos: [...(pos.current || ENTRANCE_SPAWN.pos)], yaw: look.current.yaw, pitch: look.current.pitch },
+      eye: WALK.eye,
+      move: (p, d) => walkMove(p, d, boxes, TOUR.radius),
+      openables: () => [...openables.values()],
+      doors,
+      setOpen: (r, v) => r.setOpen(v),
+      resolve,
+      say: (t) => onCaption?.(t),
+      warn: (m) => console.warn(m),
+    };
+    const state = createTour(tour, { loop: true });
+    tourRef.current = { state, ctx };
+    return () => {
+      endTour(state, ctx);
+      tourRef.current = null;
+      onCaption?.(null);
+    };
+  }, [tour, boxes, openables, doors, resolve, onCaption]);
 
   // Enter at the spawn point; put the orbit camera back exactly as it was.
   useEffect(() => {
@@ -1386,6 +1470,7 @@ function WalkControls({ spawn, boxes, glideRef, dragRef, onExit }) {
       const dy = e.clientY - drag[1];
       drag = [e.clientX, e.clientY];
       dragRef.current += Math.abs(dx) + Math.abs(dy);
+      if (dragRef.current > 4) stopTour();
       look.current.yaw += dx * 0.005;
       look.current.pitch = MathUtils.clamp(look.current.pitch + dy * 0.005, -1.45, 1.45);
     };
@@ -1395,6 +1480,7 @@ function WalkControls({ spawn, boxes, glideRef, dragRef, onExit }) {
     const wheel = (e) => {
       e.preventDefault();
       if (!pos.current) return;
+      stopTour();
       glideRef.current = null;
       const { yaw } = look.current;
       const d = MathUtils.clamp(-e.deltaY * 4, -250, 250);
@@ -1424,17 +1510,29 @@ function WalkControls({ spawn, boxes, glideRef, dragRef, onExit }) {
       window.removeEventListener('keydown', keydown);
       window.removeEventListener('keyup', keyup);
     };
-  }, [gl, boxes, glideRef, dragRef, onExit]);
+  }, [gl, boxes, glideRef, dragRef, onExit]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useFrame((_, dtRaw) => {
     if (!pos.current) return;
     const dt = Math.min(dtRaw, 0.05); // clamp frame spikes so we can't tunnel
-    const { yaw, pitch } = look.current;
-    const fwd = [-Math.sin(yaw), Math.cos(yaw)]; // data-space heading
-    const right = [Math.cos(yaw), Math.sin(yaw)];
     const k = keys.current;
     const mx = (k.d || k.arrowright ? 1 : 0) - (k.a || k.arrowleft ? 1 : 0);
     const my = (k.w || k.arrowup ? 1 : 0) - (k.s || k.arrowdown ? 1 : 0);
+    if (tourRef.current && (mx || my || glideRef.current)) stopTour(); // the user takes over
+    if (tourRef.current) {
+      const { state, ctx } = tourRef.current;
+      const running = tickTour(state, ctx, dt);
+      pos.current = ctx.body.pos;
+      look.current.yaw = ctx.body.yaw;
+      look.current.pitch = ctx.body.pitch;
+      if (!running) stopTour();
+      camera.position.set(pos.current[0] * S, WALK.eye * S, -pos.current[1] * S);
+      camera.rotation.set(look.current.pitch, look.current.yaw, 0);
+      return;
+    }
+    const { yaw, pitch } = look.current;
+    const fwd = [-Math.sin(yaw), Math.cos(yaw)]; // data-space heading
+    const right = [Math.cos(yaw), Math.sin(yaw)];
     if (mx || my) {
       glideRef.current = null; // keys override an active glide
       const sp = ((k.shift ? WALK.run : WALK.speed) * dt) / Math.hypot(mx, my);
@@ -1556,6 +1654,9 @@ export default function Viewer({
   walkSpawn = null,
   onWalkEnter,
   onWalkExit,
+  tour = null, // scripted tour steps (src/data/tour.js) to play while walking, or null
+  onTourEnd,
+  onTourCaption,
 }) {
   const openingColor = { door: '#7fd17f', window: '#7fb8ff' };
   const woodTex = useMemo(() => makeWoodTexture(), []);
@@ -1566,16 +1667,19 @@ export default function Viewer({
   // Everything solid at body height blocks walking: walls (lintels sit above
   // the head and drop out), the entrance door opening (a "closed front door"),
   // and every placed furniture part box.
-  const walkBoxes = useMemo(() => {
-    const atBody = (b) => b.min[2] < WALK.zhi && b.max[2] > WALK.zlo;
-    return [
-      ...apartment.walls.map((w) => aabbOf(w.pos, w.size)),
-      ...(apartment.openings || [])
-        .filter((o) => o.style === 'entrance')
-        .map((o) => aabbOf(o.pos, o.size)),
-      ...report.placed.flatMap((p) => p.partBoxes),
-    ].filter(atBody);
-  }, [apartment, report]);
+  const walkBoxes = useMemo(() => walkObstacles(apartment, report.placed, WALK.zlo, WALK.zhi), [apartment, report]);
+
+  // Everything that opens registers here (see OpenablesContext) so the tour
+  // can drive it; look targets by piece label / opening name resolve here too.
+  const openables = useMemo(() => new Map(), []);
+  const tourDoors = useMemo(
+    () => (apartment.openings || []).filter((o) => o.type === 'door').map(doorGeometry),
+    [apartment]
+  );
+  const resolveTourTarget = useMemo(
+    () => (t) => resolveTarget(t, { placed: report.placed, openings: apartment.openings || [], eye: WALK.eye }),
+    [report, apartment]
+  );
 
   const glideRef = useRef(null); // data-space [x, y] glide target, or null
   const dragRef = useRef(0); // pointer travel since last pointerdown (px)
@@ -1639,6 +1743,7 @@ export default function Viewer({
       style={{ background: '#16181c' }}
     >
       <EdgesContext.Provider value={false}>
+      <OpenablesContext.Provider value={openables}>
       <color attach="background" args={['#16181c']} />
       <ambientLight intensity={walking ? 0.95 : 0.7} />
       <directionalLight
@@ -1814,8 +1919,15 @@ export default function Viewer({
           glideRef={glideRef}
           dragRef={dragRef}
           onExit={onWalkExit}
+          tour={tour}
+          onTourEnd={onTourEnd}
+          openables={openables}
+          doors={tourDoors}
+          resolve={resolveTourTarget}
+          onCaption={onTourCaption}
         />
       )}
+      </OpenablesContext.Provider>
       </EdgesContext.Provider>
     </Canvas>
   );

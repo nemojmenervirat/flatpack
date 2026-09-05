@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import MaterialsPanel from './MaterialsPanel.jsx';
 import Viewer, { PieceViewer } from './Viewer.jsx';
 import { fitReport, pieceLocalBBox, placeBox } from './geometry.js';
@@ -7,6 +7,7 @@ import { partRows, hardwareList, priceEstimate } from './hardware.js';
 import apartment from './data/apartment.json';
 import rooms from './data/rooms.json';
 import scene from './data/scene.json';
+import { tour as tourScript } from './data/tour.js';
 import wardrobeHall from './data/wardrobe-hall.json';
 import kitchen from './data/kitchen.json';
 import bed90 from './data/bed-90.json';
@@ -98,6 +99,12 @@ const ICONS = {
     <>
       <circle cx="13" cy="4" r="1.8" />
       <path d="M9.5 21l2-6.5-2.5-1.5v-4l3.5-1.5 2.5 3 3 1M15.5 21l-2.5-6M8 12l-2.5 2" />
+    </>
+  ),
+  tour: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M10 8.5l5.5 3.5-5.5 3.5z" />
     </>
   ),
   materials: <path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" />,
@@ -533,6 +540,9 @@ export default function App() {
   const [hoverIndex, setHoverIndex] = useState(null); // part index (3D -> table)
   const [walk, setWalk] = useState('off'); // 'off' | 'arm' | 'on'
   const [walkSpawn, setWalkSpawn] = useState(null); // { pos:[x,y], yaw } or null = entrance
+  const [tourOn, setTourOn] = useState(false); // scripted tour playing inside walk mode
+  const [tourCaption, setTourCaption] = useState(null); // current room label from the script
+  const stopTour = useCallback(() => setTourOn(false), []);
   const [materialsOpen, setMaterialsOpen] = useState(false);
   const [explode, setExplode] = useState(0); // 0..1, single-piece exploded view
   const [hideAppliances, setHideAppliances] = useState(() => lsGet('flatpack.hideAppliances', false)); // single-piece: strip oven/sink/hob
@@ -567,6 +577,10 @@ export default function App() {
     if (view !== 'apartment') setWalk('off'); // walk mode only exists in the apartment view
     setExplode(0); // come back assembled
   }, [view]);
+
+  useEffect(() => {
+    if (walk !== 'on') setTourOn(false); // the tour only lives inside walk mode
+  }, [walk]);
 
   // Esc cancels the "click a floor point" arming (WalkControls handles Esc while walking)
   useEffect(() => {
@@ -609,6 +623,9 @@ export default function App() {
               setWalk('on');
             }}
             onWalkExit={() => setWalk('off')}
+            tour={tourOn ? tourScript : null}
+            onTourEnd={stopTour}
+            onTourCaption={setTourCaption}
           />
         )}
 
@@ -619,9 +636,16 @@ export default function App() {
             <span className="muted-inline">esc cancels</span>
           </div>
         )}
-        {!materialsOpen && !piece && walk === 'on' && (
+        {!materialsOpen && !piece && walk === 'on' && !tourOn && (
           <div className="walk-chip">
             drag to look · scroll or WASD to move · click floor to glide · esc to exit
+          </div>
+        )}
+        {!materialsOpen && !piece && walk === 'on' && tourOn && (
+          <div className="walk-chip tour-chip">
+            <span className="tour-cap">{tourCaption || 'Tour'}</span>
+            <span className="muted-inline">drag or move to take over · esc exits</span>
+            <button onClick={stopTour}>stop tour</button>
           </div>
         )}
 
@@ -715,6 +739,20 @@ export default function App() {
             }}
           >
             <Icon name="walk" />
+          </button>
+          <button
+            className={tourOn ? 'active' : ''}
+            data-tip={tourOn ? 'Stop the tour' : 'Guided tour (auto walk)'}
+            onClick={() => {
+              if (tourOn) return setTourOn(false);
+              setMaterialsOpen(false);
+              setView('apartment');
+              setWalkSpawn(null);
+              setWalk('on');
+              setTourOn(true);
+            }}
+          >
+            <Icon name="tour" />
           </button>
           <span className="side-sep" />
           <button

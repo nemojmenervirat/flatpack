@@ -35,6 +35,10 @@ view is read-only.** When he asks for a new piece or a change, edit the JSON.
 - `src/cutlist.js` — cut list derivation + CSV export. Pure functions.
 - `src/Viewer.jsx` — the only file that knows three.js exists.
 - `src/App.jsx` — layout, panels.
+- `src/tour.js` — scripted first-person tour runner (pure: step kinds, selectors,
+  look math). `src/data/tour.js` is the route itself (waypoints in mm, what to open
+  where). After moving a piece or editing the route run `node scripts/check-tour.mjs` —
+  it replays the tour against the real obstacle boxes and fails on stuck steps.
 - `src/data/` — apartment, pieces, scene. New furniture = new JSON file here,
   registered in `piecesById` in App.jsx. `hardware.json` = bought hardware by part
   name (product + KM per piece) for parts flagged `"hardware": true`.

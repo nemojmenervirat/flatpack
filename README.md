@@ -85,6 +85,28 @@ is actually built, so the cut list can go straight to the board shop:
   oven 559 × 548 × 576 with 595 × 594 fascia, 583 × 513 hob over a 560 × 490 cutout,
   Electrolux LFP326AB hood inside a 600 niche, 600 dishwasher on the floor.
 
+## Walk mode and the guided tour
+
+The walk button drops you into a first-person view (drag to look, WASD/scroll to
+move, click a floor point to glide, Esc to exit). Doors, drawers, flaps and
+room doors open when clicked.
+
+The tour button (▶) plays a scripted walk through the whole apartment: it
+goes room to room, opens and closes the wardrobes, kitchen drawers, fridges,
+room doors and so on, pauses, looks around, and loops back to the front door.
+The script is `src/data/tour.js` — a plain list of steps in mm (`go`, `look`,
+`turn`, `wait`, `open`, `close`, `say`), documented at the top of `src/tour.js`.
+Any drag, key or floor click hands control back to you; "stop tour" or Esc
+ends it and closes whatever it left open.
+
+After moving furniture or editing the route, replay it against the real walls:
+
+```
+node scripts/check-tour.mjs           # reports stuck steps and selectors that match nothing
+node scripts/check-tour.mjs --trace   # position after every step
+node scripts/check-tour.mjs --dump    # placed pieces and doors, for picking waypoints
+```
+
 ## Materials
 
 `src/data/materials.json` is a registry of boards you can actually buy: every decor
