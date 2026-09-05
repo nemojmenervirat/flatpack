@@ -43,52 +43,67 @@ body {
 
 .side-head {
   display: flex;
-  align-items: center;
-  gap: 0;
-  padding: 6px 7px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+  padding: 8px 8px;
   border-bottom: 1px solid #2c2f36;
 }
 
 .side.collapsed .side-head {
-  flex-direction: column;
+  align-items: center;
   padding: 8px 0;
   border-bottom: none;
 }
 
-/* thin divider between button groups: vertical in the row, horizontal in the strip */
+/* thin divider between button groups */
 .side-sep {
   flex: none;
-  width: 1px;
-  height: 16px;
-  margin: 0 2px;
+  height: 1px;
+  margin: 4px 4px;
   background: #2c2f36;
 }
 
 .side.collapsed .side-sep {
   width: 16px;
-  height: 1px;
   margin: 4px 0;
 }
 
+/* menu row: icon + label; the collapsed strip drops the label and centres the icon */
 .side-head button {
   position: relative;
   flex: none;
-  width: 26px;
-  height: 26px;
-  padding: 0;
+  height: 30px;
+  padding: 0 8px;
   border: none;
   border-radius: 7px;
   background: transparent;
   color: #9a958c;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 10px;
+  text-align: left;
+  font: inherit;
+  font-size: 13px;
   transition: background 0.12s, color 0.12s;
+}
+
+.side-head button .lbl {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .side.collapsed .side-head button {
   width: 30px;
-  height: 30px;
+  padding: 0;
+  justify-content: center;
+}
+
+.side.collapsed .side-head button .lbl {
+  display: none;
 }
 
 .side-head button:hover {
@@ -98,9 +113,11 @@ body {
 
 .side-head button .ico {
   display: block;
+  flex: none;
 }
 
-.side-head button[data-tip]:hover::after {
+/* tooltips only when collapsed — expanded rows carry their own label */
+.side.collapsed .side-head button[data-tip]:hover::after {
   content: attr(data-tip);
   position: absolute;
   right: calc(100% + 10px);
@@ -128,7 +145,8 @@ body {
 }
 
 /* on/off flags: no pill — they read as switches with a small status dot.
-   off = dim icon + hollow dot, on = bright icon + lit amber dot */
+   off = dim icon + hollow dot, on = bright icon + lit amber dot.
+   Expanded: the dot sits at the right end of the row; collapsed: icon corner. */
 .side-head button.toggle {
   color: #6b675f;
 }
@@ -136,14 +154,24 @@ body {
 .side-head button.toggle::before {
   content: '';
   position: absolute;
-  right: 4px;
-  bottom: 4px;
-  width: 5px;
-  height: 5px;
+  right: 10px;
+  top: 50%;
+  margin-top: -3px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   border: 1px solid #55514a;
   background: transparent;
   transition: background 0.12s, border-color 0.12s, box-shadow 0.12s;
+}
+
+.side.collapsed .side-head button.toggle::before {
+  right: 4px;
+  top: auto;
+  bottom: 4px;
+  margin-top: 0;
+  width: 5px;
+  height: 5px;
 }
 
 .side-head button.toggle:hover {

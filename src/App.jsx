@@ -128,6 +128,15 @@ const Icon = ({ name }) => (
   </svg>
 );
 
+// One side-menu row: icon + label when the menu is expanded, icon only (with a
+// fly-out tooltip) when collapsed — the CSS hides `.lbl` in the collapsed strip.
+const MenuBtn = ({ icon, label, tip, className = '', onClick }) => (
+  <button className={className} data-tip={tip} onClick={onClick}>
+    <Icon name={icon} />
+    <span className="lbl">{label}</span>
+  </button>
+);
+
 const roomAt = (x, y) => {
   const room = roomDefs.find((r) =>
     r.zones.some(
@@ -705,44 +714,49 @@ export default function App() {
 
       <nav className={sideOpen ? 'side' : 'side collapsed'}>
         <div className="side-head">
-          <button data-tip={sideOpen ? 'Collapse' : 'Pieces'} onClick={() => setSideOpen((v) => !v)}>
-            <Icon name={sideOpen ? 'collapse' : 'expand'} />
-          </button>
+          <MenuBtn
+            icon={sideOpen ? 'collapse' : 'expand'}
+            label="Collapse"
+            tip="Expand menu"
+            onClick={() => setSideOpen((v) => !v)}
+          />
           <span className="side-sep" />
-          <button
+          <MenuBtn
+            icon="home"
+            label="Apartment"
+            tip="Whole apartment"
             className={view === 'apartment' && !materialsOpen ? 'active' : ''}
-            data-tip="Whole apartment"
             onClick={() => {
               setMaterialsOpen(false);
               setView('apartment');
             }}
-          >
-            <Icon name="home" />
-          </button>
-          <button
+          />
+          <MenuBtn
+            icon="plan"
+            label="Floor plan"
+            tip={cam === 'plan' ? 'Back to orbit view' : 'Floor plan (top-down)'}
             className={cam === 'plan' ? 'active' : ''}
-            data-tip={cam === 'plan' ? 'Back to orbit view' : 'Floor plan (top-down)'}
             onClick={() => {
               setView('apartment');
               setWalk('off');
               setCam((c) => (c === 'plan' ? 'free' : 'plan'));
             }}
-          >
-            <Icon name="plan" />
-          </button>
-          <button
+          />
+          <MenuBtn
+            icon="walk"
+            label="Walk around"
+            tip={walk === 'off' ? 'Walk around (first person)' : 'Exit walk mode'}
             className={walk !== 'off' ? 'active' : ''}
-            data-tip={walk === 'off' ? 'Walk around (first person)' : 'Exit walk mode'}
             onClick={() => {
               setView('apartment');
               setWalk((w) => (w === 'off' ? 'arm' : 'off'));
             }}
-          >
-            <Icon name="walk" />
-          </button>
-          <button
+          />
+          <MenuBtn
+            icon="tour"
+            label="Guided tour"
+            tip={tourOn ? 'Stop the tour' : 'Guided tour (auto walk)'}
             className={tourOn ? 'active' : ''}
-            data-tip={tourOn ? 'Stop the tour' : 'Guided tour (auto walk)'}
             onClick={() => {
               if (tourOn) return setTourOn(false);
               setMaterialsOpen(false);
@@ -751,39 +765,37 @@ export default function App() {
               setWalk('on');
               setTourOn(true);
             }}
-          >
-            <Icon name="tour" />
-          </button>
+          />
           <span className="side-sep" />
-          <button
+          <MenuBtn
+            icon="pieces"
+            label="Pieces"
+            tip={`Pieces: ${showPieces ? 'shown' : 'hidden'}`}
             className={showPieces ? 'toggle on' : 'toggle'}
-            data-tip={`Pieces: ${showPieces ? 'shown' : 'hidden'}`}
             onClick={() => setShowPieces((v) => !v)}
-          >
-            <Icon name="pieces" />
-          </button>
-          <button
+          />
+          <MenuBtn
+            icon="clearance"
+            label="Clearance zones"
+            tip={`Clearance zones: ${showClearances ? 'on' : 'off'}`}
             className={showClearances ? 'toggle on' : 'toggle'}
-            data-tip={`Clearance zones: ${showClearances ? 'on' : 'off'}`}
             onClick={() => setShowClearances((v) => !v)}
-          >
-            <Icon name="clearance" />
-          </button>
-          <button
+          />
+          <MenuBtn
+            icon="areas"
+            label="Room areas"
+            tip={`Room areas: ${showAreas ? 'on' : 'off'}`}
             className={showAreas ? 'toggle on' : 'toggle'}
-            data-tip={`Room areas: ${showAreas ? 'on' : 'off'}`}
             onClick={() => setShowAreas((v) => !v)}
-          >
-            <Icon name="areas" />
-          </button>
+          />
           <span className="side-sep" />
-          <button
+          <MenuBtn
+            icon="materials"
+            label="Materials"
+            tip={materialsOpen ? 'Back to the model' : 'Materials (Elgrad price list)'}
             className={materialsOpen ? 'active' : ''}
-            data-tip={materialsOpen ? 'Back to the model' : 'Materials (Elgrad price list)'}
             onClick={() => setMaterialsOpen((v) => !v)}
-          >
-            <Icon name="materials" />
-          </button>
+          />
         </div>
         {sideOpen && (
           <>
