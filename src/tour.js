@@ -1,4 +1,4 @@
-// Scripted first-person tour: a step list (src/data/tour.js) drives the walk
+// Scripted first-person tour: a step list (apartments/<id>/tour.js) drives the walk
 // camera around the apartment, opens and closes fronts and room doors, pauses
 // and looks around. Pure functions - no three.js, no DOM - so the whole route
 // can be simulated in node (scripts/check-tour.mjs) against the real walls.
@@ -82,6 +82,23 @@ export function doorGeometry(opening) {
     open,
     box: { min: [opening.pos[0], opening.pos[1]], max: [opening.pos[0] + sx, opening.pos[1] + sy] },
   };
+}
+
+// Where walk mode drops you in when no floor point was clicked: an explicit
+// apartment.spawn ({ pos: [x, y], yaw: deg }) wins; otherwise 400 mm inside
+// the entrance door (the opening styled "entrance", else the first door),
+// facing the way its leaf swings — i.e. into the flat. Yaw in radians.
+export function entranceSpawn(apartment) {
+  if (apartment.spawn) return { pos: [...apartment.spawn.pos], yaw: deg(apartment.spawn.yaw ?? 180) };
+  const doors = (apartment.openings || []).filter((o) => o.type === 'door');
+  const door = doors.find((o) => o.style === 'entrance') || doors[0];
+  if (!door) {
+    const f = apartment.floor;
+    return { pos: f ? [f.pos[0] + f.size[0] / 2, f.pos[1] + f.size[1] / 2] : [0, 0], yaw: 0 };
+  }
+  const d = doorGeometry(door);
+  const c = [(d.box.min[0] + d.box.max[0]) / 2, (d.box.min[1] + d.box.max[1]) / 2];
+  return { pos: [c[0] + d.open[0] * 400, c[1] + d.open[1] * 400], yaw: Math.atan2(-d.open[0], d.open[1]) };
 }
 
 // Is a body at p (with `margin`) inside the quarter disc the leaf sweeps?

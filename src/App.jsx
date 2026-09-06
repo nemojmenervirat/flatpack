@@ -4,89 +4,24 @@ import Viewer, { PieceViewer } from './Viewer.jsx';
 import { fitReport, pieceLocalBBox, placeBox } from './geometry.js';
 import { cutList, cutListCsv } from './cutlist.js';
 import { partRows, hardwareList, priceEstimate } from './hardware.js';
-import apartment from './data/apartment.json';
-import rooms from './data/rooms.json';
-import scene from './data/scene.json';
-import { tour as tourScript } from './data/tour.js';
-import wardrobeHall from './data/wardrobe-hall.json';
-import kitchen from './data/kitchen.json';
-import bed90 from './data/bed-90.json';
-import bed180 from './data/bed-180.json';
-import wardrobeMaster1 from './data/wardrobe-master-1.json';
-import wardrobeMaster2 from './data/wardrobe-master-2.json';
-import deskMaster from './data/desk-master.json';
-import wardrobeDeskRoom5 from './data/wardrobe-desk-room5.json';
-import wardrobeRoom6 from './data/wardrobe-room6.json';
-import hallBench from './data/hall-bench.json';
-import shower from './data/shower.json';
-import sink from './data/sink.json';
-import sinkWc from './data/sink-wc.json';
-import toilet from './data/toilet.json';
-import bathtub from './data/bathtub.json';
-import washer from './data/washer.json';
-import dryer from './data/dryer.json';
-import waterHeater from './data/water-heater.json';
-import eloBlock from './data/eloblock.json';
-import fridge from './data/fridge.json';
-import sofaCorner from './data/sofa-corner.json';
-import deskLiving from './data/desk-living.json';
-import tvCabinet from './data/tv-cabinet.json';
-import tv from './data/tv.json';
-import diningTable from './data/dining-table.json';
-import diningChair from './data/dining-chair.json';
-import acIndoor from './data/ac-indoor.json';
-import acOutdoor from './data/ac-outdoor.json';
-import deskChair from './data/desk-chair.json';
+import { apartments, apartmentById } from './apartments.js';
 
-const piecesById = {
-  [wardrobeHall.id]: wardrobeHall,
-  [wardrobeMaster1.id]: wardrobeMaster1,
-  [wardrobeMaster2.id]: wardrobeMaster2,
-  [deskMaster.id]: deskMaster,
-  [bed90.id]: bed90,
-  [bed180.id]: bed180,
-  [wardrobeDeskRoom5.id]: wardrobeDeskRoom5,
-  [wardrobeRoom6.id]: wardrobeRoom6,
-  [hallBench.id]: hallBench,
-  [shower.id]: shower,
-  [sink.id]: sink,
-  [sinkWc.id]: sinkWc,
-  [toilet.id]: toilet,
-  [bathtub.id]: bathtub,
-  [washer.id]: washer,
-  [dryer.id]: dryer,
-  [waterHeater.id]: waterHeater,
-  [eloBlock.id]: eloBlock,
-  [kitchen.id]: kitchen,
-  [fridge.id]: fridge,
-  [sofaCorner.id]: sofaCorner,
-  [deskLiving.id]: deskLiving,
-  [tvCabinet.id]: tvCabinet,
-  [tv.id]: tv,
-  [diningTable.id]: diningTable,
-  [diningChair.id]: diningChair,
-  [acIndoor.id]: acIndoor,
-  [acOutdoor.id]: acOutdoor,
-  [deskChair.id]: deskChair,
-};
-
-// Rooms are final exact polygons: data/rooms.json defines each room as a
+// Rooms are final exact polygons: the flat's rooms.json defines each room as a
 // union of axis-aligned rects (pos = min corner [x, y] mm, size = [w, d])
 // with walls, stubs and door passages already carved out. Nothing is
 // subtracted at runtime — the sidebar groups, m² labels, overlay shapes, and
 // outline dimensions all read these rects as-is.
-const roomDefs = rooms.rooms.map((r) => ({
-  name: r.name,
-  zones: r.rects.map((rc, i) => ({ name: `${r.name} zone ${i + 1}`, pos: rc.pos, size: rc.size })),
-}));
-const ROOM_ORDER = roomDefs.map((r) => r.name);
+const buildRoomDefs = (rooms) =>
+  rooms.map((r) => ({
+    name: r.name,
+    zones: r.rects.map((rc, i) => ({ name: `${r.name} zone ${i + 1}`, pos: rc.pos, size: rc.size })),
+  }));
 
 // Monochrome stroke icons for the side strip — one visual language instead of
 // mixed emoji / text glyphs. All 24-unit viewBox, currentColor stroke.
 const ICONS = {
   collapse: <path d="M13 6l6 6-6 6M5 6l6 6-6 6" />,
   expand: <path d="M11 6l-6 6 6 6M19 6l-6 6 6 6" />,
-  home: <path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10" />,
   clearance: <path d="M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4M9 9h6v6H9z" />,
   areas: (
     <>
@@ -108,6 +43,8 @@ const ICONS = {
     </>
   ),
   materials: <path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" />,
+  home: <path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10" />,
+  building: <path d="M3 21h18M5 21V4h9v17M14 9h5v12M8 8h2M8 12h2M8 16h2M16.5 13h.01M16.5 17h.01" />,
   plan: <path d="M3 3h18v18H3zM3 12h9M12 3v9M12 12v9M12 12h9M15 21v-4" />,
 };
 
@@ -137,7 +74,7 @@ const MenuBtn = ({ icon, label, tip, className = '', onClick }) => (
   </button>
 );
 
-const roomAt = (x, y) => {
+const roomAt = (roomDefs, x, y) => {
   const room = roomDefs.find((r) =>
     r.zones.some(
       (z) => x >= z.pos[0] && x <= z.pos[0] + z.size[0] && y >= z.pos[1] && y <= z.pos[1] + z.size[1]
@@ -249,7 +186,7 @@ const roomEdges = (zones) => {
   return edges;
 };
 
-const roomAreas = (() => {
+const computeRoomAreas = (roomDefs) => {
   const rows = roomDefs
     .filter((r) => r.zones.length > 0)
     .map(({ name, zones }) => {
@@ -272,15 +209,15 @@ const roomAreas = (() => {
       };
     });
   return { rows, total: rows.reduce((n, r) => n + r.m2, 0) };
-})();
+};
 
-const pieceGroups = (() => {
+const computePieceGroups = ({ scene, piecesById }, roomDefs) => {
   const byRoom = new Map();
   for (const pl of scene.placements) {
     const piece = piecesById[pl.piece];
     if (!piece) continue;
     const bb = placeBox(pieceLocalBBox(piece), pl);
-    const room = roomAt((bb.min[0] + bb.max[0]) / 2, (bb.min[1] + bb.max[1]) / 2);
+    const room = roomAt(roomDefs, (bb.min[0] + bb.max[0]) / 2, (bb.min[1] + bb.max[1]) / 2);
     const counts = byRoom.get(room) || new Map();
     counts.set(pl.piece, (counts.get(pl.piece) || 0) + 1);
     byRoom.set(room, counts);
@@ -291,7 +228,7 @@ const pieceGroups = (() => {
       counts.set(id, 0);
       byRoom.set('Unplaced', counts);
     }
-  return [...ROOM_ORDER, 'Elsewhere', 'Unplaced']
+  return [...roomDefs.map((r) => r.name), 'Elsewhere', 'Unplaced']
     .filter((label) => byRoom.has(label))
     .map((label) => ({
       label,
@@ -299,7 +236,17 @@ const pieceGroups = (() => {
         .map(([id, count]) => ({ id, count, name: piecesById[id].name }))
         .sort((a, b) => a.name.localeCompare(b.name)),
     }));
-})();
+};
+
+// Everything derived from one apartment's data, computed once per switch.
+const deriveApartment = (apt) => {
+  const roomDefs = buildRoomDefs(apt.rooms);
+  return {
+    roomAreas: computeRoomAreas(roomDefs),
+    pieceGroups: computePieceGroups(apt, roomDefs),
+    report: fitReport(apt.scene, apt.piecesById, apt.apartment),
+  };
+};
 
 // view + toggles survive a refresh
 const lsGet = (key, fallback) => {
@@ -326,7 +273,7 @@ const km = (v) => v.toFixed(2);
 
 // Bought pieces aren't cut from boards — the parts only model how the thing
 // looks. All that matters for shopping is the outer size and where it goes.
-function BoughtPanel({ piece }) {
+function BoughtPanel({ piece, scene }) {
   const bb = pieceLocalBBox(piece);
   const [w, d, h] = [0, 1, 2].map((i) => bb.max[i] - bb.min[i]);
   const placed = scene.placements.filter((pl) => pl.piece === piece.id).length;
@@ -348,7 +295,7 @@ function BoughtPanel({ piece }) {
   );
 }
 
-function PiecePanel({ piece, hoverIndex, onHoverRow }) {
+function PiecePanel({ piece, piecesById, hoverIndex, onHoverRow }) {
   const rows = useMemo(() => partRows(piece), [piece]);
   const hw = useMemo(() => hardwareList(piece), [piece]);
   const price = useMemo(() => priceEstimate(piece), [piece]);
@@ -538,6 +485,12 @@ function PiecePanel({ piece, hoverIndex, onHoverRow }) {
 }
 
 export default function App() {
+  const [apartmentId, setApartmentId] = useState(() => {
+    const id = lsGet('flatpack.apartment', apartments[0].id);
+    return apartmentById[id] ? id : apartments[0].id;
+  });
+  const apt = apartmentById[apartmentId];
+  const { apartment, scene, piecesById, tour: tourScript } = apt;
   const [view, setView] = useState(() => lsGet('flatpack.view', 'apartment'));
   const [showClearances, setShowClearances] = useState(() => lsGet('flatpack.showClearances', true));
   const [showAreas, setShowAreas] = useState(() => lsGet('flatpack.showAreas', false));
@@ -556,6 +509,7 @@ export default function App() {
   const [explode, setExplode] = useState(0); // 0..1, single-piece exploded view
   const [hideAppliances, setHideAppliances] = useState(() => lsGet('flatpack.hideAppliances', false)); // single-piece: strip oven/sink/hob
 
+  useEffect(() => lsSet('flatpack.apartment', apartmentId), [apartmentId]);
   useEffect(() => lsSet('flatpack.view', view), [view]);
   useEffect(() => lsSet('flatpack.showClearances', showClearances), [showClearances]);
   useEffect(() => lsSet('flatpack.hideAppliances', hideAppliances), [hideAppliances]);
@@ -564,18 +518,43 @@ export default function App() {
   useEffect(() => lsSet('flatpack.sideOpen', sideOpen), [sideOpen]);
   useEffect(() => lsSet('flatpack.cam', cam), [cam]);
 
-  const report = useMemo(() => fitReport(scene, piecesById, apartment), []);
+  const { report, roomAreas, pieceGroups } = useMemo(() => deriveApartment(apt), [apt]);
+
+  // Whole apartment in the given camera ('plan' = 2D top-down, 'free' = 3D orbit),
+  // leaving a piece view, walk mode or the materials browser if needed.
+  const showApartment = (mode) => {
+    setMaterialsOpen(false);
+    setView('apartment');
+    setWalk('off');
+    setCam(mode);
+  };
+
+  // Switching flats: back to the whole-apartment view, out of walk mode, filter cleared.
+  const switchApartment = (id) => {
+    if (!apartmentById[id] || id === apartmentId) return;
+    setApartmentId(id);
+    setView('apartment');
+    setWalk('off');
+    setWalkSpawn(null);
+    setFilter('');
+    setHighlight(null);
+    setHoverIndex(null);
+  };
 
   // Which pieces name each decor, so the browser can flag what is already used.
+  // The materials browser is apartment-agnostic, so this spans every flat.
   const materialUsage = useMemo(() => {
     const used = {};
     const add = (id, name) => {
       if (!id) return;
       (used[id] = used[id] || []).includes(name) || used[id].push(name);
     };
-    for (const p of Object.values(piecesById)) {
-      add(p.material, p.name);
-      for (const part of p.parts || []) add(part.material, p.name);
+    for (const a of apartments) {
+      const tag = apartments.length > 1 ? ` · ${a.name}` : '';
+      for (const p of Object.values(a.piecesById)) {
+        add(p.material, p.name + tag);
+        for (const part of p.parts || []) add(part.material, p.name + tag);
+      }
     }
     return used;
   }, []);
@@ -585,7 +564,7 @@ export default function App() {
     if (view !== 'apartment' && !piecesById[view]) setView('apartment'); // stale localStorage
     if (view !== 'apartment') setWalk('off'); // walk mode only exists in the apartment view
     setExplode(0); // come back assembled
-  }, [view]);
+  }, [view, piecesById]);
 
   useEffect(() => {
     if (walk !== 'on') setTourOn(false); // the tour only lives inside walk mode
@@ -617,6 +596,7 @@ export default function App() {
           />
         ) : (
           <Viewer
+            key={apt.id}
             apartment={apartment}
             report={report}
             showClearances={showClearances}
@@ -686,9 +666,9 @@ export default function App() {
 
         {!materialsOpen && piece &&
           (piece.buildable ? (
-            <PiecePanel piece={piece} hoverIndex={hoverIndex} onHoverRow={setHighlight} />
+            <PiecePanel piece={piece} piecesById={piecesById} hoverIndex={hoverIndex} onHoverRow={setHighlight} />
           ) : (
-            <BoughtPanel piece={piece} />
+            <BoughtPanel piece={piece} scene={scene} />
           ))}
 
         {!materialsOpen && !piece && report.issues.length > 0 && (
@@ -721,84 +701,99 @@ export default function App() {
             onClick={() => setSideOpen((v) => !v)}
           />
           <span className="side-sep" />
-          <MenuBtn
-            icon="home"
-            label="Apartment"
-            tip="Whole apartment"
-            className={view === 'apartment' && !materialsOpen ? 'active' : ''}
-            onClick={() => {
-              setMaterialsOpen(false);
-              setView('apartment');
-            }}
-          />
-          <MenuBtn
-            icon="plan"
-            label="Floor plan"
-            tip={cam === 'plan' ? 'Back to orbit view' : 'Floor plan (top-down)'}
-            className={cam === 'plan' ? 'active' : ''}
-            onClick={() => {
-              setView('apartment');
-              setWalk('off');
-              setCam((c) => (c === 'plan' ? 'free' : 'plan'));
-            }}
-          />
-          <MenuBtn
-            icon="walk"
-            label="Walk around"
-            tip={walk === 'off' ? 'Walk around (first person)' : 'Exit walk mode'}
-            className={walk !== 'off' ? 'active' : ''}
-            onClick={() => {
-              setView('apartment');
-              setWalk((w) => (w === 'off' ? 'arm' : 'off'));
-            }}
-          />
-          <MenuBtn
-            icon="tour"
-            label="Guided tour"
-            tip={tourOn ? 'Stop the tour' : 'Guided tour (auto walk)'}
-            className={tourOn ? 'active' : ''}
-            onClick={() => {
-              if (tourOn) return setTourOn(false);
-              setMaterialsOpen(false);
-              setView('apartment');
-              setWalkSpawn(null);
-              setWalk('on');
-              setTourOn(true);
-            }}
-          />
-          <span className="side-sep" />
-          <MenuBtn
-            icon="pieces"
-            label="Pieces"
-            tip={`Pieces: ${showPieces ? 'shown' : 'hidden'}`}
-            className={showPieces ? 'toggle on' : 'toggle'}
-            onClick={() => setShowPieces((v) => !v)}
-          />
-          <MenuBtn
-            icon="clearance"
-            label="Clearance zones"
-            tip={`Clearance zones: ${showClearances ? 'on' : 'off'}`}
-            className={showClearances ? 'toggle on' : 'toggle'}
-            onClick={() => setShowClearances((v) => !v)}
-          />
-          <MenuBtn
-            icon="areas"
-            label="Room areas"
-            tip={`Room areas: ${showAreas ? 'on' : 'off'}`}
-            className={showAreas ? 'toggle on' : 'toggle'}
-            onClick={() => setShowAreas((v) => !v)}
-          />
-          <span className="side-sep" />
+
+          {/* global: the board registry is the same for every flat */}
           <MenuBtn
             icon="materials"
             label="Materials"
-            tip={materialsOpen ? 'Back to the model' : 'Materials (Elgrad price list)'}
+            tip={materialsOpen ? 'Back to the apartment' : 'Materials (Elgrad price list)'}
             className={materialsOpen ? 'active' : ''}
             onClick={() => setMaterialsOpen((v) => !v)}
           />
+          <span className="side-sep" />
+
+          {/* one flat: which one, how to look at it, what to overlay. Dimmed
+              while the materials browser is open; any click here comes back. */}
+          <div className={materialsOpen ? 'side-group dim' : 'side-group'}>
+            {sideOpen ? (
+              <label className="side-apt-row" title="Apartment">
+                <Icon name="building" />
+                <select className="side-apt" value={apartmentId} onChange={(e) => switchApartment(e.target.value)}>
+                  {apartments.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ) : (
+              <MenuBtn icon="building" label={apt.name} tip={apt.name} onClick={() => setSideOpen(true)} />
+            )}
+            <MenuBtn
+              icon="home"
+              label="Overview"
+              tip="Whole apartment in 3D"
+              className={view === 'apartment' && !materialsOpen && cam === 'free' && walk === 'off' ? 'active' : ''}
+              onClick={() => showApartment('free')}
+            />
+            <MenuBtn
+              icon="plan"
+              label="Floor plan"
+              tip={cam === 'plan' ? 'Back to orbit view' : 'Floor plan (top-down)'}
+              className={cam === 'plan' && !materialsOpen ? 'active' : ''}
+              onClick={() => showApartment(cam === 'plan' ? 'free' : 'plan')}
+            />
+            {tourScript && (
+              <MenuBtn
+                icon="tour"
+                label="Guided tour"
+                tip={tourOn ? 'Stop the tour' : 'Guided tour (auto walk)'}
+                className={tourOn && !materialsOpen ? 'active' : ''}
+                onClick={() => {
+                  if (tourOn) return setTourOn(false);
+                  setMaterialsOpen(false);
+                  setView('apartment');
+                  setWalkSpawn(null);
+                  setWalk('on');
+                  setTourOn(true);
+                }}
+              />
+            )}
+            <span className="side-sep" />
+            <MenuBtn
+              icon="pieces"
+              label="Pieces"
+              tip={`Pieces: ${showPieces ? 'shown' : 'hidden'}`}
+              className={showPieces ? 'toggle on' : 'toggle'}
+              onClick={() => {
+                setMaterialsOpen(false);
+                setShowPieces((v) => !v);
+              }}
+            />
+            <MenuBtn
+              icon="clearance"
+              label="Clearance zones"
+              tip={`Clearance zones: ${showClearances ? 'on' : 'off'}`}
+              className={showClearances ? 'toggle on' : 'toggle'}
+              onClick={() => {
+                setMaterialsOpen(false);
+                setShowClearances((v) => !v);
+              }}
+            />
+            <MenuBtn
+              icon="areas"
+              label="Room areas"
+              tip={`Room areas: ${showAreas ? 'on' : 'off'}`}
+              className={showAreas ? 'toggle on' : 'toggle'}
+              onClick={() => {
+                setMaterialsOpen(false);
+                setShowAreas((v) => !v);
+              }}
+            />
+          </div>
         </div>
         {sideOpen && (
-          <>
+          <div className={materialsOpen ? 'side-body dim' : 'side-body'}>
             <input
               className="side-filter"
               type="search"
@@ -834,7 +829,7 @@ export default function App() {
                   </div>
                 ))}
             </div>
-          </>
+          </div>
         )}
       </nav>
     </div>

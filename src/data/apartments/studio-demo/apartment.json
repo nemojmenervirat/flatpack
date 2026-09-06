@@ -1,0 +1,23 @@
+{
+  "name": "Studio demo (example)",
+  "height": 2600,
+  "floor": { "pos": [0, 0, -60], "size": [4500, 4000, 50] },
+  "walls": [
+    { "name": "south-w", "pos": [0, 0, 0], "size": [1000, 250, 2600] },
+    { "name": "parapet-window", "pos": [1000, 0, 0], "size": [1800, 250, 900] },
+    { "name": "lintel-window", "pos": [1000, 0, 2400], "size": [1800, 250, 200] },
+    { "name": "south-e", "pos": [2800, 0, 0], "size": [1700, 250, 2600] },
+    { "name": "west", "pos": [0, 250, 0], "size": [250, 3500, 2600] },
+    { "name": "east", "pos": [4250, 250, 0], "size": [250, 3500, 2600] },
+    { "name": "north-w", "pos": [0, 3750, 0], "size": [1750, 250, 2600] },
+    { "name": "lintel-entrance", "pos": [1750, 3750, 2100], "size": [900, 250, 500] },
+    { "name": "north-e", "pos": [2650, 3750, 0], "size": [1850, 250, 2600] }
+  ],
+  "openings": [
+    { "name": "entrance", "type": "door", "pos": [1750, 3750, 0], "size": [900, 250, 2100], "hinge": "min", "swing": -1, "style": "entrance" },
+    { "name": "window-south", "type": "window", "pos": [1000, 0, 900], "size": [1800, 250, 1500] }
+  ],
+  "floors": [
+    { "name": "oak-studio", "pos": [250, 250, -10], "size": [4000, 3500, 10], "color": "#c08a55", "texture": "wood" }
+  ]
+}

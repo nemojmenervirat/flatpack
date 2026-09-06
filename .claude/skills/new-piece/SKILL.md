@@ -6,13 +6,16 @@ description: Create a new furniture piece for flatpack — design the JSON, plac
 # Creating a new furniture piece
 
 The JSON is the source of truth; the 3D view is read-only. A new piece means:
-piece JSON in `src/data/`, a placement in `src/data/scene.json`, registration in
-`src/App.jsx`, verification via `geometry.js`.
+piece JSON in the flat's `src/data/apartments/<id>/pieces/` (custom builds) or in the
+shared catalogue `src/data/pieces/` (generic bought items), a placement in that flat's
+`scene.json`, verification via `geometry.js`. Nothing is registered by hand —
+`src/apartments.js` globs the folders. Confirm which flat when more than one exists
+(today: `l2-39`).
 
 ## Order of work
 
-1. **Read the room first.** `src/data/apartment.json` (walls/openings near the target
-   spot) and `src/data/scene.json` (what already stands there). Work out the piece's
+1. **Read the room first.** The flat's `apartment.json` (walls/openings near the target
+   spot) and `scene.json` (what already stands there). Work out the piece's
    **world-space** footprint as min/max coordinates against real wall faces before
    designing any parts. Useful interior faces are wall `pos`/`pos+size` values.
 2. **Pick the rotation before authoring parts.** Doors must face local −y (see
@@ -20,7 +23,8 @@ piece JSON in `src/data/`, a placement in `src/data/scene.json`, registration in
    from the table below, then author parts in local coordinates that map onto the
    world footprint.
 3. Author the piece JSON (schema + construction rules below).
-4. Place it in `scene.json`, register it in `piecesById` in `App.jsx` (import + entry).
+4. Place it in the flat's `scene.json`. File name must equal the piece `id`, and ids
+   are unique across the whole project (catalogue + every flat).
 5. **Verify with the check command** (below) — fit report must be clean and parts must
    not overlap each other. Also hand-check that cut sizes add up to the outer size.
 
@@ -104,18 +108,15 @@ Recipe: write down the target world min/max, pick rot from the fronts row, read 
 
 ## Verify command
 
-Run from the repo root; add the new piece id to `ids`. Must print `issues: none` and
-`internal part overlaps: 0`.
+Run from the repo root with the flat's id (the piece must already be placed in its
+`scene.json`). Must print `issues: none` and `internal part overlaps: 0`.
 
 ```bash
 node --input-type=module -e "
 import { fitReport, aabbOf, overlaps } from './src/geometry.js';
-import { readFileSync } from 'fs';
-const j = (p) => JSON.parse(readFileSync('src/data/'+p+'.json','utf8'));
-const scene = j('scene');
-const ids = scene.placements.map(p => p.piece);
-const piecesById = Object.fromEntries([...new Set(ids)].map(id => [id, j(id)]));
-const r = fitReport(scene, piecesById, j('apartment'));
+import { loadApartment } from './scripts/lib/apartments.mjs';
+const { apartment, scene, piecesById } = await loadApartment('l2-39');
+const r = fitReport(scene, piecesById, apartment);
 console.log('issues:', r.issues.length ? r.issues : 'none');
 for (const [id, piece] of Object.entries(piecesById)) {
   const boxes = (piece.parts||[]).map(p => aabbOf(p.pos, p.size));
@@ -135,6 +136,8 @@ Data uses the plan's numbering: `room5` (first bedroom, window south), `room6`
 confirm against which bed/label he means — historically "room 1" ≈ `room5`.
 
 ## Reference pieces
+
+All in `src/data/apartments/l2-39/pieces/` except `bed-90.json` (`src/data/pieces/`).
 
 - `wardrobe-hall.json` — cleanest carcass (partition, shelf column, two-tier doors).
 - `kitchen.json` — the whole kitchen as one L-piece (bases + uppers, two runs): uses

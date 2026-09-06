@@ -3,7 +3,7 @@ import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, OrthographicCamera, Html, Edges } from '@react-three/drei';
 import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, Path, ExtrudeGeometry } from 'three';
 import { aabbOf, pieceLocalBBox, walkMove, walkObstacles, frontFrame } from './geometry.js';
-import { TOUR, createTour, tickTour, endTour, resolveTarget, doorGeometry } from './tour.js';
+import { TOUR, createTour, tickTour, endTour, resolveTarget, doorGeometry, entranceSpawn } from './tour.js';
 import { partColor } from './materials.js';
 
 // Glow added to a part while it is hovered in the 3D view or in the parts
@@ -1390,14 +1390,24 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
 // circle at fixed eye height; walkMove (geometry.js) slides it along walls
 // and furniture, so doorways work and nothing solid can be crossed.
 //
-// With a `tour` script (src/data/tour.js) the runner in src/tour.js drives the
+// With a `tour` script (the flat's tour.js) the runner in src/tour.js drives the
 // body instead: it walks the route, opens and closes fronts through the
 // openables registry and posts captions. Any manual input (drag, wheel, keys,
 // floor click) hands control back; onTourEnd tells the app.
 const WALK = { eye: 1650, radius: 200, zlo: 100, zhi: 1650, speed: 1400, run: 2800, glide: 2200 };
-const ENTRANCE_SPAWN = { pos: [8647, 6950], yaw: Math.PI }; // just inside the front door, facing the hall
+// Orbit camera framing from the floor slab: look at the slab centre from the
+// south, height and distance scaled by the longer side (three.js metres).
+const frameFor = (apartment) => {
+  const f = apartment.floor;
+  if (!f) return { position: [7.5, 11, 14], target: [7.5, 0.5, -4.6] };
+  const cx = (f.pos[0] + f.size[0] / 2) * S;
+  const cz = -(f.pos[1] + f.size[1] / 2) * S;
+  const L = Math.max(f.size[0], f.size[1]) * S;
+  return { position: [cx, 0.73 * L, cz + 1.24 * L], target: [cx, 0.5, cz] };
+};
 
-function WalkControls({ spawn, boxes, glideRef, dragRef, onExit, tour, onTourEnd, openables, doors, resolve, onCaption }) {
+// entrance: { pos: [x, y], yaw } where walking starts when no spawn was clicked
+function WalkControls({ spawn, entrance, boxes, glideRef, dragRef, onExit, tour, onTourEnd, openables, doors, resolve, onCaption }) {
   const camera = useThree((s) => s.camera);
   const gl = useThree((s) => s.gl);
   const pos = useRef(null); // data-space mm [x, y]
@@ -1415,7 +1425,7 @@ function WalkControls({ spawn, boxes, glideRef, dragRef, onExit, tour, onTourEnd
   useEffect(() => {
     if (!tour || !openables) return undefined;
     const ctx = {
-      body: { pos: [...(pos.current || ENTRANCE_SPAWN.pos)], yaw: look.current.yaw, pitch: look.current.pitch },
+      body: { pos: [...(pos.current || entrance.pos)], yaw: look.current.yaw, pitch: look.current.pitch },
       eye: WALK.eye,
       move: (p, d) => walkMove(p, d, boxes, TOUR.radius),
       openables: () => [...openables.values()],
@@ -1442,7 +1452,7 @@ function WalkControls({ spawn, boxes, glideRef, dragRef, onExit, tour, onTourEnd
       fov: camera.fov,
       order: camera.rotation.order,
     };
-    const s = spawn || ENTRANCE_SPAWN;
+    const s = spawn || entrance;
     pos.current = [...s.pos];
     look.current = { yaw: s.yaw ?? Math.PI, pitch: 0 };
     camera.rotation.order = 'YXZ';
@@ -1654,7 +1664,7 @@ export default function Viewer({
   walkSpawn = null,
   onWalkEnter,
   onWalkExit,
-  tour = null, // scripted tour steps (src/data/tour.js) to play while walking, or null
+  tour = null, // scripted tour steps (the apartment's tour.js) to play while walking, or null
   onTourEnd,
   onTourCaption,
 }) {
@@ -1668,6 +1678,8 @@ export default function Viewer({
   // the head and drop out), the entrance door opening (a "closed front door"),
   // and every placed furniture part box.
   const walkBoxes = useMemo(() => walkObstacles(apartment, report.placed, WALK.zlo, WALK.zhi), [apartment, report]);
+  const entrance = useMemo(() => entranceSpawn(apartment), [apartment]);
+  const frame = useMemo(() => frameFor(apartment), [apartment]);
 
   // Everything that opens registers here (see OpenablesContext) so the tour
   // can drive it; look targets by piece label / opening name resolve here too.
@@ -1739,7 +1751,7 @@ export default function Viewer({
 
   return (
     <Canvas
-      camera={{ position: [7.5, 11, 14], fov: 45, near: 0.05 }}
+      camera={{ position: frame.position, fov: 45, near: 0.05 }}
       style={{ background: '#16181c' }}
     >
       <EdgesContext.Provider value={false}>
@@ -1909,12 +1921,13 @@ export default function Viewer({
         <DimLabel box={hover.box} text={hover.text} name={hover.name} className={hover.className} />
       )}
 
-      {!walking && cam === 'free' && <OrbitControls target={[7.5, 0.5, -4.6]} makeDefault />}
+      {!walking && cam === 'free' && <OrbitControls target={frame.target} makeDefault />}
       {!walking && cam !== 'free' && <PlanView apartment={apartment} />}
       {!walking && <ArrowKeyPan />}
       {walking && (
         <WalkControls
           spawn={walkSpawn}
+          entrance={entrance}
           boxes={walkBoxes}
           glideRef={glideRef}
           dragRef={dragRef}

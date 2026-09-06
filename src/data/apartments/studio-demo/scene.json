@@ -1,0 +1,5 @@
+{
+  "placements": [
+    { "piece": "bed-180", "label": "Bed 180 - studio", "pos": [2372, 268, 0], "rot": 0, "clearance": { "left": 500 } }
+  ]
+}

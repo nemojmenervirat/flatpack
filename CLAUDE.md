@@ -1,8 +1,10 @@
 # CLAUDE.md — flatpack
 
 Personal furniture/apartment planner. Furniture and rooms are defined as JSON, rendered
-in 3D (react-three-fiber), with computed fit checks and cut lists. See README.md for the
-full picture. **Milan doesn't design in 3D — the JSON is the source of truth; the 3D
+in 3D (react-three-fiber), with computed fit checks and cut lists. Several apartments
+can live side by side (one folder each). In the sidebar only Materials is global; the
+dropdown and everything under it belong to one flat. See README.md
+for the full picture. **Milan doesn't design in 3D — the JSON is the source of truth; the 3D
 view is read-only.** When he asks for a new piece or a change, edit the JSON.
 
 ## Conventions (do not break these)
@@ -36,12 +38,20 @@ view is read-only.** When he asks for a new piece or a change, edit the JSON.
 - `src/Viewer.jsx` — the only file that knows three.js exists.
 - `src/App.jsx` — layout, panels.
 - `src/tour.js` — scripted first-person tour runner (pure: step kinds, selectors,
-  look math). `src/data/tour.js` is the route itself (waypoints in mm, what to open
-  where). After moving a piece or editing the route run `node scripts/check-tour.mjs` —
-  it replays the tour against the real obstacle boxes and fails on stuck steps.
-- `src/data/` — apartment, pieces, scene. New furniture = new JSON file here,
-  registered in `piecesById` in App.jsx. `hardware.json` = bought hardware by part
-  name (product + KM per piece) for parts flagged `"hardware": true`.
+  look math, `entranceSpawn()`). Each flat's `tour.js` is its route (waypoints in mm,
+  what to open where). After moving a piece or editing a route run
+  `node scripts/check-tour.mjs <id>` — it replays the tour against the real obstacle
+  boxes and fails on stuck steps. `node scripts/check-areas.mjs <id>` audits rooms.json.
+- `src/apartments.js` — the registry. Globs `src/data/apartments/*/` (one folder per
+  flat, folder name = id) and `src/data/pieces/`; **nothing is registered by hand**.
+- `src/data/apartments/<id>/` — `apartment.json` + `scene.json` (required),
+  `rooms.json`, `tour.js` (optional), `pieces/` = furniture built for that flat.
+  The current flat is `l2-39`.
+- `src/data/pieces/` — bought catalogue shared by every flat (beds, fridge, sanitary).
+  New furniture = new JSON file in the flat's `pieces/` (custom builds) or here
+  (generic bought items); file name = piece `id`, ids unique project-wide.
+- `src/data/hardware.json` = bought hardware by part name (product + KM per piece)
+  for parts flagged `"hardware": true`. Global, like materials.json.
 - `src/materials.js` + `src/data/materials.json` — the real-board registry (Elgrad
   price list + swatch colours). **Generated — never hand-edit materials.json**;
   rebuild with `node scripts/build-materials.mjs`. A piece or part can carry
@@ -49,6 +59,9 @@ view is read-only.** When he asks for a new piece or a change, edit the JSON.
 - `src/MaterialsPanel.jsx` — the ▩ browser for that registry.
 - `scripts/parse-cjenovnik.mjs` — price-list PDF → raw table (word coordinates, not
   `pdftotext -layout`, which drops cells).
+- `scripts/lib/apartments.mjs` — node twin of the registry for scripts and ad-hoc
+  checks: `listApartments()`, `loadApartment(id)` → apartment, rooms, scene,
+  piecesById, tour.
 
 ## Rules
 

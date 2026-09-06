@@ -207,6 +207,87 @@ body {
   border-color: #3a3e46;
 }
 
+/* a group of rows that all belong to the open flat. Dimmed while the
+   (apartment-agnostic) materials browser is open; the list group below the
+   head fills the rest of the sidebar. */
+.side-group {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+  min-height: 0;
+  transition: opacity 0.15s;
+}
+
+.side.collapsed .side-group {
+  align-items: center;
+}
+
+/* filter + piece list under the head */
+.side-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  transition: opacity 0.15s;
+}
+
+.side-group.dim,
+.side-body.dim {
+  opacity: 0.45;
+}
+
+.side-group.dim:hover,
+.side-body.dim:hover {
+  opacity: 0.8;
+}
+
+/* the apartment picker: a menu row whose label is a <select> */
+.side-apt-row {
+  position: relative;
+  flex: none;
+  height: 30px;
+  padding: 0 8px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #e6e4df;
+  cursor: pointer;
+}
+
+.side-apt-row:hover {
+  background: #2c2f36;
+}
+
+.side-apt-row .ico {
+  flex: none;
+  color: #ffd479;
+}
+
+.side-apt {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: #e6e4df;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+
+.side-apt:focus {
+  outline: none;
+}
+
+.side-apt option {
+  background: #1c1f24;
+  color: #e6e4df;
+}
+
 .side-list {
   flex: 1;
   overflow-y: auto;

@@ -19,19 +19,40 @@ npm install
 npm run dev
 ```
 
-Open the printed URL. You get a 3D view of the sample room (orbit with mouse, scroll to
-zoom) and a side panel with the fit report and cut list.
+Open the printed URL. You get a 3D view of the apartment (orbit with mouse, scroll to
+zoom) and a side panel with the fit report and cut list. The side panel has two parts:
+**Materials** at the top is global (the same board registry for every flat); everything
+below it belongs to the flat picked in the dropdown — overview, floor plan, walk, tour,
+the overlay toggles and the piece list.
 
 ## How it works
 
-Three kinds of data, all under `src/data/`:
+Everything lives under `src/data/`, one folder per apartment plus a shared catalogue:
 
-- **apartment.json** — the room: walls, floor, door/window openings. All boxes.
-- **piece files** (`wardrobe.json`, `bed.json`, …) — one file per furniture piece.
+```
+src/data/
+  pieces/               bought furniture shared by every flat (bed-90.json, fridge.json, …)
+  materials.json        board registry (generated), hardware.json — global
+  apartments/<id>/      one folder per flat; the folder name is the apartment id
+    apartment.json      walls, floor, door/window openings — all boxes
+    scene.json          which pieces go where
+    rooms.json          room polygons for the m² overlay (optional)
+    tour.js             the guided walk (optional)
+    pieces/             furniture built for this flat only (wardrobes, the kitchen, …)
+```
+
+Nothing is registered by hand: `src/apartments.js` picks up every folder and every
+piece file. A new apartment is a folder with `apartment.json` and `scene.json`.
+
+- **apartment.json** — the flat: walls, floor, door/window openings. All boxes. Walk
+  mode starts just inside the opening styled `"entrance"` (or set `"spawn":
+  { "pos": [x, y], "yaw": deg }` explicitly).
+- **piece files** — one file per furniture piece, named by its `id`. Ids are unique
+  across the whole project.
   - Buildable pieces have `parts`: every panel with its size and position. Cut lists
-    come from these.
+    come from these. They live in the flat's own `pieces/`.
   - Bought pieces (bed, sofa, fridge) are just an outer `size`. They participate in
-    fit checks but have no cut list.
+    fit checks but have no cut list. They live in the shared `src/data/pieces/`.
 - **scene.json** — which pieces go where: `{ "piece": "wardrobe", "pos": [200, 2900, 0], "rot": 0 }`.
 
 The app computes:
@@ -94,17 +115,19 @@ room doors open when clicked.
 The tour button (▶) plays a scripted walk through the whole apartment: it
 goes room to room, opens and closes the wardrobes, kitchen drawers, fridges,
 room doors and so on, pauses, looks around, and loops back to the front door.
-The script is `src/data/tour.js` — a plain list of steps in mm (`go`, `look`,
+The script is the flat's `tour.js` — a plain list of steps in mm (`go`, `look`,
 `turn`, `wait`, `open`, `close`, `say`), documented at the top of `src/tour.js`.
 Any drag, key or floor click hands control back to you; "stop tour" or Esc
-ends it and closes whatever it left open.
+ends it and closes whatever it left open. A flat without a `tour.js` has no tour button.
 
 After moving furniture or editing the route, replay it against the real walls:
 
 ```
-node scripts/check-tour.mjs           # reports stuck steps and selectors that match nothing
-node scripts/check-tour.mjs --trace   # position after every step
-node scripts/check-tour.mjs --dump    # placed pieces and doors, for picking waypoints
+node scripts/check-tour.mjs                 # every flat that has a tour
+node scripts/check-tour.mjs l2-39           # one flat: stuck steps, selectors that match nothing
+node scripts/check-tour.mjs l2-39 --trace   # position after every step
+node scripts/check-tour.mjs l2-39 --dump    # placed pieces and doors, for picking waypoints
+node scripts/check-areas.mjs [l2-39]        # audit rooms.json against the walls
 ```
 
 ## Materials
@@ -148,8 +171,8 @@ to tell a warm oak from a cool one, not a substitute for a physical sample.
 
 ## Typical workflow
 
-1. Measure the room once, write `apartment.json`.
-2. Describe a piece to AI → get a piece JSON with all parts.
+1. Measure the flat once, make `src/data/apartments/<id>/` and write `apartment.json`.
+2. Describe a piece to AI → get a piece JSON with all parts in the flat's `pieces/`.
 3. Place it in `scene.json`, look at it in 3D, read the fit report.
 4. Iterate in text until it fits.
 5. Copy the cut list CSV into cutlistoptimizer.com, buy boards, cut, build.

@@ -4,8 +4,8 @@
 // free corridors between furniture, and every spot where a room door is opened
 // or closed lies outside the leaf's swing arc (the runner also auto-opens any
 // closed door it heads into and waits for the leaf). Run
-// `node scripts/check-tour.mjs` after moving a piece or editing this route: it
-// replays the tour against the real obstacle boxes and door swings.
+// `node scripts/check-tour.mjs l2-39` after moving a piece or editing this route:
+// it replays the tour against the real obstacle boxes and door swings.
 //
 // The route ends where it starts (inside the front door, facing the hall), so
 // looping is seamless.
