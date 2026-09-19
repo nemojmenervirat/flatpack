@@ -1,0 +1,15 @@
+{
+  "comment": "Exact walkable rects (see l2-39/rooms.json). One room: interior minus the pilaster and the ploca footprint; the area behind the ploca joins the room through its open west side.",
+  "rooms": [
+    {
+      "name": "Boravak",
+      "rects": [
+        { "pos": [250, 250], "size": [4550, 2350] },
+        { "pos": [250, 2600], "size": [2970, 2180] },
+        { "pos": [3220, 2600], "size": [610, 1880] },
+        { "pos": [3670, 4480], "size": [160, 300] },
+        { "pos": [3830, 2740], "size": [970, 2040] }
+      ]
+    }
+  ]
+}

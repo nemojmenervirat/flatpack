@@ -1832,7 +1832,7 @@ export default function Viewer({
           key: `w-${w.name}`,
           box,
           name: w.name,
-          text: cm(Math.max(w.size[0], w.size[1])),
+          text: `${cm(Math.max(w.size[0], w.size[1]))} × ${cm(Math.min(w.size[0], w.size[1]))}`,
           className: '',
         };
         return (

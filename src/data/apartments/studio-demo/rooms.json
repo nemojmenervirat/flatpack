@@ -1,6 +1,0 @@
-{
-  "comment": "One room, one rect: the whole interior between the wall faces.",
-  "rooms": [
-    { "name": "Studio", "rects": [ { "pos": [250, 250], "size": [4000, 3500] } ] }
-  ]
-}

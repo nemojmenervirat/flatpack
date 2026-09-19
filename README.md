@@ -46,7 +46,8 @@ piece file. A new apartment is a folder with `apartment.json` and `scene.json`.
 
 - **apartment.json** — the flat: walls, floor, door/window openings. All boxes. Walk
   mode starts just inside the opening styled `"entrance"` (or set `"spawn":
-  { "pos": [x, y], "yaw": deg }` explicitly).
+  { "pos": [x, y], "yaw": deg }` explicitly). `"areaPad"` (mm, default 20) is how far
+  the room-area overlay plates stop short of the walls; 0 draws them wall to wall.
 - **piece files** — one file per furniture piece, named by its `id`. Ids are unique
   across the whole project.
   - Buildable pieces have `parts`: every panel with its size and position. Cut lists

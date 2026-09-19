@@ -87,6 +87,8 @@ const roomAt = (roomDefs, x, y) => {
 // edge (extended past its ends to cover corners) is subtracted from the room
 // rects, so the slab keeps an exact 2 cm gap to walls with no seam pinholes.
 // The m² values use the un-padded rects — padding is presentation only.
+// Default inset of the room-area overlay from its boundary (mm). An apartment
+// can override it with "areaPad" in apartment.json (0 = plates touch the walls).
 const AREA_PAD = 20;
 const AREA_EPS = 0.5;
 
@@ -112,14 +114,14 @@ const cutAll = (boxes, cutters) => {
   return out;
 };
 
-// A boundary edge as its exclusion band: PAD deep toward the room interior,
-// extended PAD past both ends so corner squares are covered too.
-const edgeBand = (e) => {
-  const lo = e.from - AREA_PAD;
-  const hi = e.to + AREA_PAD;
+// A boundary edge as its exclusion band: pad deep toward the room interior,
+// extended pad past both ends so corner squares are covered too.
+const edgeBand = (e, pad) => {
+  const lo = e.from - pad;
+  const hi = e.to + pad;
   if (e.axis === 'v')
-    return e.inward === 1 ? [e.coord, lo, e.coord + AREA_PAD, hi] : [e.coord - AREA_PAD, lo, e.coord, hi];
-  return e.inward === 1 ? [lo, e.coord, hi, e.coord + AREA_PAD] : [lo, e.coord - AREA_PAD, hi, e.coord];
+    return e.inward === 1 ? [e.coord, lo, e.coord + pad, hi] : [e.coord - pad, lo, e.coord, hi];
+  return e.inward === 1 ? [lo, e.coord, hi, e.coord + pad] : [lo, e.coord - pad, hi, e.coord];
 };
 
 // Outline edges of a set of non-overlapping rects (the room's NET shape, so
@@ -186,15 +188,13 @@ const roomEdges = (zones) => {
   return edges;
 };
 
-const computeRoomAreas = (roomDefs) => {
+const computeRoomAreas = (roomDefs, pad = AREA_PAD) => {
   const rows = roomDefs
     .filter((r) => r.zones.length > 0)
     .map(({ name, zones }) => {
       const edges = roomEdges(zones);
-      const eroded = cutAll(
-        zones.map((z) => [z.pos[0], z.pos[1], z.pos[0] + z.size[0], z.pos[1] + z.size[1]]),
-        edges.map(edgeBand)
-      );
+      const boxes = zones.map((z) => [z.pos[0], z.pos[1], z.pos[0] + z.size[0], z.pos[1] + z.size[1]]);
+      const eroded = pad > 0 ? cutAll(boxes, edges.map((e) => edgeBand(e, pad))) : boxes;
       return {
         label: name,
         m2: zones.reduce((n, z) => n + z.size[0] * z.size[1], 0) / 1e6,
@@ -242,7 +242,7 @@ const computePieceGroups = ({ scene, piecesById }, roomDefs) => {
 const deriveApartment = (apt) => {
   const roomDefs = buildRoomDefs(apt.rooms);
   return {
-    roomAreas: computeRoomAreas(roomDefs),
+    roomAreas: computeRoomAreas(roomDefs, apt.apartment.areaPad ?? AREA_PAD),
     pieceGroups: computePieceGroups(apt, roomDefs),
     report: fitReport(apt.scene, apt.piecesById, apt.apartment),
   };

@@ -1,0 +1,35 @@
+{
+  "name": "Ljilja - boravak",
+  "comment": "From the hand sketch (sketch.jpg, cm) plus Milan's corrections: room 455 x 453, H 252. North wall from the west: 66 wall, 96 window, 135 wall (120 on the sketch, +15 so the row closes to 455), 45 pilaster, 113 wall to the NE corner. NE corner: a 970 x 2040 area closed toward the room by a full-height 14 cm 'ploca' wall (H=140 on the sketch is a misread), open on its west side. East wall: 124 wall south of the ploca, then the door (90 assumed), 21 to the SE corner. South wall: double window centred (160 wide assumed). Assumed: wall thickness 250, pilaster depth 300, window sill 900 / head 2200.",
+  "height": 2520,
+  "areaPad": 0,
+  "floor": { "pos": [0, 0, -60], "size": [5050, 5030, 50] },
+  "walls": [
+    { "name": "south-w", "pos": [0, 0, 0], "size": [1725, 250, 2520] },
+    { "name": "parapet-window-s", "pos": [1725, 0, 0], "size": [1600, 250, 900] },
+    { "name": "lintel-window-s", "pos": [1725, 0, 2200], "size": [1600, 250, 320] },
+    { "name": "south-e", "pos": [3325, 0, 0], "size": [1725, 250, 2520] },
+    { "name": "west", "pos": [0, 250, 0], "size": [250, 4780, 2520] },
+
+    { "name": "east-s", "pos": [4800, 250, 0], "size": [250, 210, 2520] },
+    { "name": "lintel-door", "pos": [4800, 460, 2100], "size": [250, 900, 420] },
+    { "name": "east-n", "pos": [4800, 1360, 0], "size": [250, 3670, 2520] },
+
+    { "name": "north-w", "pos": [250, 4780, 0], "size": [660, 250, 2520] },
+    { "name": "parapet-window-n", "pos": [910, 4780, 0], "size": [960, 250, 900] },
+    { "name": "lintel-window-n", "pos": [910, 4780, 2200], "size": [960, 250, 320] },
+    { "name": "north-mid", "pos": [1870, 4780, 0], "size": [1350, 250, 2520] },
+    { "name": "pilaster", "pos": [3220, 4480, 0], "size": [450, 550, 2520] },
+    { "name": "north-e", "pos": [3670, 4780, 0], "size": [1130, 250, 2520] },
+
+    { "name": "ploca", "pos": [3830, 2600, 0], "size": [970, 140, 2520] }
+  ],
+  "openings": [
+    { "name": "door", "type": "door", "pos": [4800, 460, 0], "size": [250, 900, 2100], "hinge": "min", "swing": 1, "style": "entrance" },
+    { "name": "window-north", "type": "window", "pos": [910, 4780, 900], "size": [960, 250, 1300] },
+    { "name": "window-south", "type": "window", "pos": [1725, 0, 900], "size": [1600, 250, 1300] }
+  ],
+  "floors": [
+    { "name": "oak-boravak", "pos": [250, 250, -10], "size": [4550, 4530, 10], "color": "#c08a55", "texture": "wood" }
+  ]
+}
