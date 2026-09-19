@@ -1,0 +1,12 @@
+{
+  "id": "tv-40",
+  "name": "TV 40\" on stand",
+  "buildable": false,
+  "color": "#22262b",
+  "parts": [
+    { "name": "stand foot", "pos": [300, 20, 0], "size": [300, 200, 15], "color": "#33383e" },
+    { "name": "stand neck", "pos": [400, 40, 15], "size": [100, 40, 45], "color": "#33383e" },
+    { "name": "tv panel", "pos": [0, 0, 60], "size": [900, 50, 520], "color": "#22262b" },
+    { "name": "screen", "pos": [30, -8, 90], "size": [840, 8, 460], "color": "#101318" }
+  ]
+}

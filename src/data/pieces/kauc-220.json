@@ -1,0 +1,18 @@
+{
+  "id": "kauc-220",
+  "name": "Kauc 220 (sitting couch)",
+  "buildable": false,
+  "color": "#8f7f66",
+  "clearance": { "front": 500 },
+  "parts": [
+    { "name": "foot", "pos": [40, 40, 0], "size": [60, 60, 80], "color": "#2a2622" },
+    { "name": "foot", "pos": [2100, 40, 0], "size": [60, 60, 80], "color": "#2a2622" },
+    { "name": "foot", "pos": [40, 750, 0], "size": [60, 60, 80], "color": "#2a2622" },
+    { "name": "foot", "pos": [2100, 750, 0], "size": [60, 60, 80], "color": "#2a2622" },
+    { "name": "base", "pos": [0, 0, 80], "size": [2200, 850, 320], "round": 30, "fabric": "weave" },
+    { "name": "arm", "pos": [0, 0, 400], "size": [60, 850, 250], "round": 20, "fabric": "weave" },
+    { "name": "arm", "pos": [2140, 0, 400], "size": [60, 850, 250], "round": 20, "fabric": "weave" },
+    { "name": "seat cushion", "pos": [60, 20, 400], "size": [2080, 640, 100], "round": 40, "fabric": "weave", "color": "#a08f74" },
+    { "name": "back cushion", "pos": [60, 660, 400], "size": [2080, 170, 400], "round": 40, "fabric": "weave", "color": "#a08f74" }
+  ]
+}

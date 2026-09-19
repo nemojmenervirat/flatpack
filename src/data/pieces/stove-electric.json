@@ -1,0 +1,26 @@
+{
+  "id": "stove-electric",
+  "name": "Elektricni sporet 596x600x850 (electric cooker)",
+  "buildable": false,
+  "color": "#f4f4f2",
+  "clearance": { "front": 600 },
+  "parts": [
+    { "name": "plinth", "pos": [20, 20, 0], "size": [556, 560, 60], "color": "#17181a" },
+    { "name": "body", "pos": [0, 0, 60], "size": [596, 600, 782] },
+    { "name": "hob glass", "pos": [10, 10, 842], "size": [576, 580, 7], "color": "#15171a" },
+    { "name": "hob ring", "pos": [80, 80, 849], "size": [180, 180, 1], "round": 90, "color": "#2e3136" },
+    { "name": "hob ring", "pos": [336, 80, 849], "size": [180, 180, 1], "round": 90, "color": "#2e3136" },
+    { "name": "hob ring", "pos": [80, 340, 849], "size": [180, 180, 1], "round": 90, "color": "#2e3136" },
+    { "name": "hob ring", "pos": [336, 340, 849], "size": [180, 180, 1], "round": 90, "color": "#2e3136" },
+
+    { "name": "knob", "pos": [50, -12, 780], "size": [40, 12, 40], "disc": true, "color": "#dcdedf" },
+    { "name": "knob", "pos": [130, -12, 780], "size": [40, 12, 40], "disc": true, "color": "#dcdedf" },
+    { "name": "knob", "pos": [426, -12, 780], "size": [40, 12, 40], "disc": true, "color": "#dcdedf" },
+    { "name": "knob", "pos": [506, -12, 780], "size": [40, 12, 40], "disc": true, "color": "#dcdedf" },
+
+    { "name": "oven front", "pos": [30, -10, 200], "size": [536, 10, 550] },
+    { "name": "oven glass", "pos": [68, -12, 280], "size": [460, 2, 400], "color": "#101318" },
+    { "name": "oven handle", "pos": [58, -30, 700], "size": [480, 18, 25], "color": "#c9ccd0" },
+    { "name": "drawer front", "pos": [30, -10, 70], "size": [536, 10, 120] }
+  ]
+}

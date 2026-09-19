@@ -1,0 +1,24 @@
+{
+  "id": "stove-wood",
+  "name": "Sporet na drva 900x600 (wood stove, lid open)",
+  "buildable": false,
+  "color": "#f2f2ef",
+  "clearance": { "front": 600 },
+  "parts": [
+    { "name": "plinth", "pos": [40, 40, 0], "size": [820, 520, 60], "color": "#17181a" },
+    { "name": "body", "pos": [0, 0, 60], "size": [900, 600, 790] },
+    { "name": "top plate", "pos": [30, 30, 850], "size": [840, 540, 20], "color": "#3a3c3f" },
+    { "name": "front rail", "pos": [0, -30, 830], "size": [900, 30, 20], "color": "#c9ccd0" },
+    { "name": "lid open", "pos": [0, 570, 870], "size": [900, 30, 520] },
+
+    { "name": "firebox front", "pos": [50, -15, 560], "size": [270, 15, 230] },
+    { "name": "ash drawer front", "pos": [50, -15, 330], "size": [270, 15, 200] },
+    { "name": "oven front", "pos": [370, -15, 420], "size": [480, 15, 370] },
+    { "name": "drawer front", "pos": [370, -15, 130], "size": [480, 15, 250] },
+
+    { "name": "handle", "pos": [120, -35, 660], "size": [130, 20, 25], "color": "#c9ccd0" },
+    { "name": "handle", "pos": [120, -35, 410], "size": [130, 20, 25], "color": "#c9ccd0" },
+    { "name": "handle oven", "pos": [500, -35, 700], "size": [220, 20, 25], "color": "#c9ccd0" },
+    { "name": "handle oven", "pos": [500, -35, 240], "size": [220, 20, 25], "color": "#c9ccd0" }
+  ]
+}

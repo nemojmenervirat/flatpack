@@ -1,0 +1,13 @@
+{
+  "id": "coffee-table-120",
+  "name": "Coffee table 120x60",
+  "buildable": false,
+  "color": "#3e3222",
+  "parts": [
+    { "name": "table top", "pos": [0, 0, 622], "size": [1200, 600, 28], "round": 40, "color": "#5a452e" },
+    { "name": "table leg", "pos": [60, 60, 0], "size": [60, 60, 622] },
+    { "name": "table leg", "pos": [1080, 60, 0], "size": [60, 60, 622] },
+    { "name": "table leg", "pos": [60, 480, 0], "size": [60, 60, 622] },
+    { "name": "table leg", "pos": [1080, 480, 0], "size": [60, 60, 622] }
+  ]
+}

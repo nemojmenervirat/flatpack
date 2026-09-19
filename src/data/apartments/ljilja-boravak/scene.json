@@ -1,3 +1,14 @@
 {
-  "placements": []
+  "placements": [
+    { "piece": "tv-ormar-ljilja", "label": "TV ormar - east wall", "pos": [4418, 2600, 0], "rot": 270 },
+    { "piece": "tv-40", "label": "TV 40 - on ormar", "pos": [4508, 2550, 900], "rot": 270 },
+    { "piece": "stove-wood", "label": "Sporet na drva - NW of pilaster", "pos": [2290, 4130, 0], "rot": 0 },
+    { "piece": "kauc-220", "label": "Kauc - west wall", "pos": [1100, 1100, 0], "rot": 90, "clearance": { "front": 200 } },
+    { "piece": "kauc-220", "label": "Kauc - south wall", "pos": [3400, 1100, 0], "rot": 180, "clearance": { "front": 200 } },
+    { "piece": "stove-electric", "label": "Elektricni sporet - NE corner", "pos": [4192, 4772, 0], "rot": 270, "clearance": { "front": 450 } },
+    { "piece": "kitchen-ljilja", "label": "Kitchen - sink run, east wall", "pos": [4192, 4772, 0], "rot": 270 },
+    { "piece": "wall-panel-east-mid", "label": "Slat panel - east-mid extension", "pos": [3000, 2645, 0], "rot": 0 },
+    { "piece": "fridge-gorenje-rf4142", "label": "Fridge - free-standing by the worktop end", "pos": [3590, 3250, 0], "rot": 180 },
+    { "piece": "coffee-table-120", "label": "Coffee table - at kauc corner", "pos": [1350, 1350, 0], "rot": 0 }
+  ]
 }

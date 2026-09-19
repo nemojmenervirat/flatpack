@@ -1,0 +1,19 @@
+{
+  "id": "tv-ormar-ljilja",
+  "name": "TV ormar (existing, wood) 1000",
+  "buildable": false,
+  "color": "#8a5a2b",
+  "clearance": { "front": 600 },
+  "parts": [
+    { "name": "side", "pos": [0, 0, 0], "size": [18, 382, 900] },
+    { "name": "side", "pos": [982, 0, 0], "size": [18, 382, 900] },
+    { "name": "plinth", "pos": [18, 40, 0], "size": [964, 339, 80], "color": "#5e3d1c" },
+    { "name": "bottom", "pos": [18, 0, 80], "size": [964, 379, 18] },
+    { "name": "shelf", "pos": [18, 0, 480], "size": [964, 379, 18] },
+    { "name": "top", "pos": [18, 0, 882], "size": [964, 379, 18] },
+    { "name": "back", "pos": [18, 379, 98], "size": [964, 3, 784], "color": "#6e4622" },
+
+    { "name": "door left", "pos": [3, -18, 3], "size": [495, 18, 894], "color": "#9a6633" },
+    { "name": "door right", "pos": [502, -18, 3], "size": [495, 18, 894], "color": "#9a6633" }
+  ]
+}

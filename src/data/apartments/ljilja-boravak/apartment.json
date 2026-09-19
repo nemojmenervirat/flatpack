@@ -1,6 +1,6 @@
 {
   "name": "Ljilja - boravak",
-  "comment": "From the hand sketch (sketch.jpg, cm) plus Milan's corrections: room 455 x 453, H 252. North wall from the west: 66 wall, 96 window, 135 wall (120 on the sketch, +15 so the row closes to 455), 45 pilaster, 113 wall to the NE corner. NE corner: a 970 x 2040 area closed toward the room by the full-height 14 cm east-mid stub wall (the sketch's 'ploca'), open on its west side; floor and its three walls tiled to H 140 (the sketch's 'ploc H=140'). East wall: 124 wall south of east-mid, then the door (90 assumed), 21 to the SE corner. South wall: double window centred (160 wide assumed). Assumed: wall thickness 250, pilaster depth 300, window sill 900 / head 2200.",
+  "comment": "From the hand sketch (sketch.jpg, cm) plus Milan's corrections: room 455 x 453, H 252. North wall from the west: 66 wall, 96 window, 135 wall (120 on the sketch, +15 so the row closes to 455), 45 pilaster, 113 wall to the NE corner. NE corner: a 970 x 2040 area closed toward the room by the full-height 14 cm east-mid wall (the sketch's 'ploca'), open on its west side; floor and its three walls tiled to H 140 (the sketch's 'ploc H=140'). East wall: 124 wall south of east-mid, then the door (90 assumed), 21 to the SE corner. South wall: double window centred (160 wide assumed). Assumed: wall thickness 250, pilaster depth 300, window sill 900 / head 2200.",
   "height": 2520,
   "areaPad": 0,
   "floor": { "pos": [0, 0, -60], "size": [5050, 5030, 50] },
@@ -25,7 +25,7 @@
     { "name": "east-mid", "pos": [3830, 2600, 0], "size": [970, 140, 2520] }
   ],
   "openings": [
-    { "name": "door", "type": "door", "pos": [4800, 460, 0], "size": [250, 900, 2100], "hinge": "min", "swing": 1, "style": "entrance" },
+    { "name": "door", "type": "door", "pos": [4800, 460, 0], "size": [250, 900, 2100], "hinge": "min", "swing": 1, "style": "inner" },
     { "name": "window-north", "type": "window", "pos": [910, 4780, 900], "size": [960, 250, 1300] },
     { "name": "window-south", "type": "window", "pos": [1725, 0, 900], "size": [1600, 250, 1300] }
   ],
