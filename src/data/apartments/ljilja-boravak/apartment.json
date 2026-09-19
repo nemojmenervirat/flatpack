@@ -1,6 +1,6 @@
 {
   "name": "Ljilja - boravak",
-  "comment": "From the hand sketch (sketch.jpg, cm) plus Milan's corrections: room 455 x 453, H 252. North wall from the west: 66 wall, 96 window, 135 wall (120 on the sketch, +15 so the row closes to 455), 45 pilaster, 113 wall to the NE corner. NE corner: a 970 x 2040 area closed toward the room by a full-height 14 cm 'ploca' wall (H=140 on the sketch is a misread), open on its west side. East wall: 124 wall south of the ploca, then the door (90 assumed), 21 to the SE corner. South wall: double window centred (160 wide assumed). Assumed: wall thickness 250, pilaster depth 300, window sill 900 / head 2200.",
+  "comment": "From the hand sketch (sketch.jpg, cm) plus Milan's corrections: room 455 x 453, H 252. North wall from the west: 66 wall, 96 window, 135 wall (120 on the sketch, +15 so the row closes to 455), 45 pilaster, 113 wall to the NE corner. NE corner: a 970 x 2040 area closed toward the room by the full-height 14 cm east-mid stub wall (the sketch's 'ploca'), open on its west side; floor and its three walls tiled to H 140 (the sketch's 'ploc H=140'). East wall: 124 wall south of east-mid, then the door (90 assumed), 21 to the SE corner. South wall: double window centred (160 wide assumed). Assumed: wall thickness 250, pilaster depth 300, window sill 900 / head 2200.",
   "height": 2520,
   "areaPad": 0,
   "floor": { "pos": [0, 0, -60], "size": [5050, 5030, 50] },
@@ -22,7 +22,7 @@
     { "name": "pilaster", "pos": [3220, 4480, 0], "size": [450, 550, 2520] },
     { "name": "north-e", "pos": [3670, 4780, 0], "size": [1130, 250, 2520] },
 
-    { "name": "ploca", "pos": [3830, 2600, 0], "size": [970, 140, 2520] }
+    { "name": "east-mid", "pos": [3830, 2600, 0], "size": [970, 140, 2520] }
   ],
   "openings": [
     { "name": "door", "type": "door", "pos": [4800, 460, 0], "size": [250, 900, 2100], "hinge": "min", "swing": 1, "style": "entrance" },
@@ -30,6 +30,13 @@
     { "name": "window-south", "type": "window", "pos": [1725, 0, 900], "size": [1600, 250, 1300] }
   ],
   "floors": [
-    { "name": "oak-boravak", "pos": [250, 250, -10], "size": [4550, 4530, 10], "color": "#c08a55", "texture": "wood" }
+    { "name": "oak-boravak-s", "pos": [250, 250, -10], "size": [4550, 2490, 10], "color": "#c08a55", "texture": "wood" },
+    { "name": "oak-boravak-n", "pos": [250, 2740, -10], "size": [3580, 2040, 10], "color": "#c08a55", "texture": "wood" },
+    { "name": "tile-ne-corner", "pos": [3830, 2740, -10], "size": [970, 2040, 10], "color": "#b8b2a6", "texture": "tile" }
+  ],
+  "wallTiles": [
+    { "name": "tilewall-ne-north", "pos": [3830, 4772, 0], "size": [970, 8, 1400] },
+    { "name": "tilewall-ne-east", "pos": [4792, 2740, 0], "size": [8, 2040, 1400] },
+    { "name": "tilewall-ne-eastmid", "pos": [3830, 2740, 0], "size": [970, 8, 1400] }
   ]
 }
