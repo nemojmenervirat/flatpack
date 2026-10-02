@@ -21,7 +21,7 @@
 //   { say: 'caption' }
 //
 // Selectors (sel): 'all' | 'opened' | [sel, ...] |
-//   { door: 'opening name' } | { piece: 'label or id', part?: 'name prefix',
+//   { door: 'opening name' } (a room door or a window) | { piece: 'label or id', part?: 'name prefix',
 //     kind?: 'door'|'drawer'|'flap'|'pullout'|'roomdoor', near?: mm, limit?: n }
 
 // radius: the tour body is slimmer than the manual walker's 200mm (shoulders
@@ -145,8 +145,8 @@ export function matchOpenables(records, sel, body, opened) {
   }
   const dist = (r) => Math.hypot(r.center[0] - body.pos[0], r.center[1] - body.pos[1]);
   let out = records.filter((r) => {
-    if (sel.door !== undefined) return r.kind === 'roomdoor' && r.part === sel.door;
-    if (r.kind === 'roomdoor') return false;
+    if (sel.door !== undefined) return (r.kind === 'roomdoor' || r.kind === 'window') && r.part === sel.door;
+    if (r.kind === 'roomdoor' || r.kind === 'window') return false;
     if (sel.piece !== undefined) {
       const q = String(sel.piece).toLowerCase();
       if (r.piece.toLowerCase() !== q && r.pieceId.toLowerCase() !== q) return false;

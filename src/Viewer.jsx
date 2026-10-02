@@ -819,63 +819,157 @@ function doorLeafParts(style, w, h) {
   }
 }
 
-// PVC window in "leaf plane" coordinates (u along the width, z up, t = depth,
-// centered in the wall). Openings ≤ WIN_SINGLE_MAX wide get one sash (handle on
-// the latch stile); wider ones get two sashes split by a center mullion, with
-// both handles beside it. Static — windows don't open.
+// PVC tilt-and-turn window in "leaf plane" coordinates (u along the width,
+// z up, t = depth, centered in the wall). Openings ≤ WIN_SINGLE_MAX wide get
+// one sash hinged on the right (handle on the left stile); wider ones get two
+// sashes split by a center mullion, each hinged on its outer stile with the
+// handles flanking the mullion. Sashes are clickable and swing 90° into the
+// room (RoomWindow decides which side that is).
 const WIN_SINGLE_MAX = 1201; // nominal 120cm cutoff; loggia7/bath are 1201 and single in reality
 const WIN_FRAME = 70; // outer frame profile
 const WIN_SASH = 80; // sash frame profile
+const WIN_SASH_T = 96; // sash depth
 const WIN_MULLION = 90;
 const WIN_PVC = '#e3e4e6';
 const WIN_SASH_PVC = '#f4f4f2';
 
+// { frame: [parts], sashes: [{ hingeU, parts }] } — sash parts keep absolute u.
 function windowParts(w, h) {
   const F = WIN_FRAME;
-  const parts = [
+  const frame = [
     { u: 0, du: F, z: 0, dz: h, t: 84, color: WIN_PVC },
     { u: w - F, du: F, z: 0, dz: h, t: 84, color: WIN_PVC },
     { u: F, du: w - 2 * F, z: 0, dz: F, t: 84, color: WIN_PVC },
     { u: F, du: w - 2 * F, z: h - F, dz: F, t: 84, color: WIN_PVC },
   ];
-  // one sash spanning [u0, u0+sw] inside the outer frame; handleU = handle center
+  const sashes = [];
+  // one sash spanning [u0, u0+sw] inside the outer frame; handleU = handle
+  // center, the hinge is on the opposite stile
   const sash = (u0, sw, handleU) => {
     const Sf = WIN_SASH;
-    parts.push(
-      { u: u0, du: Sf, z: F, dz: h - 2 * F, t: 96, color: WIN_SASH_PVC },
-      { u: u0 + sw - Sf, du: Sf, z: F, dz: h - 2 * F, t: 96, color: WIN_SASH_PVC },
-      { u: u0 + Sf, du: sw - 2 * Sf, z: F, dz: Sf, t: 96, color: WIN_SASH_PVC },
-      { u: u0 + Sf, du: sw - 2 * Sf, z: h - F - Sf, dz: Sf, t: 96, color: WIN_SASH_PVC },
-      { u: u0 + Sf, du: sw - 2 * Sf, z: F + Sf, dz: h - 2 * F - 2 * Sf, t: 20, color: DOOR_GLASS, opacity: 0.35 },
-      { u: handleU - 16, du: 32, z: h / 2 - 85, dz: 170, t: 120, color: '#d8dadc' }
-    );
+    const hingeU = handleU < u0 + sw / 2 ? u0 + sw : u0;
+    sashes.push({
+      hingeU,
+      parts: [
+        { u: u0, du: Sf, z: F, dz: h - 2 * F, t: WIN_SASH_T, color: WIN_SASH_PVC },
+        { u: u0 + sw - Sf, du: Sf, z: F, dz: h - 2 * F, t: WIN_SASH_T, color: WIN_SASH_PVC },
+        { u: u0 + Sf, du: sw - 2 * Sf, z: F, dz: Sf, t: WIN_SASH_T, color: WIN_SASH_PVC },
+        { u: u0 + Sf, du: sw - 2 * Sf, z: h - F - Sf, dz: Sf, t: WIN_SASH_T, color: WIN_SASH_PVC },
+        { u: u0 + Sf, du: sw - 2 * Sf, z: F + Sf, dz: h - 2 * F - 2 * Sf, t: 20, color: DOOR_GLASS, opacity: 0.35 },
+        { u: handleU - 16, du: 32, z: h / 2 - 85, dz: 170, t: 120, color: '#d8dadc' },
+      ],
+    });
   };
   if (w <= WIN_SINGLE_MAX) {
     sash(F, w - 2 * F, F + WIN_SASH / 2); // handle on the left stile
   } else {
     const sw = (w - 2 * F - WIN_MULLION) / 2;
-    parts.push({ u: F + sw, du: WIN_MULLION, z: F, dz: h - 2 * F, t: 84, color: WIN_PVC });
+    frame.push({ u: F + sw, du: WIN_MULLION, z: F, dz: h - 2 * F, t: 84, color: WIN_PVC });
     sash(F, sw, F + sw - WIN_SASH / 2); // handles flank the mullion
     sash(F + sw + WIN_MULLION, sw, F + sw + WIN_MULLION + WIN_SASH / 2);
   }
-  return parts;
+  return { frame, sashes };
 }
 
-// A window opening: frame + sash(es) + glass, centered in the wall thickness.
-function RoomWindow({ opening, hovered, onPointerOver, onPointerOut }) {
+// Which way a window opens: the side of the wall facing the room. Default is
+// the side toward the apartment floor's center; an opening may pin it with
+// "inside": "+x" | "-x" | "+y" | "-y". Returns ±1 along the wall's normal axis
+// (y for a wall running along x, x for one running along y).
+function windowInside(opening, floor, horiz) {
+  const axis = horiz ? 'y' : 'x';
+  if (opening.inside) {
+    if (opening.inside[1] !== axis) throw new Error(`${opening.name}: "inside" must be ±${axis}`);
+    return opening.inside[0] === '-' ? -1 : 1;
+  }
+  const i = horiz ? 1 : 0;
+  const fc = floor ? floor.pos[i] + floor.size[i] / 2 : 0;
+  const oc = opening.pos[i] + opening.size[i] / 2;
+  return fc >= oc ? 1 : -1;
+}
+
+// One clickable sash: pivots on a vertical axis at the inside edge of its
+// hinge stile and swings 90° into the room with damping (same feel as doors).
+function WindowSash({ sash, horiz, vIn, open, hovered, ...handlers }) {
+  const ref = useRef();
+  const dir = sash.parts[0].u + 1 > sash.hingeU ? 1 : -1; // sash extends from the hinge in ±u
+  // rotation.y = +90° is CCW seen from above in data space; pick the sign that
+  // carries the sash (direction dir along u) onto the inside normal (vIn along v)
+  const cw = horiz ? dir * vIn : -dir * vIn;
+  const target = open ? cw * MathUtils.degToRad(90) : 0;
+  const vAxis = vIn * (WIN_SASH_T / 2);
+  useFrame((_, dt) => {
+    if (ref.current) {
+      ref.current.rotation.y = MathUtils.damp(ref.current.rotation.y, target, 6, dt);
+    }
+  });
+  return (
+    <group
+      ref={ref}
+      position={horiz ? [sash.hingeU * S, 0, -vAxis * S] : [vAxis * S, 0, -sash.hingeU * S]}
+      {...handlers}
+    >
+      {sash.parts.map((p, i) => {
+        const u = p.u - sash.hingeU;
+        const v = -p.t / 2 - vAxis;
+        return (
+          <LocalBox
+            key={i}
+            part={horiz ? { pos: [u, v, p.z], size: [p.du, p.t, p.dz] } : { pos: [v, u, p.z], size: [p.t, p.du, p.dz] }}
+            color={p.color}
+            opacity={p.opacity ?? 1}
+            hovered={hovered}
+          />
+        );
+      })}
+    </group>
+  );
+}
+
+// A window opening: static frame + clickable sash(es) + glass, centered in the
+// wall thickness. Registered as an openable (key "opening:<name>") so the tour
+// can open it like a door; one click/record toggles every sash.
+function RoomWindow({ opening, floor, hovered, onPointerOver, onPointerOut }) {
+  const [open, setOpen] = useState(false);
+  const meta = useMemo(
+    () => ({
+      key: `opening:${opening.name}`,
+      kind: 'window',
+      piece: '',
+      pieceId: '',
+      part: opening.name,
+      center: [0, 1, 2].map((a) => opening.pos[a] + opening.size[a] / 2),
+    }),
+    [opening]
+  );
+  useOpenable(meta, setOpen);
   const [sx, sy, sz] = opening.size;
   const horiz = sx >= sy;
   const w = horiz ? sx : sy;
-  const parts = windowParts(w, sz);
+  const { frame, sashes } = useMemo(() => windowParts(w, sz), [w, sz]);
+  const vIn = windowInside(opening, floor, horiz);
   const ox = horiz ? opening.pos[0] : opening.pos[0] + sx / 2;
   const oy = horiz ? opening.pos[1] + sy / 2 : opening.pos[1];
+  const handlers = {
+    onClick: (e) => {
+      e.stopPropagation();
+      setOpen((o) => !o);
+    },
+    onPointerOver: (e) => {
+      document.body.style.cursor = 'pointer';
+      onPointerOver?.(e);
+    },
+    onPointerOut: (e) => {
+      document.body.style.cursor = 'auto';
+      onPointerOut?.(e);
+    },
+  };
   return (
     <group
       position={[ox * S, opening.pos[2] * S, -oy * S]}
       onPointerOver={onPointerOver}
       onPointerOut={onPointerOut}
     >
-      {parts.map((p, i) => (
+      {frame.map((p, i) => (
         <LocalBox
           key={i}
           part={
@@ -887,6 +981,9 @@ function RoomWindow({ opening, hovered, onPointerOver, onPointerOut }) {
           opacity={p.opacity ?? 1}
           hovered={hovered}
         />
+      ))}
+      {sashes.map((sash, i) => (
+        <WindowSash key={`s${i}`} sash={sash} horiz={horiz} vIn={vIn} open={open} hovered={hovered} {...handlers} />
       ))}
     </group>
   );
@@ -1871,6 +1968,7 @@ export default function Viewer({
             <RoomWindow
               key={o.name}
               opening={o}
+              floor={apartment.floor}
               hovered={hover?.key === info.key}
               onPointerOver={over(info)}
               onPointerOut={out(info.key)}

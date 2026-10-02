@@ -53,12 +53,12 @@ async function check(id) {
     });
   });
   (apartment.openings || [])
-    .filter((o) => o.type === 'door')
+    .filter((o) => o.type === 'door' || o.type === 'window')
     .forEach((o) => {
       const key = `opening:${o.name}`;
       records.push({
         key,
-        kind: 'roomdoor',
+        kind: o.type === 'door' ? 'roomdoor' : 'window',
         piece: '',
         pieceId: '',
         part: o.name,

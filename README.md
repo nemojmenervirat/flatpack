@@ -48,6 +48,8 @@ piece file. A new apartment is a folder with `apartment.json` and `scene.json`.
   mode starts just inside the opening styled `"entrance"` (or set `"spawn":
   { "pos": [x, y], "yaw": deg }` explicitly). `"areaPad"` (mm, default 20) is how far
   the room-area overlay plates stop short of the walls; 0 draws them wall to wall.
+  Window sashes swing into the room: the side of the wall facing the floor's
+  centre, or pin it with `"inside": "+x" | "-x" | "+y" | "-y"` on the opening.
 - **piece files** — one file per furniture piece, named by its `id`. Ids are unique
   across the whole project.
   - Buildable pieces have `parts`: every panel with its size and position. Cut lists
@@ -110,8 +112,9 @@ is actually built, so the cut list can go straight to the board shop:
 ## Walk mode and the guided tour
 
 The walk button drops you into a first-person view (drag to look, WASD/scroll to
-move, click a floor point to glide, Esc to exit). Doors, drawers, flaps and
-room doors open when clicked.
+move, click a floor point to glide, Esc to exit). Doors, drawers, flaps, room
+doors and window sashes open when clicked (sashes swing inward, tilt-and-turn
+style; a two-sash window opens both).
 
 The tour button (▶) plays a scripted walk through the whole apartment: it
 goes room to room, opens and closes the wardrobes, kitchen drawers, fridges,
