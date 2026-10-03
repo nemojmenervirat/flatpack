@@ -46,10 +46,14 @@ piece file. A new apartment is a folder with `apartment.json` and `scene.json`.
 
 - **apartment.json** — the flat: walls, floor, door/window openings. All boxes. Walk
   mode starts just inside the opening styled `"entrance"` (or set `"spawn":
-  { "pos": [x, y], "yaw": deg }` explicitly). `"areaPad"` (mm, default 20) is how far
+  { "pos": [x, y], "yaw": deg }` explicitly). `"areaPad"` (mm, default 0) is how far
   the room-area overlay plates stop short of the walls; 0 draws them wall to wall.
   Window sashes swing into the room: the side of the wall facing the floor's
   centre, or pin it with `"inside": "+x" | "-x" | "+y" | "-y"` on the opening.
+  Walls are **finished** sizes, plaster included: 20 cm structural walls are 230,
+  12 cm partitions 150, and outer walls carry the 15 mm only on the flat's side
+  (loggia-facing faces are left at the bare size). Furniture is sized against
+  these finished faces, so no extra allowance for plaster is needed.
 - **piece files** — one file per furniture piece, named by its `id`. Ids are unique
   across the whole project.
   - Buildable pieces have `parts`: every panel with its size and position. Cut lists

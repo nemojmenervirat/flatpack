@@ -83,13 +83,14 @@ const roomAt = (roomDefs, x, y) => {
   return room ? room.name : 'Elsewhere';
 };
 
-// The 3D overlay is the room polygon eroded 2 cm: a band along every boundary
-// edge (extended past its ends to cover corners) is subtracted from the room
-// rects, so the slab keeps an exact 2 cm gap to walls with no seam pinholes.
+// The 3D overlay is the room polygon eroded by AREA_PAD: a band along every
+// boundary edge (extended past its ends to cover corners) is subtracted from the
+// room rects, so the slab keeps an exact gap to walls with no seam pinholes.
 // The m² values use the un-padded rects — padding is presentation only.
-// Default inset of the room-area overlay from its boundary (mm). An apartment
-// can override it with "areaPad" in apartment.json (0 = plates touch the walls).
-const AREA_PAD = 20;
+// Default inset of the room-area overlay from its boundary (mm): 0, the plates
+// touch the plastered wall faces. An apartment can override it with "areaPad"
+// in apartment.json.
+const AREA_PAD = 0;
 const AREA_EPS = 0.5;
 
 // rectangle difference: b minus c, as up to 4 rects

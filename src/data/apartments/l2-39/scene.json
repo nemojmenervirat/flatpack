@@ -5,7 +5,7 @@
       "piece": "wardrobe-hall",
       "pos": [
         6424,
-        6649,
+        6634,
         0
       ],
       "rot": 0
@@ -14,8 +14,8 @@
       "piece": "wardrobe-desk-room5",
       "label": "Wardrobe + desk L - room 5",
       "pos": [
-        8299,
-        250,
+        8314,
+        265,
         0
       ],
       "rot": 90
@@ -25,7 +25,7 @@
       "label": "Bench + coat rack - hall",
       "pos": [
         9228,
-        6849,
+        6824,
         0
       ],
       "rot": 0
@@ -34,8 +34,8 @@
       "piece": "bed-90",
       "label": "Bed 90 - room 5",
       "pos": [
-        5999,
-        3018,
+        6014,
+        2993,
         0
       ],
       "rot": 0,
@@ -47,8 +47,8 @@
       "piece": "bed-90",
       "label": "Bed 90 - room 6",
       "pos": [
-        9907,
-        3678,
+        9932,
+        3693,
         0
       ],
       "rot": 180
@@ -57,8 +57,8 @@
       "piece": "wardrobe-room6",
       "label": "Wardrobe + desk - room 6",
       "pos": [
-        10407,
-        3598,
+        10432,
+        3573,
         0
       ],
       "rot": 270
@@ -67,8 +67,8 @@
       "piece": "bed-180",
       "label": "Master bed",
       "pos": [
-        12714,
-        5531,
+        12699,
+        5503,
         0
       ],
       "rot": 270,
@@ -80,8 +80,8 @@
       "piece": "shower",
       "label": "Walk-in shower - WC",
       "pos": [
-        9447,
-        7349,
+        9462,
+        7374,
         0
       ],
       "rot": 0
@@ -91,7 +91,7 @@
       "label": "Sink - WC",
       "pos": [
         10503,
-        8668,
+        8653,
         0
       ],
       "rot": 0
@@ -101,7 +101,7 @@
       "label": "Toilet - WC",
       "pos": [
         11160,
-        8348,
+        8333,
         0
       ],
       "rot": 0
@@ -110,7 +110,7 @@
       "piece": "sink",
       "label": "Sink - bath",
       "pos": [
-        12257,
+        12282,
         7650,
         0
       ],
@@ -120,7 +120,7 @@
       "piece": "toilet",
       "label": "Toilet - bath",
       "pos": [
-        12497,
+        12522,
         8398,
         0
       ],
@@ -133,8 +133,8 @@
       "piece": "bathtub",
       "label": "Bathtub - bath",
       "pos": [
-        13194,
-        8298,
+        13179,
+        8283,
         0
       ],
       "rot": 0
@@ -143,8 +143,8 @@
       "piece": "washer",
       "label": "Washer - bath",
       "pos": [
-        14194,
-        7447,
+        14179,
+        7472,
         0
       ],
       "rot": 180
@@ -153,8 +153,8 @@
       "piece": "dryer",
       "label": "Dryer - bath",
       "pos": [
-        14794,
-        7447,
+        14779,
+        7472,
         0
       ],
       "rot": 180
@@ -164,7 +164,7 @@
       "label": "Water heater - bath",
       "pos": [
         14747,
-        7163,
+        7188,
         1150
       ],
       "rot": 180
@@ -174,7 +174,7 @@
       "label": "eloBLOCK - bath",
       "pos": [
         14128,
-        7162,
+        7187,
         1150
       ],
       "rot": 180
@@ -183,8 +183,8 @@
       "piece": "desk-master",
       "label": "Desk + shelves - master",
       "pos": [
-        11797,
-        250,
+        11812,
+        265,
         0
       ],
       "rot": 0
@@ -193,8 +193,8 @@
       "piece": "wardrobe-master-2",
       "label": "Master wardrobe 2 - east wall",
       "pos": [
-        14194,
-        3168,
+        14179,
+        3143,
         0
       ],
       "rot": 270
@@ -202,8 +202,8 @@
     {
       "piece": "wardrobe-master-1",
       "pos": [
-        12928,
-        6149,
+        13038,
+        6124,
         0
       ],
       "rot": 0
@@ -212,8 +212,8 @@
       "piece": "kitchen",
       "label": "Kitchen",
       "pos": [
-        198,
-        5149,
+        213,
+        5164,
         0
       ],
       "rot": 0
@@ -223,7 +223,7 @@
       "label": "Fridge 1",
       "pos": [
         4534,
-        6619,
+        6604,
         0
       ],
       "rot": 0
@@ -233,7 +233,7 @@
       "label": "Fridge 2",
       "pos": [
         5158,
-        6619,
+        6604,
         0
       ],
       "rot": 0
@@ -242,8 +242,8 @@
       "piece": "sofa-corner",
       "label": "Corner sofa - living room",
       "pos": [
-        3798,
-        1598,
+        3783,
+        1613,
         0
       ],
       "rot": 0
@@ -252,8 +252,8 @@
       "piece": "desk-living",
       "label": "Work desk - living room",
       "pos": [
-        198,
-        250,
+        213,
+        265,
         0
       ],
       "rot": 0
@@ -262,7 +262,7 @@
       "piece": "tv-cabinet",
       "label": "TV cabinet - living room",
       "pos": [
-        580,
+        595,
         2198,
         0
       ],
@@ -272,7 +272,7 @@
       "piece": "tv",
       "label": "TV 55 - living room",
       "pos": [
-        288,
+        303,
         2483,
         800
       ],
@@ -342,7 +342,7 @@
       "piece": "ac-indoor",
       "label": "AC indoor - living room",
       "pos": [
-        5568,
+        5553,
         2800,
         2250
       ],
@@ -362,7 +362,7 @@
       "piece": "ac-indoor",
       "label": "AC indoor - master",
       "pos": [
-        12027,
+        12042,
         450,
         2250
       ],

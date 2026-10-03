@@ -759,6 +759,7 @@ function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
 const DOOR_WHITE = '#f2f1ed';
 const DOOR_GLASS = '#bcd8ee';
 const DOOR_METAL = '#9aa0a8';
+const DOOR_LEAF_T = 44; // slab thickness; hardware is centred on the slab
 
 // Hinges + lever handle + key rosette shared by the white hinged-door styles.
 function doorHardware(w) {
@@ -1307,6 +1308,13 @@ function RoomDoor({ opening, hovered, onPointerOver, onPointerOut }) {
     : (hinge === 'max' ? opening.pos[1] + sy : opening.pos[1]);
   const away = hinge === 'max' ? -w : 0;
   const target = open ? swing * MathUtils.degToRad(90) : 0;
+  // The leaf hangs on the wall face it swings toward: closed it sits flush
+  // with that face inside the opening, open it lies clear of the wall rather
+  // than half buried in it (which a pivot on the wall's centre line would do).
+  const wall = horiz ? sy : sx;
+  const n = doorGeometry(opening).open; // unit vector across the wall, toward the swing side
+  const [nx, ny] = n;
+  const pivot = horiz ? [0, ny * (wall / 2)] : [nx * (wall / 2), 0];
 
   useFrame((_, dt) => {
     if (ref.current) {
@@ -1328,6 +1336,7 @@ function RoomDoor({ opening, hovered, onPointerOver, onPointerOut }) {
       ))}
       <group
         ref={ref}
+        position={[pivot[0] * S, 0, -pivot[1] * S]}
         onClick={(e) => {
           e.stopPropagation();
           setOpen((o) => !o);
@@ -1350,8 +1359,8 @@ function RoomDoor({ opening, hovered, onPointerOver, onPointerOut }) {
             key={i}
             part={
               horiz
-                ? { pos: [away + u, -p.t / 2, p.z], size: [p.du, p.t, p.dz] }
-                : { pos: [-p.t / 2, away + u, p.z], size: [p.t, p.du, p.dz] }
+                ? { pos: [away + u, -ny * (DOOR_LEAF_T / 2) - p.t / 2, p.z], size: [p.du, p.t, p.dz] }
+                : { pos: [-nx * (DOOR_LEAF_T / 2) - p.t / 2, away + u, p.z], size: [p.t, p.du, p.dz] }
             }
             color={p.color}
             opacity={p.opacity ?? 1}

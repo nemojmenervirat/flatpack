@@ -8,7 +8,7 @@
       "name": "leg",
       "pos": [
         30,
-        1239,
+        1189,
         0
       ],
       "size": [
@@ -23,7 +23,7 @@
       "name": "leg",
       "pos": [
         30,
-        1659,
+        1609,
         0
       ],
       "size": [
@@ -37,8 +37,8 @@
     {
       "name": "leg",
       "pos": [
-        620,
-        1239,
+        595,
+        1189,
         0
       ],
       "size": [
@@ -52,8 +52,8 @@
     {
       "name": "leg",
       "pos": [
-        620,
-        1659,
+        595,
+        1609,
         0
       ],
       "size": [
@@ -68,7 +68,7 @@
       "name": "side lower",
       "pos": [
         0,
-        1189,
+        1139,
         118
       ],
       "size": [
@@ -76,13 +76,13 @@
         600,
         1764
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "side lower",
       "pos": [
-        682,
-        1189,
+        657,
+        1139,
         118
       ],
       "size": [
@@ -90,45 +90,45 @@
         600,
         1764
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "bottom lower",
       "pos": [
         0,
-        1189,
+        1139,
         100
       ],
       "size": [
-        700,
+        675,
         600,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "top lower",
       "pos": [
         0,
-        1189,
+        1139,
         1882
       ],
       "size": [
-        700,
+        675,
         600,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "back HDF lower",
       "pos": [
         18,
-        1786,
+        1736,
         118
       ],
       "size": [
-        664,
+        639,
         3,
         1764
       ],
@@ -138,7 +138,7 @@
       "name": "side upper",
       "pos": [
         0,
-        1189,
+        1139,
         1918
       ],
       "size": [
@@ -146,13 +146,13 @@
         600,
         564
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "side upper",
       "pos": [
-        682,
-        1189,
+        657,
+        1139,
         1918
       ],
       "size": [
@@ -160,45 +160,45 @@
         600,
         564
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "bottom upper",
       "pos": [
         0,
-        1189,
+        1139,
         1900
       ],
       "size": [
-        700,
+        675,
         600,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "top upper",
       "pos": [
         0,
-        1189,
+        1139,
         2482
       ],
       "size": [
-        700,
+        675,
         600,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "back HDF upper",
       "pos": [
         18,
-        1786,
+        1736,
         1918
       ],
       "size": [
-        664,
+        639,
         3,
         564
       ],
@@ -207,8 +207,8 @@
     {
       "name": "leg",
       "pos": [
-        730,
-        1239,
+        705,
+        1189,
         0
       ],
       "size": [
@@ -222,8 +222,8 @@
     {
       "name": "leg",
       "pos": [
-        730,
-        1659,
+        705,
+        1609,
         0
       ],
       "size": [
@@ -237,8 +237,8 @@
     {
       "name": "leg",
       "pos": [
-        1320,
-        1239,
+        1270,
+        1189,
         0
       ],
       "size": [
@@ -252,8 +252,8 @@
     {
       "name": "leg",
       "pos": [
-        1320,
-        1659,
+        1270,
+        1609,
         0
       ],
       "size": [
@@ -267,8 +267,8 @@
     {
       "name": "side lower",
       "pos": [
-        700,
-        1189,
+        675,
+        1139,
         118
       ],
       "size": [
@@ -276,13 +276,13 @@
         600,
         1764
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "side lower",
       "pos": [
-        1382,
-        1189,
+        1332,
+        1139,
         118
       ],
       "size": [
@@ -290,45 +290,45 @@
         600,
         1764
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "bottom lower",
       "pos": [
-        700,
-        1189,
+        675,
+        1139,
         100
       ],
       "size": [
-        700,
+        675,
         600,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "top lower",
       "pos": [
-        700,
-        1189,
+        675,
+        1139,
         1882
       ],
       "size": [
-        700,
+        675,
         600,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "back HDF lower",
       "pos": [
-        718,
-        1786,
+        693,
+        1736,
         118
       ],
       "size": [
-        664,
+        639,
         3,
         1764
       ],
@@ -337,8 +337,8 @@
     {
       "name": "side upper",
       "pos": [
-        700,
-        1189,
+        675,
+        1139,
         1918
       ],
       "size": [
@@ -346,13 +346,13 @@
         600,
         564
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "side upper",
       "pos": [
-        1382,
-        1189,
+        1332,
+        1139,
         1918
       ],
       "size": [
@@ -360,45 +360,45 @@
         600,
         564
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "bottom upper",
       "pos": [
-        700,
-        1189,
+        675,
+        1139,
         1900
       ],
       "size": [
-        700,
+        675,
         600,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "top upper",
       "pos": [
-        700,
-        1189,
+        675,
+        1139,
         2482
       ],
       "size": [
-        700,
+        675,
         600,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "back HDF upper",
       "pos": [
-        718,
-        1786,
+        693,
+        1736,
         1918
       ],
       "size": [
-        664,
+        639,
         3,
         564
       ],
@@ -407,8 +407,8 @@
     {
       "name": "leg",
       "pos": [
-        1430,
-        1239,
+        1380,
+        1189,
         0
       ],
       "size": [
@@ -422,8 +422,8 @@
     {
       "name": "leg",
       "pos": [
-        1430,
-        1659,
+        1380,
+        1609,
         0
       ],
       "size": [
@@ -437,8 +437,8 @@
     {
       "name": "leg",
       "pos": [
-        1920,
-        1239,
+        1870,
+        1189,
         0
       ],
       "size": [
@@ -452,8 +452,8 @@
     {
       "name": "leg",
       "pos": [
-        1920,
-        1659,
+        1870,
+        1609,
         0
       ],
       "size": [
@@ -467,8 +467,8 @@
     {
       "name": "side lower",
       "pos": [
-        1400,
-        1189,
+        1350,
+        1139,
         118
       ],
       "size": [
@@ -476,13 +476,13 @@
         600,
         1764
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "side lower",
       "pos": [
-        1982,
-        1189,
+        1932,
+        1139,
         118
       ],
       "size": [
@@ -490,13 +490,13 @@
         600,
         1764
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "bottom lower",
       "pos": [
-        1400,
-        1189,
+        1350,
+        1139,
         100
       ],
       "size": [
@@ -504,13 +504,13 @@
         600,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "top lower",
       "pos": [
-        1400,
-        1189,
+        1350,
+        1139,
         1882
       ],
       "size": [
@@ -518,13 +518,13 @@
         600,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "back HDF lower",
       "pos": [
-        1418,
-        1786,
+        1368,
+        1736,
         118
       ],
       "size": [
@@ -537,8 +537,8 @@
     {
       "name": "side upper",
       "pos": [
-        1400,
-        1189,
+        1350,
+        1139,
         1918
       ],
       "size": [
@@ -546,13 +546,13 @@
         600,
         564
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "side upper",
       "pos": [
-        1982,
-        1189,
+        1932,
+        1139,
         1918
       ],
       "size": [
@@ -560,13 +560,13 @@
         600,
         564
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "bottom upper",
       "pos": [
-        1400,
-        1189,
+        1350,
+        1139,
         1900
       ],
       "size": [
@@ -574,13 +574,13 @@
         600,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "top upper",
       "pos": [
-        1400,
-        1189,
+        1350,
+        1139,
         2482
       ],
       "size": [
@@ -588,13 +588,13 @@
         600,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "back HDF upper",
       "pos": [
-        1418,
-        1786,
+        1368,
+        1736,
         1918
       ],
       "size": [
@@ -608,11 +608,11 @@
       "name": "hanging rail",
       "pos": [
         48,
-        1474,
+        1424,
         1720
       ],
       "size": [
-        604,
+        579,
         30,
         30
       ],
@@ -623,64 +623,64 @@
     {
       "name": "shelf column",
       "pos": [
-        719,
-        1192,
+        694,
+        1142,
         400
       ],
       "size": [
-        662,
+        637,
         592,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "shelf column",
       "pos": [
-        719,
-        1192,
+        694,
+        1142,
         800
       ],
       "size": [
-        662,
+        637,
         592,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "shelf column",
       "pos": [
-        719,
-        1192,
+        694,
+        1142,
         1200
       ],
       "size": [
-        662,
+        637,
         592,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "shelf column",
       "pos": [
-        719,
-        1192,
+        694,
+        1142,
         1600
       ],
       "size": [
-        662,
+        637,
         592,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "open shelf",
       "pos": [
-        1419,
-        1192,
+        1369,
+        1142,
         360
       ],
       "size": [
@@ -688,13 +688,13 @@
         592,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "open shelf",
       "pos": [
-        1419,
-        1192,
+        1369,
+        1142,
         732
       ],
       "size": [
@@ -702,13 +702,13 @@
         592,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "open shelf",
       "pos": [
-        1419,
-        1192,
+        1369,
+        1142,
         1100
       ],
       "size": [
@@ -716,13 +716,13 @@
         592,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "open shelf",
       "pos": [
-        1419,
-        1192,
+        1369,
+        1142,
         1450
       ],
       "size": [
@@ -730,13 +730,13 @@
         592,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "open shelf",
       "pos": [
-        1419,
-        1192,
+        1369,
+        1142,
         1800
       ],
       "size": [
@@ -744,41 +744,41 @@
         592,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "shelf upper",
       "pos": [
         19,
-        1192,
+        1142,
         2191
       ],
       "size": [
-        662,
+        637,
         592,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "shelf upper",
       "pos": [
-        719,
-        1192,
+        694,
+        1142,
         2191
       ],
       "size": [
-        662,
+        637,
         592,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "shelf upper",
       "pos": [
-        1419,
-        1192,
+        1369,
+        1142,
         2191
       ],
       "size": [
@@ -786,17 +786,17 @@
         592,
         18
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "plinth",
       "pos": [
         3,
-        1171,
+        1121,
         0
       ],
       "size": [
-        1994,
+        1944,
         18,
         100
       ],
@@ -806,11 +806,11 @@
       "name": "top filler front",
       "pos": [
         0,
-        1171,
+        1121,
         2500
       ],
       "size": [
-        2000,
+        1950,
         18,
         100
       ],
@@ -820,25 +820,25 @@
       "name": "filler backer front",
       "pos": [
         0,
-        1189,
+        1139,
         2500
       ],
       "size": [
-        2000,
+        1950,
         18,
         90
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     },
     {
       "name": "door lower",
       "pos": [
         3,
-        1171,
+        1121,
         103
       ],
       "size": [
-        694,
+        669,
         18,
         1794
       ],
@@ -847,12 +847,12 @@
     {
       "name": "door lower",
       "pos": [
-        703,
-        1171,
+        678,
+        1121,
         103
       ],
       "size": [
-        694,
+        669,
         18,
         1794
       ],
@@ -862,11 +862,11 @@
       "name": "door upper",
       "pos": [
         3,
-        1171,
+        1121,
         1903
       ],
       "size": [
-        694,
+        669,
         18,
         594
       ],
@@ -875,12 +875,12 @@
     {
       "name": "door upper",
       "pos": [
-        703,
-        1171,
+        678,
+        1121,
         1903
       ],
       "size": [
-        694,
+        669,
         18,
         594
       ],
@@ -889,13 +889,13 @@
     {
       "name": "desk top",
       "pos": [
-        1400,
+        1350,
         0,
         732
       ],
       "size": [
         600,
-        1189,
+        1139,
         18
       ],
       "material": "U156 ST9"
@@ -903,7 +903,7 @@
     {
       "name": "desk end panel",
       "pos": [
-        1400,
+        1350,
         0,
         0
       ],
@@ -917,16 +917,16 @@
     {
       "name": "desk apron",
       "pos": [
-        1982,
+        1932,
         18,
         532
       ],
       "size": [
         18,
-        1171,
+        1121,
         200
       ],
-      "material": "W960 SM \u00b7 Klasi\u010dna bijela"
+      "material": "W960 SM · Klasična bijela"
     }
   ]
 }
