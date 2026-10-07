@@ -1,0 +1,15 @@
+{
+  "comment": "Drop test placements here. Pieces built only for testing go in gallery/pieces/.",
+  "placements": [
+    {
+      "piece": "wardrobe-zhitov-1100",
+      "label": "Wardrobe - NW corner",
+      "pos": [
+        250,
+        3650,
+        0
+      ],
+      "rot": 0
+    }
+  ]
+}

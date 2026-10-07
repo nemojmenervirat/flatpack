@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState } from 
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, OrthographicCamera, Html, Edges } from '@react-three/drei';
 import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, Path, ExtrudeGeometry } from 'three';
-import { aabbOf, pieceLocalBBox, walkMove, walkObstacles, frontFrame } from './geometry.js';
+import { aabbOf, pieceLocalBBox, walkMove, walkObstacles, frontFrame, hardwareHosts } from './geometry.js';
 import { TOUR, createTour, tickTour, endTour, resolveTarget, doorGeometry, entranceSpawn } from './tour.js';
 import { partColor } from './materials.js';
 
@@ -640,21 +640,26 @@ function LocalRounded({ part, color, hovered, opacity = 1, ...handlers }) {
   );
 }
 
-// A part with "disc": true renders as a cylinder lying along local y (the
-// front/back axis) — a porthole or dial face. Radius comes from the x/z
-// footprint, length from the y size. Render-only sugar like "round":
-// geometry.js still sees the plain AABB.
+// A part with "disc": true renders as a cylinder along its thinnest axis
+// (ties go to y, the front/back axis) — a porthole or dial face on a front,
+// a drilled hole on a side. Radius comes from the other two sizes, length
+// from the thin one. Render-only sugar like "round": geometry.js still sees
+// the plain AABB.
 function LocalDisc({ part, color, hovered, opacity = 1, ...handlers }) {
   const [sx, sy, sz] = part.size;
-  const r = (Math.min(sx, sz) / 2) * S;
+  const axis = sy <= sx && sy <= sz ? 1 : sx <= sz ? 0 : 2;
+  const other = [0, 1, 2].filter((a) => a !== axis);
+  const r = (Math.min(part.size[other[0]], part.size[other[1]]) / 2) * S;
   const pos = [
     (part.pos[0] + sx / 2) * S,
     (part.pos[2] + sz / 2) * S,
     -(part.pos[1] + sy / 2) * S,
   ];
+  // cylinderGeometry stands along three.y (= data z); tip it onto data y or x
+  const rotation = axis === 1 ? [Math.PI / 2, 0, 0] : axis === 0 ? [0, 0, Math.PI / 2] : [0, 0, 0];
   return (
-    <mesh position={pos} rotation={[Math.PI / 2, 0, 0]} {...handlers}>
-      <cylinderGeometry args={[r, r, sy * S, 48]} />
+    <mesh position={pos} rotation={rotation} {...handlers}>
+      <cylinderGeometry args={[r, r, part.size[axis] * S, 48]} />
       <meshStandardMaterial
         color={color}
         emissive={hovered ? HOVER_EMISSIVE : '#000000'}
@@ -1077,28 +1082,35 @@ function Door({ part, attachments = [], color, bbox, hovered, openable }) {
     };
   }, [w, t, h, z0, hingeLeft]);
 
-  // Euro hinges on the hinge edge: cup + arm as one metal block on the door's
-  // inner face (protrudes into the carcass when closed, swings with the leaf).
-  // Count scales with leaf height; centers 100mm in from top and bottom.
-  const hinges = useMemo(() => {
+  // Euro hinges on the hinge edge, in three real parts. On the leaf: a 35 mm
+  // cup bored 12 mm into its inner face (K 4.5 from the edge), the only part
+  // that swings. On the carcass: a mounting plate screwed to the side's inner
+  // face (18 in from the carcass front, 45 deep) and the arm clipped onto it,
+  // reaching forward past the carcass front into the cup, where the links
+  // pivot. Count scales with leaf height; centers 100mm in from top and
+  // bottom. Local x: 0 at the hinge edge, sign toward the free edge. The
+  // side's inner face sits 15 in from the hinge edge (3 reveal + 18 board),
+  // so the plate is at 15..19 and the arm at 19..31.
+  const hingeSets = useMemo(() => {
     const n = h < 900 ? 2 : h < 1600 ? 3 : h < 2100 ? 4 : 5;
+    const d = hingeLeft ? 1 : -1; // direction toward the free edge
+    const ax = (x0, wx) => (d > 0 ? x0 : -x0 - wx); // box from x0, wx wide, mirrored for a right hinge
     return Array.from({ length: n }, (_, i) => {
-      const zc = n === 1 ? h / 2 : 100 + ((h - 200) * i) / (n - 1);
+      const zc = z0 + (n === 1 ? h / 2 : 100 + ((h - 200) * i) / (n - 1));
       return {
-        name: 'hinge',
-        pos: [hingeLeft ? 4 : -59, 0, z0 + zc - 25],
-        size: [55, 14, 50],
-        metal: true,
+        cup: { name: 'hinge cup', pos: [ax(4.5, 35), -12, zc - 17.5], size: [35, 13, 35], disc: true, metal: true },
+        arm: { name: 'hinge arm', pos: [hx + ax(19, 12), -10, zc - 7], size: [12, 73, 14], metal: true },
+        plate: { name: 'hinge plate', pos: [hx + ax(15, 4), 18, zc - 24], size: [4, 45, 48], metal: true },
       };
     });
-  }, [h, z0, hingeLeft]);
+  }, [h, z0, hingeLeft, hx]);
 
   return (
     <group position={[origin[0] * S, 0, -origin[1] * S]} rotation={[0, MathUtils.degToRad(alpha), 0]}>
       <group ref={ref} position={[hx * S, 0, 0]}>
         <LocalBox part={leaf} color={color} hovered={hovered} {...handlers} />
-        {hinges.map((hp, i) => (
-          <LocalBox key={`h${i}`} part={hp} color="#9aa0a8" hovered={hovered} {...handlers} />
+        {hingeSets.map((hs, i) => (
+          <LocalBox key={`h${i}`} part={hs.cup} color="#6f757c" hovered={hovered} {...handlers} />
         ))}
         <LocalBox part={handle} color="#9aa0a8" hovered={hovered} {...handlers} />
         {riders.map((a, i) => (
@@ -1112,6 +1124,12 @@ function Door({ part, attachments = [], color, bbox, hovered, openable }) {
           />
         ))}
       </group>
+      {hingeSets.map((hs, i) => (
+        <group key={`p${i}`}>
+          <LocalBox part={hs.plate} color="#9aa0a8" hovered={hovered} {...handlers} />
+          <LocalBox part={hs.arm} color="#9aa0a8" hovered={hovered} {...handlers} />
+        </group>
+      ))}
     </group>
   );
 }
@@ -2063,16 +2081,20 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAp
     : [{ name: piece.name, pos: [0, 0, 0], size: piece.size, color: piece.color || '#8a93a6' }];
   const bb = pieceLocalBBox(piece);
   const centerX = (bb.min[0] + bb.max[0]) / 2;
-  // Exploded view: each part slides away from the piece center (mm, data space),
+  // Exploded view: each board slides away from the piece center (mm, data space),
   // proportional to the slider. z explodes from the bottom so nothing sinks below
-  // the grid. At 0 every offset is 0.
+  // the grid. At 0 every offset is 0. Hardware (screws, pins, clips, legs)
+  // takes the offset of its host board — the first board it is driven into —
+  // so fasteners stay seated instead of scattering (hardwareHosts).
   const centerY = (bb.min[1] + bb.max[1]) / 2;
-  const explodeOffset = (p) => {
+  const hosts = useMemo(() => hardwareHosts(parts), [parts]);
+  const explodeOffset = (p, i) => {
     const k = explode * 1.2;
+    const h = i != null && hosts[i] != null ? parts[hosts[i]] : p;
     return [
-      (p.pos[0] + p.size[0] / 2 - centerX) * k,
-      (p.pos[1] + p.size[1] / 2 - centerY) * k,
-      (p.pos[2] + p.size[2] / 2 - bb.min[2]) * k,
+      (h.pos[0] + h.size[0] / 2 - centerX) * k,
+      (h.pos[1] + h.size[1] / 2 - centerY) * k,
+      (h.pos[2] + h.size[2] / 2 - bb.min[2]) * k,
     ];
   };
   const isFlap = (p) => p.name.startsWith('flap');
@@ -2111,7 +2133,7 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAp
         parts.map((p, i) => {
           // scattered: every part on its own, no drawer/door grouping or animation
           if (hidden(p)) return null;
-          const off = explodeOffset(p);
+          const off = explodeOffset(p, i);
           return (
             <group
               key={i}
@@ -2194,7 +2216,7 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAp
       {hoveredPart && (
         <DimLabel
           box={aabbOf(
-            hoveredPart.pos.map((v, a) => v + explodeOffset(hoveredPart)[a]),
+            hoveredPart.pos.map((v, a) => v + explodeOffset(hoveredPart, hover)[a]),
             hoveredPart.size
           )}
           name={hoveredPart.name}

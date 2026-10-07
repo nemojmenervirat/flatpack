@@ -6,6 +6,7 @@
 // named door* are hinged doors, drawer bottoms mark drawer boxes, ...).
 
 import { pieceLocalBBox, frontFrame } from './geometry.js';
+import { banding } from './cutlist.js';
 import { findMaterial, cuttingRate, tapeSpec, bandingRate } from './materials.js';
 import hardwareCatalogue from './data/hardware.json';
 
@@ -19,19 +20,6 @@ const sortedDims = (size) => [...size].sort((a, b) => b - a); // [L, W, T]
 const HDF_PER_M2 = 8; // KM/m²
 const HDF_ID = 'HDF (raw)';
 
-// Edge banding by rule:
-//  - 3/6mm boards (HDF backs, drawer bottoms) are never banded
-//  - fronts (doors, drawer fronts) and worktops show all four edges
-//  - every other carcass part shows one long edge (the front edge)
-function banding(part) {
-  const [L, W, T] = sortedDims(part.size);
-  if (T <= 6) return { edges: 'none', length: 0 };
-  const n = part.name;
-  if (n.startsWith('door') || n.startsWith('drawer front') || n.startsWith('flap') || n.includes('desk top'))
-    return { edges: 'all', length: 2 * (L + W) };
-  return { edges: 'long', length: L };
-}
-
 // Parts grouped by identical name + cut size, with banding and the indices of
 // the raw parts in piece.parts (so the UI can cross-highlight 3D <-> table).
 export function partRows(piece) {
@@ -39,7 +27,7 @@ export function partRows(piece) {
   (piece.parts || []).forEach((p, i) => {
     if (p.appliance || p.hardware) return; // bought appliances / hardware (legs, hooks) — not cut, not banded
     const [L, W, T] = sortedDims(p.size);
-    const key = `${p.name}|${L}x${W}x${T}`;
+    const key = `${p.name}|${L}x${W}x${T}|${p.band ?? ''}`;
     const row =
       rows.get(key) || {
         name: p.name,
@@ -48,7 +36,7 @@ export function partRows(piece) {
         thickness: T,
         qty: 0,
         indices: [],
-        banding: banding(p),
+        banding: banding(p, piece),
       };
     row.qty += 1;
     row.indices.push(i);
@@ -92,7 +80,9 @@ export function hardwareList(piece) {
   const drawers = bottoms.length || parts.filter((p) => p.name.startsWith('drawer front')).length;
   const slideBoxDepth = bottoms.length ? sortedDims(bottoms[0].size)[1] : 0;
 
-  const shelves = parts.filter((p) => p.name.includes('shelf')).length;
+  const shelves = parts.filter((p) => p.name.includes('shelf') && !p.hardware).length;
+  // shelf pins: explicitly modeled hardware parts when present, else 4 per shelf
+  const pinHw = parts.filter((p) => p.hardware && p.name.includes('shelf pin')).length;
   const rails = parts
     .filter((p) => p.name.includes('hanging'))
     .map((p) => ({ length: sortedDims(p.size)[0] }));
@@ -110,7 +100,7 @@ export function hardwareList(piece) {
   // hanging rails are counted above, everything else is listed by name + size
   const extras = new Map();
   for (const p of parts) {
-    if (!p.hardware || p.name.includes('hook') || p.name.includes('hanging')) continue;
+    if (!p.hardware || p.name.includes('hook') || p.name.includes('hanging') || p.name.includes('shelf pin')) continue;
     const key = `${p.name}|${p.size.join('x')}`;
     const item = hardwareItem(p.name);
     const row =
@@ -126,7 +116,7 @@ export function hardwareList(piece) {
     drawers,
     slideBoxDepth,
     shelves,
-    shelfPins: shelves * 4,
+    shelfPins: pinHw || shelves * 4,
     rails,
     hooks,
     extras: [...extras.values()],
@@ -151,8 +141,17 @@ export function priceEstimate(piece) {
   const bandLabour = new Map(); // thickness band|tape -> row
   const unpriced = new Map(); // name|cut -> row
   const hardware = new Map(); // name -> qty
-  const cheapestTape = (mat) =>
-    Object.entries(mat?.tape || {}).sort((a, b) => a[1] - b[1])[0] || null;
+  // The material's tape row for a band thickness: the cheapest tape of that
+  // thickness when the piece asks for one (e.g. "band": 0.8), else the
+  // cheapest tape it has at all.
+  const pickTape = (mat, thickness) => {
+    const rows = Object.entries(mat?.tape || {}).sort((a, b) => a[1] - b[1]);
+    if (thickness != null) {
+      const same = rows.filter(([k]) => tapeSpec(k).thickness === thickness);
+      if (same.length) return same[0];
+    }
+    return rows[0] || null;
+  };
   // Worktops are sold by the running metre in fixed depth x thickness formats
   // (mat.worktop["600x38"]). A part named worktop* is priced by its length in
   // the narrowest format at least as deep as the part, nearest thickness.
@@ -220,10 +219,11 @@ export function priceEstimate(piece) {
     boards.set(key, row);
     if (rawHdf) continue; // never banded, no tape
 
-    const band = banding(p);
+    const band = banding(p, piece);
     if (!band.length) continue;
-    tapes.set(mat.id, (tapes.get(mat.id) || 0) + band.length / 1000);
-    const tape = cheapestTape(mat);
+    const tKey = `${mat.id}|${band.tape ?? ''}`;
+    tapes.set(tKey, (tapes.get(tKey) || 0) + band.length / 1000);
+    const tape = pickTape(mat, band.tape);
     const rate = tape && bandingRate(T, tapeSpec(tape[0]));
     if (rate) {
       const k = `${rate.maxThickness}|${rate.tape}|${rate.glue}`;
@@ -242,10 +242,11 @@ export function priceEstimate(piece) {
     ...r,
     cost: r.worktop ? r.meters * r.perM : r.perM2 ? r.m2 * r.perM2 : 0,
   }));
-  const tapeRows = [...tapes.entries()].map(([id, meters]) => {
-    const tape = cheapestTape(findMaterial(id));
+  const tapeRows = [...tapes.entries()].map(([key, meters]) => {
+    const [id, t] = key.split('|');
+    const tape = pickTape(findMaterial(id), t === '' ? null : Number(t));
     const perM = tape ? tape[1] : null;
-    return { material: id, meters, perM, cost: perM ? meters * perM : 0 };
+    return { material: tape ? `${id} · ${tape[0]}` : id, meters, perM, cost: perM ? meters * perM : 0 };
   });
   const serviceRows = [...cutting.values(), ...bandLabour.values()].map((r) => ({ ...r, cost: r.meters * r.perM }));
   const boardsTotal = boardRows.reduce((n, r) => n + r.cost, 0);

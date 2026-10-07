@@ -266,3 +266,36 @@ export function fitReport(scene, piecesById, apartment) {
 
   return { placed, issues, collidedIds };
 }
+
+// Exploded-view hosts. A hardware part (screw, pin, staple, clip, leg, ...)
+// does not fly off on its own: it rides with the first board it is driven
+// into. The head is the end of its long axis that no board buries (a proud
+// cap, or flush with an outer face); the host is the overlapped board whose
+// face is nearest that end along the axis. When both ends are buried, the
+// board overlapping the most of the axis wins. Hardware touching no board
+// (legs under the bottom, a clip on the plinth) rides with the nearest board.
+// Boards host themselves. Returns parts.length indices.
+export function hardwareHosts(parts) {
+  const boxes = parts.map((p) => aabbOf(p.pos, p.size));
+  const boards = parts.map((p, i) => (p.hardware ? -1 : i)).filter((i) => i >= 0);
+  const buried = (pt, b) => [0, 1, 2].every((a) => pt[a] > b.min[a] + EPS && pt[a] < b.max[a] - EPS);
+  const gap = (a, b) =>
+    [0, 1, 2].reduce((s, i) => s + Math.max(0, a.min[i] - b.max[i], b.min[i] - a.max[i]), 0);
+  const pick = (ks, score) => ks.reduce((best, k) => (score(k) < score(best) ? k : best));
+  return parts.map((p, i) => {
+    if (!p.hardware) return i;
+    const b = boxes[i];
+    const axis = p.size.indexOf(Math.max(...p.size));
+    const ends = [b.min, b.max].map((m) => [0, 1, 2].map((a) => (a === axis ? m[a] : (b.min[a] + b.max[a]) / 2)));
+    const hits = boards.filter((k) => overlaps(b, boxes[k]));
+    if (!hits.length) return pick(boards, (k) => gap(b, boxes[k]));
+    const deep = ends.map((pt) => hits.some((k) => buried(pt, boxes[k])));
+    if (deep[0] !== deep[1]) {
+      const head = deep[0] ? 1 : 0; // the free end
+      const face = (k) => (head === 0 ? boxes[k].min[axis] : boxes[k].max[axis]);
+      return pick(hits, (k) => Math.abs(face(k) - ends[head][axis]));
+    }
+    const along = (k) => Math.min(b.max[axis], boxes[k].max[axis]) - Math.max(b.min[axis], boxes[k].min[axis]);
+    return pick(hits, (k) => -along(k));
+  });
+}

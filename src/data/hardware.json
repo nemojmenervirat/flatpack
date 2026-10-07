@@ -8,7 +8,7 @@
     },
     "hinge": {
       "product": "cabinet hinge, approx.",
-      "price": 3.0,
+      "price": 3,
       "note": "rough price per hinge; count is derived per door height in hardware.js"
     },
     "shelf support": {
@@ -18,7 +18,7 @@
     },
     "drawer slide pair": {
       "product": "Klizač za ladicu 450mm 35mm, 2 per drawer",
-      "price": 17.0,
+      "price": 17,
       "note": "roller slide, 450 mm long, 35 mm high; 8.50 KM per piece, a drawer needs two"
     },
     "runner": {
@@ -28,7 +28,7 @@
     },
     "handle": {
       "product": "door / drawer bar handle",
-      "price": 9.0,
+      "price": 9,
       "note": "9 KM per piece; one per door leaf, drawer front and flap (dishwasher panel), drawn by the viewer"
     },
     "cabinet hanger": {
@@ -38,8 +38,53 @@
     },
     "wall rail": {
       "product": "čelična šina za ovjes, per cabinet section",
-      "price": 4.0,
+      "price": 4,
       "note": "approx. price per section (sold in 2 m lengths, cut per cabinet)"
+    },
+    "confirmat screw": {
+      "product": "Konfirmat vijak 7x50",
+      "price": 0.08,
+      "note": "approx. price per piece; modelled one part per screw at every fixed carcass joint"
+    },
+    "wood screw 4x30": {
+      "product": "Vijak za iverice 4x30",
+      "price": 0.04,
+      "note": "approx. price per piece"
+    },
+    "wood screw 4x40": {
+      "product": "Vijak za iverice 4x40",
+      "price": 0.05,
+      "note": "approx. price per piece"
+    },
+    "shelf pin": {
+      "product": "Nosač police 5 mm, metalni",
+      "price": 0.03,
+      "note": "same pin as shelf support; when modelled explicitly these replace the derived 4-per-shelf count"
+    },
+    "rail holder": {
+      "product": "Nosač šipke za vješalice, bočni",
+      "price": 1.5,
+      "note": "approx. price per piece; two per rail"
+    },
+    "plinth clip": {
+      "product": "Klipsa za sokl na nogicu",
+      "price": 0.5,
+      "note": "approx. price per piece; one per front leg"
+    },
+    "staple": {
+      "product": "Spajalica za HDF leđa",
+      "price": 0.01,
+      "note": "approx.; one per 150 mm of back edge"
+    },
+    "dowel 8x30": {
+      "product": "Drveni tipl 8x30",
+      "price": 0.03,
+      "note": "approx. price per piece; glued"
+    },
+    "shelf hole": {
+      "product": "Rupa 5 mm za nosač police (red na 32 mm)",
+      "price": 0,
+      "note": "drilling, not a bought part; drilled on site with a jig — set a price here if the shop drills them"
     }
   }
 }

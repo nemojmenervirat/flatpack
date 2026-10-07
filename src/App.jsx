@@ -268,8 +268,10 @@ const lsSet = (key, value) => {
 
 const m = (mm) => (mm >= 1000 ? `${(mm / 1000).toFixed(2)} m` : `${mm} mm`);
 
-const bandingText = (b) =>
-  b.edges === 'none' ? '—' : b.edges === 'all' ? `all 4 · ${m(b.length)}` : `front · ${m(b.length)}`;
+// Shop notation: how many edges to band on the length and on the width; the
+// band thickness is its own column (metres only matter for the cost estimate).
+const bandingText = (b) => (b.L + b.W === 0 ? '—' : `${b.L} L + ${b.W} W`);
+const bandMmText = (b) => (b.L + b.W === 0 || b.tape == null ? '—' : `${b.tape}`);
 const km = (v) => v.toFixed(2);
 
 // Bought pieces aren't cut from boards — the parts only model how the thing
@@ -319,6 +321,7 @@ function PiecePanel({ piece, piecesById, hoverIndex, onHoverRow }) {
               <th className="num">Thk</th>
               <th className="num">Qty</th>
               <th>Edge band</th>
+              <th className="num">Band mm</th>
             </tr>
           </thead>
           <tbody>
@@ -336,6 +339,7 @@ function PiecePanel({ piece, piecesById, hoverIndex, onHoverRow }) {
                 <td className="num">{r.thickness}</td>
                 <td className="num">{r.qty}</td>
                 <td className="nowrap">{bandingText(r.banding)}</td>
+                <td className="num">{bandMmText(r.banding)}</td>
               </tr>
             ))}
           </tbody>

@@ -1,0 +1,5870 @@
+{
+  "id": "wardrobe-zhitov-1100",
+  "name": "Wardrobe 1100 (zhitov drawing)",
+  "comment": "From the zhitov.com drawing: 1100 x 600 x 2460, 18 mm board, in U156 ST9 Pjescano bez. Built the flatpack way: six 100 mm adjustable legs under a full-width bottom panel at z 100, sides (2324) standing on it, top over the sides, the 3 mm HDF back nailed over the rear faces of sides, top and bottom (boards 597 deep, 600 overall), plinth clipped to the front legs (its back face on the leg line, y 50, so it is recessed 68 behind the door face). Interior 2324 as on the drawing. Fixed shelf 400 under the top; below it a partition (1906) runs down to the bottom panel and splits the interior into two 523 columns, each with a shelf about 316 over the bottom (the drawing labels read 512 but 523 + 18 + 523 = 1064, the inner width it also gives). All six column shelves are adjustable, on 5 mm pins (18 long, 9 in the board) in 32 mm rows of holes drawn as dots (y 50 and 550): full rows z 173.5..1965.5 in the right column, and in the hanging column just five positions around the bottom shelf, z 365.5..493.5. Bottom shelves at 432 in both columns; the right column shelf at 1072 (partition mid-height) is full depth (594) and fixed with confirmats through the side and the partition, with the back stapled to it, to stiffen the column, with no hole positions within 64 of it; the other right column shelves at 784 / 1072 / 1392 / 1712 (compartments 332, 270, 302, 302, 294: the lowest one sits a grid step higher than the drawing's 300 so it clears the second door hinge at z 741). Column shelves are 570 deep, set back 27 from the carcass front (the top shelf stays full depth). Left column: hanging rail. Top filler (65) flush with the door face, backed by a 55 x 18 strip lying flat on the carcass top, screwed down through it into the top 27 from the front edge on the bench; the filler is scribed on site and then glued and doweled to the backer front edge, since nothing fits behind it under the ceiling, running the full 1100 width, as on wardrobe-hall: total height 2525 to the ceiling. The exposed right side is covered by a full-height end panel (2525 x 618) flush with the door face, scribed on site to floor and ceiling; overall width 1118. Doors are not on the drawing; two hinged doors assumed, 545 and 543 (the right one 2 narrower for a 5 mm gap to the end panel). Fasteners are modelled as hardware parts (not cut): confirmat 7x50 at every fixed carcass joint (caps 2 mm proud where visible, flush against the wall and behind the end panel), 4x30 wood screws for the end panel and the filler backer, 8x30 dowels for the filler, 5 mm shelf pins for the four adjustable shelves, rail holders, plinth clips on the front legs, staples for the HDF back. Hinges (cup, arm, plate) and handles are drawn by the viewer.",
+  "buildable": true,
+  "color": "#ddccba",
+  "clearance": {
+    "front": 600
+  },
+  "band": 0.8,
+  "parts": [
+    {
+      "name": "leg",
+      "pos": [
+        30,
+        50,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#1c1c1e",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        30,
+        470,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#1c1c1e",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        525,
+        50,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#1c1c1e",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        525,
+        470,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#1c1c1e",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        1020,
+        50,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#1c1c1e",
+      "hardware": true
+    },
+    {
+      "name": "leg",
+      "pos": [
+        1020,
+        470,
+        0
+      ],
+      "size": [
+        50,
+        50,
+        100
+      ],
+      "color": "#1c1c1e",
+      "hardware": true
+    },
+    {
+      "name": "side",
+      "pos": [
+        0,
+        0,
+        118
+      ],
+      "size": [
+        18,
+        597,
+        2324
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "side",
+      "pos": [
+        1082,
+        0,
+        118
+      ],
+      "size": [
+        18,
+        597,
+        2324
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "top",
+      "pos": [
+        0,
+        0,
+        2442
+      ],
+      "size": [
+        1100,
+        597,
+        18
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "bottom",
+      "pos": [
+        0,
+        0,
+        100
+      ],
+      "size": [
+        1100,
+        597,
+        18
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "back HDF",
+      "pos": [
+        0,
+        597,
+        100
+      ],
+      "size": [
+        1100,
+        3,
+        2360
+      ],
+      "color": "#ffffff"
+    },
+    {
+      "name": "shelf top",
+      "pos": [
+        18,
+        3,
+        2024
+      ],
+      "size": [
+        1064,
+        594,
+        18
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "shelf column",
+      "pos": [
+        18,
+        27,
+        432
+      ],
+      "size": [
+        523,
+        570,
+        18
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "shelf column",
+      "pos": [
+        559,
+        27,
+        432
+      ],
+      "size": [
+        523,
+        570,
+        18
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "partition",
+      "pos": [
+        541,
+        3,
+        118
+      ],
+      "size": [
+        18,
+        594,
+        1906
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "shelf column",
+      "pos": [
+        559,
+        27,
+        784
+      ],
+      "size": [
+        523,
+        570,
+        18
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "shelf column fixed",
+      "pos": [
+        559,
+        3,
+        1072
+      ],
+      "size": [
+        523,
+        594,
+        18
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "shelf column",
+      "pos": [
+        559,
+        27,
+        1392
+      ],
+      "size": [
+        523,
+        570,
+        18
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "shelf column",
+      "pos": [
+        559,
+        27,
+        1712
+      ],
+      "size": [
+        523,
+        570,
+        18
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "hanging rail",
+      "pos": [
+        28,
+        285,
+        1920
+      ],
+      "size": [
+        503,
+        30,
+        30
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "plinth front",
+      "pos": [
+        3,
+        20,
+        0
+      ],
+      "size": [
+        1094,
+        18,
+        100
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "door",
+      "pos": [
+        3,
+        -18,
+        103
+      ],
+      "size": [
+        545,
+        18,
+        2354
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "door",
+      "pos": [
+        552,
+        -18,
+        103
+      ],
+      "size": [
+        543,
+        18,
+        2354
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "filler backer front",
+      "pos": [
+        0,
+        0,
+        2460
+      ],
+      "size": [
+        1100,
+        55,
+        18
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "top filler front",
+      "pos": [
+        0,
+        -18,
+        2460
+      ],
+      "size": [
+        1100,
+        18,
+        65
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "end panel",
+      "pos": [
+        1100,
+        -18,
+        0
+      ],
+      "size": [
+        18,
+        618,
+        2525
+      ],
+      "material": "U156 ST9"
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        5.5,
+        146.5,
+        98
+      ],
+      "size": [
+        7,
+        7,
+        50
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        546.5,
+        146.5,
+        98
+      ],
+      "size": [
+        7,
+        7,
+        50
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        1087.5,
+        146.5,
+        98
+      ],
+      "size": [
+        7,
+        7,
+        50
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        5.5,
+        146.5,
+        2412
+      ],
+      "size": [
+        7,
+        7,
+        50
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        1087.5,
+        146.5,
+        2412
+      ],
+      "size": [
+        7,
+        7,
+        50
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        546.5,
+        146.5,
+        1994
+      ],
+      "size": [
+        7,
+        7,
+        50
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        0,
+        146.5,
+        2029.5
+      ],
+      "size": [
+        50,
+        7,
+        7
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        1050,
+        146.5,
+        2029.5
+      ],
+      "size": [
+        50,
+        7,
+        7
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        5.5,
+        296.5,
+        98
+      ],
+      "size": [
+        7,
+        7,
+        50
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        546.5,
+        296.5,
+        98
+      ],
+      "size": [
+        7,
+        7,
+        50
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        1087.5,
+        296.5,
+        98
+      ],
+      "size": [
+        7,
+        7,
+        50
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        5.5,
+        296.5,
+        2412
+      ],
+      "size": [
+        7,
+        7,
+        50
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        1087.5,
+        296.5,
+        2412
+      ],
+      "size": [
+        7,
+        7,
+        50
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        546.5,
+        296.5,
+        1994
+      ],
+      "size": [
+        7,
+        7,
+        50
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        0,
+        296.5,
+        2029.5
+      ],
+      "size": [
+        50,
+        7,
+        7
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        1050,
+        296.5,
+        2029.5
+      ],
+      "size": [
+        50,
+        7,
+        7
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        5.5,
+        446.5,
+        98
+      ],
+      "size": [
+        7,
+        7,
+        50
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        546.5,
+        446.5,
+        98
+      ],
+      "size": [
+        7,
+        7,
+        50
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        1087.5,
+        446.5,
+        98
+      ],
+      "size": [
+        7,
+        7,
+        50
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        5.5,
+        446.5,
+        2412
+      ],
+      "size": [
+        7,
+        7,
+        50
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        1087.5,
+        446.5,
+        2412
+      ],
+      "size": [
+        7,
+        7,
+        50
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        546.5,
+        446.5,
+        1994
+      ],
+      "size": [
+        7,
+        7,
+        50
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        0,
+        446.5,
+        2029.5
+      ],
+      "size": [
+        50,
+        7,
+        7
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        1050,
+        446.5,
+        2029.5
+      ],
+      "size": [
+        50,
+        7,
+        7
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "wood screw 4x30",
+      "pos": [
+        1080,
+        78,
+        398
+      ],
+      "size": [
+        30,
+        4,
+        4
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "wood screw 4x30",
+      "pos": [
+        1080,
+        78,
+        1298
+      ],
+      "size": [
+        30,
+        4,
+        4
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "wood screw 4x30",
+      "pos": [
+        1080,
+        78,
+        2198
+      ],
+      "size": [
+        30,
+        4,
+        4
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "wood screw 4x30",
+      "pos": [
+        1080,
+        498,
+        398
+      ],
+      "size": [
+        30,
+        4,
+        4
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "wood screw 4x30",
+      "pos": [
+        1080,
+        498,
+        1298
+      ],
+      "size": [
+        30,
+        4,
+        4
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "wood screw 4x30",
+      "pos": [
+        1080,
+        498,
+        2198
+      ],
+      "size": [
+        30,
+        4,
+        4
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        550,
+        47.5,
+        779
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        1073,
+        47.5,
+        779
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        550,
+        547.5,
+        779
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        1073,
+        547.5,
+        779
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        550,
+        47.5,
+        1387
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        1073,
+        47.5,
+        1387
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        550,
+        547.5,
+        1387
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        1073,
+        547.5,
+        1387
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        550,
+        47.5,
+        1707
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        1073,
+        47.5,
+        1707
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        550,
+        547.5,
+        1707
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        1073,
+        547.5,
+        1707
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "rail holder",
+      "pos": [
+        18,
+        280,
+        1915
+      ],
+      "size": [
+        10,
+        40,
+        40
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "rail holder",
+      "pos": [
+        531,
+        280,
+        1915
+      ],
+      "size": [
+        10,
+        40,
+        40
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "plinth clip",
+      "pos": [
+        40,
+        38,
+        20
+      ],
+      "size": [
+        30,
+        12,
+        50
+      ],
+      "color": "#1c1c1e",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "plinth clip",
+      "pos": [
+        535,
+        38,
+        20
+      ],
+      "size": [
+        30,
+        12,
+        50
+      ],
+      "color": "#1c1c1e",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "plinth clip",
+      "pos": [
+        1030,
+        38,
+        20
+      ],
+      "size": [
+        30,
+        12,
+        50
+      ],
+      "color": "#1c1c1e",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        8,
+        580,
+        199
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        1090,
+        580,
+        199
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        8,
+        580,
+        349
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        1090,
+        580,
+        349
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        8,
+        580,
+        499
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        1090,
+        580,
+        499
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        8,
+        580,
+        649
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        1090,
+        580,
+        649
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        8,
+        580,
+        799
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        1090,
+        580,
+        799
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        8,
+        580,
+        949
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        1090,
+        580,
+        949
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        8,
+        580,
+        1099
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        1090,
+        580,
+        1099
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        8,
+        580,
+        1249
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        1090,
+        580,
+        1249
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        8,
+        580,
+        1399
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        1090,
+        580,
+        1399
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        8,
+        580,
+        1549
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        1090,
+        580,
+        1549
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        8,
+        580,
+        1699
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        1090,
+        580,
+        1699
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        8,
+        580,
+        1849
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        1090,
+        580,
+        1849
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        8,
+        580,
+        1999
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        1090,
+        580,
+        1999
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        8,
+        580,
+        2149
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        1090,
+        580,
+        2149
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        8,
+        580,
+        2299
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        1090,
+        580,
+        2299
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        549,
+        580,
+        199
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        549,
+        580,
+        349
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        549,
+        580,
+        499
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        549,
+        580,
+        649
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        549,
+        580,
+        799
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        549,
+        580,
+        949
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        549,
+        580,
+        1099
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        549,
+        580,
+        1249
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        549,
+        580,
+        1399
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        549,
+        580,
+        1549
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        549,
+        580,
+        1699
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        549,
+        580,
+        1849
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        99,
+        580,
+        108
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        99,
+        580,
+        2450
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        99,
+        580,
+        2032
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        249,
+        580,
+        108
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        249,
+        580,
+        2450
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        249,
+        580,
+        2032
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        399,
+        580,
+        108
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        399,
+        580,
+        2450
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        399,
+        580,
+        2032
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        549,
+        580,
+        108
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        549,
+        580,
+        2450
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        549,
+        580,
+        2032
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        699,
+        580,
+        108
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        699,
+        580,
+        2450
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        699,
+        580,
+        2032
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        849,
+        580,
+        108
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        849,
+        580,
+        2450
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        849,
+        580,
+        2032
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        999,
+        580,
+        108
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        999,
+        580,
+        2450
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        999,
+        580,
+        2032
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        9,
+        47.5,
+        427
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        532,
+        47.5,
+        427
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        550,
+        47.5,
+        427
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        1073,
+        47.5,
+        427
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        9,
+        547.5,
+        427
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        532,
+        547.5,
+        427
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        550,
+        547.5,
+        427
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf pin",
+      "pos": [
+        1073,
+        547.5,
+        427
+      ],
+      "size": [
+        18,
+        5,
+        5
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        171
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        171
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        171
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        171
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        203
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        203
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        203
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        203
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        235
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        235
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        235
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        235
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        267
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        267
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        267
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        267
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        299
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        299
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        299
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        299
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        331
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        331
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        331
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        331
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        18,
+        47.5,
+        363
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        540,
+        47.5,
+        363
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        363
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        363
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        18,
+        547.5,
+        363
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        540,
+        547.5,
+        363
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        363
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        363
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        18,
+        47.5,
+        395
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        540,
+        47.5,
+        395
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        395
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        395
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        18,
+        547.5,
+        395
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        540,
+        547.5,
+        395
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        395
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        395
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        18,
+        47.5,
+        459
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        540,
+        47.5,
+        459
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        459
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        459
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        18,
+        547.5,
+        459
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        540,
+        547.5,
+        459
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        459
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        459
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        18,
+        47.5,
+        491
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        540,
+        47.5,
+        491
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        491
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        491
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        18,
+        547.5,
+        491
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        540,
+        547.5,
+        491
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        491
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        491
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        523
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        523
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        523
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        523
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        555
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        555
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        555
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        555
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        587
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        587
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        587
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        587
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        619
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        619
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        619
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        619
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        651
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        651
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        651
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        651
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        683
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        683
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        683
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        683
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        715
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        715
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        715
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        715
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        747
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        747
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        747
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        747
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        811
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        811
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        811
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        811
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        843
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        843
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        843
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        843
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        875
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        875
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        875
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        875
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        907
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        907
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        907
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        907
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        939
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        939
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        939
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        939
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        971
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        971
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        971
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        971
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1163
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1163
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1163
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1163
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1195
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1195
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1195
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1195
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1227
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1227
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1227
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1227
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1259
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1259
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1259
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1259
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1291
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1291
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1291
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1291
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1323
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1323
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1323
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1323
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1355
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1355
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1355
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1355
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1419
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1419
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1419
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1419
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1451
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1451
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1451
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1451
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1483
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1483
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1483
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1483
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1515
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1515
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1515
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1515
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1547
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1547
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1547
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1547
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1579
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1579
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1579
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1579
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1611
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1611
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1611
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1611
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1643
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1643
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1643
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1643
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1675
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1675
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1675
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1675
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1739
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1739
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1739
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1739
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1771
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1771
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1771
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1771
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1803
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1803
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1803
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1803
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1835
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1835
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1835
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1835
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1867
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1867
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1867
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1867
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1899
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1899
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1899
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1899
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1931
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1931
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1931
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1931
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        47.5,
+        1963
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        47.5,
+        1963
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        559,
+        547.5,
+        1963
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "shelf hole",
+      "pos": [
+        1081,
+        547.5,
+        1963
+      ],
+      "size": [
+        1,
+        5,
+        5
+      ],
+      "disc": true,
+      "color": "#2b2d31",
+      "hardware": true
+    },
+    {
+      "name": "wood screw 4x30",
+      "pos": [
+        98,
+        25,
+        2450
+      ],
+      "size": [
+        4,
+        4,
+        30
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "wood screw 4x30",
+      "pos": [
+        348,
+        25,
+        2450
+      ],
+      "size": [
+        4,
+        4,
+        30
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "wood screw 4x30",
+      "pos": [
+        548,
+        25,
+        2450
+      ],
+      "size": [
+        4,
+        4,
+        30
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "wood screw 4x30",
+      "pos": [
+        748,
+        25,
+        2450
+      ],
+      "size": [
+        4,
+        4,
+        30
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "wood screw 4x30",
+      "pos": [
+        998,
+        25,
+        2450
+      ],
+      "size": [
+        4,
+        4,
+        30
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "dowel 8x30",
+      "pos": [
+        196,
+        -15,
+        2465
+      ],
+      "size": [
+        8,
+        30,
+        8
+      ],
+      "color": "#c9a36b",
+      "hardware": true
+    },
+    {
+      "name": "dowel 8x30",
+      "pos": [
+        496,
+        -15,
+        2465
+      ],
+      "size": [
+        8,
+        30,
+        8
+      ],
+      "color": "#c9a36b",
+      "hardware": true
+    },
+    {
+      "name": "dowel 8x30",
+      "pos": [
+        796,
+        -15,
+        2465
+      ],
+      "size": [
+        8,
+        30,
+        8
+      ],
+      "color": "#c9a36b",
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        1050,
+        146.5,
+        1077.5
+      ],
+      "size": [
+        50,
+        7,
+        7
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        539,
+        146.5,
+        1077.5
+      ],
+      "size": [
+        50,
+        7,
+        7
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        1050,
+        296.5,
+        1077.5
+      ],
+      "size": [
+        50,
+        7,
+        7
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        539,
+        296.5,
+        1077.5
+      ],
+      "size": [
+        50,
+        7,
+        7
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        1050,
+        446.5,
+        1077.5
+      ],
+      "size": [
+        50,
+        7,
+        7
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "confirmat screw",
+      "pos": [
+        539,
+        446.5,
+        1077.5
+      ],
+      "size": [
+        50,
+        7,
+        7
+      ],
+      "color": "#4a4e55",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        699,
+        580,
+        1080
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        849,
+        580,
+        1080
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    },
+    {
+      "name": "staple",
+      "pos": [
+        999,
+        580,
+        1080
+      ],
+      "size": [
+        2,
+        20,
+        2
+      ],
+      "color": "#9aa0a8",
+      "metal": true,
+      "hardware": true
+    }
+  ]
+}

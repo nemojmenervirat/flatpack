@@ -1,0 +1,187 @@
+{
+  "name": "Gallery (test room)",
+  "comment": "A plain single room for trying out pieces before they go into a real flat. Interior 5000 x 4000, H 2525 (wardrobe 2460 + 65 top filler), walls 250. Door (900) on the east wall near the SE corner, window (2000) centred on the south wall, sill 900 / head 2200. Nothing here is a real place.",
+  "height": 2525,
+  "areaPad": 0,
+  "floor": {
+    "pos": [
+      0,
+      0,
+      -60
+    ],
+    "size": [
+      5500,
+      4500,
+      50
+    ]
+  },
+  "walls": [
+    {
+      "name": "south-w",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "size": [
+        1750,
+        250,
+        2525
+      ]
+    },
+    {
+      "name": "parapet-window-s",
+      "pos": [
+        1750,
+        0,
+        0
+      ],
+      "size": [
+        2000,
+        250,
+        900
+      ]
+    },
+    {
+      "name": "lintel-window-s",
+      "pos": [
+        1750,
+        0,
+        2200
+      ],
+      "size": [
+        2000,
+        250,
+        325
+      ]
+    },
+    {
+      "name": "south-e",
+      "pos": [
+        3750,
+        0,
+        0
+      ],
+      "size": [
+        1750,
+        250,
+        2525
+      ]
+    },
+    {
+      "name": "west",
+      "pos": [
+        0,
+        250,
+        0
+      ],
+      "size": [
+        250,
+        4000,
+        2525
+      ]
+    },
+    {
+      "name": "north",
+      "pos": [
+        0,
+        4250,
+        0
+      ],
+      "size": [
+        5500,
+        250,
+        2525
+      ]
+    },
+    {
+      "name": "east-s",
+      "pos": [
+        5250,
+        250,
+        0
+      ],
+      "size": [
+        250,
+        250,
+        2525
+      ]
+    },
+    {
+      "name": "lintel-door",
+      "pos": [
+        5250,
+        500,
+        2100
+      ],
+      "size": [
+        250,
+        900,
+        425
+      ]
+    },
+    {
+      "name": "east-n",
+      "pos": [
+        5250,
+        1400,
+        0
+      ],
+      "size": [
+        250,
+        2850,
+        2525
+      ]
+    }
+  ],
+  "openings": [
+    {
+      "name": "door",
+      "type": "door",
+      "pos": [
+        5250,
+        500,
+        0
+      ],
+      "size": [
+        250,
+        900,
+        2100
+      ],
+      "hinge": "min",
+      "swing": 1,
+      "style": "inner"
+    },
+    {
+      "name": "window-south",
+      "type": "window",
+      "pos": [
+        1750,
+        0,
+        900
+      ],
+      "size": [
+        2000,
+        250,
+        1300
+      ]
+    }
+  ],
+  "floors": [
+    {
+      "name": "oak-gallery",
+      "pos": [
+        250,
+        250,
+        -10
+      ],
+      "size": [
+        5000,
+        4000,
+        10
+      ],
+      "color": "#c08a55",
+      "texture": "wood"
+    }
+  ]
+}

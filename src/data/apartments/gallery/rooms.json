@@ -1,0 +1,6 @@
+{
+  "comment": "One rectangle: the whole interior.",
+  "rooms": [
+    { "name": "Gallery", "rects": [ { "pos": [250, 250], "size": [5000, 4000] } ] }
+  ]
+}
