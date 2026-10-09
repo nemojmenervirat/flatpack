@@ -85,6 +85,31 @@
       "product": "Rupa 5 mm za nosač police (red na 32 mm)",
       "price": 0,
       "note": "drilling, not a bought part; drilled on site with a jig — set a price here if the shop drills them"
+    },
+    "angle bracket": {
+      "product": "Kutnik metalni 20x20x40 sa 4 vijka 3,5x16",
+      "price": 0.4,
+      "note": "approx. price per piece incl. screws; holds a shelf to a partition where no screw can pass"
+    },
+    "runner 550 cabinet part": {
+      "product": "Klizač za ladicu 550mm 35mm (par profila)",
+      "price": 10.5,
+      "note": "approx. price per side; the matching drawer part comes with it"
+    },
+    "runner 550 drawer part": {
+      "product": "drawer profile of the 550 runner",
+      "price": 0,
+      "note": "included with the cabinet part"
+    },
+    "hanging rail": {
+      "product": "Šipka za vješalice ovalna 30x15, cut to length",
+      "price": 5,
+      "note": "approx. price per rail (sold per metre, about 6 KM/m); holders are separate"
+    },
+    "coat hook": {
+      "product": "Vješalica kuka, metalna",
+      "price": 2,
+      "note": "approx. price per hook"
     }
   }
 }

@@ -5,6 +5,7 @@
 // Edge banding by rule (the piece panel and the price estimate use the same):
 //  - 3/6mm boards (HDF backs, drawer bottoms) are never banded
 //  - fronts (doors, drawer fronts, flaps) and worktops show all four edges
+//  - drawer box parts show their top edge (the long one)
 //  - every other part shows exactly one edge: the one facing the room. Parts
 //    are authored in piece-local space with the front at -y, so that edge runs
 //    along x for a horizontal board (thin along z: tops, bottoms, shelves),
@@ -24,6 +25,7 @@ export function banding(part, piece) {
   const n = part.name;
   if (n.startsWith('door') || n.startsWith('drawer front') || n.startsWith('flap') || n.includes('desk top'))
     return { edges: 'all', L: 2, W: 2, tape, length: 2 * (L + W) };
+  if (n.startsWith('drawer box')) return { edges: 'front', L: 1, W: 0, tape, length: L }; // the box's top edge
   const front = T === sz ? sx : T === sx ? sz : Math.max(sx, sz);
   return front === L ? { edges: 'front', L: 1, W: 0, tape, length: L } : { edges: 'front', L: 0, W: 1, tape, length: W };
 }
@@ -72,4 +74,22 @@ export function cutListCsv(rows) {
     lines.push([q(r.piece), q(r.part), r.length, r.width, r.thickness, r.qty, q(r.material || ''), b.L, b.W, tape].join(','));
   }
   return lines.join('\n');
+}
+
+// Which narrow faces of a board carry the tape, for the viewer: piece-local
+// face keys (+x -x +y -y +z -z). narrow = the four edge faces (those not
+// perpendicular to the thin axis); banded = the taped ones among them. The
+// rest show raw chipboard. A strip facing the room (plinth, filler) bands the
+// long edge you see: the bottom edge when it sits high, the top edge low down.
+export function bandedFaces(part) {
+  const [sx, sy, sz] = part.size;
+  const T = Math.min(sx, sy, sz);
+  const thin = T === sz ? 'z' : T === sx ? 'x' : 'y';
+  const narrow = thin === 'z' ? ['+x', '-x', '+y', '-y'] : thin === 'x' ? ['+y', '-y', '+z', '-z'] : ['+x', '-x', '+z', '-z'];
+  const b = banding(part);
+  if (b.edges === 'none') return { narrow, banded: [] };
+  if (b.edges === 'all') return { narrow, banded: narrow };
+  if (part.name.startsWith('drawer box')) return { narrow, banded: ['+z'] };
+  if (thin !== 'y') return { narrow, banded: ['-y'] };
+  return { narrow, banded: [part.pos[2] > 1000 ? '-z' : '+z'] };
 }

@@ -79,6 +79,9 @@ export function hardwareList(piece) {
   const bottoms = parts.filter((p) => p.name === 'drawer bottom');
   const drawers = bottoms.length || parts.filter((p) => p.name.startsWith('drawer front')).length;
   const slideBoxDepth = bottoms.length ? sortedDims(bottoms[0].size)[1] : 0;
+  // slide pairs are derived per drawer unless the runners are modelled as
+  // hardware parts (then they are listed by name with the extras instead)
+  const runnerHw = parts.some((p) => p.hardware && p.name.startsWith('runner'));
 
   const shelves = parts.filter((p) => p.name.includes('shelf') && !p.hardware).length;
   // shelf pins: explicitly modeled hardware parts when present, else 4 per shelf
@@ -113,7 +116,7 @@ export function hardwareList(piece) {
     hinges,
     hingesTotal,
     handles,
-    drawers,
+    drawers: runnerHw ? 0 : drawers,
     slideBoxDepth,
     shelves,
     shelfPins: pinHw || shelves * 4,
@@ -121,6 +124,65 @@ export function hardwareList(piece) {
     hooks,
     extras: [...extras.values()],
   };
+}
+
+// The hardware list as flat table rows: { qty, name, detail, product, price,
+// cost } — derived items (hinges, handles, slides, pins, rails, hooks) first,
+// then the explicitly modelled parts. price/cost are null when the catalogue
+// has no entry for the name.
+export function hardwareRows(piece) {
+  const hw = hardwareList(piece);
+  const rows = [];
+  const push = (qty, name, detail, item = hardwareItem(name), size = null) => {
+    const price = item?.price ?? null;
+    rows.push({ qty, name, detail, size, product: item?.product || null, price, cost: price != null ? qty * price : null });
+  };
+  if (hw.hingesTotal) {
+    const doors = hw.hinges.reduce((n, g) => n + g.doors, 0);
+    const per = [...new Set(hw.hinges.map((g) => g.perDoor))].join('/');
+    push(hw.hingesTotal, 'hinge', `${doors} door${doors > 1 ? 's' : ''}, ${per} per door`);
+  }
+  if (hw.handles) push(hw.handles, 'handle', 'one per door leaf and drawer front');
+  if (hw.drawers) push(hw.drawers, 'drawer slide pair', hw.slideBoxDepth ? `box depth ${hw.slideBoxDepth}` : '');
+  if (hw.shelves && !(piece.parts || []).some((p) => p.hardware && p.name.includes('shelf pin')))
+    push(hw.shelfPins, 'shelf support', `${hw.shelves} shelves × 4`);
+  for (const r of hw.rails) push(1, 'hanging rail', `${r.length} mm`);
+  if (hw.hooks) push(hw.hooks, 'coat hook', '');
+  // screws, staples and drilled holes are consumables, not hardware to shop
+  // for: they stay out of this table (the price estimate still counts them)
+  const consumable = (name) => /screw|staple|shelf hole/.test(name);
+  // a runner modelled as "<x> cabinet part" + "<x> drawer part" is bought as
+  // one piece: one row under <x>, counted by the cabinet parts, priced by them
+  const merged = new Map();
+  for (const x of hw.extras) {
+    if (consumable(x.name)) continue;
+    const m = x.name.match(/^(.*) (cabinet|drawer) part$/);
+    if (!m) {
+      push(x.qty, x.name, `${x.size.join(' × ')} mm`, hardwareItem(x.name), x.size);
+      continue;
+    }
+    const row = merged.get(m[1]) || { qty: 0, item: null };
+    if (m[2] === 'cabinet') {
+      row.qty = x.qty;
+      row.item = hardwareItem(x.name);
+    }
+    merged.set(m[1], row);
+  }
+  for (const [name, r] of merged) push(r.qty, name, 'cabinet + drawer profile', r.item);
+  const total = rows.reduce((n, r) => n + (r.cost || 0), 0);
+  return { rows, total };
+}
+
+// CSV of the hardware table: one row per item, with the detail, the catalogue
+// product and the prices; a total line at the end.
+export function hardwareCsv(piece) {
+  const q = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+  const { rows, total } = hardwareRows(piece);
+  const lines = ['Piece,Qty,Item,Detail,Product,Each (KM),Total (KM)'];
+  for (const r of rows)
+    lines.push([q(piece.name), r.qty, q(r.name), q(r.detail), q(r.product), r.price != null ? r.price.toFixed(2) : '', r.cost != null ? r.cost.toFixed(2) : ''].join(','));
+  lines.push([q(piece.name), '', q('total'), '', '', '', total.toFixed(2)].join(','));
+  return lines.join('\n');
 }
 
 // Board, edge-banding tape and labour cost from the materials registry (Elgrad

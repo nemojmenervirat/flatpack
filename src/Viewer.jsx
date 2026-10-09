@@ -5,6 +5,7 @@ import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shap
 import { aabbOf, pieceLocalBBox, walkMove, walkObstacles, frontFrame, hardwareHosts } from './geometry.js';
 import { TOUR, createTour, tickTour, endTour, resolveTarget, doorGeometry, entranceSpawn } from './tour.js';
 import { partColor } from './materials.js';
+import { bandedFaces } from './cutlist.js';
 
 // Glow added to a part while it is hovered in the 3D view or in the parts
 // table. Warm and bright enough to read on white boards under full light.
@@ -720,8 +721,19 @@ function Leg({ part, color, hovered, ...handlers }) {
 }
 
 // A part box in piece-local coordinates (rendered inside the placement group).
+// BoxGeometry material slots in three space: +x, -x, +y, -y, +z, -z. With
+// three.y = data z and three.z = -data y that is, in piece-local face keys:
+const FACE_SLOTS = ['+x', '-x', '+z', '-z', '-y', '+y'];
+const RAW_EDGE = '#c9b58e'; // untaped chipboard edge
+
 function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
   const showEdges = useContext(EdgesContext);
+  // boards show their edge banding: taped narrow faces in the decor colour,
+  // untaped ones as raw chipboard (hardware, appliances, fabric: one material)
+  const faces = useMemo(
+    () => (part.hardware || part.appliance || part.metal || part.fabric ? null : bandedFaces(part)),
+    [part]
+  );
   if (part.hardware && part.name.startsWith('leg')) {
     return <Leg part={part} color={color} hovered={hovered} {...handlers} />;
   }
@@ -740,16 +752,31 @@ function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
   return (
     <mesh position={pos} {...handlers}>
       <boxGeometry args={size} />
-      <meshStandardMaterial
-        map={part.fabric ? getFabricTexture(part.fabric) : null}
-        color={color}
-        emissive={hovered ? HOVER_EMISSIVE : '#000000'}
-        metalness={part.metal ? 0.5 : 0}
-        roughness={part.metal ? 0.28 : 1}
-        transparent={opacity < 1}
-        opacity={opacity}
-        depthWrite={opacity === 1}
-      />
+      {faces ? (
+        FACE_SLOTS.map((key, i) => (
+          <meshStandardMaterial
+            key={i}
+            attach={`material-${i}`}
+            color={faces.narrow.includes(key) && !faces.banded.includes(key) ? RAW_EDGE : color}
+            emissive={hovered ? HOVER_EMISSIVE : '#000000'}
+            roughness={1}
+            transparent={opacity < 1}
+            opacity={opacity}
+            depthWrite={opacity === 1}
+          />
+        ))
+      ) : (
+        <meshStandardMaterial
+          map={part.fabric ? getFabricTexture(part.fabric) : null}
+          color={color}
+          emissive={hovered ? HOVER_EMISSIVE : '#000000'}
+          metalness={part.metal ? 0.5 : 0}
+          roughness={part.metal ? 0.28 : 1}
+          transparent={opacity < 1}
+          opacity={opacity}
+          depthWrite={opacity === 1}
+        />
+      )}
       {showEdges && opacity === 1 && !part.fabric && (
         <Edges>
           <lineBasicMaterial color="#000000" transparent opacity={0.22} />
@@ -1033,7 +1060,7 @@ function doorCasingParts(horiz, away, w, h, wall, architrave = true) {
 // -y, width along x, origin at the left end of the back plane) and the outer
 // group turns the whole thing into place. attachments = parts riding on the
 // door (bins, inner liner) that swing along.
-function Door({ part, attachments = [], color, bbox, hovered, openable }) {
+function Door({ part, attachments = [], color, bbox, hovered, openable, showHandle = true, handleHot = false }) {
   const [open, setOpen] = useState(false);
   useOpenable(openable, setOpen);
   const ref = useRef();
@@ -1112,7 +1139,7 @@ function Door({ part, attachments = [], color, bbox, hovered, openable }) {
         {hingeSets.map((hs, i) => (
           <LocalBox key={`h${i}`} part={hs.cup} color="#6f757c" hovered={hovered} {...handlers} />
         ))}
-        <LocalBox part={handle} color="#9aa0a8" hovered={hovered} {...handlers} />
+        {showHandle && <LocalBox part={handle} color="#9aa0a8" hovered={hovered || handleHot} {...handlers} />}
         {riders.map((a, i) => (
           <LocalBox
             key={i}
@@ -1260,6 +1287,24 @@ function drawerGroups(parts) {
       consumed.add(i);
     }
   });
+  // hardware riding in the box: the box's own screws and staples and the
+  // drawer-side runner profiles — anything flagged hardware whose center lies
+  // within 8 mm of the box members' bounding box (the carcass-side runner
+  // profile sits just outside it and stays put)
+  for (const [fi, members] of groups) {
+    const boards = members.filter((m) => !parts[m].hardware);
+    if (!boards.length) continue;
+    const lo = [0, 1, 2].map((a) => Math.min(...boards.map((m) => parts[m].pos[a])) - 8);
+    const hi = [0, 1, 2].map((a) => Math.max(...boards.map((m) => parts[m].pos[a] + parts[m].size[a])) + 8);
+    parts.forEach((p, i) => {
+      if (!p.hardware || consumed.has(i) || i === fi) return;
+      const c = [0, 1, 2].map((a) => p.pos[a] + p.size[a] / 2);
+      if ([0, 1, 2].every((a) => c[a] > lo[a] && c[a] < hi[a])) {
+        members.push(i);
+        consumed.add(i);
+      }
+    });
+  }
   return { groups, consumed };
 }
 
@@ -1292,6 +1337,24 @@ function doorGroups(parts) {
       consumed.add(i);
     }
   });
+  // hardware riding in the box: the box's own screws and staples and the
+  // drawer-side runner profiles — anything flagged hardware whose center lies
+  // within 8 mm of the box members' bounding box (the carcass-side runner
+  // profile sits just outside it and stays put)
+  for (const [fi, members] of groups) {
+    const boards = members.filter((m) => !parts[m].hardware);
+    if (!boards.length) continue;
+    const lo = [0, 1, 2].map((a) => Math.min(...boards.map((m) => parts[m].pos[a])) - 8);
+    const hi = [0, 1, 2].map((a) => Math.max(...boards.map((m) => parts[m].pos[a] + parts[m].size[a])) + 8);
+    parts.forEach((p, i) => {
+      if (!p.hardware || consumed.has(i) || i === fi) return;
+      const c = [0, 1, 2].map((a) => p.pos[a] + p.size[a] / 2);
+      if ([0, 1, 2].every((a) => c[a] > lo[a] && c[a] < hi[a])) {
+        members.push(i);
+        consumed.add(i);
+      }
+    });
+  }
   return { groups, consumed };
 }
 
@@ -2075,7 +2138,80 @@ export default function Viewer({
 // highlight = Set of part indices to light up (driven by the parts table);
 // onHoverPart reports the hovered part index back so the table can follow.
 // Remount (key it by piece id) when the piece changes so the camera reframes.
-export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAppliances = false }) {
+// Assembly mode: a part of the current step slides in from its approach
+// direction (mm, data space) and settles with damping at `base` (0 for a
+// part in place, a stage offset for one built outside the piece); parts of
+// earlier steps mount already settled. The key on this group changes when a
+// part's step becomes current or its stage is installed, so it remounts and
+// starts from its travel offset.
+function Placing({ from, animate, base = [0, 0, 0], children }) {
+  const ref = useRef();
+  const start = animate ? base.map((v, a) => v + from[a]) : base;
+  const end = [base[0] * S, base[2] * S, -base[1] * S];
+  useFrame((_, dt) => {
+    const g = ref.current;
+    if (!g) return;
+    g.position.x = MathUtils.damp(g.position.x, end[0], 5, dt);
+    g.position.y = MathUtils.damp(g.position.y, end[1], 5, dt);
+    g.position.z = MathUtils.damp(g.position.z, end[2], 5, dt);
+  });
+  return (
+    <group ref={ref} position={[start[0] * S, start[2] * S, -start[1] * S]}>
+      {children}
+    </group>
+  );
+}
+
+// On-screen camera buttons for the piece view: each command nudges the orbit
+// camera around its target (zoom = move along the view line, rotate = turn
+// around the vertical axis, tilt = change the polar angle) or resets it to
+// the opening view. cmd = { id, type } changes on every press.
+function ViewCommands({ cmd, home, target }) {
+  const { camera, controls } = useThree();
+  useEffect(() => {
+    if (!cmd || !controls) return;
+    const t = controls.target;
+    const v = camera.position.clone().sub(t);
+    const up = new Vector3(0, 1, 0);
+    switch (cmd.type) {
+      case 'in':
+        v.multiplyScalar(0.8);
+        break;
+      case 'out':
+        v.multiplyScalar(1.25);
+        break;
+      case 'left':
+        v.applyAxisAngle(up, MathUtils.degToRad(15));
+        break;
+      case 'right':
+        v.applyAxisAngle(up, -MathUtils.degToRad(15));
+        break;
+      case 'up':
+      case 'down': {
+        const axis = new Vector3().crossVectors(up, v).normalize();
+        const polar = v.angleTo(up);
+        const delta = MathUtils.degToRad(cmd.type === 'up' ? -10 : 10);
+        const next = MathUtils.clamp(polar + delta, 0.05, Math.PI - 0.05);
+        v.applyAxisAngle(axis, next - polar);
+        break;
+      }
+      case 'home':
+        t.set(target[0], target[1], target[2]);
+        camera.position.set(home[0], home[1], home[2]);
+        controls.update();
+        return;
+      default:
+        return;
+    }
+    camera.position.copy(t).add(v);
+    controls.update();
+    // only a new press (cmd.id) may run this; home/target are stable memos
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cmd?.id, controls]);
+  return null;
+}
+
+export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAppliances = false, assembly = null }) {
   const parts = piece.parts?.length
     ? piece.parts
     : [{ name: piece.name, pos: [0, 0, 0], size: piece.size, color: piece.color || '#8a93a6' }];
@@ -2112,22 +2248,72 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAp
     onHoverPart?.(i);
   };
 
-  // three-space center of the piece and a camera distance from its span
-  const c = [
-    ((bb.min[0] + bb.max[0]) / 2) * S,
-    ((bb.min[2] + bb.max[2]) / 2) * S,
-    (-(bb.min[1] + bb.max[1]) / 2) * S,
-  ];
-  const span = Math.max(bb.max[0] - bb.min[0], bb.max[1] - bb.min[1], bb.max[2] - bb.min[2]) * S;
-  const cam = [c[0] + span * 0.9, c[1] + span * 0.75, c[2] + span * 1.3];
+  // three-space center of the piece and a camera distance from its span —
+  // memoized so OrbitControls' target prop keeps its identity across renders
+  // (a fresh array would snap the target back on every hover or step)
+  const { c, cam } = useMemo(() => {
+    const c = [
+      ((bb.min[0] + bb.max[0]) / 2) * S,
+      ((bb.min[2] + bb.max[2]) / 2) * S,
+      (-(bb.min[1] + bb.max[1]) / 2) * S,
+    ];
+    const span = Math.max(bb.max[0] - bb.min[0], bb.max[1] - bb.min[1], bb.max[2] - bb.min[2]) * S;
+    return { c, cam: [c[0] + span * 0.9, c[1] + span * 0.75, c[2] + span * 1.3] };
+  }, [bb.min[0], bb.min[1], bb.min[2], bb.max[0], bb.max[1], bb.max[2]]);
 
   const hoveredPart = hover != null ? parts[hover] : null;
+  const [viewCmd, setViewCmd] = useState(null);
+  const sendView = (type) => setViewCmd({ id: Date.now(), type });
+
+  // assembly: which parts exist at the current step, and how far each travels in
+  const asmHidden = (i) => assembly && assembly.stepOf[i] > assembly.step;
+  const travel = (p, i) => {
+    const d = assembly.dirs[i];
+    const axis = d.findIndex((v) => v !== 0);
+    const dist = p.hardware ? 60 + (axis >= 0 ? p.size[axis] : 0) : 350;
+    return d.map((v) => v * dist);
+  };
+  // viewer-drawn handles go on at the assembly's handles step
+  const handlesOn = !assembly || assembly.handlesStep == null || assembly.step >= assembly.handlesStep;
+  const handlesHot = !!assembly && assembly.handlesStep != null && assembly.step === assembly.handlesStep;
+  // a drawer is grouped (and opens) once its front and every box part is placed
+  const frontOf = new Map();
+  for (const [fi, members] of drawers) for (const m of members) frontOf.set(m, fi);
+  const drawerDone = (fi) =>
+    !assembly || [fi, ...drawers.get(fi)].every((m) => assembly.stepOf[m] <= assembly.step && !(assembly.stageOf?.[m] && assembly.stages[assembly.stageOf[m]].installStep > assembly.step));
+  const placing = (p, i, el) => {
+    if (!assembly) return el;
+    const now = assembly.stepOf[i] === assembly.step;
+    const stage = assembly.stageOf?.[i] ? assembly.stages[assembly.stageOf[i]] : null;
+    if (stage) {
+      // built outside the piece until its install step slides the whole group in
+      const installing = assembly.step === stage.installStep;
+      const outside = assembly.step < stage.installStep;
+      return (
+        <Placing
+          key={`${i}-${now}-${outside}-${installing}`}
+          base={outside ? stage.offset : [0, 0, 0]}
+          from={installing ? stage.offset : travel(p, i)}
+          animate={now || installing}
+        >
+          {el}
+        </Placing>
+      );
+    }
+    return (
+      <Placing key={`${i}-${now}`} from={travel(p, i)} animate={now}>
+        {el}
+      </Placing>
+    );
+  };
 
   return (
+    <>
     <Canvas camera={{ position: cam, fov: 45 }} style={{ background: '#16181c' }}>
       <color attach="background" args={['#16181c']} />
       <ambientLight intensity={0.75} />
       <directionalLight position={[4, 8, 5]} intensity={1.3} />
+      <ViewCommands cmd={viewCmd} home={cam} target={c} />
 
       {explode > 0 &&
         parts.map((p, i) => {
@@ -2156,11 +2342,18 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAp
 
       {explode === 0 &&
         parts.map((p, i) => {
-        if (consumed.has(i) || onDoors.has(i)) return null; // rendered inside its Drawer/Door
-        if (hidden(p)) return null;
-        const lit = hover === i || highlight?.has(i);
-        if (drawers.has(i)) {
-          return (
+        // while assembling, drawer boxes are built part by part, so nothing is
+        // grouped under its front (doors still carry their bins and hinges)
+        if ((consumed.has(i) && drawerDone(frontOf.get(i))) || onDoors.has(i)) return null; // rendered inside its Drawer/Door
+        if (hidden(p) || asmHidden(i)) return null;
+        const lit =
+          hover === i ||
+          highlight?.has(i) ||
+          (assembly != null &&
+            (assembly.stepOf[i] === assembly.step ||
+              (assembly.stageOf?.[i] && assembly.stages[assembly.stageOf[i]].installStep === assembly.step)));
+        if (drawers.has(i) && drawerDone(i)) {
+          return placing(p, i,
             <Drawer key={i} face={drawerFace(p)} pullMm={drawerPull(parts, p, drawers.get(i))}>
               {[i, ...drawers.get(i)].filter((pi) => !hidden(parts[pi])).map((pi) => (
                 <group
@@ -2183,7 +2376,7 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAp
             </Drawer>
           );
         }
-        return (
+        return placing(p, i,
           <group
             key={i}
             onPointerOver={(e) => {
@@ -2199,6 +2392,8 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAp
                 color={partColor(p, piece)}
                 bbox={bb}
                 hovered={lit}
+                showHandle={handlesOn}
+                handleHot={handlesHot}
               />
             ) : isFlap(p) ? (
               <Flap part={p} color={partColor(p, piece)} hovered={lit} />
@@ -2206,6 +2401,11 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAp
               <Drawer face={drawerFace(p)} pullMm={Math.round(0.8 * p.size[drawerAxes(drawerFace(p)).pull])}>
                 <LocalBox part={p} color={partColor(p, piece)} opacity={p.opacity ?? 1} hovered={lit} />
               </Drawer>
+            ) : drawers.has(i) ? (
+              <group>
+                <LocalBox part={p} color={partColor(p, piece)} opacity={p.opacity ?? 1} hovered={lit} />
+                {handlesOn && <LocalBox part={barHandle(p)} color="#9aa0a8" hovered={lit || handlesHot} />}
+              </group>
             ) : (
               <LocalBox part={p} color={partColor(p, piece)} opacity={p.opacity ?? 1} hovered={lit} />
             )}
@@ -2228,5 +2428,15 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAp
       <OrbitControls target={c} makeDefault />
       <ArrowKeyPan />
     </Canvas>
+    <div className="view-controls" title="Camera">
+      <button onClick={() => sendView('in')} title="Zoom in">+</button>
+      <button onClick={() => sendView('out')} title="Zoom out">−</button>
+      <button onClick={() => sendView('left')} title="Rotate left">⟲</button>
+      <button onClick={() => sendView('right')} title="Rotate right">⟳</button>
+      <button onClick={() => sendView('up')} title="Tilt up">▲</button>
+      <button onClick={() => sendView('down')} title="Tilt down">▼</button>
+      <button onClick={() => sendView('home')} title="Reset view">⌂</button>
+    </div>
+    </>
   );
 }

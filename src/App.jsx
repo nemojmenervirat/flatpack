@@ -1,9 +1,10 @@
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import MaterialsPanel from './MaterialsPanel.jsx';
 import Viewer, { PieceViewer } from './Viewer.jsx';
 import { fitReport, pieceLocalBBox, placeBox } from './geometry.js';
 import { cutList, cutListCsv } from './cutlist.js';
-import { partRows, hardwareList, priceEstimate } from './hardware.js';
+import { partRows, hardwareList, hardwareRows, hardwareCsv, priceEstimate } from './hardware.js';
+import { assemblySteps, stepInstructions } from './assembly.js';
 import { apartments, apartmentById } from './apartments.js';
 
 // Rooms are final exact polygons: the flat's rooms.json defines each room as a
@@ -298,18 +299,33 @@ function BoughtPanel({ piece, scene }) {
   );
 }
 
-function PiecePanel({ piece, piecesById, hoverIndex, onHoverRow }) {
+function PiecePanel({ piece, piecesById, hoverIndex, onHoverRow, assembly, asmStep, onAsmStep }) {
   const rows = useMemo(() => partRows(piece), [piece]);
+  // keep the current assembly step in view while stepping or playing
+  const stepRefs = useRef([]);
+  useEffect(() => {
+    if (asmStep == null) return;
+    stepRefs.current[asmStep]?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }, [asmStep]);
   const hw = useMemo(() => hardwareList(piece), [piece]);
+  const hwTable = useMemo(() => hardwareRows(piece), [piece]);
   const price = useMemo(() => priceEstimate(piece), [piece]);
   const bandTotal = rows.reduce((n, r) => n + r.banding.length * r.qty, 0);
 
   const copyCsv = () =>
     navigator.clipboard.writeText(cutListCsv(cutList({ placements: [{ piece: piece.id }] }, piecesById)));
+  const copyHardwareCsv = () => navigator.clipboard.writeText(hardwareCsv(piece));
+
+  // overall size of everything that is cut or bought, fronts included
+  const bb = pieceLocalBBox(piece);
+  const [ow, od, oh] = [0, 1, 2].map((i) => bb.max[i] - bb.min[i]);
 
   return (
     <div className="piece-panel">
       <h1>{piece.name}</h1>
+      <p className="size-line overall">
+        {ow} × {od} × {oh} mm <span className="muted-inline">(width × depth × height)</span>
+      </p>
 
       <section>
         <h2>Parts</h2>
@@ -353,39 +369,93 @@ function PiecePanel({ piece, piecesById, hoverIndex, onHoverRow }) {
       {(hw.hingesTotal > 0 || hw.drawers > 0 || hw.shelves > 0 || hw.rails.length > 0 || hw.hooks > 0 || hw.extras.length > 0) && (
         <section>
           <h2>Hardware</h2>
-          <ul className="hardware">
-            {hw.hinges.map((g, i) => (
-              <li key={`h${i}`}>
-                {g.doors * g.perDoor} × hinge — {g.doors} door{g.doors > 1 ? 's' : ''} {g.doorW}×{g.doorH},{' '}
-                {g.perDoor} each, hinge {g.side}
-              </li>
-            ))}
-            {hw.hingesTotal > 0 && <li className="muted">hinges total: {hw.hingesTotal}</li>}
-            {hw.handles > 0 && <li>{hw.handles} × handle — one per door</li>}
-            {hw.drawers > 0 && (
-              <li>
-                {hw.drawers} × drawer slide pair{hw.drawers > 1 ? 's' : ''}
-                {hw.slideBoxDepth ? ` (box depth ${hw.slideBoxDepth})` : ''}
-              </li>
-            )}
-            {hw.shelves > 0 && (
-              <li>
-                {hw.shelfPins} × shelf support ({hw.shelves} shelves × 4)
-              </li>
-            )}
-            {hw.rails.map((r, i) => (
-              <li key={`r${i}`}>1 × hanging rail, {r.length} mm</li>
-            ))}
-            {hw.hooks > 0 && <li>{hw.hooks} × coat hook</li>}
-            {hw.extras.map((x, i) => (
-              <li key={`x${i}`}>
-                {x.qty} × {x.name} — {x.size.join(' × ')} mm
-                {x.product && <span className="muted-inline"> · {x.product}</span>}
-                {x.price != null && <span className="muted-inline"> · {x.price.toFixed(2)} KM each</span>}
-              </li>
-            ))}
-          </ul>
+          <table className="parts hardware">
+            <thead>
+              <tr>
+                <th className="num">Qty</th>
+                <th>Item</th>
+                <th className="num">Each</th>
+                <th className="num">KM</th>
+              </tr>
+            </thead>
+            <tbody>
+              {hwTable.rows.map((r, i) => (
+                <tr key={i}>
+                  <td className="num">{r.qty}</td>
+                  <td>
+                    {r.name}
+                    {(r.detail || r.product) && (
+                      <div className="muted-inline">
+                        {r.detail}
+                        {r.detail && r.product ? ' · ' : ''}
+                        {r.product}
+                      </div>
+                    )}
+                  </td>
+                  <td className="num">{r.price != null ? r.price.toFixed(2) : '—'}</td>
+                  <td className="num">{r.cost != null ? r.cost.toFixed(2) : '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr>
+                <td className="num" colSpan="3">
+                  total
+                </td>
+                <td className="num">{hwTable.total.toFixed(2)}</td>
+              </tr>
+            </tfoot>
+          </table>
+          <div className="row-between">
+            <span className="muted">screws and staples are in the price estimate</span>
+            <button onClick={copyHardwareCsv}>Copy hardware CSV</button>
+          </div>
         </section>
+      )}
+
+      {assembly && (
+      <section>
+        <h2>Assembly</h2>
+        <p className="muted">
+          {assembly.steps.length} steps · click one to see it in 3D
+          {asmStep != null && (
+            <>
+              {' '}
+              · <a onClick={() => onAsmStep(null)}>show finished</a>
+            </>
+          )}
+        </p>
+        <ol className="asm-steps">
+          {assembly.steps.map((st, i) => {
+            const ins = stepInstructions(st, piece.parts, assembly.dirs);
+            return (
+              <li
+                key={i}
+                ref={(el) => (stepRefs.current[i] = el)}
+                className={asmStep === i ? 'current' : asmStep != null && i < asmStep ? 'done' : ''}
+                onClick={() => onAsmStep(i)}
+                onMouseEnter={() => onHoverRow(new Set(st.parts))}
+                onMouseLeave={() => onHoverRow(null)}
+              >
+                <div className="asm-title">{st.title}</div>
+                {st.note && <div className="asm-note">{st.note}</div>}
+                <div className="asm-lines">
+                  {ins.boards.map((b, k) => (
+                    <div key={`b${k}`}>
+                      {b.qty} × {b.name} <span className="muted-inline">{b.cut}</span>
+                    </div>
+                  ))}
+                  {ins.hardware.map((h, k) => (
+                    <div key={`h${k}`}>
+                      {h.drill ? `drill ${h.qty} × ${h.name}` : `+ ${h.qty} × ${h.name} ${h.from}`}
+                    </div>
+                  ))}
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </section>
       )}
 
       {(price.boardRows.length > 0 || price.unpriced.length > 0) && (
@@ -512,6 +582,8 @@ export default function App() {
   const stopTour = useCallback(() => setTourOn(false), []);
   const [materialsOpen, setMaterialsOpen] = useState(false);
   const [explode, setExplode] = useState(0); // 0..1, single-piece exploded view
+  const [asmStep, setAsmStep] = useState(null); // assembly step shown in the piece view, null = finished piece
+  const [asmPlay, setAsmPlay] = useState(false);
   const [hideAppliances, setHideAppliances] = useState(() => lsGet('flatpack.hideAppliances', false)); // single-piece: strip oven/sink/hob
 
   useEffect(() => lsSet('flatpack.apartment', apartmentId), [apartmentId]);
@@ -569,6 +641,8 @@ export default function App() {
     if (view !== 'apartment' && !piecesById[view]) setView('apartment'); // stale localStorage
     if (view !== 'apartment') setWalk('off'); // walk mode only exists in the apartment view
     setExplode(0); // come back assembled
+    setAsmStep(null);
+    setAsmPlay(false);
   }, [view, piecesById]);
 
   useEffect(() => {
@@ -585,6 +659,28 @@ export default function App() {
 
   const copyAllCsv = () => navigator.clipboard.writeText(cutListCsv(cutList(scene, piecesById)));
 
+  // assembly steps of the open piece; playing advances one step every 2.8 s
+  const assembly = useMemo(() => (piece?.parts?.length ? assemblySteps(piece) : null), [piece]);
+  const asmCount = assembly?.steps.length || 0;
+  const gotoStep = (i) => {
+    setAsmStep(i);
+    if (i != null) setExplode(0);
+  };
+  useEffect(() => {
+    if (!asmPlay || !assembly) return undefined;
+    const t = setInterval(() => {
+      setAsmStep((st) => {
+        const next = st == null ? 0 : st + 1;
+        if (next >= asmCount) {
+          setAsmPlay(false);
+          return asmCount - 1;
+        }
+        return next;
+      });
+    }, 2800);
+    return () => clearInterval(t);
+  }, [asmPlay, assembly, asmCount]);
+
   return (
     <div className="app">
       <div className={walk === 'arm' && !piece && !materialsOpen ? 'canvas-pane walk-arm' : 'canvas-pane'}>
@@ -598,6 +694,7 @@ export default function App() {
             onHoverPart={setHoverIndex}
             explode={explode}
             hideAppliances={hideAppliances}
+            assembly={asmStep != null && assembly ? { ...assembly, step: asmStep } : null}
           />
         ) : (
           <Viewer
@@ -652,11 +749,41 @@ export default function App() {
               max="1"
               step="0.01"
               value={explode}
+              disabled={asmStep != null}
               onChange={(e) => setExplode(Number(e.target.value))}
             />
             <button disabled={explode === 0} onClick={() => setExplode(0)}>
               assemble
             </button>
+            {assembly && asmStep == null && (
+              <button
+                title="Build the piece step by step"
+                onClick={() => {
+                  setExplode(0);
+                  setAsmStep(0);
+                  setAsmPlay(true);
+                }}
+              >
+                ▶ assembly
+              </button>
+            )}
+            {assembly && asmStep != null && (
+              <>
+                <button disabled={asmStep === 0} onClick={() => { setAsmPlay(false); gotoStep(asmStep - 1); }}>
+                  ◀
+                </button>
+                <span className="asm-cap">
+                  {asmStep + 1}/{asmCount} · {assembly.steps[asmStep].title}
+                </span>
+                <button disabled={asmStep >= asmCount - 1} onClick={() => { setAsmPlay(false); gotoStep(asmStep + 1); }}>
+                  ▶
+                </button>
+                <button className={asmPlay ? 'on' : ''} onClick={() => setAsmPlay((v) => !v)}>
+                  {asmPlay ? 'pause' : 'play'}
+                </button>
+                <button onClick={() => { setAsmPlay(false); gotoStep(null); }}>exit</button>
+              </>
+            )}
             {piece.parts?.some((p) => p.appliance) && (
               <button
                 className={hideAppliances ? 'on' : ''}
@@ -671,7 +798,18 @@ export default function App() {
 
         {!materialsOpen && piece &&
           (piece.buildable ? (
-            <PiecePanel piece={piece} piecesById={piecesById} hoverIndex={hoverIndex} onHoverRow={setHighlight} />
+            <PiecePanel
+              piece={piece}
+              piecesById={piecesById}
+              hoverIndex={hoverIndex}
+              onHoverRow={setHighlight}
+              assembly={assembly}
+              asmStep={asmStep}
+              onAsmStep={(i) => {
+                setAsmPlay(false);
+                gotoStep(i);
+              }}
+            />
           ) : (
             <BoughtPanel piece={piece} scene={scene} />
           ))}
