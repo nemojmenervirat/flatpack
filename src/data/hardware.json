@@ -4,7 +4,7 @@
     "leg": {
       "product": "Nogice za namještaj podesive 120mm 4/1 crne FE.9020",
       "price": 1.95,
-      "note": "adjustable plastic leg, wound down to 100 mm to sit behind the 100 mm plinth (wardrobes and kitchen)"
+      "note": "adjustable plastic leg, assumed range 100-150 mm; modelled at the 100 mm minimum behind the 100 mm plinth, so levelling can only go up (wardrobes and kitchen)"
     },
     "hinge": {
       "product": "cabinet hinge, approx.",

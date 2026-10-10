@@ -1,7 +1,7 @@
 {
   "name": "Gallery (test room)",
-  "comment": "A plain single room for trying out pieces before they go into a real flat. Interior 5000 x 4000, H 2525 (wardrobe 2460 + 65 top filler), walls 250. Door (900) on the east wall near the SE corner, window (2000) centred on the south wall, sill 900 / head 2200. Nothing here is a real place.",
-  "height": 2525,
+  "comment": "A plain single room for trying out pieces before they go into a real flat. Interior 5000 x 4000, H 2515 (wardrobe 2450 + 65 air above it, no top filler), walls 250. Door (900) on the east wall near the SE corner, window (2000) centred on the south wall, sill 900 / head 2200. Nothing here is a real place.",
+  "height": 2515,
   "areaPad": 0,
   "floor": {
     "pos": [
@@ -26,7 +26,7 @@
       "size": [
         1750,
         250,
-        2525
+        2515
       ]
     },
     {
@@ -65,7 +65,7 @@
       "size": [
         1750,
         250,
-        2525
+        2515
       ]
     },
     {
@@ -78,7 +78,7 @@
       "size": [
         250,
         4000,
-        2525
+        2515
       ]
     },
     {
@@ -91,7 +91,7 @@
       "size": [
         5500,
         250,
-        2525
+        2515
       ]
     },
     {
@@ -104,7 +104,7 @@
       "size": [
         250,
         250,
-        2525
+        2515
       ]
     },
     {
@@ -130,7 +130,7 @@
       "size": [
         250,
         2850,
-        2525
+        2515
       ]
     }
   ],
