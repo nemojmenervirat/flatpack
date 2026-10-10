@@ -411,6 +411,36 @@ function DimLabel({ box, text, name, className = '' }) {
   );
 }
 
+// A storage space (spaces.js). Quiet by default: a thin outline and the clear
+// height as a small number, which is what you read off a wardrobe. The row
+// hovered in the panel (hot) gets a filled box and the full name and size.
+// It never takes the pointer, so the boards behind stay hoverable.
+function SpaceBox({ space, hot }) {
+  const { pos, size, name, clear } = space;
+  const center = [(pos[0] + size[0] / 2) * S, (pos[2] + size[2] / 2) * S, -(pos[1] + size[1] / 2) * S];
+  return (
+    <group>
+      <mesh position={center} raycast={() => null}>
+        <boxGeometry args={[size[0] * S, size[2] * S, size[1] * S]} />
+        <meshStandardMaterial color="#8fd0ff" transparent opacity={hot ? 0.3 : 0} depthWrite={false} />
+        <Edges color={hot ? '#bfe6ff' : '#5f8fb8'} />
+      </mesh>
+      <Html position={center} center zIndexRange={[10, 0]}>
+        {hot ? (
+          <div className="dim space hot">
+            <div className="dim-name">{name}</div>
+            {clear[0]} × {clear[1]} × {clear[2]}
+          </div>
+        ) : (
+          <div className="dim space" title={`${name}: ${clear.join(' × ')}`}>
+            {clear[2]}
+          </div>
+        )}
+      </Html>
+    </group>
+  );
+}
+
 function Box({ box, color = '#c9a36b', opacity = 1, hovered = false, ...handlers }) {
   const size = [
     (box.max[0] - box.min[0]) * S,
@@ -2144,13 +2174,22 @@ export default function Viewer({
 // earlier steps mount already settled. The key on this group changes when a
 // part's step becomes current or its stage is installed, so it remounts and
 // starts from its travel offset.
-function Placing({ from, animate, base = [0, 0, 0], children }) {
+// delay: seconds to wait (hidden) before sliding in — the screws of a step
+// follow the board they go into.
+function Placing({ from, animate, base = [0, 0, 0], delay = 0, children }) {
   const ref = useRef();
+  const waited = useRef(0);
   const start = animate ? base.map((v, a) => v + from[a]) : base;
   const end = [base[0] * S, base[2] * S, -base[1] * S];
   useFrame((_, dt) => {
     const g = ref.current;
     if (!g) return;
+    if (animate && waited.current < delay) {
+      waited.current += dt;
+      g.visible = false;
+      return;
+    }
+    g.visible = true;
     g.position.x = MathUtils.damp(g.position.x, end[0], 5, dt);
     g.position.y = MathUtils.damp(g.position.y, end[1], 5, dt);
     g.position.z = MathUtils.damp(g.position.z, end[2], 5, dt);
@@ -2211,7 +2250,7 @@ function ViewCommands({ cmd, home, target }) {
   return null;
 }
 
-export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAppliances = false, assembly = null }) {
+export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAppliances = false, assembly = null, spaces = [], showSpaces = false, hotSpace = null }) {
   const parts = piece.parts?.length
     ? piece.parts
     : [{ name: piece.name, pos: [0, 0, 0], size: piece.size, color: piece.color || '#8a93a6' }];
@@ -2295,13 +2334,14 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAp
           base={outside ? stage.offset : [0, 0, 0]}
           from={installing ? stage.offset : travel(p, i)}
           animate={now || installing}
+          delay={now && !installing && p.hardware ? 0.7 : 0}
         >
           {el}
         </Placing>
       );
     }
     return (
-      <Placing key={`${i}-${now}`} from={travel(p, i)} animate={now}>
+      <Placing key={`${i}-${now}`} from={travel(p, i)} animate={now} delay={p.hardware ? 0.7 : 0}>
         {el}
       </Placing>
     );
@@ -2412,6 +2452,11 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAp
           </group>
         );
       })}
+
+      {explode === 0 && !assembly &&
+        spaces.map((sp, i) =>
+          showSpaces || hotSpace === i ? <SpaceBox key={i} space={sp} hot={hotSpace === i} /> : null
+        )}
 
       {hoveredPart && (
         <DimLabel

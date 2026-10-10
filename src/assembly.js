@@ -135,6 +135,7 @@ export function assemblySteps(piece) {
     install: s.install || null,
     stageAt: s.stageAt || null,
     handles: !!s.handles,
+    from: s.from || null, // 'front' | 'above' | ... : approach direction for the listed parts
   }));
   const listed = new Set(steps.flatMap((s) => s.sels.map(selName)));
   // every board name not listed gets its own step: by lowest z, fronts last, name as tie-break
@@ -142,7 +143,7 @@ export function assemblySteps(piece) {
   const zOf = (name) => Math.min(...parts.filter((p) => p.name === name).map((p) => p.pos[2]));
   const frontOf = (name) => isFront(parts.find((p) => p.name === name));
   rest.sort((a, b) => frontOf(a) - frontOf(b) || zOf(a) - zOf(b) || a.localeCompare(b));
-  for (const name of rest) steps.push({ title: name, note: '', view: null, sels: [name], stage: null, install: null, stageAt: null, handles: false });
+  for (const name of rest) steps.push({ title: name, note: '', view: null, sels: [name], stage: null, install: null, stageAt: null, handles: false, from: null });
 
   const stepOf = new Array(parts.length).fill(-1);
   steps.forEach((s, si) => {
@@ -183,6 +184,14 @@ export function assemblySteps(piece) {
   });
 
   const dirs = parts.map((p, i) => approachDir(p, parts, bb, hints[i]));
+  // a step may say where its listed parts come from (a rail dropped in from
+  // the front rather than threaded through the side)
+  steps.forEach((s, si) => {
+    if (!s.from || !VIEW_DIRS[s.from]) return;
+    parts.forEach((p, i) => {
+      if (stepOf[i] === si && s.sels.some((sel) => matches(sel, p))) dirs[i] = [...VIEW_DIRS[s.from]];
+    });
+  });
 
   // staged sub-assemblies: which stage each part belongs to (via its step),
   // where it is built, and the step that installs it

@@ -680,6 +680,27 @@ button:hover {
   color: #7fb8ff;
 }
 
+.dim.space {
+  font-size: 13px;
+  color: #bfe0ff;
+  background: rgba(22, 24, 28, 0.55);
+  border: 1px solid rgba(143, 191, 230, 0.35);
+  border-radius: 4px;
+  padding: 0 5px;
+  line-height: 18px;
+}
+.dim.space .dim-name {
+  font-size: 11px;
+  color: #8fbfe6;
+}
+.dim.space.hot {
+  font-size: 18px;
+  line-height: 22px;
+  padding: 2px 8px;
+  background: rgba(22, 24, 28, 0.92);
+  color: #ffffff;
+}
+
 .dim.piece {
   color: #ffd479;
 }

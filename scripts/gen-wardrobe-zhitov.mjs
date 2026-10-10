@@ -197,12 +197,12 @@ const stageL = 'left drawer';
 const up = 'upper carcass';
 const assembly = [
   S('Lower carcass: bottom', ['bottom lower'], 'Start with the bottom panel of the drawer carcass, front edge forward.', { view: 'above' }),
-  S('Legs', ['leg'], 'Screw the six adjustable legs to its underside: three along the front edge, three along the back, the middle pair under the partition line. Wind them fully down to 100 mm (they adjust 100-150, so levelling later only goes up).', { view: 'below' }),
   S('Lower carcass: left side', [{ name: 'side lower', x: 0 }], `Stand the left side (${LOWER_INNER} tall) on the bottom, flush at the front, three confirmats from below through the bottom.`, { view: 'below' }),
   S('Lower carcass: right side', [{ name: 'side lower', x: rightSideX }], 'Same for the right side: three confirmats from below.', { view: 'below' }),
   S('Lower carcass: partition', ['partition lower'], `The short partition ${col} from the left side, three confirmats from below.`, { view: 'below' }),
   S('Lower carcass: top', ['top lower'], 'Lay the full-width top over the sides and the partition and fix it from above: three confirmats into each side and three into the partition, heads flush, the upper carcass will sit on them.', { view: 'above' }),
   S('Lower carcass: back', ['back HDF lower'], 'Square it and staple the lower HDF back over the rear faces of bottom, sides, partition and top.', { view: 'back' }),
+  S('Legs', ['leg'], 'Turn the lower carcass over and screw the six adjustable legs to the underside of its bottom: three along the front edge, three along the back, the middle pair under the partition line. Wind them fully down to 100 mm (they adjust 100-150, so levelling later only goes up), then stand it back on its feet.', { view: 'below' }),
   S('Upper carcass: bottom', ['bottom upper'], 'On the bench, start the upper carcass with its bottom panel.', { stage: up, view: 'above' }),
   S('Upper carcass: left side', [{ name: 'side upper', x: 0 }], `Stand the left side (${sideUpperH} tall) on it, three confirmats from below through the bottom, heads flush.`, { stage: up, view: 'below' }),
   S('Upper carcass: right side', [{ name: 'side upper', x: rightSideX }], 'Same for the right side.', { stage: up, view: 'below' }),
@@ -211,9 +211,8 @@ const assembly = [
   S('Upper carcass: top', ['top upper'], 'Lay the top over the sides and fix it from above with three confirmats into each side, heads flush.', { stage: up, view: 'above' }),
   S('Upper carcass: back', ['back HDF upper'], 'Square it and staple the upper HDF back over the rear faces of bottom, sides, partition, top shelf and top.', { stage: up, view: 'back' }),
   S('Stack the upper carcass', [{ name: 'wood screw 4x30', z: z.bottomUpper - 10 }], 'Lift the upper carcass onto the lower one, flush at the front and both sides, and screw it down from inside: four screws through its bottom into the lower top.', { install: up, view: 'front' }),
-  S('Plinth', ['plinth front', 'plinth clip'], 'Clip the plinth to the three front legs.', { view: 'front-below' }),
   S('Rail holders', ['rail holder'], 'Screw the two rail holders to the left side and the partition, 74 under the top shelf.', { view: 'front' }),
-  S('Hanging rail', ['hanging rail'], 'Drop the rail into the holders.', { view: 'front' }),
+  S('Hanging rail', ['hanging rail'], 'Drop the rail into the holders from the front.', { view: 'front', from: 'front' }),
   S('Shelf pins', ['shelf pin'], 'Push four pins into the chosen holes for each adjustable shelf.', { view: 'front' }),
   S('Adjustable shelves', ['shelf column'], `Lay the ${ADJ_Z.length} adjustable shelves on their pins.`, { view: 'front' }),
   S('Left drawer: box sides and ends', [{ name: 'drawer box side', x: x0L + 13 }, { name: 'drawer box side', x: x0L + col - 31 }, { name: 'drawer box front', x: x0L + 31 }, { name: 'drawer box back', x: x0L + 31 }], 'On the bench: the two sides stand outside the front and back pieces, two confirmats per corner through the sides, heads flush on the outside so the runners clear them.', { stage: stageL, view: 'above' }),
@@ -231,6 +230,7 @@ const assembly = [
   S('Left door', [{ name: 'door', x: 3 }], 'Screw the hinge plates to the left side, press the cups into the door and clip it on. 3 at the wall, 4 to the drawer front below.', { view: 'front' }),
   S('Right door', [{ name: 'door', x: 3 + d1 + 4 }], 'Same on the right side. 4 to the left door, 5 to the end panel.', { view: 'front' }),
   S('Stand up and end panel', ['end panel'], 'Stand the wardrobe in the corner and level it on the legs. Scribe the end panel to the floor if needed, then screw it on from inside the right column through the side, six screws.', { view: 'front' }),
+  S('Plinth', ['plinth front', 'plinth clip'], 'Last, once the wardrobe is levelled: push the clips onto the three front legs and clip the plinth on.', { view: 'front-below' }),
 ];
 
 const piece = {

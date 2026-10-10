@@ -4,6 +4,7 @@ import Viewer, { PieceViewer } from './Viewer.jsx';
 import { fitReport, pieceLocalBBox, placeBox } from './geometry.js';
 import { cutList, cutListCsv } from './cutlist.js';
 import { partRows, hardwareList, hardwareRows, hardwareCsv, priceEstimate } from './hardware.js';
+import { interiorSpaces } from './spaces.js';
 import { assemblySteps, stepInstructions } from './assembly.js';
 import { apartments, apartmentById } from './apartments.js';
 
@@ -299,7 +300,7 @@ function BoughtPanel({ piece, scene }) {
   );
 }
 
-function PiecePanel({ piece, piecesById, hoverIndex, onHoverRow, assembly, asmStep, onAsmStep }) {
+function PiecePanel({ piece, piecesById, hoverIndex, onHoverRow, assembly, asmStep, onAsmStep, spaces, hotSpace, onHoverSpace }) {
   const rows = useMemo(() => partRows(piece), [piece]);
   // keep the current assembly step in view while stepping or playing
   const stepRefs = useRef([]);
@@ -365,6 +366,39 @@ function PiecePanel({ piece, piecesById, hoverIndex, onHoverRow, assembly, asmSt
           <button onClick={copyCsv}>Copy cut list CSV</button>
         </div>
       </section>
+
+      {spaces?.length > 0 && (
+        <section>
+          <h2>Spaces</h2>
+          <p className="muted">clear inside sizes · hover a row to see it in 3D</p>
+          <table className="parts spaces">
+            <thead>
+              <tr>
+                <th>Space</th>
+                <th className="num">W × D × H (mm)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {spaces.map((sp, i) => (
+                <tr
+                  key={i}
+                  className={hotSpace === i ? 'hot' : ''}
+                  onMouseEnter={() => onHoverSpace(i)}
+                  onMouseLeave={() => onHoverSpace(null)}
+                >
+                  <td>
+                    {sp.name}
+                    {sp.note && <div className="muted-inline">{sp.note}</div>}
+                  </td>
+                  <td className="num nowrap">
+                    {sp.clear[0]} × {sp.clear[1]} × {sp.clear[2]}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      )}
 
       {(hw.hingesTotal > 0 || hw.drawers > 0 || hw.shelves > 0 || hw.rails.length > 0 || hw.hooks > 0 || hw.extras.length > 0) && (
         <section>
@@ -584,12 +618,15 @@ export default function App() {
   const [explode, setExplode] = useState(0); // 0..1, single-piece exploded view
   const [asmStep, setAsmStep] = useState(null); // assembly step shown in the piece view, null = finished piece
   const [asmPlay, setAsmPlay] = useState(false);
+  const [showSpaces, setShowSpaces] = useState(() => lsGet('flatpack.showSpaces', false)); // single-piece: label the storage spaces
+  const [hotSpace, setHotSpace] = useState(null); // space row under the pointer
   const [hideAppliances, setHideAppliances] = useState(() => lsGet('flatpack.hideAppliances', false)); // single-piece: strip oven/sink/hob
 
   useEffect(() => lsSet('flatpack.apartment', apartmentId), [apartmentId]);
   useEffect(() => lsSet('flatpack.view', view), [view]);
   useEffect(() => lsSet('flatpack.showClearances', showClearances), [showClearances]);
   useEffect(() => lsSet('flatpack.hideAppliances', hideAppliances), [hideAppliances]);
+  useEffect(() => lsSet('flatpack.showSpaces', showSpaces), [showSpaces]);
   useEffect(() => lsSet('flatpack.showAreas', showAreas), [showAreas]);
   useEffect(() => lsSet('flatpack.showPieces', showPieces), [showPieces]);
   useEffect(() => lsSet('flatpack.sideOpen', sideOpen), [sideOpen]);
@@ -637,6 +674,7 @@ export default function App() {
   }, []);
 
   const piece = view !== 'apartment' ? piecesById[view] : null;
+  const spaces = useMemo(() => (piece?.buildable ? interiorSpaces(piece) : []), [piece]);
   useEffect(() => {
     if (view !== 'apartment' && !piecesById[view]) setView('apartment'); // stale localStorage
     if (view !== 'apartment') setWalk('off'); // walk mode only exists in the apartment view
@@ -695,6 +733,9 @@ export default function App() {
             explode={explode}
             hideAppliances={hideAppliances}
             assembly={asmStep != null && assembly ? { ...assembly, step: asmStep } : null}
+            spaces={spaces}
+            showSpaces={showSpaces}
+            hotSpace={hotSpace}
           />
         ) : (
           <Viewer
@@ -784,6 +825,16 @@ export default function App() {
                 <button onClick={() => { setAsmPlay(false); gotoStep(null); }}>exit</button>
               </>
             )}
+            {spaces.length > 0 && (
+              <button
+                className={showSpaces ? 'on' : ''}
+                title="Label the clear storage spaces: between shelves, under the rail, inside the drawers"
+                disabled={asmStep != null}
+                onClick={() => setShowSpaces((v) => !v)}
+              >
+                spaces
+              </button>
+            )}
             {piece.parts?.some((p) => p.appliance) && (
               <button
                 className={hideAppliances ? 'on' : ''}
@@ -809,6 +860,9 @@ export default function App() {
                 setAsmPlay(false);
                 gotoStep(i);
               }}
+              spaces={spaces}
+              hotSpace={hotSpace}
+              onHoverSpace={setHotSpace}
             />
           ) : (
             <BoughtPanel piece={piece} scene={scene} />
