@@ -367,38 +367,6 @@ function PiecePanel({ piece, piecesById, hoverIndex, onHoverRow, assembly, asmSt
         </div>
       </section>
 
-      {spaces?.length > 0 && (
-        <section>
-          <h2>Spaces</h2>
-          <p className="muted">clear inside sizes · hover a row to see it in 3D</p>
-          <table className="parts spaces">
-            <thead>
-              <tr>
-                <th>Space</th>
-                <th className="num">W × D × H (mm)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {spaces.map((sp, i) => (
-                <tr
-                  key={i}
-                  className={hotSpace === i ? 'hot' : ''}
-                  onMouseEnter={() => onHoverSpace(i)}
-                  onMouseLeave={() => onHoverSpace(null)}
-                >
-                  <td>
-                    {sp.name}
-                    {sp.note && <div className="muted-inline">{sp.note}</div>}
-                  </td>
-                  <td className="num nowrap">
-                    {sp.clear[0]} × {sp.clear[1]} × {sp.clear[2]}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
-      )}
 
       {(hw.hingesTotal > 0 || hw.drawers > 0 || hw.shelves > 0 || hw.rails.length > 0 || hw.hooks > 0 || hw.extras.length > 0) && (
         <section>
@@ -444,6 +412,39 @@ function PiecePanel({ piece, piecesById, hoverIndex, onHoverRow, assembly, asmSt
             <span className="muted">screws and staples are in the price estimate</span>
             <button onClick={copyHardwareCsv}>Copy hardware CSV</button>
           </div>
+        </section>
+      )}
+
+      {spaces?.length > 0 && (
+        <section>
+          <h2>Spaces</h2>
+          <p className="muted">clear inside sizes · hover a row to see it in 3D</p>
+          <table className="parts spaces">
+            <thead>
+              <tr>
+                <th>Space</th>
+                <th className="num">W × D × H (mm)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {spaces.map((sp, i) => (
+                <tr
+                  key={i}
+                  className={hotSpace === i ? 'hot' : ''}
+                  onMouseEnter={() => onHoverSpace(i)}
+                  onMouseLeave={() => onHoverSpace(null)}
+                >
+                  <td>
+                    {sp.name}
+                    {sp.note && <div className="muted-inline">{sp.note}</div>}
+                  </td>
+                  <td className="num nowrap">
+                    {sp.clear[0]} × {sp.clear[1]} × {sp.clear[2]}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </section>
       )}
 
@@ -615,7 +616,6 @@ export default function App() {
   const [tourCaption, setTourCaption] = useState(null); // current room label from the script
   const stopTour = useCallback(() => setTourOn(false), []);
   const [materialsOpen, setMaterialsOpen] = useState(false);
-  const [explode, setExplode] = useState(0); // 0..1, single-piece exploded view
   const [asmStep, setAsmStep] = useState(null); // assembly step shown in the piece view, null = finished piece
   const [asmPlay, setAsmPlay] = useState(false);
   const [showSpaces, setShowSpaces] = useState(() => lsGet('flatpack.showSpaces', false)); // single-piece: label the storage spaces
@@ -678,7 +678,6 @@ export default function App() {
   useEffect(() => {
     if (view !== 'apartment' && !piecesById[view]) setView('apartment'); // stale localStorage
     if (view !== 'apartment') setWalk('off'); // walk mode only exists in the apartment view
-    setExplode(0); // come back assembled
     setAsmStep(null);
     setAsmPlay(false);
   }, [view, piecesById]);
@@ -700,10 +699,7 @@ export default function App() {
   // assembly steps of the open piece; playing advances one step every 2.8 s
   const assembly = useMemo(() => (piece?.parts?.length ? assemblySteps(piece) : null), [piece]);
   const asmCount = assembly?.steps.length || 0;
-  const gotoStep = (i) => {
-    setAsmStep(i);
-    if (i != null) setExplode(0);
-  };
+  const gotoStep = (i) => setAsmStep(i);
   useEffect(() => {
     if (!asmPlay || !assembly) return undefined;
     const t = setInterval(() => {
@@ -730,7 +726,6 @@ export default function App() {
             piece={piece}
             highlight={highlight}
             onHoverPart={setHoverIndex}
-            explode={explode}
             hideAppliances={hideAppliances}
             assembly={asmStep != null && assembly ? { ...assembly, step: asmStep } : null}
             spaces={spaces}
@@ -782,25 +777,11 @@ export default function App() {
         )}
 
         {!materialsOpen && piece && (
-          <div className="explode-chip">
-            <span>explode</span>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.01"
-              value={explode}
-              disabled={asmStep != null}
-              onChange={(e) => setExplode(Number(e.target.value))}
-            />
-            <button disabled={explode === 0} onClick={() => setExplode(0)}>
-              assemble
-            </button>
+          <div className="piece-chip">
             {assembly && asmStep == null && (
               <button
                 title="Build the piece step by step"
                 onClick={() => {
-                  setExplode(0);
                   setAsmStep(0);
                   setAsmPlay(true);
                 }}

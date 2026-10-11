@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState } from 
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, OrthographicCamera, Html, Edges } from '@react-three/drei';
 import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, Path, ExtrudeGeometry } from 'three';
-import { aabbOf, pieceLocalBBox, walkMove, walkObstacles, frontFrame, hardwareHosts } from './geometry.js';
+import { aabbOf, pieceLocalBBox, walkMove, walkObstacles, frontFrame } from './geometry.js';
 import { TOUR, createTour, tickTour, endTour, resolveTarget, doorGeometry, entranceSpawn } from './tour.js';
 import { partColor } from './materials.js';
 import { bandedFaces } from './cutlist.js';
@@ -12,7 +12,7 @@ import { bandedFaces } from './cutlist.js';
 const HOVER_EMISSIVE = '#b08a2e';
 
 // Wall paint: RAL 9001 Cream (sRGB approximation of the RAL Classic swatch).
-const WALL_PAINT = '#fdf4e3';
+const WALL_PAINT = '#fdf4e3'; // default; apartment.wallColor or a wall's own color overrides
 
 // Data space is mm, [x, y, z] with z up.
 // Three.js is y-up, meters. Mapping: three.x = x, three.y = z, three.z = -y.
@@ -761,7 +761,7 @@ function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
   // boards show their edge banding: taped narrow faces in the decor colour,
   // untaped ones as raw chipboard (hardware, appliances, fabric: one material)
   const faces = useMemo(
-    () => (part.hardware || part.appliance || part.metal || part.fabric ? null : bandedFaces(part)),
+    () => (part.hardware || part.appliance || part.metal || part.fabric || !part.name ? null : bandedFaces(part)),
     [part]
   );
   if (part.hardware && part.name.startsWith('leg')) {
@@ -1490,19 +1490,6 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
     ? piece.parts
     : [{ name: piece.name, pos: [0, 0, 0], size: piece.size, color: piece.color || '#8a93a6' }];
   const bb = pieceLocalBBox(piece);
-  const centerX = (bb.min[0] + bb.max[0]) / 2;
-  // Exploded view: each part slides away from the piece center (mm, data space),
-  // proportional to the slider. z explodes from the bottom so nothing sinks below
-  // the grid. At 0 every offset is 0.
-  const centerY = (bb.min[1] + bb.max[1]) / 2;
-  const explodeOffset = (p) => {
-    const k = explode * 1.2;
-    return [
-      (p.pos[0] + p.size[0] / 2 - centerX) * k,
-      (p.pos[1] + p.size[1] / 2 - centerY) * k,
-      (p.pos[2] + p.size[2] / 2 - bb.min[2]) * k,
-    ];
-  };
   const rot = (((placement.rot || 0) % 360) + 360) % 360;
   const isFlap = (p) => p.name.startsWith('flap');
   const isPullout = (p) => p.name.startsWith('pullout');
@@ -2056,7 +2043,7 @@ export default function Viewer({
           <Box
             key={w.name}
             box={box}
-            color={WALL_PAINT}
+            color={w.color || apartment.wallColor || WALL_PAINT}
             hovered={hover?.key === info.key}
             onPointerOver={over(info)}
             onPointerOut={out(info.key)}
@@ -2250,28 +2237,11 @@ function ViewCommands({ cmd, home, target }) {
   return null;
 }
 
-export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAppliances = false, assembly = null, spaces = [], showSpaces = false, hotSpace = null }) {
+export function PieceViewer({ piece, highlight, onHoverPart, hideAppliances = false, assembly = null, spaces = [], showSpaces = false, hotSpace = null }) {
   const parts = piece.parts?.length
     ? piece.parts
     : [{ name: piece.name, pos: [0, 0, 0], size: piece.size, color: piece.color || '#8a93a6' }];
   const bb = pieceLocalBBox(piece);
-  const centerX = (bb.min[0] + bb.max[0]) / 2;
-  // Exploded view: each board slides away from the piece center (mm, data space),
-  // proportional to the slider. z explodes from the bottom so nothing sinks below
-  // the grid. At 0 every offset is 0. Hardware (screws, pins, clips, legs)
-  // takes the offset of its host board — the first board it is driven into —
-  // so fasteners stay seated instead of scattering (hardwareHosts).
-  const centerY = (bb.min[1] + bb.max[1]) / 2;
-  const hosts = useMemo(() => hardwareHosts(parts), [parts]);
-  const explodeOffset = (p, i) => {
-    const k = explode * 1.2;
-    const h = i != null && hosts[i] != null ? parts[hosts[i]] : p;
-    return [
-      (h.pos[0] + h.size[0] / 2 - centerX) * k,
-      (h.pos[1] + h.size[1] / 2 - centerY) * k,
-      (h.pos[2] + h.size[2] / 2 - bb.min[2]) * k,
-    ];
-  };
   const isFlap = (p) => p.name.startsWith('flap');
   const isPullout = (p) => p.name.startsWith('pullout');
   // "Hide appliances" strips parts flagged appliance (oven, sink, hob...) so the
@@ -2355,33 +2325,7 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAp
       <directionalLight position={[4, 8, 5]} intensity={1.3} />
       <ViewCommands cmd={viewCmd} home={cam} target={c} />
 
-      {explode > 0 &&
-        parts.map((p, i) => {
-          // scattered: every part on its own, no drawer/door grouping or animation
-          if (hidden(p)) return null;
-          const off = explodeOffset(p, i);
-          return (
-            <group
-              key={i}
-              position={[off[0] * S, off[2] * S, -off[1] * S]}
-              onPointerOver={(e) => {
-                e.stopPropagation();
-                setHovered(i);
-              }}
-              onPointerOut={() => setHovered(null)}
-            >
-              <LocalBox
-                part={p}
-                color={partColor(p, piece)}
-                opacity={p.opacity ?? 1}
-                hovered={hover === i || highlight?.has(i)}
-              />
-            </group>
-          );
-        })}
-
-      {explode === 0 &&
-        parts.map((p, i) => {
+      {parts.map((p, i) => {
         // while assembling, drawer boxes are built part by part, so nothing is
         // grouped under its front (doors still carry their bins and hinges)
         if ((consumed.has(i) && drawerDone(frontOf.get(i))) || onDoors.has(i)) return null; // rendered inside its Drawer/Door
@@ -2453,17 +2397,14 @@ export function PieceViewer({ piece, highlight, onHoverPart, explode = 0, hideAp
         );
       })}
 
-      {explode === 0 && !assembly &&
+      {!assembly &&
         spaces.map((sp, i) =>
           showSpaces || hotSpace === i ? <SpaceBox key={i} space={sp} hot={hotSpace === i} /> : null
         )}
 
       {hoveredPart && (
         <DimLabel
-          box={aabbOf(
-            hoveredPart.pos.map((v, a) => v + explodeOffset(hoveredPart, hover)[a]),
-            hoveredPart.size
-          )}
+          box={aabbOf(hoveredPart.pos, hoveredPart.size)}
           name={hoveredPart.name}
           text={[...hoveredPart.size].sort((a, b) => b - a).join(' × ')}
           className="piece"

@@ -973,7 +973,7 @@ button:hover {
   color: #d8d3c6;
 }
 
-.explode-chip {
+.piece-chip {
   position: absolute;
   top: 12px;
   left: 50%;
@@ -990,12 +990,7 @@ button:hover {
   color: #9a958c;
 }
 
-.explode-chip input[type='range'] {
-  width: 150px;
-  accent-color: #ffd479;
-}
-
-.explode-chip button {
+.piece-chip button {
   border: 1px solid #34383f;
   border-radius: 4px;
   background: #24272d;
@@ -1005,21 +1000,21 @@ button:hover {
   cursor: pointer;
 }
 
-.explode-chip button:hover {
+.piece-chip button:hover {
   background: #2c2f36;
 }
 
-.explode-chip button.on {
+.piece-chip button.on {
   border-color: #ffd479;
   color: #ffd479;
 }
 
-.explode-chip button:disabled {
+.piece-chip button:disabled {
   opacity: 0.35;
   cursor: default;
 }
 
-.explode-chip button:disabled:hover {
+.piece-chip button:disabled:hover {
   background: #24272d;
 }
 

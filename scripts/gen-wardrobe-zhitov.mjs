@@ -7,7 +7,9 @@
 // and an upper carcass stacked on it — plus a full-height end panel on the
 // exposed right side, no top filler (the room ceiling is above the top), a plinth
 // clipped to the legs, two drawers, two doors, a hanging rail on the left and
-// four adjustable shelves on the right. Every fastener is a hardware part.
+// four adjustable shelves on the right, and two concealed wall hangers in the top
+// back corners (the carcass is 20 shallower than the end panel, so their hooks and
+// wall plates sit in the pocket behind the HDF). Every fastener is a hardware part.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -20,6 +22,7 @@ const H = 2450; // carcass height (drawing)
 const CEILING = 2515; // room ceiling (not touched; no top filler)
 const T = 18; // board
 const HDF = 3; // back
+const POCKET = 20; // behind the HDF, to the wall: room for the wall hangers' hooks and plates (the end panel reaches the wall)
 const LEG = 100;
 const LOWER_INNER = 314; // drawer compartment height
 const TOP_COMP = 400; // compartment under the top
@@ -33,7 +36,7 @@ const MAT = 'U156 ST9';
 
 // ---- derived
 const carcassW = W - T; // end panel outside
-const boardD = D - T - HDF; // fronts in front, HDF behind
+const boardD = D - T - HDF - POCKET; // fronts in front, HDF behind, then the pocket to the wall
 const hdfY = boardD;
 const rightSideX = carcassW - T;
 const inner = carcassW - 2 * T;
@@ -77,8 +80,8 @@ const spread = (n, from, to) => Array.from({ length: n }, (_, i) => Math.round(f
 
 // ---- legs: three along the front, three along the back, the middle pair under the partition
 const legX = [30, partX + T / 2 - 25, carcassW - 80];
-for (const x of legX) for (const y of [50, boardD - 110]) HW('leg', [x, y, 0], [50, 50, LEG], '#1c1c1e');
-const legBackY = boardD - 110;
+for (const x of legX) for (const y of [50, boardD - 100]) HW('leg', [x, y, 0], [50, 50, LEG], '#1c1c1e');
+const legBackY = boardD - 100; // clear of the rear confirmat row at y 450
 
 // ---- lower carcass
 B('top/bottom', [0, 0, z.bottomLower], [carcassW, boardD, T]);
@@ -131,6 +134,15 @@ for (const x of legX) HW('plinth clip', [x + 10, 38, 20], [30, 12, 50], '#1c1c1e
 // ---- end panel on the exposed right side, screwed from inside through the side
 B('end panel', [carcassW, -T, 0], [T, D, H]);
 for (const y of [80, 500]) for (const zz of [400, 1300, 2200]) wood30([rightSideX - 2, y - 2, zz - 2], 'x');
+
+// ---- wall hangers: concealed cabinet hangers (Samet type) in the top back corners of the
+// upper carcass, 60 above the top shelf and screwed to the sides; the hook passes through a slot in the HDF onto a
+// plate screwed to the wall in the pocket. They only keep the wardrobe from tipping.
+const hangerZ = z.shelfTop + T + 60; // 60 above the top shelf: room for the drill and the screwdriver, still within easy reach
+for (const x of [T, rightSideX - 60]) {
+  HW('wall hanger', [x, hdfY - 20, hangerZ], [60, 20, 60], '#e8e8e8'); // white plastic mask over the steel body
+  HW('hanger wall plate', [x + 10, D - T - 6, hangerZ + 12], [40, 6, 36], '#9aa0a8');
+}
 
 // ---- hanging column: rail between two holders
 const railZ = z.shelfTop - 74 - 30;
@@ -213,7 +225,7 @@ const assembly = [
   S('Upper carcass: top shelf', ['shelf top'], `The full-width shelf ${TOP_COMP} under the top: three confirmats through each side and three down into the partition.`, { stage: up, view: 'above' }),
   S('Upper carcass: top', [{ name: 'top/bottom', z: z.top }], 'Lay the top over the sides and fix it from above with three confirmats into each side, heads flush.', { stage: up, view: 'above' }),
   S('Upper carcass: back', ['back HDF upper'], 'Square it and staple the upper HDF back over the rear faces of bottom, sides, partition, top shelf and top.', { stage: up, view: 'back' }),
-  S('Stack the upper carcass', [{ name: 'wood screw 4x30', z: z.bottomUpper - 10 }], 'Lift the upper carcass onto the lower one, flush at the front and both sides, and screw it down from inside: four screws through its bottom into the lower top.', { install: up, view: 'front' }),
+  S('Stack the upper carcass', [{ name: 'wood screw 4x30', z: z.bottomUpper - 10 }], 'Lift the upper carcass onto the lower one, flush at the front and both sides, and screw it down from inside: four screws through its bottom into the lower top.', { install: up, stageAt: [carcassW + T + 300, 0, -z.bottomUpper], view: 'front' }), // built on the floor to the right of the piece
   S('Rail holders', ['rail holder'], 'Screw the two rail holders to the left side and the partition, 74 under the top shelf.', { view: 'front' }),
   S('Hanging rail', ['hanging rail'], 'Drop the rail into the holders from the front.', { view: 'front', from: 'front' }),
   S('Shelf pins', ['shelf pin'], 'Push four pins into the chosen holes for each adjustable shelf.', { view: 'front' }),
@@ -222,17 +234,16 @@ const assembly = [
   S('Left drawer: bottom', [{ name: 'drawer bottom', x: x0L + 13 }], 'Square the box and staple the 3 mm HDF bottom under it: four staples into each side, three into the front and three into the back.', { stage: stageL, view: 'below' }),
   S('Left drawer: runner, drawer part', [{ name: 'runner 550 drawer part', x: x0L + 6 }, { name: 'runner 550 drawer part', x: x0L + col - 13 }], 'Screw the drawer profile of each runner along the bottom edge of the box sides, wheel at the back, flush with the box front.', { stage: stageL, view: 'front-below' }),
   S('Left drawer: runner, cabinet part', [{ name: 'runner 550 cabinet part', x: x0L }, { name: 'runner 550 cabinet part', x: x0L + col - 6 }], 'In the lower carcass: screw the cabinet profile of each runner to the compartment faces, flat on the bottom panel, wheel at the front, flush with the carcass front.', { view: 'front-above' }),
-  S('Left drawer: slide in', [], 'Lift the box, tilt it so the drawer wheels pass over the cabinet wheels, and roll it in. Check it runs freely.', { install: stageL, view: 'front' }),
-  S('Left drawer: front', [{ name: 'drawer front', x: 3 }], 'Hold the front against the box, aligned with the doors above (3 at the wall, 4 between, 5 at the end panel), and screw it on from inside the box with four screws.', { view: 'front' }),
+  S('Left drawer: slide in', [], 'Lift the box, tilt it so the drawer wheels pass over the cabinet wheels, and roll it in. Check it runs freely.', { install: stageL, stageAt: [carcassW + T + 300, 0, -z.sideLower], view: 'front' }), // built on the floor to the right, where the upper carcass was
   S('Right drawer', [
     { name: 'runner 550 cabinet part', x: rightX }, { name: 'runner 550 cabinet part', x: rightX + col - 6 },
     { name: 'runner 550 drawer part', x: rightX + 6 }, { name: 'runner 550 drawer part', x: rightX + col - 13 },
     { name: 'drawer box side', x: rightX + 13 }, { name: 'drawer box side', x: rightX + col - 31 }, { name: 'drawer box front/back', x: rightX + 31, y: 0 }, { name: 'drawer box front/back', x: rightX + 31, y: boxD - T },
-    { name: 'drawer bottom', x: rightX + 13 }, { name: 'drawer front', x: 3 + d1 + 4 },
-  ], 'Same as the left drawer: build the box on the bench, fit the drawer runner profiles, screw the cabinet profiles into the right compartment, roll the box in and screw the front on from inside.', { view: 'front' }),
-  S('Left door', [{ name: 'door', x: 3 }], 'Screw the hinge plates to the left side, press the cups into the door and clip it on. 3 at the wall, 4 to the drawer front below.', { view: 'front' }),
-  S('Right door', [{ name: 'door', x: 3 + d1 + 4 }], 'Same on the right side. 4 to the left door, 5 to the end panel.', { view: 'front' }),
-  S('Stand up and end panel', ['end panel'], 'Stand the wardrobe in the corner and level it on the legs. Scribe the end panel to the floor if needed, then screw it on from inside the right column through the side, six screws.', { view: 'front' }),
+    { name: 'drawer bottom', x: rightX + 13 },
+  ], 'Same as the left drawer: build the box on the bench, fit the drawer runner profiles, screw the cabinet profiles into the right compartment and roll the box in.', { view: 'front' }),
+  S('Position in the corner and fix to the wall', ['wall hanger', 'hanger wall plate'], `Push the wardrobe into the corner, its back ${POCKET} off the wall (the end panel will reach the wall and close that gap). Check it with a spirit level and, if needed, wind the legs up until it stands plumb and level and the top sits parallel to the ceiling. Screw a concealed hanger into each back corner of the top compartment: body against the side, 60 above the top shelf so the drill and screwdriver have room, two screws into the side, and cut a slot through the HDF behind each one so the hook reaches into the pocket. Mark the two hook heights on the wall, pull the wardrobe out, plug and screw the plates to the wall, push it back so the hooks catch them and tighten the hangers' adjusters until it sits tight against the wall. It stands on its legs; the hangers only stop it tipping forward.`, { view: 'back', from: 'back' }),
+  S('End panel', ['end panel'], 'Scribe the end panel to the floor if needed, then screw it on from inside the right column through the side, six screws.', { view: 'front' }),
+  S('Doors and drawer fronts', ['door', 'drawer front'], 'Doors: screw the hinge plates to the sides, press the cups into the doors and clip them on. Drawer fronts: hold each against its box and screw it on from inside with four screws. Gaps: 3 at the wall, 4 between the two columns, 5 at the end panel, 4 between a drawer front and the door above it.', { view: 'front' }),
   S('Plinth', ['plinth front', 'plinth clip'], 'Last, once the wardrobe is levelled: push the clips onto the three front legs and clip the plinth on.', { view: 'front-below' }),
 ];
 
@@ -240,12 +251,12 @@ const piece = {
   id: 'wardrobe-zhitov-1100',
   name: `Wardrobe ${W} (zhitov drawing)`,
   comment:
-    `From the zhitov.com drawing, resized to ${W} x ${D} x ${H} overall (end panel and doors included; carcass ${carcassW} wide, boards ${boardD} deep + ${HDF} HDF), 18 mm board in U156 ST9. ` +
+    `From the zhitov.com drawing, resized to ${W} x ${D} x ${H} overall (end panel and doors included; carcass ${carcassW} wide, boards ${boardD} deep + ${HDF} HDF + ${POCKET} pocket to the wall), 18 mm board in U156 ST9. ` +
     `Generated by scripts/gen-wardrobe-zhitov.mjs — change the parameters there and re-run rather than editing coordinates by hand. ` +
     `Two carcasses like the hall wardrobe: a lower drawer carcass (bottom on six 100 mm legs, ${LOWER_INNER} sides and partition, full-width top at ${z.topLower}..${z.topLower + T}, HDF back) and an upper carcass standing on it (bottom at ${z.bottomUpper}..${z.bottomUpper + T}, ${sideUpperH} sides, partition to the top shelf at ${z.shelfTop}, top at ${z.top}..${H}, HDF back), joined by four screws down through the upper bottom. ` +
     `Columns ${col} + 18 + ${col}. Right column: ${ADJ_Z.length} adjustable ${adjD}-deep shelves on 5 mm pins with two spare holes above and below each (32 mm pitch, none where a shelf would hit a hinge plate); left column: hanging rail. ` +
     `Two drawers in the lower carcass: fronts ${DRAWER_FRONT_H} in the door plane (${drawerFrontZ}..${drawerFrontZ + DRAWER_FRONT_H}), boxes ${col - 26} x ${boxD} x ${BOX_H + BOTTOM_T} in the decor on ${BOTTOM_T} mm HDF bottoms stapled under the sides, on ${RUNNER} roller runners. Doors ${d1} and ${d2} from ${doorZ} to ${doorZ + doorH} (3 reveal at the wall, 4 between, 5 to the end panel). ` +
-    `No top filler (ceiling ${CEILING} stays ${CEILING - H} above the top); full-height end panel ${H} x ${D} on the exposed right side; plinth clipped to the front legs. ` +
+    `No top filler (ceiling ${CEILING} stays ${CEILING - H} above the top); full-height end panel ${H} x ${D} on the exposed right side; plinth clipped to the front legs. Two concealed wall hangers (Samet type) 60 above the top shelf, in the back corners of the top compartment, hook onto plates screwed to the wall in the ${POCKET} mm pocket behind the HDF, so the wardrobe cannot tip forward; it stands on its legs. ` +
     `Fasteners are modelled as hardware parts (not cut): confirmat 7x50 at every fixed carcass joint (caps 2 mm proud where visible, flush where covered), 4x30 wood screws for the stacking, end panel and drawer fronts, staples for the HDF. Hinges (cup, arm, plate) and handles are drawn by the viewer.`,
   buildable: true,
   color: '#ddccba',

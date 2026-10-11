@@ -22,7 +22,7 @@ export function banding(part, piece) {
   const [L, W] = [sx, sy, sz].sort((a, b) => b - a);
   if (T <= 6) return { edges: 'none', L: 0, W: 0, tape: null, length: 0 };
   const tape = part.band ?? piece?.band ?? null;
-  const n = part.name;
+  const n = part.name || ''; // viewer-only boxes (room door casings) carry no name
   if (n.startsWith('door') || n.startsWith('drawer front') || n.startsWith('flap') || n.includes('desk top'))
     return { edges: 'all', L: 2, W: 2, tape, length: 2 * (L + W) };
   if (n.startsWith('drawer box')) return { edges: 'front', L: 1, W: 0, tape, length: L }; // the box's top edge
@@ -94,10 +94,11 @@ export function bandedFaces(part) {
   const T = Math.min(sx, sy, sz);
   const thin = T === sz ? 'z' : T === sx ? 'x' : 'y';
   const narrow = thin === 'z' ? ['+x', '-x', '+y', '-y'] : thin === 'x' ? ['+y', '-y', '+z', '-z'] : ['+x', '-x', '+z', '-z'];
+  const n = part.name || '';
   const b = banding(part);
   if (b.edges === 'none') return { narrow, banded: [] };
   if (b.edges === 'all') return { narrow, banded: narrow };
-  if (part.name.startsWith('drawer box')) return { narrow, banded: ['+z'] };
+  if (n.startsWith('drawer box')) return { narrow, banded: ['+z'] };
   if (thin !== 'y') return { narrow, banded: ['-y'] };
   return { narrow, banded: [part.pos[2] > 1000 ? '-z' : '+z'] };
 }
