@@ -9,8 +9,10 @@
 //
 // Step kinds (one object each; `say` may ride on any step):
 //   { at: [x, y], yaw: deg }            teleport (tour start)
-//   { go: [x, y], speed? }              turn to face the point, then walk there looking
-//                                       ahead; pauses to open any closed room door on the way
+//   { go: [x, y], speed?, face? }       turn to face the point, then walk there looking
+//                                       ahead; pauses to open any closed room door on the way.
+//                                       face = a look target (see resolveTarget) to keep
+//                                       watching while walking (sidesteps instead of turning)
 //   { look: target, dur? }              turn to a target (see resolveTarget) or { yaw, pitch } in degrees
 //   { turn: deg, dur?, pitch? }         relative turn; 360 = look all around
 //   { wait: seconds }
@@ -215,8 +217,10 @@ function beginStep(state, ctx, step) {
     cur.speed = step.speed ?? TOUR.speed;
     // face the waypoint first (eased turn), then walk
     const d0 = Math.hypot(step.go[0] - body.pos[0], step.go[1] - body.pos[1]);
+    cur.face = step.face !== undefined ? ctx.resolve(step.face) : null;
+    if (step.face !== undefined && !cur.face) ctx.warn?.(`tour step ${state.i}: face target not found`);
     cur.y0 = body.yaw;
-    cur.y1 = d0 < TOUR.arrive ? body.yaw : body.yaw + wrapAngle(yawTo(body.pos, step.go) - body.yaw);
+    cur.y1 = d0 < TOUR.arrive || cur.face ? body.yaw : body.yaw + wrapAngle(yawTo(body.pos, step.go) - body.yaw);
     cur.p0 = body.pitch;
     cur.turnDur = Math.abs(cur.y1 - cur.y0) / deg(TOUR.walkTurnRate);
     cur.timeout = cur.turnDur + (d0 / cur.speed) * 3 + 3 + 2 * TOUR.doorWait;
@@ -294,9 +298,15 @@ function runStep(state, ctx, dt) {
         body.pitch = cur.p0 * (1 - u);
         return false;
       }
-      // walking: look where you walk, level the view
-      body.yaw = dampAngle(body.yaw, Math.atan2(-dx, dy), 4, dt);
-      body.pitch += -body.pitch * (1 - Math.exp(-3 * dt));
+      if (cur.face) {
+        // walking while watching the target (the gaze follows as the body moves)
+        body.yaw = dampAngle(body.yaw, yawTo(body.pos, cur.face), 4, dt);
+        body.pitch += (pitchTo(body.pos, ctx.eye ?? TOUR.eye, cur.face) - body.pitch) * (1 - Math.exp(-3 * dt));
+      } else {
+        // walking: look where you walk, level the view
+        body.yaw = dampAngle(body.yaw, Math.atan2(-dx, dy), 4, dt);
+        body.pitch += -body.pitch * (1 - Math.exp(-3 * dt));
+      }
       if (cur.hold > 0) {
         cur.hold -= dt; // a door is swinging open ahead - stand still
         return false;

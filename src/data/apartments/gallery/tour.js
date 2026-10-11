@@ -1,8 +1,9 @@
-// Guided walk through the gallery: in at the door, over to the wardrobe in the
-// north-west corner, then standing still in front of it while its fronts are
-// worked one at a time (left door, right door, left drawer, right drawer, some
-// closed while others stay open), a look at the end panel from the side, back
-// to the door. Coordinates are data-space mm; step kinds and selectors are
+// Guided walk through the gallery, eyes on the wardrobe the whole time: in at
+// the door already looking at it, over to it (every `go` keeps facing it), then
+// standing still in front of it while its fronts are worked one at a time
+// (left door, right door, left drawer, right drawer, some closed while others
+// stay open), a sidestep to see the end panel, and back to the door still
+// watching it. Coordinates are data-space mm; step kinds and selectors are
 // documented at the top of src/tour.js.
 //
 // The two doors (and the two drawer fronts) share a name, so a selector picks
@@ -13,18 +14,17 @@
 
 const W = 'Wardrobe - NW corner';
 const SPOT = [800, 2500]; // in front of the wardrobe, centred on it
+const FACE = [800, 3650, 1300]; // what the body keeps watching while it walks: the middle of the fronts
 const doorL = { piece: W, kind: 'door', pick: 'left' };
 const doorR = { piece: W, kind: 'door', pick: 'right' };
 const drawerL = { piece: W, kind: 'drawer', pick: 'left' };
 const drawerR = { piece: W, kind: 'drawer', pick: 'right' };
 
 export const tour = [
-  { at: [4100, 950], yaw: 90, say: 'Gallery' }, // just clear of the door leaf's swing
-  { wait: 0.6 },
-  { look: { piece: W }, dur: 1 },
-  { wait: 0.4 },
-  { go: [2600, 2600] },
-  { go: SPOT, say: 'Wardrobe 1100' },
+  { at: [4100, 950], yaw: 51, say: 'Gallery' }, // just clear of the door leaf's swing, already facing the wardrobe
+  { wait: 0.8 },
+  { go: [2600, 2600], face: FACE },
+  { go: SPOT, face: FACE, say: 'Wardrobe 1100' },
   { look: [800, 3650, 1300], dur: 0.8 },
   { wait: 0.6 },
 
@@ -69,15 +69,15 @@ export const tour = [
   { wait: 1.0 },
 
   // ── from the side: the end panel ──────────────────────────────────────
-  { go: [2300, 3300], say: 'End panel' },
+  { go: [2300, 3300], face: FACE, say: 'End panel' },
   { look: [1350, 3950, 1200], dur: 1 },
   { wait: 1 },
   { look: [1350, 3950, 2465], dur: 0.8, say: 'End panel up to the ceiling gap' },
   { wait: 0.8 },
 
   // ── back to the door ──────────────────────────────────────────────────
-  { go: [2600, 2600] },
-  { go: [4100, 950] },
-  { look: { yaw: 90, pitch: 0 }, dur: 0.8 },
-  { wait: 0.5 },
+  { go: [2600, 2600], face: FACE },
+  { go: [4100, 950], face: FACE },
+  { look: { piece: W }, dur: 0.8 },
+  { wait: 0.8 },
 ];
