@@ -30,6 +30,12 @@ export function banding(part, piece) {
   return front === L ? { edges: 'front', L: 1, W: 0, tape, length: L } : { edges: 'front', L: 0, W: 1, tape, length: W };
 }
 
+// Raw HDF for backs and drawer bottoms (3-6 mm): the price list has no decor
+// row for it, so a thin board without a decor is exported under this name
+// (the price estimate charges it a flat rate under the same label).
+export const RAW_HDF = 'HDF (raw)';
+export const isRawHdf = (part, piece) => !part.material && !piece?.material && Math.min(...part.size) <= 6;
+
 export function cutList(scene, piecesById) {
   const rows = new Map();
   for (const pl of scene.placements) {
@@ -39,9 +45,11 @@ export function cutList(scene, piecesById) {
       if (p.appliance || p.hardware) continue; // bought appliances / hardware (runners, hinges)
 
       const dims = [...p.size].sort((a, b) => b - a); // [L, W, T]
-      const material = p.material || piece.material || '';
+      const material = p.material || piece.material || (isRawHdf(p, piece) ? RAW_HDF : '');
       const band = banding(p, piece);
-      const key = `${piece.id}|${p.name}|${dims.join('x')}|${material}|${band.tape}`;
+      // one row per name + size (+ material, banding): parts meant to share
+      // a line share a name in the JSON
+      const key = `${piece.id}|${p.name}|${dims.join('x')}|${material}|${band.edges}${band.L}${band.W}|${band.tape}`;
       const row = rows.get(key) || {
         piece: piece.name,
         part: p.name,

@@ -6,7 +6,7 @@
 // named door* are hinged doors, drawer bottoms mark drawer boxes, ...).
 
 import { pieceLocalBBox, frontFrame } from './geometry.js';
-import { banding } from './cutlist.js';
+import { banding, RAW_HDF } from './cutlist.js';
 import { findMaterial, cuttingRate, tapeSpec, bandingRate } from './materials.js';
 import hardwareCatalogue from './data/hardware.json';
 
@@ -16,9 +16,10 @@ export const hardwareItem = (name) => hardwareCatalogue.items[name] || null;
 const sortedDims = (size) => [...size].sort((a, b) => b - a); // [L, W, T]
 
 // Raw HDF for backs and drawer bottoms (3-6 mm). The price list has no decor
-// row for it, so thin boards without a decor price are charged this flat rate.
+// row for it, so thin boards without a decor price are charged this flat rate
+// under the cut list's RAW_HDF label.
 const HDF_PER_M2 = 8; // KM/m²
-const HDF_ID = 'HDF (raw)';
+const HDF_ID = RAW_HDF;
 
 // Parts grouped by identical name + cut size, with banding and the indices of
 // the raw parts in piece.parts (so the UI can cross-highlight 3D <-> table).
@@ -27,7 +28,10 @@ export function partRows(piece) {
   (piece.parts || []).forEach((p, i) => {
     if (p.appliance || p.hardware) return; // bought appliances / hardware (legs, hooks) — not cut, not banded
     const [L, W, T] = sortedDims(p.size);
-    const key = `${p.name}|${L}x${W}x${T}|${p.band ?? ''}`;
+    const band = banding(p, piece);
+    const material = p.material || piece.material || '';
+    // one row per name + size (+ material, banding)
+    const key = `${p.name}|${L}x${W}x${T}|${material}|${band.edges}${band.L}${band.W}|${band.tape}`;
     const row =
       rows.get(key) || {
         name: p.name,
@@ -36,7 +40,7 @@ export function partRows(piece) {
         thickness: T,
         qty: 0,
         indices: [],
-        banding: banding(p, piece),
+        banding: band,
       };
     row.qty += 1;
     row.indices.push(i);
