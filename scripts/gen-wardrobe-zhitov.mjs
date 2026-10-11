@@ -7,9 +7,9 @@
 // and an upper carcass stacked on it — plus a full-height end panel on the
 // exposed right side, no top filler (the room ceiling is above the top), a plinth
 // clipped to the legs, two drawers, two doors, a hanging rail on the left and
-// four adjustable shelves on the right, and two concealed wall hangers in the top
-// back corners (the carcass is 20 shallower than the end panel, so their hooks and
-// wall plates sit in the pocket behind the HDF). Every fastener is a hardware part.
+// four adjustable shelves on the right, and two corner brackets in the back corners of
+// the top compartment, screwed through the HDF into the wall so the wardrobe cannot tip
+// forward. Every fastener is a hardware part.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -22,7 +22,6 @@ const H = 2450; // carcass height (drawing)
 const CEILING = 2515; // room ceiling (not touched; no top filler)
 const T = 18; // board
 const HDF = 3; // back
-const POCKET = 20; // behind the HDF, to the wall: room for the wall hangers' hooks and plates (the end panel reaches the wall)
 const LEG = 100;
 const LOWER_INNER = 314; // drawer compartment height
 const TOP_COMP = 400; // compartment under the top
@@ -36,7 +35,7 @@ const MAT = 'U156 ST9';
 
 // ---- derived
 const carcassW = W - T; // end panel outside
-const boardD = D - T - HDF - POCKET; // fronts in front, HDF behind, then the pocket to the wall
+const boardD = D - T - HDF; // fronts in front, HDF behind
 const hdfY = boardD;
 const rightSideX = carcassW - T;
 const inner = carcassW - 2 * T;
@@ -80,8 +79,8 @@ const spread = (n, from, to) => Array.from({ length: n }, (_, i) => Math.round(f
 
 // ---- legs: three along the front, three along the back, the middle pair under the partition
 const legX = [30, partX + T / 2 - 25, carcassW - 80];
-for (const x of legX) for (const y of [50, boardD - 100]) HW('leg', [x, y, 0], [50, 50, LEG], '#1c1c1e');
-const legBackY = boardD - 100; // clear of the rear confirmat row at y 450
+for (const x of legX) for (const y of [50, boardD - 110]) HW('leg', [x, y, 0], [50, 50, LEG], '#1c1c1e');
+const legBackY = boardD - 110;
 
 // ---- lower carcass
 B('top/bottom', [0, 0, z.bottomLower], [carcassW, boardD, T]);
@@ -135,14 +134,15 @@ for (const x of legX) HW('plinth clip', [x + 10, 38, 20], [30, 12, 50], '#1c1c1e
 B('end panel', [carcassW, -T, 0], [T, D, H]);
 for (const y of [80, 500]) for (const zz of [400, 1300, 2200]) wood30([rightSideX - 2, y - 2, zz - 2], 'x');
 
-// ---- wall hangers: concealed cabinet hangers (Samet type) in the top back corners of the
-// upper carcass, 60 above the top shelf and screwed to the sides; the hook passes through a slot in the HDF onto a
-// plate screwed to the wall in the pocket. They only keep the wardrobe from tipping.
-const hangerZ = z.shelfTop + T + 60; // 60 above the top shelf: room for the drill and the screwdriver, still within easy reach
-for (const x of [T, rightSideX - 60]) {
-  HW('wall hanger', [x, hdfY - 20, hangerZ], [60, 20, 60], '#e8e8e8'); // white plastic mask over the steel body
-  HW('hanger wall plate', [x + 10, D - T - 6, hangerZ + 12], [40, 6, 36], '#9aa0a8');
-}
+// ---- wall brackets: a bent steel angle in each back corner of the top
+// compartment, 60 above the top shelf (room for the drill): one leg flat on the side with
+// two screws, the other against the HDF with one plugged screw through it into the wall.
+// Drawn as an L in plan (notch), 2 mm steel. They only keep the wardrobe from tipping forward.
+const bracketZ = z.shelfTop + T + 60;
+const BR = 50; // leg length
+const brY = hdfY - BR;
+HW('wall bracket', [T, brY, bracketZ], [BR, BR, 40], '#9aa0a8', { notch: [T + 2, brY, T + BR, hdfY - 2] });
+HW('wall bracket', [rightSideX - BR, brY, bracketZ], [BR, BR, 40], '#9aa0a8', { notch: [rightSideX - BR, brY, rightSideX - 2, hdfY - 2] });
 
 // ---- hanging column: rail between two holders
 const railZ = z.shelfTop - 74 - 30;
@@ -241,22 +241,22 @@ const assembly = [
     { name: 'drawer box side', x: rightX + 13 }, { name: 'drawer box side', x: rightX + col - 31 }, { name: 'drawer box front/back', x: rightX + 31, y: 0 }, { name: 'drawer box front/back', x: rightX + 31, y: boxD - T },
     { name: 'drawer bottom', x: rightX + 13 },
   ], 'Same as the left drawer: build the box on the bench, fit the drawer runner profiles, screw the cabinet profiles into the right compartment and roll the box in.', { view: 'front' }),
-  S('Position in the corner and fix to the wall', ['wall hanger', 'hanger wall plate'], `Push the wardrobe into the corner, its back ${POCKET} off the wall (the end panel will reach the wall and close that gap). Check it with a spirit level and, if needed, wind the legs up until it stands plumb and level and the top sits parallel to the ceiling. Screw a concealed hanger into each back corner of the top compartment: body against the side, 60 above the top shelf so the drill and screwdriver have room, two screws into the side, and cut a slot through the HDF behind each one so the hook reaches into the pocket. Mark the two hook heights on the wall, pull the wardrobe out, plug and screw the plates to the wall, push it back so the hooks catch them and tighten the hangers' adjusters until it sits tight against the wall. It stands on its legs; the hangers only stop it tipping forward.`, { view: 'back', from: 'back' }),
+  S('Position in the corner and fix to the wall', ['wall bracket'], 'Push the wardrobe into the corner, back against the wall. Check it with a spirit level and, if needed, wind the legs up until it stands plumb and level and the top sits parallel to the ceiling. Then fit a wall bracket in each back corner of the top compartment, 60 above the top shelf so the drill has room: one leg flat on the side with two screws, then drill through the other leg and the HDF into the wall, plug it and screw it tight. It stands on its legs; the brackets only stop it tipping forward.', { view: 'front', from: 'front' }),
   S('End panel', ['end panel'], 'Scribe the end panel to the floor if needed, then screw it on from inside the right column through the side, six screws.', { view: 'front' }),
+  S('Plinth', ['plinth front', 'plinth clip'], 'Once the wardrobe is levelled and fixed: push the clips onto the three front legs and clip the plinth on.', { view: 'front-below' }),
   S('Doors and drawer fronts', ['door', 'drawer front'], 'Doors: screw the hinge plates to the sides, press the cups into the doors and clip them on. Drawer fronts: hold each against its box and screw it on from inside with four screws. Gaps: 3 at the wall, 4 between the two columns, 5 at the end panel, 4 between a drawer front and the door above it.', { view: 'front' }),
-  S('Plinth', ['plinth front', 'plinth clip'], 'Last, once the wardrobe is levelled: push the clips onto the three front legs and clip the plinth on.', { view: 'front-below' }),
 ];
 
 const piece = {
   id: 'wardrobe-zhitov-1100',
   name: `Wardrobe ${W} (zhitov drawing)`,
   comment:
-    `From the zhitov.com drawing, resized to ${W} x ${D} x ${H} overall (end panel and doors included; carcass ${carcassW} wide, boards ${boardD} deep + ${HDF} HDF + ${POCKET} pocket to the wall), 18 mm board in U156 ST9. ` +
+    `From the zhitov.com drawing, resized to ${W} x ${D} x ${H} overall (end panel and doors included; carcass ${carcassW} wide, boards ${boardD} deep + ${HDF} HDF), 18 mm board in U156 ST9. ` +
     `Generated by scripts/gen-wardrobe-zhitov.mjs — change the parameters there and re-run rather than editing coordinates by hand. ` +
     `Two carcasses like the hall wardrobe: a lower drawer carcass (bottom on six 100 mm legs, ${LOWER_INNER} sides and partition, full-width top at ${z.topLower}..${z.topLower + T}, HDF back) and an upper carcass standing on it (bottom at ${z.bottomUpper}..${z.bottomUpper + T}, ${sideUpperH} sides, partition to the top shelf at ${z.shelfTop}, top at ${z.top}..${H}, HDF back), joined by four screws down through the upper bottom. ` +
     `Columns ${col} + 18 + ${col}. Right column: ${ADJ_Z.length} adjustable ${adjD}-deep shelves on 5 mm pins with two spare holes above and below each (32 mm pitch, none where a shelf would hit a hinge plate); left column: hanging rail. ` +
     `Two drawers in the lower carcass: fronts ${DRAWER_FRONT_H} in the door plane (${drawerFrontZ}..${drawerFrontZ + DRAWER_FRONT_H}), boxes ${col - 26} x ${boxD} x ${BOX_H + BOTTOM_T} in the decor on ${BOTTOM_T} mm HDF bottoms stapled under the sides, on ${RUNNER} roller runners. Doors ${d1} and ${d2} from ${doorZ} to ${doorZ + doorH} (3 reveal at the wall, 4 between, 5 to the end panel). ` +
-    `No top filler (ceiling ${CEILING} stays ${CEILING - H} above the top); full-height end panel ${H} x ${D} on the exposed right side; plinth clipped to the front legs. Two concealed wall hangers (Samet type) 60 above the top shelf, in the back corners of the top compartment, hook onto plates screwed to the wall in the ${POCKET} mm pocket behind the HDF, so the wardrobe cannot tip forward; it stands on its legs. ` +
+    `No top filler (ceiling ${CEILING} stays ${CEILING - H} above the top); full-height end panel ${H} x ${D} on the exposed right side; plinth clipped to the front legs. Two bent steel wall brackets in the back corners of the top compartment, 60 above the top shelf, one leg screwed to the side, the other through the HDF into the wall (plug + screw), so the wardrobe cannot tip forward; it stands on its legs. ` +
     `Fasteners are modelled as hardware parts (not cut): confirmat 7x50 at every fixed carcass joint (caps 2 mm proud where visible, flush where covered), 4x30 wood screws for the stacking, end panel and drawer fronts, staples for the HDF. Hinges (cup, arm, plate) and handles are drawn by the viewer.`,
   buildable: true,
   color: '#ddccba',

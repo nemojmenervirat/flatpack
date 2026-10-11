@@ -111,15 +111,10 @@
       "price": 2,
       "note": "approx. price per hook"
     },
-    "wall hanger": {
-      "product": "Nosač visećih elemenata Samet (nosač + maska + pločica za zid), do 65 kg po paru",
-      "price": 0.25,
-      "note": "bmcompany.ba online price, check in the shop; concealed hanger screwed to the side in a top back corner, hook through a slot in the HDF onto the wall plate in the 20 mm pocket behind the back; adjustable without taking the piece down. On a floor-standing wardrobe it only stops it tipping forward"
-    },
-    "hanger wall plate": {
-      "product": "wall plate of the Samet hanger",
-      "price": 0,
-      "note": "comes with the hanger; plug and screw it to the wall at the hook height"
+    "wall bracket": {
+      "product": "Ugaonik za fiksiranje ormara uz zid 50x50x40 + tipl 6 mm sa vijkom 5x60",
+      "price": 1,
+      "note": "approx. price incl. plug and screw; bent steel angle in a back corner of the top compartment, one leg on the side with two 4x16 screws, the other through the HDF into the wall with the plugged screw; keeps a floor-standing wardrobe from tipping forward"
     }
   }
 }
