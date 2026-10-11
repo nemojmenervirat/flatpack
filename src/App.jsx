@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import MaterialsPanel from './MaterialsPanel.jsx';
 import Viewer, { PieceViewer } from './Viewer.jsx';
-import { fitReport, pieceLocalBBox, placeBox } from './geometry.js';
+import { skirtingStrips, fitReport, pieceLocalBBox, placeBox } from './geometry.js';
 import { cutList, cutListCsv } from './cutlist.js';
 import { partRows, hardwareList, hardwareRows, hardwareCsv, priceEstimate } from './hardware.js';
 import { interiorSpaces } from './spaces.js';
@@ -244,10 +244,12 @@ const computePieceGroups = ({ scene, piecesById }, roomDefs) => {
 // Everything derived from one apartment's data, computed once per switch.
 const deriveApartment = (apt) => {
   const roomDefs = buildRoomDefs(apt.rooms);
+  const report = fitReport(apt.scene, apt.piecesById, apt.apartment);
   return {
     roomAreas: computeRoomAreas(roomDefs, apt.apartment.areaPad ?? AREA_PAD),
     pieceGroups: computePieceGroups(apt, roomDefs),
-    report: fitReport(apt.scene, apt.piecesById, apt.apartment),
+    report,
+    skirting: skirtingStrips(apt.apartment, apt.rooms, report.placed),
   };
 };
 
@@ -632,7 +634,7 @@ export default function App() {
   useEffect(() => lsSet('flatpack.sideOpen', sideOpen), [sideOpen]);
   useEffect(() => lsSet('flatpack.cam', cam), [cam]);
 
-  const { report, roomAreas, pieceGroups } = useMemo(() => deriveApartment(apt), [apt]);
+  const { report, roomAreas, pieceGroups, skirting } = useMemo(() => deriveApartment(apt), [apt]);
 
   // Whole apartment in the given camera ('plan' = 2D top-down, 'free' = 3D orbit),
   // leaving a piece view, walk mode or the materials browser if needed.
@@ -741,6 +743,7 @@ export default function App() {
             showAreas={showAreas}
             showPieces={showPieces}
             areas={roomAreas.rows}
+            skirting={skirting}
             onSelectPiece={setView}
             cam={walk === 'off' ? cam : 'free'}
             walk={walk}

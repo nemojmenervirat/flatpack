@@ -22,7 +22,9 @@
 //
 // Selectors (sel): 'all' | 'opened' | [sel, ...] |
 //   { door: 'opening name' } (a room door or a window) | { piece: 'label or id', part?: 'name prefix',
-//     kind?: 'door'|'drawer'|'flap'|'pullout'|'roomdoor', near?: mm, limit?: n }
+//     kind?: 'door'|'drawer'|'flap'|'pullout'|'roomdoor', near?: mm, limit?: n,
+//     pick?: 'left'|'right' } (pick = of the matches, the one farthest left / right
+//     as seen from where the body stands — one of two same-named doors)
 
 // radius: the tour body is slimmer than the manual walker's 200mm (shoulders
 // turned sideways) so it fits the 400mm gap between the dining table and the
@@ -157,6 +159,10 @@ export function matchOpenables(records, sel, body, opened) {
     return true;
   });
   out.sort((a, b) => dist(a) - dist(b));
+  if (sel.pick === 'left' || sel.pick === 'right') {
+    const ltr = leftToRight(out, body);
+    out = ltr.length ? [sel.pick === 'left' ? ltr[0] : ltr[ltr.length - 1]] : [];
+  }
   if (sel.limit !== undefined) out = out.slice(0, sel.limit);
   return out;
 }

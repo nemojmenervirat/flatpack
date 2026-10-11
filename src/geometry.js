@@ -141,6 +141,56 @@ export function clearanceLocalBoxes(piece) {
 // (lintels above the head drop out), the entrance door opening (a "closed
 // front door") and every placed furniture part box. Inner room doors are not
 // obstacles - the walker (or the tour) passes through them.
+// Skirting boards ("lajsne"): apartment.skirting = { height, thickness, color? }
+// puts a strip along every wall face that bounds a room (rooms.json rects),
+// broken at door openings (the walls are already split there) and cut away
+// along the whole footprint of any placed piece that stands against that wall
+// down at floor level — behind a wardrobe the skirting is removed, not notched
+// around. placed = fitReport().placed. Pure; returns [{ name, box }] in mm.
+export function skirtingStrips(apartment, rooms, placed = []) {
+  const sk = apartment?.skirting;
+  const list = rooms?.rooms || rooms;
+  if (!sk || !Array.isArray(list)) return [];
+  const H = sk.height ?? 100;
+  const T = sk.thickness ?? 12;
+  const walls = (apartment.walls || []).filter((w) => w.pos[2] <= 0).map((w) => aabbOf(w.pos, w.size));
+  const out = [];
+  for (const room of list) {
+    for (const r of room.rects || []) {
+      const [x0, y0] = r.pos;
+      const [x1, y1] = [x0 + r.size[0], y0 + r.size[1]];
+      const edges = [
+        { name: 'south', along: 0, lo: x0, hi: x1, strip: (a, b) => ({ min: [a, y0, 0], max: [b, y0 + T, H] }), outside: { min: [x0, y0 - 1, 0], max: [x1, y0, H] } },
+        { name: 'north', along: 0, lo: x0, hi: x1, strip: (a, b) => ({ min: [a, y1 - T, 0], max: [b, y1, H] }), outside: { min: [x0, y1, 0], max: [x1, y1 + 1, H] } },
+        { name: 'west', along: 1, lo: y0, hi: y1, strip: (a, b) => ({ min: [x0, a, 0], max: [x0 + T, b, H] }), outside: { min: [x0 - 1, y0, 0], max: [x0, y1, H] } },
+        { name: 'east', along: 1, lo: y0, hi: y1, strip: (a, b) => ({ min: [x1 - T, a, 0], max: [x1, b, H] }), outside: { min: [x1, y0, 0], max: [x1 + 1, y1, H] } },
+      ];
+      for (const e of edges) {
+        // where a wall stands right outside this edge
+        let spans = walls
+          .filter((w) => overlaps(w, e.outside))
+          .map((w) => [Math.max(e.lo, w.min[e.along]), Math.min(e.hi, w.max[e.along])])
+          .filter(([a, b]) => b - a > 0);
+        // minus every piece whose parts reach into the strip
+        const full = e.strip(e.lo, e.hi);
+        for (const p of placed) {
+          if (!p.partBoxes.some((pb) => overlaps(pb, full))) continue;
+          const [c, d] = [p.bbox.min[e.along], p.bbox.max[e.along]];
+          spans = spans.flatMap(([a, b]) => {
+            if (d <= a || c >= b) return [[a, b]];
+            const keep = [];
+            if (c > a) keep.push([a, c]);
+            if (d < b) keep.push([d, b]);
+            return keep;
+          });
+        }
+        for (const [a, b] of spans) if (b - a >= T) out.push({ name: `skirting ${room.name} ${e.name}`, box: e.strip(a, b) });
+      }
+    }
+  }
+  return out;
+}
+
 export function walkObstacles(apartment, placed, zlo, zhi) {
   const atBody = (b) => b.min[2] < zhi && b.max[2] > zlo;
   return [

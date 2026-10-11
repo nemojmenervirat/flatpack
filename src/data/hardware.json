@@ -87,9 +87,9 @@
       "note": "drilling, not a bought part; drilled on site with a jig — set a price here if the shop drills them"
     },
     "angle bracket": {
-      "product": "Kutnik metalni 20x20x40 sa 4 vijka 3,5x16",
+      "product": "Ugaonik metalni 20x20x40 sa 4 vijka 3,5x16",
       "price": 0.4,
-      "note": "approx. price per piece incl. screws; holds a shelf to a partition where no screw can pass"
+      "note": "approx. price per piece incl. screws; holds a shelf to a partition where no screw can pass, or a side plinth to the underside of a carcass bottom"
     },
     "runner 550 cabinet part": {
       "product": "Klizač za ladicu 550mm 35mm (par profila)",

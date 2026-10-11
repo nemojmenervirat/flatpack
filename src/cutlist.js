@@ -3,9 +3,11 @@
 // A part's thickness is its smallest dimension; the other two are the cut size.
 
 // Edge banding by rule (the piece panel and the price estimate use the same):
-//  - 3/6mm boards (HDF backs, drawer bottoms) and plinths are never banded
+//  - 3/6mm boards (HDF backs, drawer bottoms) and plinths are never banded,
+//    except a side plinth, which shows its front end: that one short edge
 //  - fronts (doors, drawer fronts, flaps) and worktops show all four edges
 //  - drawer box parts show their top edge (the long one)
+//  - an end panel shows its front edge and both its top and bottom edges (one length, two widths)
 //  - every other part shows exactly one edge: the one facing the room. Parts
 //    are authored in piece-local space with the front at -y, so that edge runs
 //    along x for a horizontal board (thin along z: tops, bottoms, shelves),
@@ -21,11 +23,13 @@ export function banding(part, piece) {
   const T = Math.min(sx, sy, sz);
   const [L, W] = [sx, sy, sz].sort((a, b) => b - a);
   const n = part.name || ''; // viewer-only boxes (room door casings) carry no name
-  if (T <= 6 || n.startsWith('plinth')) return { edges: 'none', L: 0, W: 0, tape: null, length: 0 };
+  if (T <= 6 || (n.startsWith('plinth') && !n.startsWith('plinth side'))) return { edges: 'none', L: 0, W: 0, tape: null, length: 0 };
   const tape = part.band ?? piece?.band ?? null;
+  if (n.startsWith('plinth side')) return { edges: 'front', L: 0, W: 1, tape, length: W }; // its front end
   if (n.startsWith('door') || n.startsWith('drawer front') || n.startsWith('flap') || n.includes('desk top'))
     return { edges: 'all', L: 2, W: 2, tape, length: 2 * (L + W) };
   if (n.startsWith('drawer box')) return { edges: 'front', L: 1, W: 0, tape, length: L }; // the box's top edge
+  if (n.startsWith('end panel')) return { edges: 'front+ends', L: 1, W: 2, tape, length: L + 2 * W };
   const front = T === sz ? sx : T === sx ? sz : Math.max(sx, sz);
   return front === L ? { edges: 'front', L: 1, W: 0, tape, length: L } : { edges: 'front', L: 0, W: 1, tape, length: W };
 }
@@ -99,6 +103,7 @@ export function bandedFaces(part) {
   if (b.edges === 'none') return { narrow, banded: [] };
   if (b.edges === 'all') return { narrow, banded: narrow };
   if (n.startsWith('drawer box')) return { narrow, banded: ['+z'] };
+  if (n.startsWith('end panel')) return { narrow, banded: ['-y', '-z', '+z'] };
   if (thin !== 'y') return { narrow, banded: ['-y'] };
   return { narrow, banded: [part.pos[2] > 1000 ? '-z' : '+z'] };
 }

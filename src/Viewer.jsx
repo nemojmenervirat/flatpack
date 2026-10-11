@@ -1862,6 +1862,7 @@ export default function Viewer({
   showAreas,
   showPieces = true,
   areas,
+  skirting = [], // skirting strips from skirtingStrips(): [{ name, box }]
   onSelectPiece,
   cam = 'free', // 'free' orbit | 'plan' top-down
   walk = 'off', // 'off' | 'arm' (click floor to drop in) | 'on' (walking)
@@ -1979,17 +1980,21 @@ export default function Viewer({
           onClick={walk !== 'off' ? onFloorClick : undefined}
         />
       ))}
+      {skirting.map((s) => (
+        <Box key={s.name + s.box.min.join()} box={s.box} color={apartment.skirting?.color || apartment.wallColor || '#f4f1ea'} raycast={() => null} />
+      ))}
       {(apartment.wallTiles || []).map((f) => (
         <WallTileZone key={f.name} f={f} tile={wallTileTex} />
       ))}
-      {/* walking only: a ceiling slab so looking up doesn't show the void */}
+      {/* walking only: a ceiling slab so looking up doesn't show the void;
+          painted like the walls when the flat sets a wall colour */}
       {walking && apartment.floor && (
         <Box
           box={aabbOf(
             [apartment.floor.pos[0], apartment.floor.pos[1], apartment.height || 2600],
             [apartment.floor.size[0], apartment.floor.size[1], 40]
           )}
-          color="#26282d"
+          color={apartment.ceilingColor || apartment.wallColor || '#26282d'}
           raycast={() => null}
         />
       )}

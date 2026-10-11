@@ -5,7 +5,7 @@
 //
 // Build: two carcasses like the hall wardrobe — a lower drawer carcass on legs
 // and an upper carcass stacked on it — plus a full-height end panel on the
-// exposed right side, no top filler (the room ceiling is above the top), a plinth
+// exposed right side (from the carcass bottom up, a side plinth under it), no top filler (the room ceiling is above the top), a plinth
 // clipped to the legs, two drawers, two doors, a hanging rail on the left and
 // four adjustable shelves on the right, and two corner brackets in the back corners of
 // the top compartment, screwed through the HDF into the wall so the wardrobe cannot tip
@@ -19,7 +19,7 @@ import { fileURLToPath } from 'node:url';
 const W = 1100; // overall width, end panel included
 const D = 600; // overall depth, doors included
 const H = 2450; // carcass height (drawing)
-const CEILING = 2515; // room ceiling (not touched; no top filler)
+const CEILING = 2470; // room ceiling (not touched; no top filler)
 const T = 18; // board
 const HDF = 3; // back
 const LEG = 100;
@@ -90,7 +90,7 @@ B('partition lower', [partX, 0, z.sideLower], [T, boardD, LOWER_INNER]);
 B('top/bottom', [0, 0, z.topLower], [carcassW, boardD, T]);
 parts.push({ name: 'back HDF lower', pos: [0, hdfY, z.bottomLower], size: [carcassW, HDF, z.bottomUpper - z.bottomLower], color: '#ffffff' });
 for (const y of Y3) {
-  for (const cx of [T / 2, partX + T / 2, rightSideX + T / 2]) confirmat([cx - 3.5, y - 3.5, z.bottomLower - 2], 'z'); // bottom -> sides + partition, from below, cap 2 proud
+  for (const cx of [T / 2, partX + T / 2, rightSideX + T / 2]) confirmat([cx - 3.5, y - 3.5, z.bottomLower], 'z'); // bottom -> sides + partition, from below, flush (the skirting runs right under the carcass)
 }
 for (const y of Y3) for (const cx of [T / 2, rightSideX + T / 2]) confirmat([cx - 3.5, y - 3.5, z.topLower + T - 50], 'z'); // top lower -> sides, from above, flush
 for (const y of [100, 300, 500]) confirmat([partX + T / 2 - 3.5, y - 3.5, z.topLower + T - 50], 'z'); // top lower -> partition
@@ -126,12 +126,20 @@ for (const zz of [z.bottomLower + T / 2, z.topLower + T / 2, z.bottomUpper + T /
   for (const x of rowX) staple([x - 1, stapleY, zz - 1], 'y');
 
 
-// ---- plinth clipped to the front legs
-B('plinth front', [3, 20, 0], [carcassW - 6, T, LEG]);
-for (const x of legX) HW('plinth clip', [x + 10, 38, 20], [30, 12, 50], '#1c1c1e');
+// ---- plinth: front strip clipped to the front legs, recessed 20 from the carcass
+// front; side strip in the end panel's plane under it, from the front strip's
+// face back toward the wall, hung on two angle brackets under the carcass bottom.
+// Both stop 10 short of the wall: the room's skirting passes behind them
+const PLINTH_Y = 20;
+const SKIRTING = 10; // the room's skirting board runs on under the carcass; the plinths stop short of the walls by its thickness
+B('plinth front', [SKIRTING, PLINTH_Y, 0], [carcassW - SKIRTING, T, LEG]);
+for (const x of legX) HW('plinth clip', [x + 10, PLINTH_Y + T, 20], [30, 12, 50], '#1c1c1e');
+B('plinth side', [carcassW, PLINTH_Y, 0], [T, D - T - PLINTH_Y - SKIRTING, LEG]);
+for (const y of [220, 380]) HW('angle bracket', [carcassW - 20, y, LEG - 20], [20, 40, 20], '#9aa0a8'); // between the bottom confirmats at y 150/300/450
 
-// ---- end panel on the exposed right side, screwed from inside through the side
-B('end panel', [carcassW, -T, 0], [T, D, H]);
+// ---- end panel on the exposed right side, from the carcass bottom up (the side
+// plinth closes under it), screwed from inside through the side
+B('end panel', [carcassW, -T, LEG], [T, D, H - LEG]);
 for (const y of [80, 500]) for (const zz of [400, 1300, 2200]) wood30([rightSideX - 2, y - 2, zz - 2], 'x');
 
 // ---- wall brackets: a bent steel angle in each back corner of the top
@@ -242,8 +250,8 @@ const assembly = [
     { name: 'drawer bottom', x: rightX + 13 },
   ], 'Same as the left drawer: build the box on the bench, fit the drawer runner profiles, screw the cabinet profiles into the right compartment and roll the box in.', { view: 'front' }),
   S('Position in the corner and fix to the wall', ['wall bracket'], 'Push the wardrobe into the corner, back against the wall. Check it with a spirit level and, if needed, wind the legs up until it stands plumb and level and the top sits parallel to the ceiling. Then fit a wall bracket in each back corner of the top compartment, 60 above the top shelf so the drill has room: one leg flat on the side with two screws, then drill through the other leg and the HDF into the wall, plug it and screw it tight. It stands on its legs; the brackets only stop it tipping forward.', { view: 'front', from: 'front' }),
-  S('End panel', ['end panel'], 'Scribe the end panel to the floor if needed, then screw it on from inside the right column through the side, six screws.', { view: 'front' }),
-  S('Plinth', ['plinth front', 'plinth clip'], 'Once the wardrobe is levelled and fixed: push the clips onto the three front legs and clip the plinth on.', { view: 'front-below' }),
+  S('End panel', ['end panel'], 'Hold the end panel against the right side, its bottom edge level with the underside of the carcass bottom and its front edge flush with the fronts, and screw it on from inside the right column through the side, six screws.', { view: 'front' }),
+  S('Plinth', ['plinth front', 'plinth clip', 'plinth side', 'angle bracket'], `Once the wardrobe is levelled and fixed: push the clips onto the three front legs and clip the front plinth on. The side plinth stands under the end panel, butted against the end of the front plinth and running back toward the wall, hung on two angle brackets screwed to the underside of the carcass bottom. Both plinths stop ${SKIRTING} short of the walls: the skirting board passes behind them.`, { view: 'front-below' }),
   S('Doors and drawer fronts', ['door', 'drawer front'], 'Doors: screw the hinge plates to the sides, press the cups into the doors and clip them on. Drawer fronts: hold each against its box and screw it on from inside with four screws. Gaps: 3 at the wall, 4 between the two columns, 5 at the end panel, 4 between a drawer front and the door above it.', { view: 'front' }),
 ];
 
@@ -256,8 +264,8 @@ const piece = {
     `Two carcasses like the hall wardrobe: a lower drawer carcass (bottom on six 100 mm legs, ${LOWER_INNER} sides and partition, full-width top at ${z.topLower}..${z.topLower + T}, HDF back) and an upper carcass standing on it (bottom at ${z.bottomUpper}..${z.bottomUpper + T}, ${sideUpperH} sides, partition to the top shelf at ${z.shelfTop}, top at ${z.top}..${H}, HDF back), joined by four screws down through the upper bottom. ` +
     `Columns ${col} + 18 + ${col}. Right column: ${ADJ_Z.length} adjustable ${adjD}-deep shelves on 5 mm pins with two spare holes above and below each (32 mm pitch, none where a shelf would hit a hinge plate); left column: hanging rail. ` +
     `Two drawers in the lower carcass: fronts ${DRAWER_FRONT_H} in the door plane (${drawerFrontZ}..${drawerFrontZ + DRAWER_FRONT_H}), boxes ${col - 26} x ${boxD} x ${BOX_H + BOTTOM_T} in the decor on ${BOTTOM_T} mm HDF bottoms stapled under the sides, on ${RUNNER} roller runners. Doors ${d1} and ${d2} from ${doorZ} to ${doorZ + doorH} (3 reveal at the wall, 4 between, 5 to the end panel). ` +
-    `No top filler (ceiling ${CEILING} stays ${CEILING - H} above the top); full-height end panel ${H} x ${D} on the exposed right side; plinth clipped to the front legs. Two bent steel wall brackets in the back corners of the top compartment, 60 above the top shelf, one leg screwed to the side, the other through the HDF into the wall (plug + screw), so the wardrobe cannot tip forward; it stands on its legs. ` +
-    `Fasteners are modelled as hardware parts (not cut): confirmat 7x50 at every fixed carcass joint (caps 2 mm proud where visible, flush where covered), 4x30 wood screws for the stacking, end panel and drawer fronts, staples for the HDF. Hinges (cup, arm, plate) and handles are drawn by the viewer.`,
+    `No top filler (ceiling ${CEILING} stays ${CEILING - H} above the top); end panel ${H - LEG} x ${D} on the exposed right side, from the carcass bottom up; plinth clipped to the front legs, recessed 20, with a side strip under the end panel; both stop ${SKIRTING} short of the walls so the room's ${SKIRTING} mm skirting runs on under the carcass. Two bent steel wall brackets in the back corners of the top compartment, 60 above the top shelf, one leg screwed to the side, the other through the HDF into the wall (plug + screw), so the wardrobe cannot tip forward; it stands on its legs. ` +
+    `Fasteners are modelled as hardware parts (not cut): confirmat 7x50 at every fixed carcass joint (caps flush), 4x30 wood screws for the stacking, end panel and drawer fronts, staples for the HDF. Hinges (cup, arm, plate) and handles are drawn by the viewer.`,
   buildable: true,
   color: '#ddccba',
   clearance: { front: 600 },

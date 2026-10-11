@@ -50,6 +50,11 @@ piece file. A new apartment is a folder with `apartment.json` and `scene.json`.
   the room-area overlay plates stop short of the walls; 0 draws them wall to wall.
   Window sashes swing into the room: the side of the wall facing the floor's
   centre, or pin it with `"inside": "+x" | "-x" | "+y" | "-y"` on the opening.
+  `"skirting": { "height": 100, "thickness": 12, "color"? }` draws skirting boards
+  along every wall face that bounds a room (from rooms.json), gapped at doors and cut
+  away behind any piece standing against the wall at floor level (`skirtingStrips()`
+  in geometry.js). `"wallColor"` paints the walls (and the walk-mode ceiling, or set
+  `"ceilingColor"`).
   Walls are **finished** sizes, plaster included: 20 cm structural walls are 230,
   12 cm partitions 150, and outer walls carry the 15 mm only on the flat's side
   (loggia-facing faces are left at the bare size). Furniture is sized against
