@@ -3,14 +3,14 @@
 // A part's thickness is its smallest dimension; the other two are the cut size.
 
 // Edge banding by rule (the piece panel and the price estimate use the same):
-//  - 3/6mm boards (HDF backs, drawer bottoms) are never banded
+//  - 3/6mm boards (HDF backs, drawer bottoms) and plinths are never banded
 //  - fronts (doors, drawer fronts, flaps) and worktops show all four edges
 //  - drawer box parts show their top edge (the long one)
 //  - every other part shows exactly one edge: the one facing the room. Parts
 //    are authored in piece-local space with the front at -y, so that edge runs
 //    along x for a horizontal board (thin along z: tops, bottoms, shelves),
 //    along z for an upright one (thin along x: sides, partitions), and is the
-//    longer of the two for a strip thin along y (plinth, filler).
+//    longer of the two for a strip thin along y (filler).
 // Result, in the shop's notation: L = how many of the two length edges are
 // banded, W = how many of the two width edges (0, 1 or 2), where length is the
 // longer cut dimension; tape = the band thickness in mm ("band" on the part,
@@ -20,9 +20,9 @@ export function banding(part, piece) {
   const [sx, sy, sz] = part.size;
   const T = Math.min(sx, sy, sz);
   const [L, W] = [sx, sy, sz].sort((a, b) => b - a);
-  if (T <= 6) return { edges: 'none', L: 0, W: 0, tape: null, length: 0 };
-  const tape = part.band ?? piece?.band ?? null;
   const n = part.name || ''; // viewer-only boxes (room door casings) carry no name
+  if (T <= 6 || n.startsWith('plinth')) return { edges: 'none', L: 0, W: 0, tape: null, length: 0 };
+  const tape = part.band ?? piece?.band ?? null;
   if (n.startsWith('door') || n.startsWith('drawer front') || n.startsWith('flap') || n.includes('desk top'))
     return { edges: 'all', L: 2, W: 2, tape, length: 2 * (L + W) };
   if (n.startsWith('drawer box')) return { edges: 'front', L: 1, W: 0, tape, length: L }; // the box's top edge
@@ -87,8 +87,8 @@ export function cutListCsv(rows) {
 // Which narrow faces of a board carry the tape, for the viewer: piece-local
 // face keys (+x -x +y -y +z -z). narrow = the four edge faces (those not
 // perpendicular to the thin axis); banded = the taped ones among them. The
-// rest show raw chipboard. A strip facing the room (plinth, filler) bands the
-// long edge you see: the bottom edge when it sits high, the top edge low down.
+// rest show raw chipboard. A strip facing the room (filler) bands the long
+// edge you see: the bottom edge when it sits high, the top edge low down.
 export function bandedFaces(part) {
   const [sx, sy, sz] = part.size;
   const T = Math.min(sx, sy, sz);

@@ -26,7 +26,7 @@ const LEG = 100;
 const LOWER_INNER = 314; // drawer compartment height
 const TOP_COMP = 400; // compartment under the top
 const ADJ_Z = [784, 1072, 1392, 1680]; // adjustable shelves in the right column (on the 32 grid: pin centre = z - 2.5 = 749.5 + 32k)
-const SHELF_SETBACK = 27;
+const SHELF_SETBACK = T; // adjustable shelves one board thickness shallower than the sides (561), clear of the hinge arms
 const RUNNER = 550;
 const BOX_H = 250;
 const BOTTOM_T = 3; // drawer bottom: 3 mm HDF like the backs, stapled under the box
@@ -42,7 +42,7 @@ const inner = carcassW - 2 * T;
 const col = (inner - T) / 2;
 const partX = T + col; // partition
 const rightX = partX + T; // right column start
-const shelfD = boardD - 3;
+
 const adjD = boardD - SHELF_SETBACK;
 const boxD = RUNNER + 5;
 const z = {
@@ -86,7 +86,7 @@ const legBackY = boardD - 110;
 B('top/bottom', [0, 0, z.bottomLower], [carcassW, boardD, T]);
 B('side lower', [0, 0, z.sideLower], [T, boardD, LOWER_INNER]);
 B('side lower', [rightSideX, 0, z.sideLower], [T, boardD, LOWER_INNER]);
-B('partition lower', [partX, 3, z.sideLower], [T, shelfD, LOWER_INNER]);
+B('partition lower', [partX, 0, z.sideLower], [T, boardD, LOWER_INNER]);
 B('top/bottom', [0, 0, z.topLower], [carcassW, boardD, T]);
 parts.push({ name: 'back HDF lower', pos: [0, hdfY, z.bottomLower], size: [carcassW, HDF, z.bottomUpper - z.bottomLower], color: '#ffffff' });
 for (const y of Y3) {
@@ -99,8 +99,8 @@ for (const y of [100, 300, 500]) confirmat([partX + T / 2 - 3.5, y - 3.5, z.topL
 B('top/bottom', [0, 0, z.bottomUpper], [carcassW, boardD, T]);
 B('side upper', [0, 0, z.sideUpper], [T, boardD, sideUpperH]);
 B('side upper', [rightSideX, 0, z.sideUpper], [T, boardD, sideUpperH]);
-B('partition upper', [partX, 3, z.sideUpper], [T, shelfD, partUpperH]);
-B('shelf top', [T, 3, z.shelfTop], [inner, shelfD, T]);
+B('partition upper', [partX, 0, z.sideUpper], [T, boardD, partUpperH]);
+B('shelf top', [T, 0, z.shelfTop], [inner, boardD, T]);
 B('top/bottom', [0, 0, z.top], [carcassW, boardD, T]);
 parts.push({ name: 'back HDF upper', pos: [0, hdfY, z.bottomUpper], size: [carcassW, HDF, H - z.bottomUpper], color: '#ffffff' });
 for (const y of Y3) for (const cx of [T / 2, rightSideX + T / 2]) confirmat([cx - 3.5, y - 3.5, z.bottomUpper], 'z'); // bottom upper -> sides, from below, flush
@@ -177,7 +177,7 @@ const drawer = (x0, fx, fw) => {
   const sL = x0 + 13;
   const sR = x0 + col - 31;
   // bottom: 3 mm HDF (same sheet as the backs), stapled up into the box
-  parts.push({ name: 'drawer bottom', pos: [sL, 0, z.sideLower], size: [bw, boxD, BOTTOM_T], color: '#d9bf94' });
+  parts.push({ name: 'drawer bottom', pos: [sL, 0, z.sideLower], size: [bw, boxD, BOTTOM_T], color: '#ffffff' }); // white HDF, same sheet as the backs
   const bz = z.sideLower + BOTTOM_T; // box sides stand on the bottom
   B('drawer box side', [sL, 0, bz], [T, boxD, BOX_H]);
   B('drawer box side', [sR, 0, bz], [T, boxD, BOX_H]);
