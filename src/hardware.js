@@ -180,15 +180,14 @@ export function hardwareRows(piece) {
   return { rows, total };
 }
 
-// CSV of the hardware table: one row per item, with the detail, the catalogue
-// product and the prices; a total line at the end.
+// CSV of the hardware table: one row per item, with the detail and the
+// catalogue product. No prices - those live in the price estimate.
 export function hardwareCsv(piece) {
   const q = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
-  const { rows, total } = hardwareRows(piece);
-  const lines = ['Piece,Qty,Item,Detail,Product,Each (KM),Total (KM)'];
+  const { rows } = hardwareRows(piece);
+  const lines = ['Piece,Qty,Item,Detail,Product'];
   for (const r of rows)
-    lines.push([q(piece.name), r.qty, q(r.name), q(r.detail), q(r.product), r.price != null ? r.price.toFixed(2) : '', r.cost != null ? r.cost.toFixed(2) : ''].join(','));
-  lines.push([q(piece.name), '', q('total'), '', '', '', total.toFixed(2)].join(','));
+    lines.push([q(piece.name), r.qty, q(r.name), q(r.detail), q(r.product)].join(','));
   return lines.join('\n');
 }
 
