@@ -1,5 +1,5 @@
 {
-  "note": "Bought hardware by part name (parts flagged \"hardware\": true) or by derived item (hinge). Prices in KM per piece.",
+  "note": "Bought hardware by part name (parts flagged \"hardware\": true) or by derived item (hinge). Prices in KM per piece. \"includedWith\" names the item that already pays for this one, so the price estimate skips it.",
   "items": {
     "leg": {
       "product": "Nogice za namještaj podesive 120mm 4/1 crne FE.9020",
@@ -69,7 +69,7 @@
     "plinth clip": {
       "product": "Klipsa za sokl na nogicu",
       "price": 0.5,
-      "note": "approx. price per piece; one per front leg"
+      "note": "approx. price per piece; one per front leg, plus one per right-hand leg where a side plinth clips on"
     },
     "staple": {
       "product": "Spajalica za HDF leđa",
@@ -89,7 +89,7 @@
     "angle bracket": {
       "product": "Ugaonik metalni 20x20x40 sa 4 vijka 3,5x16",
       "price": 0.4,
-      "note": "approx. price per piece incl. screws; holds a shelf to a partition where no screw can pass, or a side plinth to the underside of a carcass bottom"
+      "note": "approx. price per piece incl. screws; holds a shelf to a partition where no screw can pass"
     },
     "runner 550 cabinet part": {
       "product": "Klizač za ladicu 550mm 35mm (par profila)",
@@ -99,7 +99,8 @@
     "runner 550 drawer part": {
       "product": "drawer profile of the 550 runner",
       "price": 0,
-      "note": "included with the cabinet part"
+      "includedWith": "runner 550 cabinet part",
+      "note": "comes with the cabinet part; left out of the price estimate"
     },
     "hanging rail": {
       "product": "Šipka za vješalice ovalna 30x15, cut to length",

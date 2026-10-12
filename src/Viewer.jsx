@@ -2167,12 +2167,16 @@ export default function Viewer({
 // part's step becomes current or its stage is installed, so it remounts and
 // starts from its travel offset.
 // delay: seconds to wait (hidden) before sliding in — the screws of a step
-// follow the board they go into.
-function Placing({ from, animate, base = [0, 0, 0], delay = 0, children }) {
+// follow the board they go into. via: waypoints (mm offsets from base) the
+// group passes on its way in, in order, so an installed sub-assembly can come
+// round to the front before it slides in.
+function Placing({ from, animate, base = [0, 0, 0], delay = 0, via = null, children }) {
   const ref = useRef();
   const waited = useRef(0);
+  const leg = useRef(0); // which waypoint we are heading for
   const start = animate ? base.map((v, a) => v + from[a]) : base;
-  const end = [base[0] * S, base[2] * S, -base[1] * S];
+  const toThree = (p) => [p[0] * S, p[2] * S, -p[1] * S];
+  const path = [...(animate && via ? via.map((v) => base.map((b, a) => b + v[a])) : []), base].map(toThree);
   useFrame((_, dt) => {
     const g = ref.current;
     if (!g) return;
@@ -2182,9 +2186,11 @@ function Placing({ from, animate, base = [0, 0, 0], delay = 0, children }) {
       return;
     }
     g.visible = true;
-    g.position.x = MathUtils.damp(g.position.x, end[0], 5, dt);
-    g.position.y = MathUtils.damp(g.position.y, end[1], 5, dt);
-    g.position.z = MathUtils.damp(g.position.z, end[2], 5, dt);
+    const t = path[Math.min(leg.current, path.length - 1)];
+    g.position.x = MathUtils.damp(g.position.x, t[0], 5, dt);
+    g.position.y = MathUtils.damp(g.position.y, t[1], 5, dt);
+    g.position.z = MathUtils.damp(g.position.z, t[2], 5, dt);
+    if (leg.current < path.length - 1 && Math.hypot(g.position.x - t[0], g.position.y - t[1], g.position.z - t[2]) < 0.015) leg.current += 1;
   });
   return (
     <group ref={ref} position={[start[0] * S, start[2] * S, -start[1] * S]}>
@@ -2308,6 +2314,7 @@ export function PieceViewer({ piece, highlight, onHoverPart, hideAppliances = fa
           key={`${i}-${now}-${outside}-${installing}`}
           base={outside ? stage.offset : [0, 0, 0]}
           from={installing ? stage.offset : travel(p, i)}
+          via={installing ? stage.via : null}
           animate={now || installing}
           delay={now && !installing && p.hardware ? 0.7 : 0}
         >

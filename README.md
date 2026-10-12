@@ -167,6 +167,9 @@ The registry also carries the price list's **services** page (`services`): cutti
 per metre by board class and edge-banding labour by board thickness and tape
 thickness. The piece panel's price estimate adds both to boards and tape — cutting
 as each part's perimeter, banding labour on the same edges the parts table bands.
+Boards are charged by the half sheet (2800 × 1035, the shop's minimum): each
+material row nests its parts in strips (`src/nesting.js`) and buys the halves that
+takes, so offcuts are in the price and the net area shows beside it.
 Thin boards without a decor price (HDF backs, drawer bottoms) are charged a flat raw-HDF
 rate set in `src/hardware.js`. Hardware parts (`"hardware": true`) are listed under
 Hardware and never cut; `src/data/hardware.json` names the bought product and its

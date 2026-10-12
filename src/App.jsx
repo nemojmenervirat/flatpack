@@ -378,8 +378,6 @@ function PiecePanel({ piece, piecesById, hoverIndex, onHoverRow, assembly, asmSt
               <tr>
                 <th className="num">Qty</th>
                 <th>Item</th>
-                <th className="num">Each</th>
-                <th className="num">KM</th>
               </tr>
             </thead>
             <tbody>
@@ -396,19 +394,9 @@ function PiecePanel({ piece, piecesById, hoverIndex, onHoverRow, assembly, asmSt
                       </div>
                     )}
                   </td>
-                  <td className="num">{r.price != null ? r.price.toFixed(2) : '—'}</td>
-                  <td className="num">{r.cost != null ? r.cost.toFixed(2) : '—'}</td>
                 </tr>
               ))}
             </tbody>
-            <tfoot>
-              <tr>
-                <td className="num" colSpan="3">
-                  total
-                </td>
-                <td className="num">{hwTable.total.toFixed(2)}</td>
-              </tr>
-            </tfoot>
           </table>
           <div className="row-between">
             <span className="muted">screws and staples are in the price estimate</span>
@@ -517,7 +505,7 @@ function PiecePanel({ piece, piecesById, hoverIndex, onHoverRow, assembly, asmSt
                       : {
                           name: r.material || r.part,
                           sub: r.material ? `${r.thickness} mm` : `${r.thickness} mm · ${r.reason}`,
-                          qty: `${r.m2.toFixed(2)} m²`,
+                          qty: r.halves != null ? `${r.halves} × ½ board · ${r.m2.toFixed(2)} m² net` : `${r.m2.toFixed(2)} m²`,
                           unit: r.perM2,
                           cost: r.cost,
                         }
@@ -584,9 +572,8 @@ function PiecePanel({ piece, piecesById, hoverIndex, onHoverRow, assembly, asmSt
             )}
             <dt className="total">total</dt>
             <dd className="total">{price.total.toFixed(0)} KM</dd>
-            <dt className="faint">with ~15% board offcut waste</dt>
-            <dd className="faint">{(price.total + 0.15 * price.boardsTotal).toFixed(0)} KM</dd>
           </dl>
+          <p className="muted">boards are bought by the half sheet (2800 × 1035): the parts are nested in strips and the halves that takes are charged, so offcuts are already in</p>
           {(price.boardRows.some((r) => r.perM2 == null) || price.hardware.some((h) => h.price == null)) && (
             <p className="muted">rows marked — have no price yet and count as 0</p>
           )}

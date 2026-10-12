@@ -20,7 +20,10 @@
 // "stage": "<name>"; those parts are shown built on the floor in front of
 // the piece until a step { "install": "<name>" } moves the whole group into
 // place. "stageAt": [dx, dy, dz] on the install step overrides where it is
-// built. A step { "handles": true } is where the viewer-drawn bar handles go
+// built; "installVia": [dx, dy, dz] or a list of them is the path the group
+// takes on its way in (each an offset from its final place), so a drawer can
+// come round to the front and slide in instead of cutting through a side.
+// A step { "handles": true } is where the viewer-drawn bar handles go
 // on the doors and drawer fronts; before it the fronts show none.
 
 import { aabbOf, overlaps, pieceLocalBBox } from './geometry.js';
@@ -134,6 +137,7 @@ export function assemblySteps(piece) {
     stage: s.stage || null,
     install: s.install || null,
     stageAt: s.stageAt || null,
+    installVia: s.installVia ? (Array.isArray(s.installVia[0]) ? s.installVia : [s.installVia]) : null,
     handles: !!s.handles,
     from: s.from || null, // 'front' | 'above' | ... : approach direction for the listed parts
   }));
@@ -203,6 +207,7 @@ export function assemblySteps(piece) {
       stages[s.install] = stages[s.install] || { name: s.install, offset: [0, 0, 0], installStep: -1 };
       stages[s.install].installStep = si;
       if (s.stageAt) stages[s.install].offset = s.stageAt;
+      if (s.installVia) stages[s.install].via = s.installVia;
     }
   });
   for (const st of Object.values(stages)) {

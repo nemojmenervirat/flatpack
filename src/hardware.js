@@ -8,6 +8,7 @@
 import { pieceLocalBBox, frontFrame } from './geometry.js';
 import { banding, RAW_HDF } from './cutlist.js';
 import { findMaterial, cuttingRate, tapeSpec, bandingRate } from './materials.js';
+import { nestHalfBoards } from './nesting.js';
 import hardwareCatalogue from './data/hardware.json';
 
 // Bought hardware by part name: the real product and its price per piece.
@@ -104,14 +105,16 @@ export function hardwareList(piece) {
       .reduce((n, p) => n + Math.max(3, Math.round(sortedDims(p.size)[0] / 280)), 0);
 
   // other explicitly modeled hardware parts (legs, runners, ...) — hooks and
-  // hanging rails are counted above, everything else is listed by name + size
+  // hanging rails are counted above, everything else is listed by name + size,
+  // the size sorted so the same clip turned 90° (a side plinth's) joins the row
   const extras = new Map();
   for (const p of parts) {
     if (!p.hardware || p.name.includes('hook') || p.name.includes('hanging') || p.name.includes('shelf pin')) continue;
-    const key = `${p.name}|${p.size.join('x')}`;
+    const dims = sortedDims(p.size);
+    const key = `${p.name}|${dims.join('x')}`;
     const item = hardwareItem(p.name);
     const row =
-      extras.get(key) || { name: p.name, size: [...p.size], qty: 0, product: item?.product || null, price: item?.price ?? null };
+      extras.get(key) || { name: p.name, size: dims, qty: 0, product: item?.product || null, price: item?.price ?? null };
     row.qty += 1;
     extras.set(key, row);
   }
@@ -195,7 +198,10 @@ export function hardwareCsv(piece) {
 // material's cheapest tape. Labour comes from the price list's services page:
 // cutting is charged per metre of cut, taken as each part's perimeter (the
 // usual way a cutting service is quoted); banding labour per metre of banded
-// edge, by board thickness and the tape's thickness. Parts whose material (own
+// edge, by board thickness and the tape's thickness. Boards are bought by the
+// half sheet (cut lengthwise), so each material row nests its parts in strips
+// (nesting.js) and charges the halves that takes, not the net area (kept as
+// m2 beside it). Parts whose material (own
 // or piece-level) has no price for their thickness land in `unpriced` instead
 // of silently costing 0 - they are still cut, so they still carry cutting
 // labour. Hardware parts (legs, runners) are priced per piece from
@@ -236,6 +242,7 @@ export function priceEstimate(piece) {
     const [L, W, T] = sortedDims(p.size);
     if (p.hardware) {
       const item = hardwareItem(p.name);
+      if (item?.includedWith) continue; // paid for by another item's row (a runner's drawer profile)
       const row = hardware.get(p.name) || { name: p.name, qty: 0, product: item?.product || null, price: item?.price ?? null };
       row.qty += 1;
       hardware.set(p.name, row);
@@ -280,8 +287,10 @@ export function priceEstimate(piece) {
     }
     const matId = rawHdf ? HDF_ID : mat.id;
     const key = `${matId}|${T}`;
-    const row = boards.get(key) || { material: matId, thickness: T, m2: 0, perM2 };
+    const [fL, fW] = String(mat?.format || '2800 x 2070').split('x').map((v) => Number(v.trim()) || 0);
+    const row = boards.get(key) || { material: matId, thickness: T, m2: 0, perM2, format: [fL || 2800, fW || 2070], parts: [] };
     row.m2 += (L * W) / 1e6;
+    row.parts.push({ L, W });
     boards.set(key, row);
     if (rawHdf) continue; // never banded, no tape
 
@@ -304,10 +313,13 @@ export function priceEstimate(piece) {
     }
   }
 
-  const boardRows = [...boards.values()].map((r) => ({
-    ...r,
-    cost: r.worktop ? r.meters * r.perM : r.perM2 ? r.m2 * r.perM2 : 0,
-  }));
+  const boardRows = [...boards.values()].map((r) => {
+    if (r.worktop) return { ...r, cost: r.meters * r.perM };
+    if (!r.perM2 || !r.parts) return { ...r, cost: 0 };
+    const nest = nestHalfBoards(r.parts, { length: r.format[0], width: r.format[1] });
+    const { parts, ...rest } = r;
+    return { ...rest, halves: nest.halves, boughtM2: nest.m2, tooBig: nest.tooBig.length, cost: nest.m2 * r.perM2 };
+  });
   const tapeRows = [...tapes.entries()].map(([key, meters]) => {
     const [id, t] = key.split('|');
     const tape = pickTape(findMaterial(id), t === '' ? null : Number(t));
