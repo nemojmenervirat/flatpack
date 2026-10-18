@@ -1,7 +1,7 @@
-import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, memo, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, OrthographicCamera, Html, Edges } from '@react-three/drei';
-import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, Path, ExtrudeGeometry } from 'three';
+import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, Path, ExtrudeGeometry, BoxGeometry, BufferAttribute, Color, MeshStandardMaterial } from 'three';
 import { aabbOf, pieceLocalBBox, walkMove, walkObstacles, frontFrame } from './geometry.js';
 import { TOUR, createTour, tickTour, endTour, resolveTarget, doorGeometry, entranceSpawn } from './tour.js';
 import { partColor } from './materials.js';
@@ -441,6 +441,41 @@ function SpaceBox({ space, hot }) {
   );
 }
 
+// Shared materials, one instance per look. Every mesh used to own its
+// materials (a banded board six of them, one per face), so a flat with ~950
+// parts pushed ~5000 distinct materials and ~5000 draw calls through three.js
+// every frame -- the first-person stutter. Materials are cheap to share:
+// three.js refreshes uniforms once per material, and the opaque render list
+// sorts by material, so these also batch. Never disposed; the set is small.
+const materialCache = new Map();
+function sharedMaterial({
+  color = '#ffffff',
+  vertexColors = false,
+  hovered = false,
+  opacity = 1,
+  metalness = 0,
+  roughness = 1,
+  map = null,
+}) {
+  const key = `${vertexColors ? 'vertex' : color}|${hovered ? 'h' : ''}|${opacity}|${metalness}|${roughness}|${map ? map.uuid : ''}`;
+  let m = materialCache.get(key);
+  if (!m) {
+    m = new MeshStandardMaterial({
+      color: vertexColors ? '#ffffff' : color,
+      vertexColors,
+      emissive: hovered ? HOVER_EMISSIVE : '#000000',
+      metalness,
+      roughness,
+      map,
+      transparent: opacity < 1,
+      opacity,
+      depthWrite: opacity === 1,
+    });
+    materialCache.set(key, m);
+  }
+  return m;
+}
+
 function Box({ box, color = '#c9a36b', opacity = 1, hovered = false, ...handlers }) {
   const size = [
     (box.max[0] - box.min[0]) * S,
@@ -453,15 +488,8 @@ function Box({ box, color = '#c9a36b', opacity = 1, hovered = false, ...handlers
     (-(box.min[1] + box.max[1]) / 2) * S,
   ];
   return (
-    <mesh position={pos} {...handlers}>
+    <mesh position={pos} material={sharedMaterial({ color, hovered, opacity })} {...handlers}>
       <boxGeometry args={size} />
-      <meshStandardMaterial
-        color={color}
-        emissive={hovered ? HOVER_EMISSIVE : '#000000'}
-        transparent={opacity < 1}
-        opacity={opacity}
-        depthWrite={opacity === 1}
-      />
     </mesh>
   );
 }
@@ -655,19 +683,9 @@ function LocalRounded({ part, color, hovered, opacity = 1, ...handlers }) {
     <mesh
       position={[part.pos[0] * S, part.pos[2] * S, -part.pos[1] * S]}
       geometry={geom}
+      material={partMaterial(part, color, hovered, opacity)}
       {...handlers}
-    >
-      <meshStandardMaterial
-        map={part.fabric ? getFabricTexture(part.fabric) : null}
-        color={color}
-        emissive={hovered ? HOVER_EMISSIVE : '#000000'}
-        metalness={part.metal ? 0.5 : 0}
-        roughness={part.metal ? 0.28 : 1}
-        transparent={opacity < 1}
-        opacity={opacity}
-        depthWrite={opacity === 1}
-      />
-    </mesh>
+    />
   );
 }
 
@@ -689,17 +707,8 @@ function LocalDisc({ part, color, hovered, opacity = 1, ...handlers }) {
   // cylinderGeometry stands along three.y (= data z); tip it onto data y or x
   const rotation = axis === 1 ? [Math.PI / 2, 0, 0] : axis === 0 ? [0, 0, Math.PI / 2] : [0, 0, 0];
   return (
-    <mesh position={pos} rotation={rotation} {...handlers}>
+    <mesh position={pos} rotation={rotation} material={partMaterial(part, color, hovered, opacity)} {...handlers}>
       <cylinderGeometry args={[r, r, part.size[axis] * S, 48]} />
-      <meshStandardMaterial
-        color={color}
-        emissive={hovered ? HOVER_EMISSIVE : '#000000'}
-        metalness={part.metal ? 0.5 : 0}
-        roughness={part.metal ? 0.28 : 1}
-        transparent={opacity < 1}
-        opacity={opacity}
-        depthWrite={opacity === 1}
-      />
     </mesh>
   );
 }
@@ -741,9 +750,8 @@ function Leg({ part, color, hovered, ...handlers }) {
   return (
     <group {...handlers}>
       {segs.map((sg, i) => (
-        <mesh key={i} position={[cx, (z0 + sg.z + sg.dz / 2) * S, cz]}>
+        <mesh key={i} position={[cx, (z0 + sg.z + sg.dz / 2) * S, cz]} material={sharedMaterial({ color, hovered, roughness: 0.6 })}>
           <cylinderGeometry args={[sg.r * S, sg.r * S, sg.dz * S, 32]} />
-          <meshStandardMaterial color={color} emissive={hovered ? HOVER_EMISSIVE : '#000000'} roughness={0.6} />
         </mesh>
       ))}
     </group>
@@ -756,6 +764,33 @@ function Leg({ part, color, hovered, ...handlers }) {
 const FACE_SLOTS = ['+x', '-x', '+z', '-z', '-y', '+y'];
 const RAW_EDGE = '#c9b58e'; // untaped chipboard edge
 
+// One-material look of a non-board part (hardware, appliance, metal, fabric).
+const partMaterial = (part, color, hovered, opacity) =>
+  sharedMaterial({
+    color,
+    hovered,
+    opacity,
+    metalness: part.metal ? 0.5 : 0,
+    roughness: part.metal ? 0.28 : 1,
+    map: part.fabric ? getFabricTexture(part.fabric) : null,
+  });
+
+// A board as a single-draw box: the edge banding is painted per vertex (the
+// decor colour on the wide faces and taped edges, raw chipboard on the rest)
+// instead of six materials. BoxGeometry lays its 24 vertices out four per
+// face in the FACE_SLOTS order, so face i owns vertices 4i..4i+3.
+const vertexColor = new Color();
+function bandedBoxGeometry(size, color, faces) {
+  const g = new BoxGeometry(size[0] * S, size[2] * S, size[1] * S);
+  const colors = new Float32Array(g.attributes.position.count * 3);
+  FACE_SLOTS.forEach((key, i) => {
+    vertexColor.set(faces.narrow.includes(key) && !faces.banded.includes(key) ? RAW_EDGE : color);
+    for (let v = i * 4; v < i * 4 + 4; v++) vertexColor.toArray(colors, v * 3);
+  });
+  g.setAttribute('color', new BufferAttribute(colors, 3));
+  return g;
+}
+
 function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
   const showEdges = useContext(EdgesContext);
   // boards show their edge banding: taped narrow faces in the decor colour,
@@ -764,6 +799,14 @@ function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
     () => (part.hardware || part.appliance || part.metal || part.fabric || !part.name ? null : bandedFaces(part)),
     [part]
   );
+  // keyed by value, not by the part object: doors and drawers rebuild their
+  // part descriptors on every render and must not re-upload geometry
+  const geomKey = faces ? `${part.size.join()}|${color}|${faces.banded.join()}|${faces.narrow.join()}` : null;
+  const geom = useMemo(
+    () => (faces ? bandedBoxGeometry(part.size, color, faces) : null),
+    [geomKey] // eslint-disable-line react-hooks/exhaustive-deps
+  );
+  useEffect(() => () => geom?.dispose(), [geom]);
   if (part.hardware && part.name.startsWith('leg')) {
     return <Leg part={part} color={color} hovered={hovered} {...handlers} />;
   }
@@ -779,34 +822,12 @@ function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
     (part.pos[2] + part.size[2] / 2) * S,
     -(part.pos[1] + part.size[1] / 2) * S,
   ];
+  const material = faces
+    ? sharedMaterial({ vertexColors: true, hovered, opacity })
+    : partMaterial(part, color, hovered, opacity);
   return (
-    <mesh position={pos} {...handlers}>
-      <boxGeometry args={size} />
-      {faces ? (
-        FACE_SLOTS.map((key, i) => (
-          <meshStandardMaterial
-            key={i}
-            attach={`material-${i}`}
-            color={faces.narrow.includes(key) && !faces.banded.includes(key) ? RAW_EDGE : color}
-            emissive={hovered ? HOVER_EMISSIVE : '#000000'}
-            roughness={1}
-            transparent={opacity < 1}
-            opacity={opacity}
-            depthWrite={opacity === 1}
-          />
-        ))
-      ) : (
-        <meshStandardMaterial
-          map={part.fabric ? getFabricTexture(part.fabric) : null}
-          color={color}
-          emissive={hovered ? HOVER_EMISSIVE : '#000000'}
-          metalness={part.metal ? 0.5 : 0}
-          roughness={part.metal ? 0.28 : 1}
-          transparent={opacity < 1}
-          opacity={opacity}
-          depthWrite={opacity === 1}
-        />
-      )}
+    <mesh position={pos} {...(faces ? { geometry: geom } : {})} material={material} {...handlers}>
+      {!faces && <boxGeometry args={size} />}
       {showEdges && opacity === 1 && !part.fabric && (
         <Edges>
           <lineBasicMaterial color="#000000" transparent opacity={0.22} />
@@ -1484,7 +1505,9 @@ function RoomDoor({ opening, hovered, onPointerOver, onPointerOut }) {
   );
 }
 
-function Placement({ entry, collided, showClearances, hovered, onPointerOver, onPointerOut, onDoubleClick }) {
+// Memoised: hovering changes the root's state, and without this every part of
+// every piece would reconcile on each pointer move. Handlers get the entry.
+const Placement = memo(function Placement({ entry, collided, showClearances, hovered, onPointerOver, onPointerOut, onDoubleClick }) {
   const { piece, placement } = entry;
   const parts = piece.parts?.length
     ? piece.parts
@@ -1520,9 +1543,9 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
       <group
         position={[placement.pos[0] * S, placement.pos[2] * S, -placement.pos[1] * S]}
         rotation={[0, MathUtils.degToRad(rot), 0]}
-        onPointerOver={onPointerOver}
-        onPointerOut={onPointerOut}
-        onDoubleClick={onDoubleClick}
+        onPointerOver={(e) => onPointerOver(e, entry)}
+        onPointerOut={(e) => onPointerOut(e, entry)}
+        onDoubleClick={(e) => onDoubleClick(e, entry)}
       >
         {parts.map((p, i) => {
           if (consumed.has(i) || onDoors.has(i)) return null; // rendered inside its Drawer/Door
@@ -1585,7 +1608,19 @@ function Placement({ entry, collided, showClearances, hovered, onPointerOver, on
         ))}
     </group>
   );
-}
+});
+
+// hover record for a placed piece: its key, bbox and the W x D x H label
+const pieceHoverInfo = (entry) => {
+  const b = entry.bbox;
+  return {
+    key: `p-${entry.id}`,
+    box: b,
+    name: entry.name,
+    text: `${cm(b.max[0] - b.min[0])} × ${cm(b.max[1] - b.min[1])} × ${cm(b.max[2] - b.min[2])}`,
+    className: 'piece',
+  };
+};
 
 // ── First-person walk mode ──────────────────────────────────────────────
 // Trackpad-friendly: drag to look around (grab-the-world), click a floor
@@ -1953,6 +1988,26 @@ export default function Viewer({
   useEffect(() => {
     if (walking) setHover(null);
   }, [walking]);
+  // stable piece handlers so the memoised Placements keep their props
+  const walkingRef = useRef(walking);
+  walkingRef.current = walking;
+  const onPieceOver = useCallback((e, entry) => {
+    if (walkingRef.current) return; // no dimension labels in first person
+    e.stopPropagation();
+    setHover(pieceHoverInfo(entry));
+  }, []);
+  const onPieceOut = useCallback((e, entry) => {
+    const key = `p-${entry.id}`;
+    setHover((h) => (h && h.key === key ? null : h));
+  }, []);
+  const onPieceSelect = useCallback(
+    (e, entry) => {
+      if (walkingRef.current) return; // double-click select would yank us out of the walk
+      e.stopPropagation();
+      onSelectPiece?.(entry.piece.id);
+    },
+    [onSelectPiece]
+  );
 
   return (
     <Canvas
@@ -2100,32 +2155,18 @@ export default function Viewer({
       })}
 
       {showPieces &&
-        report.placed.map((entry) => {
-        const b = entry.bbox;
-        const info = {
-          key: `p-${entry.id}`,
-          box: b,
-          name: entry.name,
-          text: `${cm(b.max[0] - b.min[0])} × ${cm(b.max[1] - b.min[1])} × ${cm(b.max[2] - b.min[2])}`,
-          className: 'piece',
-        };
-        return (
+        report.placed.map((entry) => (
           <Placement
             key={entry.id}
             entry={entry}
             collided={report.collidedIds.has(entry.id)}
             showClearances={showClearances}
-            hovered={hover?.key === info.key}
-            onPointerOver={over(info)}
-            onPointerOut={out(info.key)}
-            onDoubleClick={(e) => {
-              if (walking) return; // double-click select would yank us out of the walk
-              e.stopPropagation();
-              onSelectPiece?.(entry.piece.id);
-            }}
+            hovered={hover?.key === `p-${entry.id}`}
+            onPointerOver={onPieceOver}
+            onPointerOut={onPieceOut}
+            onDoubleClick={onPieceSelect}
           />
-        );
-      })}
+        ))}
 
       {hover && !walking && (
         <DimLabel box={hover.box} text={hover.text} name={hover.name} className={hover.className} />
