@@ -3,12 +3,15 @@
     { "piece": "tv-ormar-ljilja", "label": "TV ormar - east wall", "pos": [4418, 2600, 0], "rot": 270 },
     { "piece": "tv-40", "label": "TV 40 - on ormar", "pos": [4508, 2550, 900], "rot": 270 },
     { "piece": "stove-wood", "label": "Sporet na drva - NW of pilaster", "pos": [2290, 4130, 0], "rot": 0 },
-    { "piece": "kauc-220", "label": "Kauc - west wall", "pos": [1100, 1100, 0], "rot": 90, "clearance": { "front": 200 } },
-    { "piece": "kauc-220", "label": "Kauc - south wall", "pos": [3400, 1100, 0], "rot": 180, "clearance": { "front": 200 } },
+    { "piece": "sto-ljilja", "label": "Sto 120x50 - NW corner, west wall", "pos": [750, 3530, 0], "rot": 90 },
+    { "piece": "dining-chair", "label": "Stolica south - at the sto, facing west", "pos": [750, 4030, 0], "rot": 270 },
+    { "piece": "dining-chair", "label": "Stolica north - at the sto, facing west", "pos": [750, 4680, 0], "rot": 270 },
+    { "piece": "secija-ljilja", "label": "Secija - SW corner (south + west wall)", "pos": [250, 250, 0], "rot": 0 },
     { "piece": "stove-electric", "label": "Elektricni sporet - NE corner", "pos": [4192, 4772, 0], "rot": 270, "clearance": { "front": 450 } },
     { "piece": "kitchen-ljilja", "label": "Kitchen - sink run, east wall", "pos": [4192, 4772, 0], "rot": 270 },
     { "piece": "wall-panel-east-mid", "label": "Slat panel - east-mid extension", "pos": [3000, 2645, 0], "rot": 0 },
-    { "piece": "fridge-gorenje-rf4142", "label": "Fridge - free-standing by the worktop end", "pos": [3590, 3250, 0], "rot": 180 },
-    { "piece": "coffee-table-120", "label": "Coffee table - at kauc corner", "pos": [1350, 1350, 0], "rot": 0 }
+    { "piece": "radni-pult-ljilja", "label": "Radni pult - north of the slat panel", "pos": [3600, 3295, 0], "rot": 180 },
+    { "piece": "fridge-gorenje-rf4142", "label": "Fridge - in the run, next to the sink", "pos": [4232, 3338, 0], "rot": 270 },
+    { "piece": "coffee-table-120", "label": "Coffee table - in the secija corner", "pos": [1500, 1500, 0], "rot": 0 }
   ]
 }

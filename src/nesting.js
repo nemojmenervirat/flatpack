@@ -1,10 +1,13 @@
 // Strip nesting of cut parts onto boards, to count what has to be bought: the
-// shop sells by the half board (the 2800 x 2070 sheet cut lengthwise into two
-// 2800 x 1035), so what matters is how many halves the parts need, not their
-// net area. Pure, mm, no rendering.
+// shop sells boards only whole, so what matters is how many sheets the parts
+// need, not their net area. Pure, mm, no rendering.
 //
-//   nestHalfBoards(parts, { length, width, kerf, trim }) ->
-//     { halves, m2, boards: [{ strips: [{ width, used, parts }], widthUsed, halves }], tooBig }
+//   nestHalfBoards(parts, { length, width, kerf, trim, unit }) ->
+//     { unit, count, halves, m2, boards: [{ strips: [{ width, used, parts }], widthUsed, halves }], tooBig }
+//
+// unit 'board' (default) charges every started board whole, so count =
+// boards.length and m2 = whole sheets; 'half' charges the halves the boards
+// use (a sheet cut lengthwise, for a shop that sells that way).
 //
 // parts: [{ L, W, qty }] cut sizes. Greedy first fit: parts sorted by width then
 // length; each goes into the narrowest existing strip (a lane along the board
@@ -14,7 +17,7 @@
 // half its width counts as one half, else two. Good enough to tell one board
 // from two; a real nesting program may do a little better, never worse. Parts
 // that fit no orientation land in tooBig.
-export function nestHalfBoards(parts, { length = 2800, width = 2070, kerf = 4, trim = 10 } = {}) {
+export function nestHalfBoards(parts, { length = 2800, width = 2070, kerf = 4, trim = 10, unit = 'board' } = {}) {
   const BL = length - trim; // usable, the saw trims the factory edges
   const BW = width - trim;
   const halfW = width / 2 - trim / 2;
@@ -59,5 +62,8 @@ export function nestHalfBoards(parts, { length = 2800, width = 2070, kerf = 4, t
   }
   for (const b of boards) b.halves = b.widthUsed <= halfW ? 1 : 2;
   const halves = boards.reduce((n, b) => n + b.halves, 0);
-  return { halves, m2: (halves * length * width) / 2 / 1e6, boards, tooBig };
+  const whole = unit !== 'half';
+  const count = whole ? boards.length : halves;
+  const m2 = ((whole ? boards.length * 2 : halves) * length * width) / 2 / 1e6;
+  return { unit: whole ? 'board' : 'half', count, halves, m2, boards, tooBig };
 }

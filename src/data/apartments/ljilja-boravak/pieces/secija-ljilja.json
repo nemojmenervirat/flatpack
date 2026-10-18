@@ -1,0 +1,39 @@
+{
+  "id": "secija-ljilja",
+  "name": "Secija 317x265 (ugaona garnitura, SW corner)",
+  "comment": "Corner sofa for the Ljilja boravak, authored for rot 0 with the local origin at the room's SW interior corner (250, 250). South run 3170 x 900 along the south wall (back 820 high, under the 900 sill of the south window), west run 900 x 1750 along the west wall facing the TV ormar on the east wall; overall 3170 x 2650. Backs along both walls, armrests at the two free ends, corner seat shared. Seat top 460. Clearance zones cover only the L's inner front, so the coffee table sits in the corner.",
+  "buildable": false,
+  "color": "#8f7f66",
+  "clearance": {
+    "zones": [
+      { "name": "south run front", "pos": [900, 900, 0], "size": [2270, 300, 820] },
+      { "name": "west run front", "pos": [900, 1200, 0], "size": [300, 1450, 820] }
+    ]
+  },
+  "parts": [
+    { "name": "plinth south", "pos": [40, 40, 0], "size": [3090, 820, 60], "color": "#2a2622" },
+    { "name": "plinth west", "pos": [40, 900, 0], "size": [820, 1710, 60], "color": "#2a2622" },
+
+    { "name": "base south run", "pos": [0, 0, 60], "size": [3170, 900, 280], "round": [0, 0, 40, 0], "fabric": "weave" },
+    { "name": "base west run", "pos": [0, 900, 60], "size": [900, 1750, 280], "round": [0, 0, 40, 0], "fabric": "weave" },
+
+    { "name": "back south", "pos": [0, 0, 340], "size": [3170, 220, 480], "round": [0, 0, 30, 0], "fabric": "weave" },
+    { "name": "back west", "pos": [0, 220, 340], "size": [220, 2430, 480], "round": [0, 0, 30, 0], "fabric": "weave" },
+
+    { "name": "arm east", "pos": [3020, 220, 340], "size": [150, 680, 220], "round": [0, 0, 40, 40], "fabric": "weave" },
+    { "name": "arm north", "pos": [220, 2500, 340], "size": [680, 150, 220], "round": [0, 40, 40, 0], "fabric": "weave" },
+
+    { "name": "seat cushion corner", "pos": [240, 240, 340], "size": [660, 640, 120], "round": 40, "fabric": "weave", "color": "#a08f74" },
+    { "name": "seat cushion south", "pos": [910, 240, 340], "size": [1040, 640, 120], "round": 40, "fabric": "weave", "color": "#a08f74" },
+    { "name": "seat cushion south", "pos": [1960, 240, 340], "size": [1040, 640, 120], "round": 40, "fabric": "weave", "color": "#a08f74" },
+    { "name": "seat cushion west", "pos": [240, 900, 340], "size": [640, 785, 120], "round": 40, "fabric": "weave", "color": "#a08f74" },
+    { "name": "seat cushion west", "pos": [240, 1695, 340], "size": [640, 785, 120], "round": 40, "fabric": "weave", "color": "#a08f74" },
+
+    { "name": "back pillow corner south", "pos": [420, 220, 460], "size": [480, 200, 300], "round": 50, "fabric": "weave", "color": "#a08f74" },
+    { "name": "back pillow corner west", "pos": [220, 240, 460], "size": [200, 640, 300], "round": 50, "fabric": "weave", "color": "#a08f74" },
+    { "name": "back pillow south", "pos": [910, 220, 460], "size": [1040, 200, 300], "round": 50, "fabric": "weave", "color": "#a08f74" },
+    { "name": "back pillow south", "pos": [1960, 220, 460], "size": [1040, 200, 300], "round": 50, "fabric": "weave", "color": "#a08f74" },
+    { "name": "back pillow west", "pos": [220, 900, 460], "size": [200, 785, 300], "round": 50, "fabric": "weave", "color": "#a08f74" },
+    { "name": "back pillow west", "pos": [220, 1695, 460], "size": [200, 785, 300], "round": 50, "fabric": "weave", "color": "#a08f74" }
+  ]
+}

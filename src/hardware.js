@@ -197,10 +197,11 @@ export function hardwareCsv(piece) {
 // material's cheapest tape. Labour comes from the price list's services page:
 // cutting is charged per metre of cut, taken as each part's perimeter (the
 // usual way a cutting service is quoted); banding labour per metre of banded
-// edge, by board thickness and the tape's thickness. Boards are bought by the
-// half sheet (cut lengthwise), so each material row nests its parts in strips
-// (nesting.js) and charges the halves that takes, not the net area (kept as
-// m2 beside it). Parts whose material (own
+// edge, by board thickness and the tape's thickness. Boards are bought only
+// whole (a material's `unit` could say 'half' for a shop that cuts sheets
+// lengthwise), so each material row nests its parts in strips (nesting.js)
+// and charges the boards that takes, not the net area (kept as m2 beside
+// it). Parts whose material (own
 // or piece-level) has no price for their thickness land in `unpriced` instead
 // of silently costing 0 - they are still cut, so they still carry cutting
 // labour. Hardware parts (legs, runners) are priced per piece from
@@ -287,7 +288,8 @@ export function priceEstimate(piece) {
     const matId = rawHdf ? HDF_ID : mat.id;
     const key = `${matId}|${T}`;
     const [fL, fW] = String(mat?.format || '2800 x 2070').split('x').map((v) => Number(v.trim()) || 0);
-    const row = boards.get(key) || { material: matId, thickness: T, m2: 0, perM2, format: [fL || 2800, fW || 2070], parts: [] };
+    const row =
+      boards.get(key) || { material: matId, thickness: T, m2: 0, perM2, format: [fL || 2800, fW || 2070], unit: mat?.unit === 'half' ? 'half' : 'board', parts: [] };
     row.m2 += (L * W) / 1e6;
     row.parts.push({ L, W });
     boards.set(key, row);
@@ -315,9 +317,9 @@ export function priceEstimate(piece) {
   const boardRows = [...boards.values()].map((r) => {
     if (r.worktop) return { ...r, cost: r.meters * r.perM };
     if (!r.perM2 || !r.parts) return { ...r, cost: 0 };
-    const nest = nestHalfBoards(r.parts, { length: r.format[0], width: r.format[1] });
+    const nest = nestHalfBoards(r.parts, { length: r.format[0], width: r.format[1], unit: r.unit });
     const { parts, ...rest } = r;
-    return { ...rest, halves: nest.halves, boughtM2: nest.m2, tooBig: nest.tooBig.length, cost: nest.m2 * r.perM2 };
+    return { ...rest, count: nest.count, halves: nest.halves, boughtM2: nest.m2, tooBig: nest.tooBig.length, cost: nest.m2 * r.perM2 };
   });
   const tapeRows = [...tapes.entries()].map(([key, meters]) => {
     const [id, t] = key.split('|');

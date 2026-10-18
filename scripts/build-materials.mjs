@@ -107,6 +107,7 @@ function readPriceList() {
           name: r.name,
           section: r.section,
           format: r.format,
+          unit: r.unit,
           panel: {},
           worktop: {},
           laminate: {},

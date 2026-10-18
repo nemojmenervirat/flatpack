@@ -505,7 +505,10 @@ function PiecePanel({ piece, piecesById, hoverIndex, onHoverRow, assembly, asmSt
                       : {
                           name: r.material || r.part,
                           sub: r.material ? `${r.thickness} mm` : `${r.thickness} mm · ${r.reason}`,
-                          qty: r.halves != null ? `${r.halves} × ½ board · ${r.m2.toFixed(2)} m² net` : `${r.m2.toFixed(2)} m²`,
+                          qty:
+                            r.count != null
+                              ? `${r.count} × ${r.unit === 'board' ? `board ${r.format[0]} × ${r.format[1]}` : '½ board'} · ${r.m2.toFixed(2)} m² net`
+                              : `${r.m2.toFixed(2)} m²`,
                           unit: r.perM2,
                           cost: r.cost,
                         }
@@ -573,7 +576,7 @@ function PiecePanel({ piece, piecesById, hoverIndex, onHoverRow, assembly, asmSt
             <dt className="total">total</dt>
             <dd className="total">{price.total.toFixed(0)} KM</dd>
           </dl>
-          <p className="muted">boards are bought by the half sheet (2800 × 1035): the parts are nested in strips and the halves that takes are charged, so offcuts are already in</p>
+          <p className="muted">boards are bought whole: the parts are nested in strips and the sheets that takes are charged, so offcuts are already in</p>
           {(price.boardRows.some((r) => r.perM2 == null) || price.hardware.some((h) => h.price == null)) && (
             <p className="muted">rows marked — have no price yet and count as 0</p>
           )}

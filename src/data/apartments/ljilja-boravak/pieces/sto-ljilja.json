@@ -1,0 +1,14 @@
+{
+  "id": "sto-ljilja",
+  "name": "Sto 120x50 (eating table, NW corner)",
+  "comment": "Small eating table for two against the west wall in the NW corner of the Ljilja boravak. Top 1200 x 500 x 28 at 750, placed with rot 90 so the long side runs along the west wall. Four 50 x 50 legs inset 40 from the edges; the two chairs stand on the long east side facing the wall, backs to the room, like the l2-39 dining set.",
+  "buildable": false,
+  "color": "#3e3222",
+  "parts": [
+    { "name": "table top", "pos": [0, 0, 722], "size": [1200, 500, 28], "round": 30, "color": "#5a452e" },
+    { "name": "table leg", "pos": [40, 40, 0], "size": [50, 50, 722] },
+    { "name": "table leg", "pos": [1110, 40, 0], "size": [50, 50, 722] },
+    { "name": "table leg", "pos": [40, 410, 0], "size": [50, 50, 722] },
+    { "name": "table leg", "pos": [1110, 410, 0], "size": [50, 50, 722] }
+  ]
+}

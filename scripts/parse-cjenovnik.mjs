@@ -20,17 +20,19 @@
 import { readFileSync } from 'fs';
 
 // Board pages only: 1-3 oplemenjena iverica, 4-5 iveral / decor panels,
-// 6 high-gloss MDF, 7-8 worktops. 9-10 are laminate and compact sheets,
-// 11 raw MDF/HDF (no decor codes), 12 services.
+// 6 high-gloss and matt MDF, 7-8 worktops. 9-10 are laminate and compact
+// sheets, 11 raw MDF/HDF (no decor codes), 12 services. `unit` is the smallest
+// amount the shop sells: every board only whole ('board'; 'half' would be the
+// sheet cut lengthwise, which Elgrad does not sell).
 const PAGES = {
-  1: { section: 'iverica', format: '2800 x 2070' },
-  2: { section: 'iverica', format: '2800 x 2070' },
-  3: { section: 'iverica', format: '2800 x 2070' },
-  4: { section: 'iveral', format: '2800 x 2070' },
-  5: { section: 'iveral', format: '2800 x 2070' },
-  6: { section: 'gloss', format: '2800 x 1220' },
-  7: { section: 'worktop', format: null },
-  8: { section: 'worktop', format: null },
+  1: { section: 'iverica', format: '2800 x 2070', unit: 'board' },
+  2: { section: 'iverica', format: '2800 x 2070', unit: 'board' },
+  3: { section: 'iverica', format: '2800 x 2070', unit: 'board' },
+  4: { section: 'iveral', format: '2800 x 2070', unit: 'board' },
+  5: { section: 'iveral', format: '2800 x 2070', unit: 'board' },
+  6: { section: 'gloss', format: '2800 x 1220', unit: 'board' },
+  7: { section: 'worktop', format: null, unit: null },
+  8: { section: 'worktop', format: null, unit: null },
 };
 
 const VALUE = /^(\d{1,3}(?:,\d{1,2})?|#N\/A|NA)$/;
@@ -232,6 +234,7 @@ export function parsePages(xmlPath) {
           table: tableId,
           section: meta.section,
           format: meta.format,
+          unit: meta.unit,
           nr: +l.words[0].text,
           code: pick(sifraX, strukturaX),
           texture: pick(strukturaX, nazivX),
