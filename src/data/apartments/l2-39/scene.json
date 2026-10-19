@@ -269,12 +269,12 @@
       "rot": 90
     },
     {
-      "piece": "tv",
-      "label": "TV 55 - living room",
+      "piece": "tv-65",
+      "label": "TV 65 - living room",
       "pos": [
         303,
-        2483,
-        800
+        2373,
+        740
       ],
       "rot": 90
     },

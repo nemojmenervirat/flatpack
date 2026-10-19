@@ -59,7 +59,7 @@ export const tour = [
   { go: [1300, 6300] },
   { go: [1300, 4300] },
   { go: [2000, 3400], say: 'TV wall' },
-  { look: { piece: 'TV 55 - living room' }, dur: 1 },
+  { look: { piece: 'TV 65 - living room' }, dur: 1 },
   { wait: 1 },
   { look: { piece: 'Work desk - living room' }, dur: 1, say: 'Work desk' },
   { wait: 0.8 },

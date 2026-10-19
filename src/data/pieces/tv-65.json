@@ -1,0 +1,11 @@
+{
+  "id": "tv-65",
+  "name": "TV 65\" wall-mounted",
+  "buildable": false,
+  "color": "#22262b",
+  "parts": [
+    { "name": "wall mount", "pos": [525, 60, 270], "size": [400, 30, 300], "color": "#33383e" },
+    { "name": "tv panel", "pos": [0, 0, 0], "size": [1450, 60, 840] },
+    { "name": "screen", "pos": [5, -8, 15], "size": [1440, 8, 810], "color": "#101318" }
+  ]
+}
