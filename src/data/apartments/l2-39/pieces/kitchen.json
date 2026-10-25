@@ -254,7 +254,8 @@
         340,
         18,
         794
-      ]
+      ],
+      "material": "H3702 ST10"
     },
     {
       "name": "door sink",
@@ -268,7 +269,9 @@
         18,
         794
       ],
-      "hinge": "left"
+      "hinge": "left",
+      "material": "H3702 ST10",
+      "handleColor": "#1b1d20"
     },
     {
       "name": "door sink",
@@ -282,7 +285,9 @@
         18,
         794
       ],
-      "hinge": "right"
+      "hinge": "right",
+      "material": "H3702 ST10",
+      "handleColor": "#1b1d20"
     },
     {
       "name": "sink rim",
@@ -507,12 +512,27 @@
       "pos": [
         1654,
         1508,
-        0
+        100
       ],
       "size": [
         596,
         540,
-        815
+        715
+      ],
+      "appliance": true,
+      "color": "#2e3338"
+    },
+    {
+      "name": "dishwasher base",
+      "pos": [
+        1654,
+        1558,
+        0
+      ],
+      "size": [
+        596,
+        490,
+        100
       ],
       "appliance": true,
       "color": "#2e3338"
@@ -528,7 +548,9 @@
         598,
         18,
         794
-      ]
+      ],
+      "material": "H3702 ST10",
+      "handleColor": "#1b1d20"
     },
     {
       "name": "bottom",
@@ -680,7 +702,9 @@
         594,
         18,
         262
-      ]
+      ],
+      "material": "H3702 ST10",
+      "handleColor": "#1b1d20"
     },
     {
       "name": "drawer bottom",
@@ -759,7 +783,9 @@
         594,
         18,
         262
-      ]
+      ],
+      "material": "H3702 ST10",
+      "handleColor": "#1b1d20"
     },
     {
       "name": "drawer bottom",
@@ -838,7 +864,9 @@
         594,
         18,
         262
-      ]
+      ],
+      "material": "H3702 ST10",
+      "handleColor": "#1b1d20"
     },
     {
       "name": "drawer bottom",
@@ -1056,7 +1084,9 @@
         838,
         18,
         395
-      ]
+      ],
+      "material": "H3702 ST10",
+      "handleColor": "#1b1d20"
     },
     {
       "name": "drawer bottom",
@@ -1135,7 +1165,9 @@
         838,
         18,
         395
-      ]
+      ],
+      "material": "H3702 ST10",
+      "handleColor": "#1b1d20"
     },
     {
       "name": "drawer bottom",
@@ -1211,10 +1243,11 @@
         0
       ],
       "size": [
-        1140,
+        1740,
         18,
         100
-      ]
+      ],
+      "material": "H3702 ST10"
     },
     {
       "name": "plinth",
@@ -1227,7 +1260,8 @@
         2044,
         18,
         100
-      ]
+      ],
+      "material": "H3702 ST10"
     },
     {
       "name": "worktop",
@@ -1248,7 +1282,7 @@
         1994
       ],
       "cutoutRound": 14,
-      "material": "H3303 ST10"
+      "material": "F800 ST9"
     },
     {
       "name": "bottom",
@@ -1393,7 +1427,10 @@
         18,
         1343
       ],
-      "hinge": "right"
+      "hinge": "right",
+      "material": "746 MAT",
+      "profile": "arch",
+      "handle": "knob"
     },
     {
       "name": "door tall",
@@ -1407,7 +1444,10 @@
         18,
         1044
       ],
-      "hinge": "right"
+      "hinge": "right",
+      "material": "746 MAT",
+      "profile": "arch",
+      "handle": "knob"
     },
     {
       "name": "leg",
@@ -1480,7 +1520,8 @@
         18,
         27,
         794
-      ]
+      ],
+      "material": "H3702 ST10"
     },
     {
       "name": "filler cleat",
@@ -1606,7 +1647,9 @@
         595,
         193
       ],
-      "face": "+x"
+      "face": "+x",
+      "material": "H3702 ST10",
+      "handleColor": "#1b1d20"
     },
     {
       "name": "drawer bottom",
@@ -1915,7 +1958,9 @@
         794,
         395
       ],
-      "face": "+x"
+      "face": "+x",
+      "material": "H3702 ST10",
+      "handleColor": "#1b1d20"
     },
     {
       "name": "drawer bottom",
@@ -1995,7 +2040,9 @@
         794,
         395
       ],
-      "face": "+x"
+      "face": "+x",
+      "material": "H3702 ST10",
+      "handleColor": "#1b1d20"
     },
     {
       "name": "drawer bottom",
@@ -2074,7 +2121,8 @@
         18,
         36,
         794
-      ]
+      ],
+      "material": "H3702 ST10"
     },
     {
       "name": "plinth",
@@ -2087,7 +2135,8 @@
         18,
         1540,
         100
-      ]
+      ],
+      "material": "H3702 ST10"
     },
     {
       "name": "worktop",
@@ -2114,7 +2163,7 @@
         600,
         1614
       ],
-      "material": "H3303 ST10"
+      "material": "F800 ST9"
     },
     {
       "name": "corner panel upper",
@@ -2127,7 +2176,8 @@
         18,
         154,
         1150
-      ]
+      ],
+      "material": "746 MAT"
     },
     {
       "name": "filler cleat",
@@ -2283,7 +2333,7 @@
       ]
     },
     {
-      "name": "divider",
+      "name": "shelf",
       "pos": [
         368,
         1740,
@@ -2296,7 +2346,7 @@
       ]
     },
     {
-      "name": "door lower",
+      "name": "door wall",
       "pos": [
         353,
         1720,
@@ -2305,23 +2355,12 @@
       "size": [
         496,
         18,
-        693
+        1044
       ],
-      "hinge": "right"
-    },
-    {
-      "name": "door upper",
-      "pos": [
-        353,
-        1720,
-        2150
-      ],
-      "size": [
-        496,
-        18,
-        347
-      ],
-      "hinge": "right"
+      "hinge": "right",
+      "profile": "arch",
+      "handle": "knob",
+      "material": "746 MAT"
     },
     {
       "name": "side",
@@ -2464,7 +2503,7 @@
       ]
     },
     {
-      "name": "divider",
+      "name": "shelf",
       "pos": [
         870,
         1740,
@@ -2477,7 +2516,7 @@
       ]
     },
     {
-      "name": "door lower",
+      "name": "door wall",
       "pos": [
         855,
         1720,
@@ -2486,12 +2525,15 @@
       "size": [
         395,
         18,
-        693
+        1044
       ],
-      "hinge": "left"
+      "hinge": "left",
+      "profile": "arch",
+      "handle": "knob",
+      "material": "746 MAT"
     },
     {
-      "name": "door lower",
+      "name": "door wall",
       "pos": [
         1254,
         1720,
@@ -2500,37 +2542,12 @@
       "size": [
         395,
         18,
-        693
+        1044
       ],
-      "hinge": "right"
-    },
-    {
-      "name": "door upper",
-      "pos": [
-        855,
-        1720,
-        2150
-      ],
-      "size": [
-        395,
-        18,
-        347
-      ],
-      "hinge": "left"
-    },
-    {
-      "name": "door upper",
-      "pos": [
-        1254,
-        1720,
-        2150
-      ],
-      "size": [
-        395,
-        18,
-        347
-      ],
-      "hinge": "right"
+      "hinge": "right",
+      "profile": "arch",
+      "handle": "knob",
+      "material": "746 MAT"
     },
     {
       "name": "side",
@@ -2673,7 +2690,7 @@
       ]
     },
     {
-      "name": "divider",
+      "name": "shelf",
       "pos": [
         1670,
         1740,
@@ -2686,7 +2703,7 @@
       ]
     },
     {
-      "name": "door lower",
+      "name": "door wall",
       "pos": [
         1655,
         1720,
@@ -2695,23 +2712,12 @@
       "size": [
         594,
         18,
-        693
+        1044
       ],
-      "hinge": "left"
-    },
-    {
-      "name": "door upper",
-      "pos": [
-        1655,
-        1720,
-        2150
-      ],
-      "size": [
-        594,
-        18,
-        347
-      ],
-      "hinge": "left"
+      "hinge": "left",
+      "profile": "arch",
+      "handle": "knob",
+      "material": "746 MAT"
     },
     {
       "name": "side",
@@ -2854,7 +2860,7 @@
       ]
     },
     {
-      "name": "divider",
+      "name": "shelf",
       "pos": [
         2270,
         1740,
@@ -2867,7 +2873,7 @@
       ]
     },
     {
-      "name": "door lower",
+      "name": "door wall",
       "pos": [
         2255,
         1720,
@@ -2876,23 +2882,12 @@
       "size": [
         594,
         18,
-        693
+        1044
       ],
-      "hinge": "right"
-    },
-    {
-      "name": "door upper",
-      "pos": [
-        2255,
-        1720,
-        2150
-      ],
-      "size": [
-        594,
-        18,
-        347
-      ],
-      "hinge": "right"
+      "hinge": "right",
+      "profile": "arch",
+      "handle": "knob",
+      "material": "746 MAT"
     },
     {
       "name": "side",
@@ -3035,7 +3030,7 @@
       ]
     },
     {
-      "name": "divider",
+      "name": "shelf",
       "pos": [
         2870,
         1740,
@@ -3048,7 +3043,7 @@
       ]
     },
     {
-      "name": "door lower",
+      "name": "door wall",
       "pos": [
         2855,
         1720,
@@ -3057,12 +3052,15 @@
       "size": [
         417,
         18,
-        693
+        1044
       ],
-      "hinge": "left"
+      "hinge": "left",
+      "profile": "arch",
+      "handle": "knob",
+      "material": "746 MAT"
     },
     {
-      "name": "door lower",
+      "name": "door wall",
       "pos": [
         3276,
         1720,
@@ -3071,37 +3069,12 @@
       "size": [
         417,
         18,
-        693
+        1044
       ],
-      "hinge": "right"
-    },
-    {
-      "name": "door upper",
-      "pos": [
-        2855,
-        1720,
-        2150
-      ],
-      "size": [
-        417,
-        18,
-        347
-      ],
-      "hinge": "left"
-    },
-    {
-      "name": "door upper",
-      "pos": [
-        3276,
-        1720,
-        2150
-      ],
-      "size": [
-        417,
-        18,
-        347
-      ],
-      "hinge": "right"
+      "hinge": "right",
+      "profile": "arch",
+      "handle": "knob",
+      "material": "746 MAT"
     },
     {
       "name": "wall filler",
@@ -3114,7 +3087,8 @@
         18,
         27,
         1044
-      ]
+      ],
+      "material": "746 MAT"
     },
     {
       "name": "filler cleat",
@@ -3291,7 +3265,7 @@
         40
       ],
       "appliance": true,
-      "color": "#b9bec4",
+      "color": "#1b1d20",
       "metal": true
     },
     {
@@ -3307,7 +3281,10 @@
         1004
       ],
       "face": "+x",
-      "hinge": "left"
+      "hinge": "left",
+      "profile": "arch",
+      "handle": "knob",
+      "material": "746 MAT"
     },
     {
       "name": "side",
@@ -3450,7 +3427,7 @@
       ]
     },
     {
-      "name": "divider",
+      "name": "shelf",
       "pos": [
         25,
         684,
@@ -3463,7 +3440,7 @@
       ]
     },
     {
-      "name": "door lower",
+      "name": "door wall",
       "pos": [
         332,
         669,
@@ -3472,13 +3449,16 @@
       "size": [
         18,
         439,
-        693
+        1044
       ],
       "face": "+x",
-      "hinge": "left"
+      "hinge": "left",
+      "profile": "arch",
+      "handle": "knob",
+      "material": "746 MAT"
     },
     {
-      "name": "door lower",
+      "name": "door wall",
       "pos": [
         332,
         1112,
@@ -3487,40 +3467,13 @@
       "size": [
         18,
         469,
-        693
+        1044
       ],
       "face": "+x",
-      "hinge": "right"
-    },
-    {
-      "name": "door upper",
-      "pos": [
-        332,
-        669,
-        2150
-      ],
-      "size": [
-        18,
-        439,
-        347
-      ],
-      "face": "+x",
-      "hinge": "left"
-    },
-    {
-      "name": "door upper",
-      "pos": [
-        332,
-        1112,
-        2150
-      ],
-      "size": [
-        18,
-        469,
-        347
-      ],
-      "face": "+x",
-      "hinge": "right"
+      "hinge": "right",
+      "profile": "arch",
+      "handle": "knob",
+      "material": "746 MAT"
     },
     {
       "name": "side",
@@ -3700,7 +3653,10 @@
         18,
         594
       ],
-      "hinge": "left"
+      "hinge": "left",
+      "handle": "knob",
+      "material": "746 MAT",
+      "profile": "arch"
     },
     {
       "name": "door fridge bay",
@@ -3714,7 +3670,10 @@
         18,
         594
       ],
-      "hinge": "right"
+      "hinge": "right",
+      "handle": "knob",
+      "material": "746 MAT",
+      "profile": "arch"
     },
     {
       "name": "wall filler",
@@ -3727,7 +3686,8 @@
         27,
         18,
         594
-      ]
+      ],
+      "material": "746 MAT"
     },
     {
       "name": "filler cleat",
@@ -3753,7 +3713,8 @@
         1874,
         18,
         100
-      ]
+      ],
+      "material": "746 MAT"
     },
     {
       "name": "filler backer front",
@@ -3779,7 +3740,8 @@
         18,
         214,
         100
-      ]
+      ],
+      "material": "746 MAT"
     },
     {
       "name": "top filler front",
@@ -3792,7 +3754,8 @@
         1902,
         18,
         100
-      ]
+      ],
+      "material": "746 MAT"
     },
     {
       "name": "top filler front",
@@ -3805,7 +3768,8 @@
         1444,
         18,
         100
-      ]
+      ],
+      "material": "746 MAT"
     },
     {
       "name": "filler backer front",
@@ -3844,7 +3808,8 @@
         18,
         1584,
         100
-      ]
+      ],
+      "material": "746 MAT"
     },
     {
       "name": "filler backer front",

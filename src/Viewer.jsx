@@ -1,7 +1,7 @@
 import { createContext, memo, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, OrthographicCamera, Html, Edges } from '@react-three/drei';
-import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, Path, ExtrudeGeometry, BoxGeometry, BufferAttribute, Color, MeshStandardMaterial } from 'three';
+import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, Path, ExtrudeGeometry, ShapeGeometry, BoxGeometry, BufferAttribute, Color, MeshStandardMaterial } from 'three';
 import { aabbOf, pieceLocalBBox, walkMove, walkObstacles, frontFrame } from './geometry.js';
 import { TOUR, createTour, tickTour, endTour, resolveTarget, doorGeometry, entranceSpawn } from './tour.js';
 import { partColor } from './materials.js';
@@ -18,6 +18,10 @@ const WALL_PAINT = '#fdf4e3'; // default; apartment.wallColor or a wall's own co
 // Three.js is y-up, meters. Mapping: three.x = x, three.y = z, three.z = -y.
 // (z must be NEGATED: three.z = +y flips handedness and mirrors the plan.)
 const S = 1 / 1000;
+// Bar handles and knobs are drawn in brushed grey unless the front names
+// its own finish: "handleColor": "#1b1d20" (render-only, like "handle").
+const HANDLE_METAL = '#9aa0a8';
+const handleColor = (part) => part.handleColor || HANDLE_METAL;
 
 const cm = (mm) => {
   const v = mm / 10;
@@ -1148,8 +1152,20 @@ function Door({ part, attachments = [], color, bbox, hovered, openable, showHand
   // Vertical bar handle on the free edge, at grab height: ~1050mm from the
   // floor where the leaf allows, else clamped toward the reachable edge (base
   // doors get it near their top, wall/upper doors near their bottom).
+  // "handle": "knob" swaps it for a small round knob 55 mm in from the free
+  // edge, low on a wall door (70 mm up from its bottom edge) and high on a
+  // base door (70 mm under its top edge), centred on a short one.
+  const knob = part.handle === 'knob';
   const handle = useMemo(() => {
     const zTop = z0 + h;
+    if (knob) {
+      const cx = hingeLeft ? w - 55 : -w + 55;
+      const zc = h < 320 ? z0 + h / 2 : z0 >= 1000 ? z0 + 70 : zTop - 70;
+      return {
+        head: { name: 'knob', pos: [cx - 13, -(t + 24), zc - 13], size: [26, 14, 26], disc: true, metal: true },
+        neck: { name: 'knob neck', pos: [cx - 5, -(t + 10), zc - 5], size: [10, 10, 10], disc: true, metal: true },
+      };
+    }
     const zc = h < 320 ? z0 + h / 2 : Math.min(Math.max(1050, z0 + 120), zTop - 120);
     const len = Math.min(160, h - 60);
     return {
@@ -1158,7 +1174,31 @@ function Door({ part, attachments = [], color, bbox, hovered, openable, showHand
       size: [12, 30, len],
       metal: true,
     };
-  }, [w, t, h, z0, hingeLeft]);
+  }, [w, t, h, z0, hingeLeft, knob]);
+
+  // "profile": "arch" — a routed groove on the leaf face tracing a tall
+  // arch (semicircular top and bottom) 50 mm in from the edges, drawn as an
+  // 8 mm ring in a darker shade of the decor just proud of the face. The
+  // ends go fully round when the arch is at least twice as tall as wide;
+  // on a wide short leaf the corner radius stops at a quarter of the height.
+  // Render-only: the cut list still sees a plain 18 mm front.
+  const profile = part.profile === 'arch';
+  const profileGeom = useMemo(() => {
+    if (!profile) return null;
+    const inset = 50;
+    const g = 8;
+    const pw = w - 2 * inset;
+    const ph = h - 2 * inset;
+    if (pw < 4 * g || ph < 4 * g) return null;
+    const r = Math.min(pw / 2, ph / 4);
+    const x0 = (-hx + inset) * S;
+    const y0 = (z0 + inset) * S;
+    const shape = roundedRect(Shape, x0, y0, pw * S, ph * S, r * S);
+    shape.holes.push(roundedRect(Path, x0 + g * S, y0 + g * S, (pw - 2 * g) * S, (ph - 2 * g) * S, Math.max(0, r - g) * S));
+    return new ShapeGeometry(shape, 32);
+  }, [profile, w, h, z0, hx]);
+  useEffect(() => () => profileGeom?.dispose(), [profileGeom]);
+  const grooveColor = useMemo(() => (profile ? `#${new Color(color).multiplyScalar(0.74).getHexString()}` : null), [profile, color]);
 
   // Euro hinges on the hinge edge, in three real parts. On the leaf: a 35 mm
   // cup bored 12 mm into its inner face (K 4.5 from the edge), the only part
@@ -1190,7 +1230,17 @@ function Door({ part, attachments = [], color, bbox, hovered, openable, showHand
         {hingeSets.map((hs, i) => (
           <LocalBox key={`h${i}`} part={hs.cup} color="#6f757c" hovered={hovered} {...handlers} />
         ))}
-        {showHandle && <LocalBox part={handle} color="#9aa0a8" hovered={hovered || handleHot} {...handlers} />}
+        {profileGeom && (
+          <mesh
+            position={[0, 0, (t + 0.4) * S]}
+            geometry={profileGeom}
+            material={sharedMaterial({ color: grooveColor, hovered })}
+            {...handlers}
+          />
+        )}
+        {showHandle && knob && <LocalBox part={handle.head} color={part.handleColor || '#2a2a2c'} hovered={hovered || handleHot} {...handlers} />}
+        {showHandle && knob && <LocalBox part={handle.neck} color={part.handleColor || '#2a2a2c'} hovered={hovered || handleHot} {...handlers} />}
+        {showHandle && !knob && <LocalBox part={handle} color={handleColor(part)} hovered={hovered || handleHot} {...handlers} />}
         {riders.map((a, i) => (
           <LocalBox
             key={i}
@@ -1246,7 +1296,7 @@ function Flap({ part, color, hovered, openable }) {
     <group position={[origin[0] * S, 0, -origin[1] * S]} rotation={[0, MathUtils.degToRad(alpha), 0]}>
       <group ref={ref} position={[0, z0 * S, 0]}>
         <LocalBox part={shifted} color={color} hovered={hovered} {...handlers} />
-        <LocalBox part={handle} color="#9aa0a8" hovered={hovered} {...handlers} />
+        <LocalBox part={handle} color={handleColor(part)} hovered={hovered} {...handlers} />
       </group>
     </group>
   );
@@ -1579,7 +1629,7 @@ const Placement = memo(function Placement({ entry, collided, showClearances, hov
                     hovered={hovered}
                   />
                 ))}
-                <LocalBox part={barHandle(p)} color="#9aa0a8" hovered={hovered} />
+                <LocalBox part={barHandle(p)} color={handleColor(p)} hovered={hovered} />
               </Drawer>
             );
           }
@@ -2409,7 +2459,7 @@ export function PieceViewer({ piece, highlight, onHoverPart, hideAppliances = fa
                   />
                 </group>
               ))}
-              <LocalBox part={barHandle(p)} color="#9aa0a8" hovered={hover === i || highlight?.has(i)} />
+              <LocalBox part={barHandle(p)} color={handleColor(p)} hovered={hover === i || highlight?.has(i)} />
             </Drawer>
           );
         }
@@ -2441,7 +2491,7 @@ export function PieceViewer({ piece, highlight, onHoverPart, hideAppliances = fa
             ) : drawers.has(i) ? (
               <group>
                 <LocalBox part={p} color={partColor(p, piece)} opacity={p.opacity ?? 1} hovered={lit} />
-                {handlesOn && <LocalBox part={barHandle(p)} color="#9aa0a8" hovered={lit || handlesHot} />}
+                {handlesOn && <LocalBox part={barHandle(p)} color={handleColor(p)} hovered={lit || handlesHot} />}
               </group>
             ) : (
               <LocalBox part={p} color={partColor(p, piece)} opacity={p.opacity ?? 1} hovered={lit} />

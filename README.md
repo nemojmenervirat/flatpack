@@ -102,7 +102,9 @@ is actually built, so the cut list can go straight to the board shop:
   by 20 mm. Oven housing: a drawer below, the oven on a fixed shelf in a 600 niche up to the worktop, no rails (hob body above, oven behind; worktop on angle brackets) and no back.
 - **Legs and plinth**: the same 120 mm adjustable legs as the wardrobes, wound down to a
   100 mm plinth (carcass top 900, worktop 938), 4 per cabinet (6 over 1200 wide), 40 mm in
-  from the sides; plinth recessed 50 mm, none in front of the dishwasher. The dishwasher
+  from the sides; plinth recessed 50 mm and continuous, also in front of the dishwasher: the
+  dishwasher's base (bottom 100 mm) is modelled set back 50 mm so the plinth passes
+  in front of it, and the panel bottom at 103 clears the plinth top. The dishwasher
   must be a built-in model that adjusts down to 815 mm.
 - **Fronts**: 18 mm, 3 mm reveal at cabinet edges, 4 mm between fronts. Drawer boxes
   450 deep for the 450 roller runners, 13 mm runner clearance per side, 250 high boxes
@@ -113,6 +115,19 @@ is actually built, so the cut list can go straight to the board shop:
   top at 2500 so a 100 mm top filler with a backer closes the gap to the 2600 ceiling.
   HDF sits 20 mm in from the back edge; a 100 mm hanger rail and two hangers per
   cabinet hook a steel wall rail in that recess. Doors over 900 high get 3 hinges.
+  Every wall-cabinet door is one full-height leaf (1453–2497, 1044 high; the hood
+  and fridge-bay doors keep their own heights) in cream super-mat MDF (`746 MAT`,
+  Arkopa, 2800 × 1220) with a routed arch groove (`"profile": "arch"`: a tall
+  stadium 50 mm in from the edges) and a black 26 mm knob low on the free edge
+  (`"handle": "knob"`) — the tall unit's upper door, the wall fillers, the
+  corner panel and the top fillers match so the upper band reads as one run.
+  The groove is only possible in MDF; the board is laminated on one side, so
+  the groove needs painting (or order the fronts lacquered).
+  The tall unit (both doors) and the fridge-bay doors follow the same cream arched
+  design, so everything above the worktop reads as one run. Base fronts, plinths and
+  the corner/wall fillers at base level are the same walnut with black bars
+  (`"handleColor"`); the worktop is white marble (`F800 ST9`, 600 × 38); the hood
+  visor is black like the tap.
 - **Fillers**: 30 mm scribe filler with a cleat at every wall end so doors clear the plaster.
 - **Appliances** (`"appliance": true`) are modelled at their real installation sizes: AEG
   oven 559 × 548 × 576 with 595 × 594 fascia, 583 × 513 hob over a 560 × 490 cutout,

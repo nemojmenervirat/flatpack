@@ -76,9 +76,13 @@ export function hardwareList(piece) {
   }
   const hinges = [...hingeGroups.values()];
   const hingesTotal = hinges.reduce((n, g) => n + g.doors * g.perDoor, 0);
-  // one bar handle per door leaf, drawer front and (non-appliance) flap - the viewer draws them
+  // one bar handle per door leaf, drawer front and (non-appliance) flap - the
+  // viewer draws them; a door leaf with "handle": "knob" takes a knob instead
+  const isLeaf = (p) => p.name.startsWith('door') && !p.name.startsWith('door bin');
+  const knobs = parts.filter((p) => isLeaf(p) && p.handle === 'knob').length;
   const handles =
-    hinges.reduce((n, g) => n + g.doors, 0) +
+    hinges.reduce((n, g) => n + g.doors, 0) -
+    knobs +
     parts.filter((p) => p.name.startsWith('drawer front') || (p.name.startsWith('flap') && !p.appliance)).length;
 
   const bottoms = parts.filter((p) => p.name === 'drawer bottom');
@@ -123,6 +127,7 @@ export function hardwareList(piece) {
     hinges,
     hingesTotal,
     handles,
+    knobs,
     drawers: runnerHw ? 0 : drawers,
     slideBoxDepth,
     shelves,
@@ -150,6 +155,7 @@ export function hardwareRows(piece) {
     push(hw.hingesTotal, 'hinge', `${doors} door${doors > 1 ? 's' : ''}, ${per} per door`);
   }
   if (hw.handles) push(hw.handles, 'handle', 'one per door leaf and drawer front');
+  if (hw.knobs) push(hw.knobs, 'knob', 'one per door leaf with "handle": "knob"');
   if (hw.drawers) push(hw.drawers, 'drawer slide pair', hw.slideBoxDepth ? `box depth ${hw.slideBoxDepth}` : '');
   if (hw.shelves && !(piece.parts || []).some((p) => p.hardware && p.name.includes('shelf pin')))
     push(hw.shelfPins, 'shelf support', `${hw.shelves} shelves × 4`);
@@ -342,6 +348,7 @@ export function priceEstimate(piece) {
   };
   derived('hinge', hw.hingesTotal);
   derived('handle', hw.handles);
+  derived('knob', hw.knobs);
   derived('drawer slide pair', hw.drawers);
   derived('shelf support', hw.shelfPins);
   if (![...hardware.keys()].some((k) => k.includes('hook'))) derived('coat hook', hw.hooks);
