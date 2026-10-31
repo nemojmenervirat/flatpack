@@ -1,0 +1,14 @@
+{
+  "id": "dining-chair",
+  "name": "Dining chair",
+  "buildable": false,
+  "color": "#6f5a40",
+  "parts": [
+    { "name": "chair leg", "pos": [30, 30, 0], "size": [35, 35, 420] },
+    { "name": "chair leg", "pos": [385, 30, 0], "size": [35, 35, 420] },
+    { "name": "chair leg", "pos": [30, 385, 0], "size": [35, 35, 420] },
+    { "name": "chair leg", "pos": [385, 385, 0], "size": [35, 35, 420] },
+    { "name": "chair seat", "pos": [25, 25, 420], "size": [400, 400, 30], "color": "#a39b88" },
+    { "name": "chair backrest", "pos": [25, 415, 450], "size": [400, 35, 480] }
+  ]
+}

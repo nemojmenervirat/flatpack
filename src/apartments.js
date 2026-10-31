@@ -1,25 +1,17 @@
 // The apartment registry. Every folder under src/data/apartments is one flat,
 // named by the folder: apartment.json (walls, openings, floors) and scene.json
 // (placements) are required; rooms.json (room polygons for the m² overlay),
-// tour.js (the guided walk) and pieces/ (furniture built for this flat only)
-// are optional. src/data/pieces is the shared catalogue of bought furniture.
-// Nothing is registered by hand — drop the files in and they are picked up.
+// tour.js (the guided walk) and pieces/ (every piece the scene places, bought
+// or built — there is no shared catalogue, so restyling a piece in one flat
+// never touches another) are optional. Nothing is registered by hand — drop
+// the files in and they are picked up.
 //
-// Each entry carries everything the app needs for one flat, including a piece
-// map that merges the flat's own pieces with the catalogue pieces its scene
-// places. Piece ids are unique across the whole project (a catalogue piece and
-// a local piece may not share an id) so cut-list exports and tour selectors
-// never depend on which apartment is open.
-const catalogue = Object.values(import.meta.glob('./data/pieces/*.json', { eager: true, import: 'default' }));
+// Each entry carries everything the app needs for one flat, including its
+// piece map. Piece ids are unique within a flat; two flats may each have their
+// own copy of the same id.
 const files = import.meta.glob('./data/apartments/*/*.json', { eager: true, import: 'default' });
 const tours = import.meta.glob('./data/apartments/*/tour.js', { eager: true, import: 'tour' });
 const local = import.meta.glob('./data/apartments/*/pieces/*.json', { eager: true, import: 'default' });
-
-const catalogueById = {};
-for (const p of catalogue) {
-  if (catalogueById[p.id]) throw new Error(`Duplicate catalogue piece id: ${p.id}`);
-  catalogueById[p.id] = p;
-}
 
 const folderOf = (path) => path.split('/apartments/')[1].split('/')[0];
 const ids = [...new Set(Object.keys(files).map(folderOf))].sort();
@@ -33,14 +25,10 @@ export const apartments = ids.map((id) => {
   for (const [path, p] of Object.entries(local)) {
     if (folderOf(path) !== id) continue;
     if (piecesById[p.id]) throw new Error(`${id}: duplicate piece id ${p.id}`);
-    if (catalogueById[p.id]) throw new Error(`${id}: piece id ${p.id} clashes with the shared catalogue`);
     piecesById[p.id] = p;
   }
-  for (const pl of scene.placements) {
-    if (piecesById[pl.piece]) continue;
-    if (!catalogueById[pl.piece]) throw new Error(`${id}: scene places unknown piece ${pl.piece}`);
-    piecesById[pl.piece] = catalogueById[pl.piece];
-  }
+  for (const pl of scene.placements)
+    if (!piecesById[pl.piece]) throw new Error(`${id}: scene places unknown piece ${pl.piece}`);
   return {
     id,
     name: apartment.name || id,

@@ -50,16 +50,18 @@ view is read-only.** When he asks for a new piece or a change, edit the JSON.
   `node scripts/check-tour.mjs <id>` — it replays the tour against the real obstacle
   boxes and fails on stuck steps. `node scripts/check-areas.mjs <id>` audits rooms.json.
 - `src/apartments.js` — the registry. Globs `src/data/apartments/*/` (one folder per
-  flat, folder name = id) and `src/data/pieces/`; **nothing is registered by hand**.
+  flat, folder name = id); **nothing is registered by hand**.
 - `src/data/apartments/<id>/` — `apartment.json` + `scene.json` (required),
-  `rooms.json`, `tour.js` (optional), `pieces/` = furniture built for that flat.
+  `rooms.json`, `tour.js` (optional), `pieces/` = every piece the flat places,
+  built or bought. **There is no shared catalogue**: each flat owns its own copy of
+  a piece (two flats may both have a `dining-chair.json`), so restyling one flat
+  never changes another. Ids are unique within a flat.
   `apartment.json` may carry `"electricity"`: the electrical plan as points
   (lights, switches, sockets… — types in README.md), drawn as fittings by the
   ⚡ toggle.
   The current flat is `l2-39`.
-- `src/data/pieces/` — bought catalogue shared by every flat (beds, fridge, sanitary).
-  New furniture = new JSON file in the flat's `pieces/` (custom builds) or here
-  (generic bought items); file name = piece `id`, ids unique project-wide.
+- New furniture = new JSON file in the flat's `pieces/`; file name = piece `id`. To
+  reuse a piece from another flat, copy the file over.
 - `src/data/hardware.json` = bought hardware by part name (product + KM per piece)
   for parts flagged `"hardware": true`. Global, like materials.json.
 - `src/materials.js` + `src/data/materials.json` — the real-board registry (Elgrad

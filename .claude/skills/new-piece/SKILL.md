@@ -6,9 +6,9 @@ description: Create a new furniture piece for flatpack — design the JSON, plac
 # Creating a new furniture piece
 
 The JSON is the source of truth; the 3D view is read-only. A new piece means:
-piece JSON in the flat's `src/data/apartments/<id>/pieces/` (custom builds) or in the
-shared catalogue `src/data/pieces/` (generic bought items), a placement in that flat's
-`scene.json`, verification via `geometry.js`. Nothing is registered by hand —
+piece JSON in the flat's `src/data/apartments/<id>/pieces/` (built and bought alike —
+there is no shared catalogue; to reuse a piece from another flat, copy its file), a
+placement in that flat's `scene.json`, verification via `geometry.js`. Nothing is registered by hand —
 `src/apartments.js` globs the folders. Confirm which flat when more than one exists
 (today: `l2-39`).
 
@@ -24,7 +24,7 @@ shared catalogue `src/data/pieces/` (generic bought items), a placement in that 
    world footprint.
 3. Author the piece JSON (schema + construction rules below).
 4. Place it in the flat's `scene.json`. File name must equal the piece `id`, and ids
-   are unique across the whole project (catalogue + every flat).
+   are unique within the flat.
 5. **Verify with the check command** (below) — fit report must be clean and parts must
    not overlap each other. Also hand-check that cut sizes add up to the outer size.
 
@@ -137,7 +137,7 @@ confirm against which bed/label he means — historically "room 1" ≈ `room5`.
 
 ## Reference pieces
 
-All in `src/data/apartments/l2-39/pieces/` except `bed-90.json` (`src/data/pieces/`).
+All in `src/data/apartments/l2-39/pieces/`.
 
 - `wardrobe-hall.json` — cleanest carcass (partition, shelf column, two-tier doors).
 - `kitchen.json` — the whole kitchen as one L-piece (bases + uppers, two runs): uses

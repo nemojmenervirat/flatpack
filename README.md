@@ -27,18 +27,18 @@ the overlay toggles and the piece list.
 
 ## How it works
 
-Everything lives under `src/data/`, one folder per apartment plus a shared catalogue:
+Everything lives under `src/data/`, one folder per apartment:
 
 ```
 src/data/
-  pieces/               bought furniture shared by every flat (bed-90.json, fridge.json, …)
   materials.json        board registry (generated), hardware.json — global
   apartments/<id>/      one folder per flat; the folder name is the apartment id
     apartment.json      walls, floor, door/window openings — all boxes
     scene.json          which pieces go where
     rooms.json          room polygons for the m² overlay (optional)
     tour.js             the guided walk (optional)
-    pieces/             furniture built for this flat only (wardrobes, the kitchen, …)
+    pieces/             every piece this flat places — built (wardrobes, the kitchen, …)
+                        and bought (bed-90.json, fridge.json, …)
 ```
 
 Nothing is registered by hand: `src/apartments.js` picks up every folder and every
@@ -69,12 +69,14 @@ piece file. A new apartment is a folder with `apartment.json` and `scene.json`.
   12 cm partitions 150, and outer walls carry the 15 mm only on the flat's side
   (loggia-facing faces are left at the bare size). Furniture is sized against
   these finished faces, so no extra allowance for plaster is needed.
-- **piece files** — one file per furniture piece, named by its `id`. Ids are unique
-  across the whole project.
+- **piece files** — one file per furniture piece, named by its `id`, in the flat's
+  own `pieces/`. There is no shared catalogue: a piece used in two flats is two
+  files, so restyling it in one flat leaves the other alone. Ids are unique within
+  a flat.
   - Buildable pieces have `parts`: every panel with its size and position. Cut lists
-    come from these. They live in the flat's own `pieces/`.
+    come from these.
   - Bought pieces (bed, sofa, fridge) are just an outer `size`. They participate in
-    fit checks but have no cut list. They live in the shared `src/data/pieces/`.
+    fit checks but have no cut list.
 - **scene.json** — which pieces go where: `{ "piece": "wardrobe", "pos": [200, 2900, 0], "rot": 0 }`.
 
 The app computes:

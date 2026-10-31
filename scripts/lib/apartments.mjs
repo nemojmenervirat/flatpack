@@ -1,6 +1,6 @@
 // Node-side twin of src/apartments.js: list the apartments under
-// src/data/apartments and load one the way the app does (its own pieces plus
-// the shared catalogue pieces its scene places). Piece files are named by id.
+// src/data/apartments and load one the way the app does (every piece its
+// scene places comes from the flat's own pieces/). Piece files are named by id.
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -22,10 +22,9 @@ export async function loadApartment(id) {
   const scene = json(join(dir, 'scene.json'));
   const piecesById = {};
   for (const pid of new Set(scene.placements.map((p) => p.piece))) {
-    const local = join(dir, 'pieces', pid + '.json');
-    const shared = join(dataDir, 'pieces', pid + '.json');
-    if (!existsSync(local) && !existsSync(shared)) throw new Error(`${id}: scene places unknown piece ${pid}`);
-    piecesById[pid] = json(existsSync(local) ? local : shared);
+    const file = join(dir, 'pieces', pid + '.json');
+    if (!existsSync(file)) throw new Error(`${id}: scene places unknown piece ${pid}`);
+    piecesById[pid] = json(file);
   }
   const tourPath = join(dir, 'tour.js');
   const tour = existsSync(tourPath) ? (await import(pathToFileURL(tourPath).href)).tour : null;
