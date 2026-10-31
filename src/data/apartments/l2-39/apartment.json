@@ -2216,5 +2216,956 @@
         2600
       ]
     }
+  ],
+  "electricity": [
+    {
+      "name": "kitchen W",
+      "circuit": "9.4",
+      "type": "ceiling",
+      "pos": [
+        1545,
+        5975,
+        2600
+      ]
+    },
+    {
+      "name": "kitchen E",
+      "circuit": "9.4",
+      "type": "ceiling",
+      "pos": [
+        4350,
+        5975,
+        2600
+      ]
+    },
+    {
+      "name": "dining",
+      "circuit": "9.3",
+      "type": "ceiling",
+      "pos": [
+        2900,
+        4965,
+        2600
+      ]
+    },
+    {
+      "name": "living",
+      "circuit": "9.2",
+      "type": "ceiling",
+      "pos": [
+        2940,
+        3145,
+        2600
+      ]
+    },
+    {
+      "name": "loggia 4",
+      "circuit": "9.6",
+      "type": "ceiling",
+      "pos": [
+        4480,
+        605,
+        2600
+      ]
+    },
+    {
+      "name": "hall W",
+      "circuit": "9.1",
+      "type": "ceiling",
+      "pos": [
+        7310,
+        6135,
+        2600
+      ]
+    },
+    {
+      "name": "hall E",
+      "circuit": "9.1",
+      "type": "ceiling",
+      "pos": [
+        10250,
+        6135,
+        2600
+      ]
+    },
+    {
+      "name": "room 5",
+      "circuit": "10.1",
+      "type": "ceiling",
+      "pos": [
+        7395,
+        2555,
+        2600
+      ]
+    },
+    {
+      "name": "room 6",
+      "circuit": "10.3",
+      "type": "ceiling",
+      "pos": [
+        10260,
+        3170,
+        2600
+      ]
+    },
+    {
+      "name": "loggia 7",
+      "circuit": "10.3",
+      "type": "ceiling",
+      "pos": [
+        10455,
+        690,
+        2600
+      ]
+    },
+    {
+      "name": "master N",
+      "circuit": "10.5",
+      "type": "ceiling",
+      "pos": [
+        13295,
+        4510,
+        2600
+      ]
+    },
+    {
+      "name": "master S",
+      "circuit": "10.6",
+      "type": "ceiling",
+      "pos": [
+        13295,
+        1590,
+        2600
+      ]
+    },
+    {
+      "name": "WC",
+      "circuit": "7.1",
+      "type": "ceiling",
+      "pos": [
+        10555,
+        8100,
+        2600
+      ]
+    },
+    {
+      "name": "bath",
+      "circuit": "7.4",
+      "type": "ceiling",
+      "pos": [
+        13305,
+        7770,
+        2600
+      ]
+    },
+    {
+      "name": "living TV wall S",
+      "circuit": "9.5",
+      "type": "wall",
+      "pos": [
+        5783,
+        2230,
+        1500
+      ],
+      "face": "-x"
+    },
+    {
+      "name": "living TV wall N",
+      "circuit": "9.5",
+      "type": "wall",
+      "pos": [
+        5783,
+        4270,
+        1500
+      ],
+      "face": "-x"
+    },
+    {
+      "name": "living west",
+      "circuit": "12a",
+      "type": "wall",
+      "pos": [
+        213,
+        619,
+        1500
+      ],
+      "face": "+x"
+    },
+    {
+      "name": "room 5 bed",
+      "circuit": "10.2",
+      "type": "wall",
+      "pos": [
+        7262,
+        5073,
+        1500
+      ],
+      "face": "-y"
+    },
+    {
+      "name": "room 6 bed",
+      "circuit": "10.4",
+      "type": "wall",
+      "pos": [
+        10232,
+        5073,
+        1500
+      ],
+      "face": "-y"
+    },
+    {
+      "name": "master bed",
+      "circuit": "",
+      "type": "wall",
+      "pos": [
+        11812,
+        462,
+        1500
+      ],
+      "face": "+x"
+    },
+    {
+      "name": "WC mirror",
+      "circuit": "7.3",
+      "type": "wall",
+      "pos": [
+        10789,
+        9033,
+        1700
+      ],
+      "face": "-y"
+    },
+    {
+      "name": "bath mirror",
+      "circuit": "7.6",
+      "type": "wall",
+      "pos": [
+        12884,
+        9033,
+        1500
+      ],
+      "face": "-y"
+    },
+    {
+      "name": "bath basin",
+      "circuit": "7.7",
+      "type": "wall",
+      "pos": [
+        11822,
+        7603,
+        1700
+      ],
+      "face": "+x"
+    },
+    {
+      "name": "kitchen LED strip",
+      "circuit": "14a",
+      "type": "strip",
+      "pos": [
+        566,
+        6914,
+        1438
+      ],
+      "size": [
+        3340,
+        15,
+        8
+      ]
+    },
+    {
+      "name": "kitchen worktop W",
+      "circuit": "3",
+      "type": "socket",
+      "pos": [
+        737,
+        7234,
+        1200
+      ],
+      "face": "-y",
+      "gangs": 2
+    },
+    {
+      "name": "dishwasher",
+      "circuit": "2",
+      "type": "socket",
+      "pos": [
+        1406,
+        7234,
+        400
+      ],
+      "face": "-y",
+      "gangs": 1,
+      "label": "mašina za suđe"
+    },
+    {
+      "name": "kitchen feed",
+      "circuit": "14a",
+      "type": "outlet",
+      "pos": [
+        2830,
+        7234,
+        1200
+      ],
+      "face": "-y"
+    },
+    {
+      "name": "kitchen worktop E",
+      "circuit": "14",
+      "type": "socket",
+      "pos": [
+        3150,
+        7234,
+        1200
+      ],
+      "face": "-y",
+      "gangs": 2
+    },
+    {
+      "name": "LED feed",
+      "circuit": "14a",
+      "type": "outlet",
+      "pos": [
+        3750,
+        7234,
+        1600
+      ],
+      "face": "-y",
+      "label": "izvod za led"
+    },
+    {
+      "name": "oven",
+      "circuit": "14",
+      "type": "socket",
+      "pos": [
+        4821,
+        7234,
+        400
+      ],
+      "face": "-y",
+      "gangs": 1
+    },
+    {
+      "name": "fridge",
+      "circuit": "14",
+      "type": "socket",
+      "pos": [
+        5491,
+        7234,
+        400
+      ],
+      "face": "-y",
+      "gangs": 1
+    },
+    {
+      "name": "hood",
+      "circuit": "3",
+      "type": "socket",
+      "pos": [
+        213,
+        6397,
+        1700
+      ],
+      "face": "+x",
+      "gangs": 1
+    },
+    {
+      "name": "kitchen W low",
+      "circuit": "1",
+      "type": "socket",
+      "pos": [
+        213,
+        6107,
+        400
+      ],
+      "face": "+x",
+      "gangs": 1
+    },
+    {
+      "name": "kitchen W worktop",
+      "circuit": "3",
+      "type": "socket",
+      "pos": [
+        213,
+        5326,
+        1200
+      ],
+      "face": "+x",
+      "gangs": 2
+    },
+    {
+      "name": "kitchen stub",
+      "circuit": "12",
+      "type": "socket",
+      "pos": [
+        960,
+        4934,
+        400
+      ],
+      "face": "-y",
+      "gangs": 1
+    },
+    {
+      "name": "living W",
+      "circuit": "12",
+      "type": "socket",
+      "pos": [
+        213,
+        4455,
+        400
+      ],
+      "face": "+x",
+      "gangs": 1
+    },
+    {
+      "name": "living TV low",
+      "circuit": "11",
+      "type": "socket",
+      "pos": [
+        213,
+        2830,
+        400
+      ],
+      "face": "+x",
+      "gangs": 2,
+      "data": true
+    },
+    {
+      "name": "living TV high",
+      "circuit": "11",
+      "type": "socket",
+      "pos": [
+        213,
+        2830,
+        1400
+      ],
+      "face": "+x",
+      "gangs": 1,
+      "data": true
+    },
+    {
+      "name": "living wall light",
+      "circuit": "12a",
+      "type": "switch",
+      "pos": [
+        213,
+        619,
+        1100
+      ],
+      "face": "+x",
+      "gangs": 1
+    },
+    {
+      "name": "living S",
+      "circuit": "12",
+      "type": "socket",
+      "pos": [
+        560,
+        265,
+        400
+      ],
+      "face": "+y",
+      "gangs": 3,
+      "data": true
+    },
+    {
+      "name": "living lights",
+      "circuit": "9.2/9.3/9.4/9.5",
+      "type": "switch",
+      "pos": [
+        5783,
+        5437,
+        1100
+      ],
+      "face": "-x",
+      "gangs": 4
+    },
+    {
+      "name": "living E",
+      "circuit": "13",
+      "type": "socket",
+      "pos": [
+        5783,
+        4813,
+        400
+      ],
+      "face": "-x",
+      "gangs": 1
+    },
+    {
+      "name": "living SE",
+      "circuit": "13",
+      "type": "socket",
+      "pos": [
+        5402,
+        1613,
+        400
+      ],
+      "face": "+y",
+      "gangs": 1
+    },
+    {
+      "name": "loggia 4 light",
+      "circuit": "9.6",
+      "type": "switch",
+      "pos": [
+        3184,
+        1266,
+        1100
+      ],
+      "face": "-x",
+      "gangs": 1
+    },
+    {
+      "name": "loggia 4",
+      "circuit": "13",
+      "type": "socket",
+      "pos": [
+        5798,
+        1177,
+        400
+      ],
+      "face": "-x",
+      "gangs": 1
+    },
+    {
+      "name": "loggia 4 AC",
+      "circuit": "6",
+      "type": "outlet",
+      "pos": [
+        5798,
+        485,
+        2100
+      ],
+      "face": "-x",
+      "label": "izvod za klimu"
+    },
+    {
+      "name": "hall light W",
+      "circuit": "9.1",
+      "type": "switch",
+      "pos": [
+        5933,
+        5571,
+        1100
+      ],
+      "face": "+x",
+      "gangs": 1
+    },
+    {
+      "name": "hall",
+      "circuit": "18",
+      "type": "socket",
+      "pos": [
+        7419,
+        5214,
+        400
+      ],
+      "face": "+y",
+      "gangs": 1
+    },
+    {
+      "name": "hall light entrance",
+      "circuit": "9.1",
+      "type": "switch",
+      "pos": [
+        9182,
+        7234,
+        1100
+      ],
+      "face": "-y",
+      "gangs": 1
+    },
+    {
+      "name": "distribution board",
+      "circuit": "20",
+      "type": "board",
+      "pos": [
+        9405,
+        7224,
+        1500
+      ],
+      "face": "-y",
+      "label": "RT"
+    },
+    {
+      "name": "WC light + fan",
+      "circuit": "7.1/7.2",
+      "type": "switch",
+      "pos": [
+        10633,
+        7224,
+        1100
+      ],
+      "face": "-y",
+      "gangs": 2
+    },
+    {
+      "name": "entry",
+      "circuit": "13",
+      "type": "socket",
+      "pos": [
+        10633,
+        7224,
+        400
+      ],
+      "face": "-y",
+      "gangs": 1
+    },
+    {
+      "name": "bath lights + boiler",
+      "circuit": "7.4/7.5/7.6/6",
+      "type": "switch",
+      "pos": [
+        11671,
+        6107,
+        1100
+      ],
+      "face": "-x",
+      "gangs": 4
+    },
+    {
+      "name": "hall E",
+      "circuit": "18",
+      "type": "socket",
+      "pos": [
+        11671,
+        5460,
+        400
+      ],
+      "face": "-x",
+      "gangs": 1
+    },
+    {
+      "name": "hall light E",
+      "circuit": "9.1",
+      "type": "switch",
+      "pos": [
+        11581,
+        5259,
+        1100
+      ],
+      "face": "-x",
+      "gangs": 1
+    },
+    {
+      "name": "room 5 lights",
+      "circuit": "10.1/10.2",
+      "type": "switch",
+      "pos": [
+        7731,
+        5073,
+        1100
+      ],
+      "face": "-y",
+      "gangs": 2
+    },
+    {
+      "name": "room 5 door",
+      "circuit": "15",
+      "type": "socket",
+      "pos": [
+        7731,
+        5073,
+        400
+      ],
+      "face": "-y",
+      "gangs": 1
+    },
+    {
+      "name": "room 5 TV",
+      "circuit": "15",
+      "type": "socket",
+      "pos": [
+        8822,
+        3720,
+        1600
+      ],
+      "face": "-x",
+      "gangs": 2,
+      "data": true
+    },
+    {
+      "name": "room 5 desk",
+      "circuit": "15",
+      "type": "socket",
+      "pos": [
+        6325,
+        265,
+        400
+      ],
+      "face": "+y",
+      "gangs": 3,
+      "data": true
+    },
+    {
+      "name": "room 6 lights",
+      "circuit": "10.3/10.4",
+      "type": "switch",
+      "pos": [
+        9852,
+        5073,
+        1100
+      ],
+      "face": "-y",
+      "gangs": 2
+    },
+    {
+      "name": "room 6 door",
+      "circuit": "16",
+      "type": "socket",
+      "pos": [
+        9852,
+        5073,
+        400
+      ],
+      "face": "-y",
+      "gangs": 1
+    },
+    {
+      "name": "room 6 W",
+      "circuit": "16",
+      "type": "socket",
+      "pos": [
+        8972,
+        3696,
+        400
+      ],
+      "face": "+x",
+      "gangs": 1
+    },
+    {
+      "name": "room 6 TV",
+      "circuit": "16",
+      "type": "socket",
+      "pos": [
+        11581,
+        4299,
+        1600
+      ],
+      "face": "-x",
+      "gangs": 2,
+      "data": true
+    },
+    {
+      "name": "room 6 desk",
+      "circuit": "16",
+      "type": "socket",
+      "pos": [
+        11380,
+        1613,
+        400
+      ],
+      "face": "+y",
+      "gangs": 3,
+      "data": true
+    },
+    {
+      "name": "loggia 7",
+      "circuit": "16",
+      "type": "socket",
+      "pos": [
+        11596,
+        1088,
+        400
+      ],
+      "face": "-x",
+      "gangs": 1
+    },
+    {
+      "name": "loggia 7 AC",
+      "circuit": "21",
+      "type": "outlet",
+      "pos": [
+        11596,
+        440,
+        2100
+      ],
+      "face": "-x",
+      "label": "izvod za klimu"
+    },
+    {
+      "name": "WC",
+      "circuit": "19",
+      "type": "socket",
+      "pos": [
+        11671,
+        8629,
+        1300
+      ],
+      "face": "-x",
+      "gangs": 1
+    },
+    {
+      "name": "bath fan",
+      "circuit": "7.5",
+      "type": "fan",
+      "pos": [
+        11822,
+        8853,
+        2300
+      ],
+      "face": "+x"
+    },
+    {
+      "name": "bath",
+      "circuit": "19",
+      "type": "socket",
+      "pos": [
+        11822,
+        8116,
+        1500
+      ],
+      "face": "+x",
+      "gangs": 1
+    },
+    {
+      "name": "washing machine",
+      "circuit": "4",
+      "type": "socket",
+      "pos": [
+        13687,
+        6872,
+        1300
+      ],
+      "face": "+y",
+      "gangs": 1,
+      "label": "VM"
+    },
+    {
+      "name": "dryer",
+      "circuit": "5",
+      "type": "socket",
+      "pos": [
+        13977,
+        6872,
+        1300
+      ],
+      "face": "+y",
+      "gangs": 1,
+      "label": "MSV"
+    },
+    {
+      "name": "boiler",
+      "circuit": "6",
+      "type": "outlet",
+      "pos": [
+        14469,
+        6872,
+        1800
+      ],
+      "face": "+y",
+      "label": "bojler"
+    },
+    {
+      "name": "master lights",
+      "circuit": "10.5/10.6",
+      "type": "switch",
+      "pos": [
+        11812,
+        5080,
+        1100
+      ],
+      "face": "+x",
+      "gangs": 2
+    },
+    {
+      "name": "master door",
+      "circuit": "12",
+      "type": "socket",
+      "pos": [
+        11812,
+        5036,
+        400
+      ],
+      "face": "+x",
+      "gangs": 1
+    },
+    {
+      "name": "master TV",
+      "circuit": "17",
+      "type": "socket",
+      "pos": [
+        11812,
+        4366,
+        1600
+      ],
+      "face": "+x",
+      "gangs": 2,
+      "data": true
+    },
+    {
+      "name": "master bed N",
+      "circuit": "17",
+      "type": "socket",
+      "pos": [
+        14779,
+        5795,
+        600
+      ],
+      "face": "-x",
+      "gangs": 2
+    },
+    {
+      "name": "master bed S",
+      "circuit": "17",
+      "type": "socket",
+      "pos": [
+        14779,
+        3964,
+        600
+      ],
+      "face": "-x",
+      "gangs": 2
+    },
+    {
+      "name": "master wardrobe",
+      "circuit": "17",
+      "type": "socket",
+      "pos": [
+        12321,
+        3431,
+        400
+      ],
+      "face": "+x",
+      "gangs": 1
+    },
+    {
+      "name": "master wall light",
+      "circuit": "",
+      "type": "switch",
+      "pos": [
+        11812,
+        484,
+        1100
+      ],
+      "face": "+x",
+      "gangs": 1
+    },
+    {
+      "name": "master S",
+      "circuit": "17",
+      "type": "socket",
+      "pos": [
+        12214,
+        265,
+        400
+      ],
+      "face": "+y",
+      "gangs": 3,
+      "data": true
+    },
+    {
+      "name": "master W low",
+      "circuit": "17",
+      "type": "socket",
+      "pos": [
+        11812,
+        1620,
+        400
+      ],
+      "face": "+x",
+      "gangs": 1,
+      "data": true
+    }
   ]
 }

@@ -45,6 +45,7 @@ const ICONS = {
     </>
   ),
   materials: <path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" />,
+  electricity: <path d="M13 2L4 14h7l-1 8 9-12h-7z" />,
   home: <path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10" />,
   building: <path d="M3 21h18M5 21V4h9v17M14 9h5v12M8 8h2M8 12h2M8 16h2M16.5 13h.01M16.5 17h.01" />,
   plan: <path d="M3 3h18v18H3zM3 12h9M12 3v9M12 12v9M12 12h9M15 21v-4" />,
@@ -613,6 +614,7 @@ export default function App() {
   const [showSpaces, setShowSpaces] = useState(() => lsGet('flatpack.showSpaces', false)); // single-piece: label the storage spaces
   const [hotSpace, setHotSpace] = useState(null); // space row under the pointer
   const [hideAppliances, setHideAppliances] = useState(() => lsGet('flatpack.hideAppliances', false)); // single-piece: strip oven/sink/hob
+  const [showElectricity, setShowElectricity] = useState(() => lsGet('flatpack.showElectricity', false)); // the electrical plan layer
 
   useEffect(() => lsSet('flatpack.apartment', apartmentId), [apartmentId]);
   useEffect(() => lsSet('flatpack.view', view), [view]);
@@ -621,6 +623,7 @@ export default function App() {
   useEffect(() => lsSet('flatpack.showSpaces', showSpaces), [showSpaces]);
   useEffect(() => lsSet('flatpack.showAreas', showAreas), [showAreas]);
   useEffect(() => lsSet('flatpack.showPieces', showPieces), [showPieces]);
+  useEffect(() => lsSet('flatpack.showElectricity', showElectricity), [showElectricity]);
   useEffect(() => lsSet('flatpack.sideOpen', sideOpen), [sideOpen]);
   useEffect(() => lsSet('flatpack.cam', cam), [cam]);
 
@@ -746,6 +749,7 @@ export default function App() {
             tour={tourOn ? tourScript : null}
             onTourEnd={stopTour}
             onTourCaption={setTourCaption}
+            showElectricity={showElectricity}
           />
         )}
 
@@ -939,6 +943,16 @@ export default function App() {
               onClick={() => {
                 setMaterialsOpen(false);
                 setShowPieces((v) => !v);
+              }}
+            />
+            <MenuBtn
+              icon="electricity"
+              label="Electricity"
+              tip={`Electricity: ${showElectricity ? 'shown' : 'hidden'} (lights, switches, sockets from the plan)`}
+              className={showElectricity ? 'toggle on' : 'toggle'}
+              onClick={() => {
+                setMaterialsOpen(false);
+                setShowElectricity((v) => !v);
               }}
             />
             <MenuBtn

@@ -54,7 +54,17 @@ piece file. A new apartment is a folder with `apartment.json` and `scene.json`.
   along every wall face that bounds a room (from rooms.json), gapped at doors and cut
   away behind any piece standing against the wall at floor level (`skirtingStrips()`
   in geometry.js). `"wallColor"` paints the walls (and the walk-mode ceiling, or set
-  `"ceilingColor"`).
+  `"ceilingColor"`; both default to plaster white). `"electricity"` is the flat's electrical plan as points
+  (for l2-39 traced from `apartment_electricity.pdf`, circuit numbers kept in
+  `"circuit"`): `"type": "ceiling"` (a light at `pos`, z = the ceiling), `"wall"`
+  (a wall light on a wall face, `"face"` = the direction it shines, z = mounting
+  height), `"strip"` (an LED strip under wall cabinets, `size` = its length),
+  `"switch"` and `"socket"` (`gangs` plates on the wall face at `pos`, `"data": true`
+  adds a TV/data plate), `"outlet"` (a bare feed point: AC, LED, boiler), `"fan"`
+  and `"board"`. The ⚡ **Electricity** toggle draws them all as the fittings
+  themselves (flush downlights, sconces, white switch and socket plates with a
+  rocker or Schuko well per gang, a fan grille, the board cabinet); hovering one
+  shows its name, circuit and mounting height.
   Walls are **finished** sizes, plaster included: 20 cm structural walls are 230,
   12 cm partitions 150, and outer walls carry the 15 mm only on the flat's side
   (loggia-facing faces are left at the bare size). Furniture is sized against

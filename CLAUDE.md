@@ -26,7 +26,9 @@ view is read-only.** When he asks for a new piece or a change, edit the JSON.
 - Part thickness = smallest dimension; the other two are the cut size (`cutlist.js`).
 - Render-only footprint sugar on a part (geometry.js still sees the plain box): `round`
   (corner radii), `cutout` (a hole, piece-local `[x0,y0,x1,y1]`), `notch` (an edge
-  notch, same format — an L-shaped worktop stays one cut part), `disc`. On a door
+  notch, same format — an L-shaped worktop stays one cut part), `disc`, `soft`
+  (bedding: `"pillow" | "cushion" | "roll" | "mattress" | "duvet"`, a soft body
+  filling the box; `fabric: "weave" | "quilt"` textures it). On a door
   leaf: `"profile": "arch"` (routed arch groove on the face) and `"handle": "knob"`
   (round knob instead of the bar handle; counted as a knob in the hardware list).
   Any front may set `"handleColor": "#hex"` for its bar or knob (default brushed grey).
@@ -38,7 +40,9 @@ view is read-only.** When he asks for a new piece or a change, edit the JSON.
 
 - `src/geometry.js` — AABB math, placement, clearances, fit report. Pure functions, no three.js.
 - `src/cutlist.js` — cut list derivation + CSV export. Pure functions.
-- `src/Viewer.jsx` — the only file that knows three.js exists.
+- `src/Viewer.jsx` — the only file that knows three.js exists. Flat colour-per-box
+  look only: a "realistic" mode (shadows, textures, path tracer) was tried and
+  removed because it lagged Milan's machine — don't bring it back unasked.
 - `src/App.jsx` — layout, panels.
 - `src/tour.js` — scripted first-person tour runner (pure: step kinds, selectors,
   look math, `entranceSpawn()`). Each flat's `tour.js` is its route (waypoints in mm,
@@ -49,6 +53,9 @@ view is read-only.** When he asks for a new piece or a change, edit the JSON.
   flat, folder name = id) and `src/data/pieces/`; **nothing is registered by hand**.
 - `src/data/apartments/<id>/` — `apartment.json` + `scene.json` (required),
   `rooms.json`, `tour.js` (optional), `pieces/` = furniture built for that flat.
+  `apartment.json` may carry `"electricity"`: the electrical plan as points
+  (lights, switches, sockets… — types in README.md), drawn as fittings by the
+  ⚡ toggle.
   The current flat is `l2-39`.
 - `src/data/pieces/` — bought catalogue shared by every flat (beds, fridge, sanitary).
   New furniture = new JSON file in the flat's `pieces/` (custom builds) or here

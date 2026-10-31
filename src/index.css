@@ -705,6 +705,20 @@ button:hover {
   color: #ffd479;
 }
 
+/* electricity layer: circuit number and mounting height, like the plan */
+.dim.elec {
+  font-size: 14px;
+  line-height: 18px;
+  padding: 0 5px;
+  color: #ff8a80;
+  background: rgba(22, 24, 28, 0.7);
+  border-radius: 4px;
+}
+.dim.elec .dim-name {
+  font-size: 11px;
+  color: #ffc1bb;
+}
+
 .dim.area {
   background: none;
 }

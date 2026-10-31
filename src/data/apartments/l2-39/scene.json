@@ -279,7 +279,7 @@
       "rot": 90
     },
     {
-      "piece": "dining-table",
+      "piece": "dining-table-200",
       "label": "Dining table",
       "pos": [
         1500,
@@ -292,8 +292,8 @@
       "piece": "dining-chair",
       "label": "Chair north 1",
       "pos": [
-        1800,
-        5550,
+        1742,
+        5150,
         0
       ],
       "rot": 0
@@ -302,8 +302,18 @@
       "piece": "dining-chair",
       "label": "Chair north 2",
       "pos": [
-        2350,
-        5550,
+        2275,
+        5150,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "dining-chair",
+      "label": "Chair north 3",
+      "pos": [
+        2808,
+        5150,
         0
       ],
       "rot": 0
@@ -312,8 +322,8 @@
       "piece": "dining-chair",
       "label": "Chair south 1",
       "pos": [
-        2250,
-        4650,
+        2192,
+        5050,
         0
       ],
       "rot": 180
@@ -322,21 +332,21 @@
       "piece": "dining-chair",
       "label": "Chair south 2",
       "pos": [
-        2800,
-        4650,
+        2725,
+        5050,
         0
       ],
       "rot": 180
     },
     {
       "piece": "dining-chair",
-      "label": "Chair east end",
+      "label": "Chair south 3",
       "pos": [
-        3040,
-        5325,
+        3258,
+        5050,
         0
       ],
-      "rot": 270
+      "rot": 180
     },
     {
       "piece": "ac-indoor",

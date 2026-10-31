@@ -2,17 +2,193 @@
   "id": "bed-180",
   "name": "Bed 180x200 (frame 186x208)",
   "buildable": false,
-  "color": "#a08663",
-  "clearance": { "left": 500, "right": 500 },
+  "color": "#8b6f4e",
+  "clearance": {
+    "left": 500,
+    "right": 500
+  },
   "parts": [
-    { "name": "frame", "pos": [0, 0, 100], "size": [1860, 2000, 200] },
-    { "name": "leg", "pos": [20, 20, 0], "size": [60, 60, 100] },
-    { "name": "leg", "pos": [1780, 20, 0], "size": [60, 60, 100] },
-    { "name": "leg", "pos": [20, 1920, 0], "size": [60, 60, 100] },
-    { "name": "leg", "pos": [1780, 1920, 0], "size": [60, 60, 100] },
-    { "name": "headboard", "pos": [0, 2000, 0], "size": [1860, 80, 900] },
-    { "name": "mattress", "pos": [30, 30, 300], "size": [1800, 1960, 180], "color": "#dcd7cd" },
-    { "name": "pillow", "pos": [120, 1620, 480], "size": [750, 340, 90], "color": "#eeebe3" },
-    { "name": "pillow", "pos": [990, 1620, 480], "size": [750, 340, 90], "color": "#eeebe3" }
+    {
+      "name": "leg",
+      "pos": [
+        20,
+        20,
+        0
+      ],
+      "size": [
+        60,
+        60,
+        100
+      ],
+      "color": "#5a4634"
+    },
+    {
+      "name": "leg",
+      "pos": [
+        20,
+        1920,
+        0
+      ],
+      "size": [
+        60,
+        60,
+        100
+      ],
+      "color": "#5a4634"
+    },
+    {
+      "name": "leg",
+      "pos": [
+        1780,
+        20,
+        0
+      ],
+      "size": [
+        60,
+        60,
+        100
+      ],
+      "color": "#5a4634"
+    },
+    {
+      "name": "leg",
+      "pos": [
+        1780,
+        1920,
+        0
+      ],
+      "size": [
+        60,
+        60,
+        100
+      ],
+      "color": "#5a4634"
+    },
+    {
+      "name": "frame",
+      "pos": [
+        0,
+        0,
+        100
+      ],
+      "size": [
+        1860,
+        2000,
+        120
+      ],
+      "color": "#8b6f4e"
+    },
+    {
+      "name": "headboard",
+      "pos": [
+        0,
+        2000,
+        0
+      ],
+      "size": [
+        1860,
+        80,
+        900
+      ],
+      "color": "#8b6f4e"
+    },
+    {
+      "name": "headboard padding",
+      "pos": [
+        30,
+        1960,
+        400
+      ],
+      "size": [
+        1800,
+        40,
+        440
+      ],
+      "soft": "mattress",
+      "fabric": "weave",
+      "color": "#cfc3ad"
+    },
+    {
+      "name": "mattress",
+      "pos": [
+        30,
+        20,
+        220
+      ],
+      "size": [
+        1800,
+        1960,
+        200
+      ],
+      "soft": "mattress",
+      "fabric": "weave",
+      "color": "#e9e6df"
+    },
+    {
+      "name": "duvet",
+      "pos": [
+        0,
+        0,
+        420
+      ],
+      "size": [
+        1860,
+        1320,
+        80
+      ],
+      "soft": "duvet",
+      "over": 30,
+      "hang": 170,
+      "fabric": "quilt",
+      "color": "#e3e6ea"
+    },
+    {
+      "name": "duvet fold",
+      "pos": [
+        0,
+        1230,
+        420
+      ],
+      "size": [
+        1860,
+        170,
+        120
+      ],
+      "soft": "roll",
+      "fabric": "quilt",
+      "color": "#d6dbe1"
+    },
+    {
+      "name": "pillow",
+      "pos": [
+        110,
+        1600,
+        420
+      ],
+      "size": [
+        760,
+        340,
+        160
+      ],
+      "soft": "pillow",
+      "fabric": "quilt",
+      "color": "#f4f2ed"
+    },
+    {
+      "name": "pillow",
+      "pos": [
+        990,
+        1600,
+        420
+      ],
+      "size": [
+        760,
+        340,
+        160
+      ],
+      "soft": "pillow",
+      "fabric": "quilt",
+      "color": "#f4f2ed"
+    }
   ]
 }

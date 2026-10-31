@@ -2,11 +2,67 @@
   "id": "bed-90",
   "name": "Bed 90x200 (frame 96x208)",
   "buildable": false,
-  "color": "#a08663",
+  "color": "#8b6f4e",
   "clearance": {
     "left": 500
   },
   "parts": [
+    {
+      "name": "leg",
+      "pos": [
+        20,
+        20,
+        0
+      ],
+      "size": [
+        60,
+        60,
+        100
+      ],
+      "color": "#5a4634"
+    },
+    {
+      "name": "leg",
+      "pos": [
+        20,
+        1920,
+        0
+      ],
+      "size": [
+        60,
+        60,
+        100
+      ],
+      "color": "#5a4634"
+    },
+    {
+      "name": "leg",
+      "pos": [
+        880,
+        20,
+        0
+      ],
+      "size": [
+        60,
+        60,
+        100
+      ],
+      "color": "#5a4634"
+    },
+    {
+      "name": "leg",
+      "pos": [
+        880,
+        1920,
+        0
+      ],
+      "size": [
+        60,
+        60,
+        100
+      ],
+      "color": "#5a4634"
+    },
     {
       "name": "frame",
       "pos": [
@@ -17,60 +73,9 @@
       "size": [
         960,
         2000,
-        200
-      ]
-    },
-    {
-      "name": "leg",
-      "pos": [
-        20,
-        20,
-        0
+        120
       ],
-      "size": [
-        60,
-        60,
-        100
-      ]
-    },
-    {
-      "name": "leg",
-      "pos": [
-        880,
-        20,
-        0
-      ],
-      "size": [
-        60,
-        60,
-        100
-      ]
-    },
-    {
-      "name": "leg",
-      "pos": [
-        20,
-        1920,
-        0
-      ],
-      "size": [
-        60,
-        60,
-        100
-      ]
-    },
-    {
-      "name": "leg",
-      "pos": [
-        880,
-        1920,
-        0
-      ],
-      "size": [
-        60,
-        60,
-        100
-      ]
+      "color": "#8b6f4e"
     },
     {
       "name": "headboard",
@@ -83,35 +88,90 @@
         960,
         80,
         900
-      ]
+      ],
+      "color": "#8b6f4e"
+    },
+    {
+      "name": "headboard padding",
+      "pos": [
+        30,
+        1960,
+        400
+      ],
+      "size": [
+        900,
+        40,
+        440
+      ],
+      "soft": "mattress",
+      "fabric": "weave",
+      "color": "#cfc3ad"
     },
     {
       "name": "mattress",
       "pos": [
         30,
-        30,
-        300
+        20,
+        220
       ],
       "size": [
         900,
         1960,
-        180
+        200
       ],
-      "color": "#dcd7cd"
+      "soft": "mattress",
+      "fabric": "weave",
+      "color": "#e9e6df"
+    },
+    {
+      "name": "duvet",
+      "pos": [
+        0,
+        0,
+        420
+      ],
+      "size": [
+        960,
+        1320,
+        80
+      ],
+      "soft": "duvet",
+      "over": 30,
+      "hang": 170,
+      "fabric": "quilt",
+      "color": "#e3e6ea"
+    },
+    {
+      "name": "duvet fold",
+      "pos": [
+        0,
+        1230,
+        420
+      ],
+      "size": [
+        960,
+        170,
+        120
+      ],
+      "soft": "roll",
+      "fabric": "quilt",
+      "color": "#d6dbe1"
     },
     {
       "name": "pillow",
       "pos": [
-        130,
-        1620,
-        480
+        110,
+        1600,
+        420
       ],
       "size": [
-        700,
+        740,
         340,
-        90
+        160
       ],
-      "color": "#eeebe3"
+      "soft": "pillow",
+      "fabric": "quilt",
+      "color": "#f4f2ed"
     }
   ]
 }

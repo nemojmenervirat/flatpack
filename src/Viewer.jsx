@@ -1,7 +1,7 @@
 import { createContext, memo, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, OrthographicCamera, Html, Edges } from '@react-three/drei';
-import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, Path, ExtrudeGeometry, ShapeGeometry, BoxGeometry, BufferAttribute, Color, MeshStandardMaterial } from 'three';
+import { Vector3, MathUtils, CanvasTexture, RepeatWrapping, SRGBColorSpace, Shape, Path, ExtrudeGeometry, ShapeGeometry, BoxGeometry, BufferGeometry, BufferAttribute, Color, MeshStandardMaterial } from 'three';
 import { aabbOf, pieceLocalBBox, walkMove, walkObstacles, frontFrame } from './geometry.js';
 import { TOUR, createTour, tickTour, endTour, resolveTarget, doorGeometry, entranceSpawn } from './tour.js';
 import { partColor } from './materials.js';
@@ -693,6 +693,190 @@ function LocalRounded({ part, color, hovered, opacity = 1, ...handlers }) {
   );
 }
 
+// ── Soft parts ─────────────────────────────────────────────────────────────
+// A part with "soft" renders as a soft body filling its box, the way bedding
+// looks rather than the way it is measured (render-only sugar like "round":
+// geometry.js still sees the plain AABB):
+//   "pillow" | "cushion" | "roll" | "mattress" — a superellipsoid, squarish in
+//     plan and pinched along its thinnest axis ("pillow": a seam at the edge
+//     and a flattened underside, so it lies on the bed instead of floating;
+//     "roll": a round cross-section, "mattress": a box with softened edges);
+//   "duvet" — a quilted cloth lying on the top of the box, with gentle folds,
+//     that hangs over the sides and the foot by "hang" mm (default 150) once
+//     past "over" mm of overhang (default 30; the head end stays flat).
+// All geometry is in three.js metres relative to the part's min corner.
+// "flat" squashes the half below the pinch (1 = symmetric).
+const SOFT_SHAPES = {
+  pillow: { polar: 1.1, plan: 0.3, flat: 0.2, cols: 72, rows: 36 },
+  cushion: { polar: 1.0, plan: 0.35, flat: 0.25, cols: 64, rows: 32 },
+  roll: { polar: 0.85, plan: 0.3, flat: 1, cols: 64, rows: 32 },
+  mattress: { polar: 0.14, plan: 0.12, flat: 1, cols: 112, rows: 56 },
+};
+const spow = (v, e) => Math.sign(v) * Math.pow(Math.abs(v), e);
+
+function superellipsoidGeometry(size, shape) {
+  const { polar, plan, flat = 1, cols, rows } = shape;
+  // the polar axis is the thinnest dimension: that is where the pinch goes
+  const axis = size.indexOf(Math.min(...size));
+  const [u, v] = [0, 1, 2].filter((a) => a !== axis);
+  const half = size.map((d) => (d / 2) * S);
+  const pos = [];
+  const uv = [];
+  const index = [];
+  const pt = [0, 0, 0];
+  const q = [0, 0, 0];
+  for (let r = 0; r <= rows; r++) {
+    const th = -Math.PI / 2 + (r / rows) * Math.PI;
+    const ct = spow(Math.cos(th), polar);
+    const st = spow(Math.sin(th), polar);
+    // the lower half squashed by "flat", then the whole thing re-spread so it
+    // still touches both faces of the box along the polar axis
+    const sq = st >= 0 ? st : st * flat;
+    const along = ((sq + flat) / (1 + flat)) * 2 - 1;
+    for (let c = 0; c < cols; c++) {
+      const ph = (c / cols) * Math.PI * 2;
+      pt[u] = half[u] * ct * spow(Math.cos(ph), plan);
+      pt[v] = half[v] * ct * spow(Math.sin(ph), plan);
+      pt[axis] = half[axis] * along;
+      // data (x, y, z) at the box centre -> three (x, z, -y)
+      pos.push(half[0] + pt[0], half[2] + pt[2], -(half[1] + pt[1]));
+      // texture in metres, projected from whichever face the point mostly
+      // belongs to (blended by direction), so no face gets stretched into
+      // stripes or rings
+      q[u] = pt[u] / half[u];
+      q[v] = pt[v] / half[v];
+      q[axis] = st;
+      const wu = q[u] ** 4;
+      const wv = q[v] ** 4;
+      const wa = q[axis] ** 4;
+      const sum = wu + wv + wa || 1;
+      uv.push(
+        (pt[u] * (wv + wa) + pt[v] * wu) / sum,
+        (pt[v] * wa + pt[axis] * (wu + wv)) / sum
+      );
+    }
+  }
+  // the data -> three axis swap mirrors the winding for two of the three
+  // polar axes; keep every face looking outward
+  const flip = axis !== 1;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const a = r * cols + c;
+      const b = r * cols + ((c + 1) % cols);
+      const d = a + cols;
+      const e = b + cols;
+      if (flip) index.push(a, b, d, b, e, d);
+      else index.push(a, d, b, b, d, e);
+    }
+  }
+  const g = new BufferGeometry();
+  g.setAttribute('position', new BufferAttribute(new Float32Array(pos), 3));
+  g.setAttribute('uv', new BufferAttribute(new Float32Array(uv), 2));
+  g.setIndex(index);
+  g.computeVertexNormals();
+  return g;
+}
+
+const smooth = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
+function duvetGeometry(part) {
+  const [W, D, H] = part.size; // mm; top of the cloth = H, it lies along y
+  const over = part.over ?? 30;
+  const hang = part.hang ?? 150;
+  const thick = Math.min(H * 0.75, 70);
+  const cols = 96;
+  const rows = Math.max(48, Math.round((96 * D) / W));
+  const n = (cols + 1) * (rows + 1);
+  const top = new Float32Array(n * 3);
+  const uv = new Float32Array(n * 2);
+  // height (mm) of the top surface at a plan point: flat on the mattress with
+  // soft folds, dropping over the shoulder past the overhang
+  const height = (x, y) => {
+    const dOut = Math.max(over - x, x - (W - over), over - y, 0);
+    const drop = hang * smooth(dOut / over);
+    const dIn = Math.min(x - over, W - over - x, y - over, D - y);
+    const w = smooth(dIn / 160);
+    const fx = (x / W) * Math.PI * 2;
+    const fy = (y / D) * Math.PI * 2;
+    const folds =
+      Math.sin(fx * 1.3 + 0.7) * Math.sin(fy * 1.7 + 1.4) * 5 +
+      Math.sin(fx * 0.6 + fy * 2.3 + 2.1) * 4 +
+      Math.cos(fx * 0.9 - fy * 1.1 + 0.4) * 3;
+    const crown = 10 * (1 - Math.pow((x - W / 2) / (W / 2), 2)) * w;
+    return H - drop + (folds + crown) * w;
+  };
+  let k = 0;
+  for (let r = 0; r <= rows; r++) {
+    const y = (r / rows) * D;
+    for (let c = 0; c <= cols; c++) {
+      const x = (c / cols) * W;
+      top[k * 3] = x * S;
+      top[k * 3 + 1] = height(x, y) * S;
+      top[k * 3 + 2] = -y * S;
+      uv[k * 2] = (x / W) * 1.2;
+      uv[k * 2 + 1] = (y / D) * 1.6;
+      k++;
+    }
+  }
+  // the underside: the top pushed down its normal by the cloth thickness
+  const tmp = new BufferGeometry();
+  tmp.setAttribute('position', new BufferAttribute(top, 3));
+  const idxTop = [];
+  for (let r = 0; r < rows; r++)
+    for (let c = 0; c < cols; c++) {
+      const a = r * (cols + 1) + c;
+      idxTop.push(a, a + 1, a + cols + 1, a + 1, a + cols + 2, a + cols + 1);
+    }
+  tmp.setIndex(idxTop);
+  tmp.computeVertexNormals();
+  const nrm = tmp.attributes.normal.array;
+  const pos = new Float32Array(n * 6);
+  pos.set(top, 0);
+  for (let i = 0; i < n; i++) {
+    pos[(n + i) * 3] = top[i * 3] - nrm[i * 3] * thick * S;
+    pos[(n + i) * 3 + 1] = top[i * 3 + 1] - nrm[i * 3 + 1] * thick * S;
+    pos[(n + i) * 3 + 2] = top[i * 3 + 2] - nrm[i * 3 + 2] * thick * S;
+  }
+  const uv2 = new Float32Array(n * 4);
+  uv2.set(uv, 0);
+  uv2.set(uv, n * 2);
+  const index = [...idxTop];
+  for (let i = 0; i < idxTop.length; i += 3) index.push(idxTop[i] + n, idxTop[i + 2] + n, idxTop[i + 1] + n);
+  // close the rim: walls between the two sheets along all four edges
+  const rim = [];
+  for (let c = 0; c <= cols; c++) rim.push(c); // y = 0 (foot)
+  for (let r = 1; r <= rows; r++) rim.push(r * (cols + 1) + cols); // x = W
+  for (let c = cols - 1; c >= 0; c--) rim.push(rows * (cols + 1) + c); // y = D (head)
+  for (let r = rows - 1; r >= 1; r--) rim.push(r * (cols + 1)); // x = 0
+  for (let i = 0; i < rim.length; i++) {
+    const a = rim[i];
+    const b = rim[(i + 1) % rim.length];
+    index.push(a, a + n, b, b, a + n, b + n);
+  }
+  const g = new BufferGeometry();
+  g.setAttribute('position', new BufferAttribute(pos, 3));
+  g.setAttribute('uv', new BufferAttribute(uv2, 2));
+  g.setIndex(index);
+  g.computeVertexNormals();
+  tmp.dispose();
+  return g;
+}
+
+function LocalSoft({ part, color, hovered, opacity = 1, ...handlers }) {
+  const geom = useMemo(
+    () => (part.soft === 'duvet' ? duvetGeometry(part) : superellipsoidGeometry(part.size, SOFT_SHAPES[part.soft] || SOFT_SHAPES.pillow)),
+    [part]
+  );
+  useEffect(() => () => geom.dispose(), [geom]);
+  return (
+    <mesh
+      position={[part.pos[0] * S, part.pos[2] * S, -part.pos[1] * S]}
+      geometry={geom}
+      material={partMaterial(part, color, hovered, opacity)}
+      {...handlers}
+    />
+  );
+}
+
 // A part with "disc": true renders as a cylinder along its thinnest axis
 // (ties go to y, the front/back axis) — a porthole or dial face on a front,
 // a drilled hole on a side. Radius comes from the other two sizes, length
@@ -813,6 +997,9 @@ function LocalBox({ part, color, hovered, opacity = 1, ...handlers }) {
   useEffect(() => () => geom?.dispose(), [geom]);
   if (part.hardware && part.name.startsWith('leg')) {
     return <Leg part={part} color={color} hovered={hovered} {...handlers} />;
+  }
+  if (part.soft) {
+    return <LocalSoft part={part} color={color} hovered={hovered} opacity={opacity} {...handlers} />;
   }
   if (part.disc) {
     return <LocalDisc part={part} color={color} hovered={hovered} opacity={opacity} {...handlers} />;
@@ -1660,6 +1847,193 @@ const Placement = memo(function Placement({ entry, collided, showClearances, hov
   );
 });
 
+// ── Electricity layer ──────────────────────────────────────────────────────
+// apartment.json "electricity" drawn as the fittings themselves: flush
+// downlights, sconces, the LED strip, white switch and socket plates (one
+// frame, a rocker or a round well per gang, a slotted TV/data module
+// appended), small junction boxes for the feed points ("outlet": AC, LED,
+// boiler), a slatted fan grille and the distribution board. Wall items sit on
+// the wall face at pos and protrude in the "face" direction. Hovering a
+// fitting shows its name, circuit and mounting height; the toolbar toggle
+// shows and hides the whole layer.
+const SHINE_DIR = { "-x": [-1, 0], "+x": [1, 0], "-y": [0, -1], "+y": [0, 1] }; // "face" → outward direction
+const noRay = () => null;
+const ELEC = {
+  plate: '#f4f3ee', // white plastic frames
+  edge: '#c3bfb6', // outline so a white plate reads on a white wall
+  rocker: '#ebeae5',
+  well: '#d8d5cd', // the socket recess
+  pin: '#4a4a48',
+  slot: '#2e2e2c',
+  shell: '#f1efe9', // lamp bodies
+  glow: '#fff1c9', // lit diffusers
+  fan: '#e6e6e3',
+  slat: '#9c9c99',
+  board: '#e9e7e1',
+  door: '#f5f4f0',
+};
+const GANG = 71; // EU frame pitch: one 81 mm frame, +71 mm per extra module
+const glowCache = new Map();
+function glowMaterial(color) {
+  let m = glowCache.get(color);
+  if (!m) {
+    m = new MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.6, roughness: 0.4 });
+    glowCache.set(color, m);
+  }
+  return m;
+}
+const plastic = (color) => sharedMaterial({ color, roughness: 0.55 });
+const fmtHeight = (z) => `h=${(z / 1000).toFixed(z % 100 ? 2 : 1)} m`;
+
+function ElecSymbol({ e }) {
+  const [x, y, z] = e.pos;
+  const type = e.type || 'ceiling';
+  const [dx, dy] = SHINE_DIR[e.face] || SHINE_DIR['-y'];
+  const alongX = dy !== 0; // the wall runs along x
+  const [hovered, setHovered] = useState(false);
+  useEffect(() => () => setHovered(false), []);
+  // a point on the wall: `off` along the wall, `out` from its face, `dz` up
+  const at = (off, out, dz = 0) => [
+    (x + dx * out + (alongX ? off : 0)) * S,
+    (z + dz) * S,
+    -(y + dy * out + (alongX ? 0 : off)) * S,
+  ];
+  // a box on the wall face: w along the wall, h vertical, t out into the room,
+  // its back `base` mm in front of the face
+  const Plate = ({ w, h, t, color, off = 0, dz = 0, base = 0, edge = false, material }) => (
+    <mesh position={at(off, base + t / 2, dz)} material={material || plastic(color)} raycast={noRay}>
+      <boxGeometry args={[(alongX ? w : t) * S, h * S, (alongX ? t : w) * S]} />
+      {edge && <Edges color={ELEC.edge} />}
+    </mesh>
+  );
+  // a disc on the wall face, its axis along the face normal
+  const Disc = ({ r, t, color, off = 0, dz = 0, base = 0, material }) => (
+    <mesh
+      position={at(off, base + t / 2, dz)}
+      rotation={alongX ? [Math.PI / 2, 0, 0] : [0, 0, Math.PI / 2]}
+      material={material || plastic(color)}
+      raycast={noRay}
+    >
+      <cylinderGeometry args={[r * S, r * S, t * S, 24]} />
+    </mesh>
+  );
+  const gangs = e.gangs || 1;
+  let body = null;
+  let labelPos;
+  let hit; // invisible hover target: centre (mm, data space) + size [sx, sy, sz]
+  if (type === 'ceiling') {
+    // a flush downlight: white trim ring under the slab, warm diffuser inside
+    body = (
+      <group position={[x * S, z * S, -y * S]}>
+        <mesh position={[0, -0.005, 0]} material={plastic(ELEC.shell)} raycast={noRay}>
+          <cylinderGeometry args={[0.06, 0.06, 0.01, 32]} />
+        </mesh>
+        <mesh position={[0, -0.011, 0]} material={glowMaterial(ELEC.glow)} raycast={noRay}>
+          <cylinderGeometry args={[0.042, 0.042, 0.004, 32]} />
+        </mesh>
+      </group>
+    );
+    labelPos = [x * S, (z - 30) * S, -y * S];
+    hit = { c: [x, y, z - 10], s: [240, 240, 60] };
+  } else if (type === 'strip') {
+    const [sx, sy, sz] = e.size || [1000, 15, 8];
+    body = (
+      <mesh
+        position={[(x + sx / 2) * S, (z + sz / 2) * S, -(y + sy / 2) * S]}
+        material={glowMaterial(ELEC.glow)}
+        raycast={noRay}
+      >
+        <boxGeometry args={[sx * S, sz * S, sy * S]} />
+      </mesh>
+    );
+    labelPos = [(x + sx / 2) * S, (z - 60) * S, -(y + sy / 2) * S];
+    hit = { c: [x + sx / 2, y + sy / 2, z + sz / 2], s: [sx + 40, sy + 60, sz + 60] };
+  } else {
+    const parts = [];
+    let w = 81;
+    let h = 81;
+    let t = 10;
+    if (type === 'wall') {
+      // a sconce: white body with a warm diffuser on its front
+      [w, h, t] = [120, 200, 80];
+      parts.push(<Plate key="b" w={w} h={h} t={t} color={ELEC.shell} />);
+      parts.push(<Plate key="g" w={100} h={176} t={3} base={t} material={glowMaterial(ELEC.glow)} />);
+    } else if (type === 'switch') {
+      w = 81 + GANG * (gangs - 1);
+      parts.push(<Plate key="f" w={w} h={h} t={t} color={ELEC.plate} edge />);
+      for (let i = 0; i < gangs; i++)
+        parts.push(<Plate key={i} w={55} h={55} t={3} base={t} color={ELEC.rocker} off={(i - (gangs - 1) / 2) * GANG} edge />);
+    } else if (type === 'socket') {
+      const n = gangs + (e.data ? 1 : 0);
+      w = 81 + GANG * (n - 1);
+      parts.push(<Plate key="f" w={w} h={h} t={t} color={ELEC.plate} edge />);
+      for (let i = 0; i < gangs; i++) {
+        const off = (i - (n - 1) / 2) * GANG;
+        // Schuko: round well with two pin holes
+        parts.push(<Disc key={`w${i}`} r={23} t={1.5} base={t} color={ELEC.well} off={off} />);
+        parts.push(<Disc key={`p${i}a`} r={2.5} t={1} base={t + 1.5} color={ELEC.pin} off={off - 9.5} />);
+        parts.push(<Disc key={`p${i}b`} r={2.5} t={1} base={t + 1.5} color={ELEC.pin} off={off + 9.5} />);
+      }
+      if (e.data) {
+        // TV / data module: a coax socket above an RJ45 slot
+        const off = (gangs - (n - 1) / 2) * GANG;
+        parts.push(<Disc key="tv" r={6} t={6} base={t} color={ELEC.pin} off={off} dz={14} />);
+        parts.push(<Plate key="rj" w={16} h={13} t={1.5} base={t} color={ELEC.slot} off={off} dz={-14} />);
+      }
+    } else if (type === 'outlet') {
+      // a bare feed point: a round junction box with its blank lid
+      [w, h, t] = [70, 70, 22];
+      parts.push(<Disc key="o" r={35} t={t} color={ELEC.plate} />);
+    } else if (type === 'fan') {
+      [w, h, t] = [150, 150, 28];
+      parts.push(<Plate key="f" w={w} h={h} t={t} color={ELEC.fan} edge />);
+      for (let i = 0; i < 5; i++) parts.push(<Plate key={i} w={126} h={5} t={2} base={t} color={ELEC.slat} dz={(i - 2) * 22} />);
+    } else if (type === 'board') {
+      [w, h, t] = [300, 500, 60];
+      parts.push(<Plate key="c" w={w} h={h} t={t} color={ELEC.board} edge />);
+      parts.push(<Plate key="d" w={280} h={480} t={4} base={t} color={ELEC.door} edge />);
+      parts.push(<Plate key="h" w={8} h={40} t={8} base={t + 4} color={ELEC.pin} off={115} />);
+    } else parts.push(<Plate key="x" w={w} h={h} t={t} color={ELEC.plate} edge />);
+    body = <>{parts}</>;
+    labelPos = at(0, t + 120, h / 2 + 60);
+    const tt = t + 40;
+    hit = { c: [x + (dx * tt) / 2, y + (dy * tt) / 2, z], s: [alongX ? w + 40 : tt, alongX ? tt : w + 40, h + 40] };
+  }
+  const text = [e.circuit, type !== 'ceiling' && type !== 'strip' ? fmtHeight(z) : null].filter(Boolean).join(' · ');
+  return (
+    <group>
+      {body}
+      <mesh
+        position={[hit.c[0] * S, hit.c[2] * S, -hit.c[1] * S]}
+        visible={false}
+        onPointerOver={(ev) => { ev.stopPropagation(); setHovered(true); }}
+        onPointerOut={() => setHovered(false)}
+      >
+        <boxGeometry args={[hit.s[0] * S, hit.s[2] * S, hit.s[1] * S]} />
+      </mesh>
+      {hovered && (
+        <Html position={labelPos} center zIndexRange={[10, 0]}>
+          <div className="dim elec">
+            {e.label && <div className="dim-name">{e.label}</div>}
+            <div className="dim-name">{e.name}</div>
+            {text || e.name}
+          </div>
+        </Html>
+      )}
+    </group>
+  );
+}
+
+function ElectricityLayer({ items }) {
+  return (
+    <group>
+      {(items || []).map((e, i) => (
+        <ElecSymbol key={`${e.name}-${i}`} e={e} />
+      ))}
+    </group>
+  );
+}
+
 // hover record for a placed piece: its key, bbox and the W x D x H label
 const pieceHoverInfo = (entry) => {
   const b = entry.bbox;
@@ -1957,6 +2331,7 @@ export default function Viewer({
   tour = null, // scripted tour steps (the apartment's tour.js) to play while walking, or null
   onTourEnd,
   onTourCaption,
+  showElectricity = false, // the electrical plan as symbols: lights, switches, sockets…
 }) {
   const openingColor = { door: '#7fd17f', window: '#7fb8ff' };
   const woodTex = useMemo(() => makeWoodTexture(), []);
@@ -2076,9 +2451,9 @@ export default function Viewer({
       {apartment.floor && (
         <Box box={aabbOf(apartment.floor.pos, apartment.floor.size)} color="#57534c" />
       )}
-      {(apartment.floors || []).map((f) => (
+      {(apartment.floors || []).map((f, i) => (
         <FloorZone
-          key={f.name}
+          key={f.name + ':' + i}
           f={f}
           wood={woodTex}
           tile={tileTex}
@@ -2091,18 +2466,20 @@ export default function Viewer({
       {(apartment.wallTiles || []).map((f) => (
         <WallTileZone key={f.name} f={f} tile={wallTileTex} />
       ))}
-      {/* walking only: a ceiling slab so looking up doesn't show the void;
-          painted like the walls when the flat sets a wall colour */}
+      {/* walking (and so the tour) only: a ceiling slab so looking up doesn't
+          show the void; plaster white like the walls unless the flat sets
+          "ceilingColor" (or "wallColor") */}
       {walking && apartment.floor && (
         <Box
           box={aabbOf(
             [apartment.floor.pos[0], apartment.floor.pos[1], apartment.height || 2600],
             [apartment.floor.size[0], apartment.floor.size[1], 40]
           )}
-          color={apartment.ceilingColor || apartment.wallColor || '#26282d'}
+          color={apartment.ceilingColor || apartment.wallColor || WALL_PAINT}
           raycast={() => null}
         />
       )}
+      {showElectricity && <ElectricityLayer items={apartment.electricity} />}
       {/* room-area overlay: a plan layer floating above the wall tops, so no
           wall or furniture ever hides it */}
       {showAreas &&
