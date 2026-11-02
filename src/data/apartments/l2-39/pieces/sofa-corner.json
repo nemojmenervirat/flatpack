@@ -1,26 +1,268 @@
 {
   "id": "sofa-corner",
-  "name": "Corner sofa 300x200",
+  "name": "Emma corner sofa bed 306x187 (bed 197x160)",
   "buildable": false,
-  "color": "#c2b49c",
+  "color": "#cdc5b9",
   "parts": [
-    { "name": "plinth chaise", "pos": [40, 40, 0], "size": [1000, 920, 60], "color": "#17181a" },
-    { "name": "plinth long", "pos": [1040, 40, 0], "size": [920, 2920, 60], "color": "#17181a" },
-
-    { "name": "base chaise", "pos": [0, 0, 60], "size": [1000, 1000, 220], "round": [40, 0, 0, 40], "fabric": "weave", "color": "#b9ab92" },
-    { "name": "base long run", "pos": [1000, 0, 60], "size": [1000, 3000, 220], "round": [0, 40, 40, 40], "fabric": "weave", "color": "#b9ab92" },
-
-    { "name": "back run", "pos": [1800, 0, 280], "size": [200, 3000, 360], "round": [0, 40, 40, 0], "fabric": "weave" },
-    { "name": "arm north", "pos": [0, 0, 280], "size": [1800, 200, 280], "round": [60, 0, 0, 60], "fabric": "quilt" },
-    { "name": "arm south", "pos": [1000, 2800, 280], "size": [800, 200, 280], "round": [60, 0, 0, 60], "fabric": "quilt" },
-
-    { "name": "seat cushion", "pos": [1000, 200, 280], "size": [800, 859, 180], "round": 50, "fabric": "weave", "color": "#c8baa2" },
-    { "name": "seat cushion", "pos": [1000, 1071, 280], "size": [800, 858, 180], "round": 50, "fabric": "weave", "color": "#c8baa2" },
-    { "name": "seat cushion", "pos": [1000, 1941, 280], "size": [800, 859, 180], "round": 50, "fabric": "weave", "color": "#c8baa2" },
-    { "name": "seat cushion chaise", "pos": [0, 200, 280], "size": [988, 800, 180], "round": 50, "fabric": "quilt", "color": "#c8baa2" },
-
-    { "name": "back pillow", "pos": [1580, 200, 460], "size": [220, 859, 320], "round": 60, "fabric": "weave", "color": "#cec0a8" },
-    { "name": "back pillow", "pos": [1580, 1071, 460], "size": [220, 858, 320], "round": 60, "fabric": "weave", "color": "#cec0a8" },
-    { "name": "back pillow", "pos": [1580, 1941, 460], "size": [220, 859, 320], "round": 60, "fabric": "weave", "color": "#cec0a8" }
+    {
+      "name": "foot",
+      "pos": [
+        40,
+        170,
+        0
+      ],
+      "size": [
+        60,
+        60,
+        60
+      ],
+      "color": "#222426"
+    },
+    {
+      "name": "foot",
+      "pos": [
+        40,
+        900,
+        0
+      ],
+      "size": [
+        60,
+        60,
+        60
+      ],
+      "color": "#222426"
+    },
+    {
+      "name": "foot",
+      "pos": [
+        1770,
+        170,
+        0
+      ],
+      "size": [
+        60,
+        60,
+        60
+      ],
+      "color": "#222426"
+    },
+    {
+      "name": "foot",
+      "pos": [
+        1770,
+        1500,
+        0
+      ],
+      "size": [
+        60,
+        60,
+        60
+      ],
+      "color": "#222426"
+    },
+    {
+      "name": "foot",
+      "pos": [
+        1770,
+        2960,
+        0
+      ],
+      "size": [
+        60,
+        60,
+        60
+      ],
+      "color": "#222426"
+    },
+    {
+      "name": "foot",
+      "pos": [
+        840,
+        2960,
+        0
+      ],
+      "size": [
+        60,
+        60,
+        60
+      ],
+      "color": "#222426"
+    },
+    {
+      "name": "base body",
+      "pos": [
+        800,
+        0,
+        60
+      ],
+      "size": [
+        1070,
+        3060,
+        200
+      ],
+      "soft": "mattress",
+      "fabric": "weave",
+      "color": "#cdc5b9"
+    },
+    {
+      "name": "base chaise",
+      "pos": [
+        0,
+        130,
+        60
+      ],
+      "size": [
+        800,
+        830,
+        200
+      ],
+      "soft": "mattress",
+      "fabric": "weave",
+      "color": "#cdc5b9"
+    },
+    {
+      "name": "seat chaise",
+      "pos": [
+        12,
+        142,
+        260
+      ],
+      "size": [
+        1696,
+        806,
+        150
+      ],
+      "soft": "mattress",
+      "fabric": "quilt",
+      "color": "#d2cbc0"
+    },
+    {
+      "name": "seat body",
+      "pos": [
+        812,
+        972,
+        260
+      ],
+      "size": [
+        896,
+        1826,
+        150
+      ],
+      "soft": "mattress",
+      "fabric": "quilt",
+      "color": "#d2cbc0"
+    },
+    {
+      "name": "arm north",
+      "pos": [
+        800,
+        0,
+        260
+      ],
+      "size": [
+        1070,
+        130,
+        340
+      ],
+      "soft": "mattress",
+      "fabric": "quilt",
+      "color": "#cdc5b9"
+    },
+    {
+      "name": "arm south",
+      "pos": [
+        800,
+        2810,
+        260
+      ],
+      "size": [
+        1070,
+        250,
+        340
+      ],
+      "soft": "mattress",
+      "fabric": "quilt",
+      "color": "#cdc5b9"
+    },
+    {
+      "name": "back frame",
+      "pos": [
+        1720,
+        130,
+        260
+      ],
+      "size": [
+        150,
+        2680,
+        515
+      ],
+      "soft": "mattress",
+      "fabric": "weave",
+      "color": "#cdc5b9"
+    },
+    {
+      "name": "back cushion",
+      "pos": [
+        1500,
+        140,
+        410
+      ],
+      "size": [
+        220,
+        880,
+        485
+      ],
+      "soft": "cushion",
+      "fabric": "weave",
+      "color": "#cfc8bc"
+    },
+    {
+      "name": "back cushion",
+      "pos": [
+        1500,
+        1030,
+        410
+      ],
+      "size": [
+        220,
+        880,
+        485
+      ],
+      "soft": "cushion",
+      "fabric": "weave",
+      "color": "#cfc8bc"
+    },
+    {
+      "name": "back cushion",
+      "pos": [
+        1500,
+        1920,
+        410
+      ],
+      "size": [
+        220,
+        880,
+        485
+      ],
+      "soft": "cushion",
+      "fabric": "weave",
+      "color": "#cfc8bc"
+    },
+    {
+      "name": "throw pillow",
+      "pos": [
+        950,
+        142,
+        410
+      ],
+      "size": [
+        500,
+        160,
+        450
+      ],
+      "soft": "pillow",
+      "fabric": "weave",
+      "color": "#b8b0a4"
+    }
   ]
 }
