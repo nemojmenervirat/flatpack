@@ -26,7 +26,8 @@ view is read-only.** When he asks for a new piece or a change, edit the JSON.
 - Part thickness = smallest dimension; the other two are the cut size (`cutlist.js`).
 - Render-only footprint sugar on a part (geometry.js still sees the plain box): `round`
   (corner radii), `cutout` (a hole, piece-local `[x0,y0,x1,y1]`), `notch` (an edge
-  notch, same format — an L-shaped worktop stays one cut part), `disc`, `soft`
+  notch, same format — an L-shaped worktop stays one cut part), `disc` (a cylinder
+  along the thinnest axis, or `"disc": "x" | "y" | "z"` to pin it: standing jars), `soft`
   (bedding: `"pillow" | "cushion" | "roll" | "mattress" | "duvet"`, a soft body
   filling the box; `fabric: "weave" | "quilt"` textures it). On a door
   leaf: `"profile": "arch"` (routed arch groove on the face) and `"handle": "knob"`

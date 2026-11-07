@@ -1,0 +1,1497 @@
+{
+  "id": "jars-small",
+  "name": "Jars 85 (in the small rack)",
+  "comment": "48 jars Ø90 x 85 standing in the rack, 2 across x 8 deep per tier. Not built: only here to show the capacity.",
+  "buildable": false,
+  "color": "#d9e6dc",
+  "parts": [
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        4.5,
+        0
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        6.5,
+        75
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        94.5,
+        0
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        96.5,
+        75
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        184.5,
+        0
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        186.5,
+        75
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        274.5,
+        0
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        276.5,
+        75
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        364.5,
+        0
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        366.5,
+        75
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        454.5,
+        0
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        456.5,
+        75
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        544.5,
+        0
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        546.5,
+        75
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        634.5,
+        0
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        636.5,
+        75
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        4.5,
+        0
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        6.5,
+        75
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        94.5,
+        0
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        96.5,
+        75
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        184.5,
+        0
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        186.5,
+        75
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        274.5,
+        0
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        276.5,
+        75
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        364.5,
+        0
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        366.5,
+        75
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        454.5,
+        0
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        456.5,
+        75
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        544.5,
+        0
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        546.5,
+        75
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        634.5,
+        0
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        636.5,
+        75
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        4.5,
+        113
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        6.5,
+        188
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        94.5,
+        113
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        96.5,
+        188
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        184.5,
+        113
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        186.5,
+        188
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        274.5,
+        113
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        276.5,
+        188
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        364.5,
+        113
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        366.5,
+        188
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        454.5,
+        113
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        456.5,
+        188
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        544.5,
+        113
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        546.5,
+        188
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        634.5,
+        113
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        636.5,
+        188
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        4.5,
+        113
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        6.5,
+        188
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        94.5,
+        113
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        96.5,
+        188
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        184.5,
+        113
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        186.5,
+        188
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        274.5,
+        113
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        276.5,
+        188
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        364.5,
+        113
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        366.5,
+        188
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        454.5,
+        113
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        456.5,
+        188
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        544.5,
+        113
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        546.5,
+        188
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        634.5,
+        113
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        636.5,
+        188
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        4.5,
+        226
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        6.5,
+        301
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        94.5,
+        226
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        96.5,
+        301
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        184.5,
+        226
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        186.5,
+        301
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        274.5,
+        226
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        276.5,
+        301
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        364.5,
+        226
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        366.5,
+        301
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        454.5,
+        226
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        456.5,
+        301
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        544.5,
+        226
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        546.5,
+        301
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        26.5,
+        634.5,
+        226
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        28.5,
+        636.5,
+        301
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        4.5,
+        226
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        6.5,
+        301
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        94.5,
+        226
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        96.5,
+        301
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        184.5,
+        226
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        186.5,
+        301
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        274.5,
+        226
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        276.5,
+        301
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        364.5,
+        226
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        366.5,
+        301
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        454.5,
+        226
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        456.5,
+        301
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        544.5,
+        226
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        546.5,
+        301
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "jar",
+      "pos": [
+        116.5,
+        634.5,
+        226
+      ],
+      "size": [
+        88,
+        88,
+        75
+      ],
+      "color": "#d9e6dc",
+      "disc": "z"
+    },
+    {
+      "name": "lid",
+      "pos": [
+        118.5,
+        636.5,
+        301
+      ],
+      "size": [
+        84,
+        84,
+        10
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    }
+  ]
+}

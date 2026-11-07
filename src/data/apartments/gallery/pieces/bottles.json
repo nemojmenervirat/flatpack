@@ -1,0 +1,1481 @@
+{
+  "id": "bottles",
+  "name": "Bottles 1 l (32 standing)",
+  "comment": "32 litre bottles Ø85 x 320 standing straight on the shelf deck in the bay next to the jar racks, 4 across x 8 deep. Not built: only here to show the bay. The 350 entrance takes bottles up to about 340 standing.",
+  "buildable": false,
+  "color": "#3f5f3e",
+  "parts": [
+    {
+      "name": "bottle",
+      "pos": [
+        1,
+        4.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        26.5,
+        30,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        25.5,
+        29,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        1,
+        94.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        26.5,
+        120,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        25.5,
+        119,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        1,
+        184.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        26.5,
+        210,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        25.5,
+        209,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        1,
+        274.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        26.5,
+        300,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        25.5,
+        299,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        1,
+        364.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        26.5,
+        390,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        25.5,
+        389,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        1,
+        454.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        26.5,
+        480,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        25.5,
+        479,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        1,
+        544.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        26.5,
+        570,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        25.5,
+        569,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        1,
+        634.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        26.5,
+        660,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        25.5,
+        659,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        91,
+        4.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        116.5,
+        30,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        115.5,
+        29,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        91,
+        94.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        116.5,
+        120,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        115.5,
+        119,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        91,
+        184.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        116.5,
+        210,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        115.5,
+        209,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        91,
+        274.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        116.5,
+        300,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        115.5,
+        299,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        91,
+        364.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        116.5,
+        390,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        115.5,
+        389,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        91,
+        454.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        116.5,
+        480,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        115.5,
+        479,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        91,
+        544.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        116.5,
+        570,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        115.5,
+        569,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        91,
+        634.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        116.5,
+        660,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        115.5,
+        659,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        181,
+        4.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        206.5,
+        30,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        205.5,
+        29,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        181,
+        94.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        206.5,
+        120,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        205.5,
+        119,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        181,
+        184.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        206.5,
+        210,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        205.5,
+        209,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        181,
+        274.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        206.5,
+        300,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        205.5,
+        299,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        181,
+        364.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        206.5,
+        390,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        205.5,
+        389,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        181,
+        454.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        206.5,
+        480,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        205.5,
+        479,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        181,
+        544.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        206.5,
+        570,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        205.5,
+        569,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        181,
+        634.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        206.5,
+        660,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        205.5,
+        659,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        271,
+        4.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        296.5,
+        30,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        295.5,
+        29,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        271,
+        94.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        296.5,
+        120,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        295.5,
+        119,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        271,
+        184.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        296.5,
+        210,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        295.5,
+        209,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        271,
+        274.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        296.5,
+        300,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        295.5,
+        299,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        271,
+        364.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        296.5,
+        390,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        295.5,
+        389,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        271,
+        454.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        296.5,
+        480,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        295.5,
+        479,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        271,
+        544.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        296.5,
+        570,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        295.5,
+        569,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    },
+    {
+      "name": "bottle",
+      "pos": [
+        271,
+        634.5,
+        0
+      ],
+      "size": [
+        83,
+        83,
+        230
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "neck",
+      "pos": [
+        296.5,
+        660,
+        230
+      ],
+      "size": [
+        32,
+        32,
+        78
+      ],
+      "color": "#3f5f3e",
+      "disc": "z"
+    },
+    {
+      "name": "cap",
+      "pos": [
+        295.5,
+        659,
+        308
+      ],
+      "size": [
+        34,
+        34,
+        12
+      ],
+      "color": "#c9a227",
+      "disc": "z",
+      "metal": true
+    }
+  ]
+}

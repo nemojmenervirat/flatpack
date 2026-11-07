@@ -15,6 +15,7 @@
 const W = 'Wardrobe - NW corner';
 const SPOT = [800, 2500]; // in front of the wardrobe, centred on it
 const FACE = [800, 3650, 1300]; // what the body keeps watching while it walks: the middle of the fronts
+const RACKS = [2555, 3510, 200]; // the open front of the garage shelf: two jar racks and the bottle bay (north wall)
 const doorL = { piece: W, kind: 'door', pick: 'left' };
 const doorR = { piece: W, kind: 'door', pick: 'right' };
 const drawerL = { piece: W, kind: 'drawer', pick: 'left' };
@@ -74,6 +75,19 @@ export const tour = [
   { wait: 1 },
   { look: [1350, 3950, 2465], dur: 0.8, say: 'End panel up to the ceiling gap' },
   { wait: 0.8 },
+
+  // ── the jar racks in the garage shelf on the north wall ───────────────
+  { go: [2555, 2700], face: RACKS, say: 'Garage shelf: two jar racks and bottles' },
+  { look: RACKS, dur: 0.9 },
+  { wait: 1.0 },
+  { look: [2245, 3510, 200], dur: 0.8, say: 'Left: 2 tiers of 150 jars, 32 per tier' },
+  { wait: 1.2 },
+  { look: [2576, 3510, 200], dur: 0.8, say: 'Middle: 3 tiers of 85 jars, 16 per tier' },
+  { wait: 1.2 },
+  { look: [2891, 3510, 200], dur: 0.8, say: 'Right: 32 bottles standing on the deck' },
+  { wait: 1.2 },
+  { look: [2555, 3500, 390], dur: 0.7, say: 'Front rail: 350 entrance, 400 behind it' },
+  { wait: 1.0 },
 
   // ── back to the door ──────────────────────────────────────────────────
   { go: [2600, 2600], face: FACE },

@@ -1,0 +1,74 @@
+{
+  "id": "garage-shelf",
+  "name": "Garage shelf (slot for the jar racks)",
+  "comment": "Mock of the existing garage shelf: a slot 1050 wide, 750 deep, 350 high at the entrance (front rail) and 400 behind it. Not built. Modules stand on the deck at z 20.",
+  "buildable": false,
+  "color": "#a8936f",
+  "parts": [
+    {
+      "name": "upright",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "size": [
+        30,
+        750,
+        440
+      ]
+    },
+    {
+      "name": "upright",
+      "pos": [
+        1080,
+        0,
+        0
+      ],
+      "size": [
+        30,
+        750,
+        440
+      ]
+    },
+    {
+      "name": "deck",
+      "pos": [
+        30,
+        0,
+        0
+      ],
+      "size": [
+        1050,
+        750,
+        20
+      ]
+    },
+    {
+      "name": "deck",
+      "pos": [
+        30,
+        0,
+        420
+      ],
+      "size": [
+        1050,
+        750,
+        20
+      ]
+    },
+    {
+      "name": "front rail",
+      "pos": [
+        30,
+        0,
+        370
+      ],
+      "size": [
+        1050,
+        60,
+        50
+      ]
+    }
+  ]
+}

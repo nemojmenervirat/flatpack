@@ -10,6 +10,66 @@
         0
       ],
       "rot": 0
+    },
+    {
+      "piece": "garage-shelf",
+      "label": "Garage shelf - north wall",
+      "pos": [
+        2000,
+        3500,
+        0
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "jar-rack-tall",
+      "label": "Jar rack - tall (left)",
+      "pos": [
+        2040,
+        3510,
+        20
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "jars-tall",
+      "label": "Jars 150 in the left rack",
+      "pos": [
+        2040,
+        3510,
+        20
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "jar-rack-small",
+      "label": "Jar rack - small (middle)",
+      "pos": [
+        2461,
+        3510,
+        20
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "jars-small",
+      "label": "Jars 85 in the middle rack",
+      "pos": [
+        2461,
+        3510,
+        20
+      ],
+      "rot": 0
+    },
+    {
+      "piece": "bottles",
+      "label": "Bottles in the right bay",
+      "pos": [
+        2711,
+        3510,
+        20
+      ],
+      "rot": 0
     }
   ]
 }

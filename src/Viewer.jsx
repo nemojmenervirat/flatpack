@@ -880,11 +880,13 @@ function LocalSoft({ part, color, hovered, opacity = 1, ...handlers }) {
 // A part with "disc": true renders as a cylinder along its thinnest axis
 // (ties go to y, the front/back axis) — a porthole or dial face on a front,
 // a drilled hole on a side. Radius comes from the other two sizes, length
-// from the thin one. Render-only sugar like "round": geometry.js still sees
-// the plain AABB.
+// from the thin one. "disc": "x" | "y" | "z" pins the axis instead, for a
+// cylinder longer than it is wide (a standing jar or bottle is "z").
+// Render-only sugar like "round": geometry.js still sees the plain AABB.
+const DISC_AXES = { x: 0, y: 1, z: 2 };
 function LocalDisc({ part, color, hovered, opacity = 1, ...handlers }) {
   const [sx, sy, sz] = part.size;
-  const axis = sy <= sx && sy <= sz ? 1 : sx <= sz ? 0 : 2;
+  const axis = DISC_AXES[part.disc] ?? (sy <= sx && sy <= sz ? 1 : sx <= sz ? 0 : 2);
   const other = [0, 1, 2].filter((a) => a !== axis);
   const r = (Math.min(part.size[other[0]], part.size[other[1]]) / 2) * S;
   const pos = [

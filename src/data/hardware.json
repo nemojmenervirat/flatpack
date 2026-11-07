@@ -121,6 +121,16 @@
       "product": "Ugaonik za fiksiranje ormara uz zid 50x50x40 + tipl 6 mm sa vijkom 5x60",
       "price": 1,
       "note": "approx. price incl. plug and screw; bent steel angle in a back corner of the top compartment, one leg on the side with two 4x16 screws, the other through the HDF into the wall with the plugged screw; keeps a floor-standing wardrobe from tipping forward"
+    },
+    "angle bracket leg": {
+      "product": "the shelf leg of the 20x20x40 angle bracket",
+      "price": 0,
+      "includedWith": "angle bracket"
+    },
+    "wood screw 5x70": {
+      "product": "Vijak za iverice 5x70",
+      "price": 0.09,
+      "note": "approx. price per piece; a lip strip screwed down through its full height into the shelf under it"
     }
   }
 }
