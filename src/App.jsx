@@ -1,5 +1,6 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import MaterialsPanel from './MaterialsPanel.jsx';
+import CutPlanPanel from './CutPlanPanel.jsx';
 import Viewer, { PieceViewer } from './Viewer.jsx';
 import { skirtingStrips, fitReport, pieceLocalBBox, placeBox } from './geometry.js';
 import { cutList, cutListCsv } from './cutlist.js';
@@ -45,6 +46,7 @@ const ICONS = {
     </>
   ),
   materials: <path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z" />,
+  cutplan: <path d="M3 5h18v14H3zM3 12h18M9 5v7M15 12v7" />,
   electricity: <path d="M13 2L4 14h7l-1 8 9-12h-7z" />,
   home: <path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10" />,
   building: <path d="M3 21h18M5 21V4h9v17M14 9h5v12M8 8h2M8 12h2M8 16h2M16.5 13h.01M16.5 17h.01" />,
@@ -609,6 +611,7 @@ export default function App() {
   const [tourCaption, setTourCaption] = useState(null); // current room label from the script
   const stopTour = useCallback(() => setTourOn(false), []);
   const [materialsOpen, setMaterialsOpen] = useState(false);
+  const [cutPlanOpen, setCutPlanOpen] = useState(false); // the flat's cut plan: pieces + loose parts nested on boards
   const [asmStep, setAsmStep] = useState(null); // assembly step shown in the piece view, null = finished piece
   const [asmPlay, setAsmPlay] = useState(false);
   const [showSpaces, setShowSpaces] = useState(() => lsGet('flatpack.showSpaces', false)); // single-piece: label the storage spaces
@@ -633,6 +636,7 @@ export default function App() {
   // leaving a piece view, walk mode or the materials browser if needed.
   const showApartment = (mode) => {
     setMaterialsOpen(false);
+    setCutPlanOpen(false);
     setView('apartment');
     setWalk('off');
     setCam(mode);
@@ -712,9 +716,11 @@ export default function App() {
 
   return (
     <div className="app">
-      <div className={walk === 'arm' && !piece && !materialsOpen ? 'canvas-pane walk-arm' : 'canvas-pane'}>
+      <div className={walk === 'arm' && !piece && !materialsOpen && !cutPlanOpen ? 'canvas-pane walk-arm' : 'canvas-pane'}>
         {materialsOpen ? (
           <MaterialsPanel usage={materialUsage} />
+        ) : cutPlanOpen ? (
+          <CutPlanPanel key={apt.id} apartment={apt} />
         ) : piece ? (
           <PieceViewer
             key={piece.id}
@@ -753,19 +759,19 @@ export default function App() {
           />
         )}
 
-        {!materialsOpen && !piece && walk === 'arm' && (
+        {!materialsOpen && !cutPlanOpen && !piece && walk === 'arm' && (
           <div className="walk-chip">
             <span>click a floor point to drop in</span>
             <button onClick={() => { setWalkSpawn(null); setWalk('on'); }}>start at entrance</button>
             <span className="muted-inline">esc cancels</span>
           </div>
         )}
-        {!materialsOpen && !piece && walk === 'on' && !tourOn && (
+        {!materialsOpen && !cutPlanOpen && !piece && walk === 'on' && !tourOn && (
           <div className="walk-chip">
             drag to look · scroll or WASD to move · click floor to glide · esc to exit
           </div>
         )}
-        {!materialsOpen && !piece && walk === 'on' && tourOn && (
+        {!materialsOpen && !cutPlanOpen && !piece && walk === 'on' && tourOn && (
           <div className="walk-chip tour-chip">
             <span className="tour-cap">{tourCaption || 'Tour'}</span>
             <span className="muted-inline">drag or move to take over · esc exits</span>
@@ -773,7 +779,7 @@ export default function App() {
           </div>
         )}
 
-        {!materialsOpen && piece && (
+        {!materialsOpen && !cutPlanOpen && piece && (
           <div className="piece-chip">
             {assembly && asmStep == null && (
               <button
@@ -825,7 +831,7 @@ export default function App() {
           </div>
         )}
 
-        {!materialsOpen && piece &&
+        {!materialsOpen && !cutPlanOpen && piece &&
           (piece.buildable ? (
             <PiecePanel
               piece={piece}
@@ -846,7 +852,7 @@ export default function App() {
             <BoughtPanel piece={piece} scene={scene} />
           ))}
 
-        {!materialsOpen && !piece && report.issues.length > 0 && (
+        {!materialsOpen && !cutPlanOpen && !piece && report.issues.length > 0 && (
           <div className="issues-chip">
             <ul className="issues">
               {report.issues.map((issue, i) => (
@@ -857,12 +863,12 @@ export default function App() {
             </ul>
           </div>
         )}
-        {!materialsOpen && !piece && (
+        {!materialsOpen && !cutPlanOpen && !piece && (
           <button className="csv-chip" onClick={copyAllCsv} title="Copy the full cut list as CSV">
             ⧉ cut list
           </button>
         )}
-        {!materialsOpen && !piece && showAreas && (
+        {!materialsOpen && !cutPlanOpen && !piece && showAreas && (
           <div className="total-chip">total {roomAreas.total.toFixed(1)} m²</div>
         )}
       </div>
@@ -883,7 +889,10 @@ export default function App() {
             label="Materials"
             tip={materialsOpen ? 'Back to the apartment' : 'Materials (Elgrad price list)'}
             className={materialsOpen ? 'active' : ''}
-            onClick={() => setMaterialsOpen((v) => !v)}
+            onClick={() => {
+              setCutPlanOpen(false);
+              setMaterialsOpen((v) => !v);
+            }}
           />
           <span className="side-sep" />
 
@@ -908,14 +917,14 @@ export default function App() {
               icon="home"
               label="Overview"
               tip="Whole apartment in 3D"
-              className={view === 'apartment' && !materialsOpen && cam === 'free' && walk === 'off' ? 'active' : ''}
+              className={view === 'apartment' && !materialsOpen && !cutPlanOpen && cam === 'free' && walk === 'off' ? 'active' : ''}
               onClick={() => showApartment('free')}
             />
             <MenuBtn
               icon="plan"
               label="Floor plan"
               tip={cam === 'plan' ? 'Back to orbit view' : 'Floor plan (top-down)'}
-              className={cam === 'plan' && !materialsOpen ? 'active' : ''}
+              className={cam === 'plan' && !materialsOpen && !cutPlanOpen ? 'active' : ''}
               onClick={() => showApartment(cam === 'plan' ? 'free' : 'plan')}
             />
             {tourScript && (
@@ -923,7 +932,7 @@ export default function App() {
                 icon="tour"
                 label="Guided tour"
                 tip={tourOn ? 'Stop the tour' : 'Guided tour (auto walk)'}
-                className={tourOn && !materialsOpen ? 'active' : ''}
+                className={tourOn && !materialsOpen && !cutPlanOpen ? 'active' : ''}
                 onClick={() => {
                   if (tourOn) return setTourOn(false);
                   setMaterialsOpen(false);
@@ -975,6 +984,18 @@ export default function App() {
                 setShowAreas((v) => !v);
               }}
             />
+            <span className="side-sep" />
+            {/* the flat's cut plan: several pieces + loose parts on boards */}
+            <MenuBtn
+              icon="cutplan"
+              label="Cut plan"
+              tip={cutPlanOpen ? 'Back to the apartment' : 'Cut plan: pieces and loose parts nested on boards'}
+              className={cutPlanOpen ? 'active' : ''}
+              onClick={() => {
+                setMaterialsOpen(false);
+                setCutPlanOpen((v) => !v);
+              }}
+            />
           </div>
         </div>
         {sideOpen && (
@@ -1003,6 +1024,7 @@ export default function App() {
                         title={it.name}
                         onClick={() => {
                           setMaterialsOpen(false);
+                          setCutPlanOpen(false);
                           setView(it.id);
                         }}
                       >

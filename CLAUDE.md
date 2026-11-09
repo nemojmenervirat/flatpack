@@ -70,6 +70,10 @@ view is read-only.** When he asks for a new piece or a change, edit the JSON.
   rebuild with `node scripts/build-materials.mjs`. A piece or part can carry
   `"material": "<decor id>"` instead of a `color`; `partColor()` resolves it.
 - `src/MaterialsPanel.jsx` — the ▩ browser for that registry.
+- `src/cutplan.js` + `src/CutPlanPanel.jsx` — the ⌗ Cut plan view: several pieces of the flat (placed or
+  not) plus loose parts typed in ("3x546x480") as one cut list, nested on boards per
+  material (`nesting.js`), drawn board by board. `scripts/cut-plan.mjs` is the same from the
+  shell (`--part`), writing a CSV and an SVG per board.
 - `scripts/parse-cjenovnik.mjs` — price-list PDF → raw table (word coordinates, not
   `pdftotext -layout`, which drops cells).
 - `scripts/lib/apartments.mjs` — node twin of the registry for scripts and ad-hoc
