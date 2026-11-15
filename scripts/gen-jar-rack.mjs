@@ -6,28 +6,30 @@
 // change a parameter here and re-run `node scripts/gen-jar-rack.mjs`.
 //
 // The garage shelf has a slot about 1050 wide x 750 deep, 350 high at the
-// entrance (a front rail), about 400 further in. Both modules are 730 deep,
+// entrance (a front rail), about 400 further in. Both modules are 675 deep,
 // stand straight on the shelf deck (the deck is the first floor: no bottom
 // board, it would cost 18 mm of height), have no top (the modules stay low,
 // the top tier's jars go in one by one once the module is in, still under
 // the 350 entrance) and a 3 mm HDF back stapled over the rear edges. The
 // extra 50 mm further in is useless: a fourth tier of small jars would need
-// 434. A shelf is 727 deep = 8 jars of 90 (720).
+// 434. A shelf is 672 deep = 7 jars of 90 (630).
 //
-// Tall module, 411 wide, 4 jars across (360 + 15 play), 2 tiers, 64 jars:
+// Tall module, 411 wide, 4 jars across (360 + 15 play), 2 tiers, 56 jars:
 // stacked columns. Each side is one 18 mm piece per tier, all in one plane,
 // with the full-width shelf between them - tier-1 side on the deck, shelf
 // laid on its top edge so the side carries it along the whole length, and a
-// 50 mm lip strip standing on the shelf. The load goes down through the
+// 100 mm lip strip standing on the shelf. The load goes down through the
 // boards. The shelf is tied to the sides under it by four 20x20x40 angle
 // brackets of 2 mm sheet in the top corners of the tier below, in the
-// headroom over the jars; the lip strips are screwed down through their 50
-// into the shelf. Built top-down, upside down on the bench, because the
+// headroom over the jars; the lip strips are screwed from below, up through
+// the shelf into their edge, before the sides cover the heads. The lip is
+// 100: over a full jar's centre of gravity (~75), so a jar cannot tip over
+// it. Built top-down, upside down on the bench, because the
 // brackets are only reachable while the tier under the shelf is still open.
 //
-// Small module, 231 wide, 2 jars across (180 + 15 play), 3 tiers, 48 jars:
+// Small module, 231 wide, 2 jars across (180 + 15 play), 3 tiers, 42 jars:
 // a plain carcass. Two full-height sides in one piece (rising the same 50
-// lip over the top shelf), fixed shelves between them on three confirmats
+// lip over the top shelf, over half an 85 jar), fixed shelves between them on three confirmats
 // per edge through the sides. Narrow enough that nothing more is needed.
 //
 // Bottles stand straight on the deck in the ~380 left over at the right:
@@ -38,7 +40,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // ---- parameters (mm)
-const D = 730; // module depth, HDF back included (slot ~750)
+const D = 675; // module depth, HDF back included (slot ~750)
 const T = 18; // board
 const HDF = 3; // back
 const JAR_D = 90; // jar diameter, both kinds
@@ -49,7 +51,9 @@ const PLAY_TALL = 8; // headroom over a jar under the shelf above
 const PLAY_SMALL = 10;
 const ACROSS_TALL = 4; // jars across in the tall module
 const ACROSS_SMALL = 2; // and in the small one
-const LIP = 50; // how far the sides rise over the top shelf, so the top jars cannot slide off
+const LIP_TALL = 100; // how far the sides rise over the top shelf: over the centre of gravity of a full jar, so it can neither slide off nor tip over
+const LIP_SMALL = 50;
+const LIP_SCREW = 50; // 4x50 up through the shelf into the lip's edge (tall module)
 const BRACKET = 20; // 20x20x40 angle bracket legs (tall module)
 const BRACKET_L = 40;
 const BRACKET_T = 2; // its sheet: fits in the headroom over the jars and the 4.5 mm between jar and side
@@ -61,6 +65,7 @@ const SLOT_H = 400; // behind it
 const BOTTLE_D = 85; // 1 l bottle
 const BOTTLE_H = 320;
 const BOTTLES_ACROSS = 4;
+const BOTTLE_BAY_D = 727; // the bottles stand on the deck, not in a module: they keep the slot's depth
 
 // ---- derived
 const boardD = D - HDF;
@@ -92,13 +97,14 @@ function tools(parts) {
   return { B, HW, sideStaples, shelfStaples };
 }
 
-// Tall module: stacked columns, brackets under the shelf, lips screwed down.
+// Tall module: stacked columns, brackets under the shelf, lips screwed from below.
 function rackStacked(id, name, jar, tiers, across) {
+  const LIP = LIP_TALL;
   const W = widthFor(across);
   const inner = W - 2 * T;
   const parts = [];
   const { B, HW, sideStaples, shelfStaples } = tools(parts);
-  const lipScrew = (pos) => HW('wood screw 5x70', pos, [5, 5, 70]); // down through the lip into the shelf, head flush on top
+  const lipScrew = (pos) => HW('wood screw 4x50', pos, [4, 4, LIP_SCREW]); // up through the shelf into the lip's edge, head countersunk flush under the shelf (the side stands over it)
   // a thin L hanging in the top corner of the tier under a shelf (z = shelf bottom): upright leg on the side, flat leg under the shelf
   const bracket = (left, y, z) => {
     HW('angle bracket', [left ? T : W - T - BRACKET_T, y, z - BRACKET], [BRACKET_T, BRACKET_L, BRACKET], '#9aa0a8');
@@ -117,7 +123,7 @@ function rackStacked(id, name, jar, tiers, across) {
     for (const x of sideX) B(top ? 'lip' : 'side', [x, 0, z], [T, boardD, h]);
     sideStaples(W, z, h);
     if (top) {
-      for (const x of sideX) for (const y of [100, boardD / 2, boardD - 100]) lipScrew([x + T / 2 - 2.5, y - 2.5, z + LIP - 70]);
+      for (const x of sideX) for (const y of [100, boardD / 2, boardD - 100]) lipScrew([x + T / 2 - 2, y - 2, z - T]);
       z += h;
       break;
     }
@@ -136,11 +142,11 @@ function rackStacked(id, name, jar, tiers, across) {
   // shelf are only reachable while the tier under it is still open.
   const assembly = [];
   const S = (title, sel, note, extra = {}) => assembly.push({ title, parts: sel, note, ...extra });
-  S('Top shelf', [{ name: 'shelf', z: shelfZ[n - 2] }], `Start at the top, right side up on the bench: the top shelf ${W} x ${boardD}.`, { view: 'above' });
+  S('Top shelf', [{ name: 'shelf', z: shelfZ[n - 2] }], `Start at the top, upside down: the top shelf ${W} x ${boardD}, bottom face up. The whole module is built upside down.`, { view: 'above' });
   S(
     'Lips',
-    [{ name: 'lip', z: pieceZ[n - 1] }, { name: 'wood screw 5x70', z: pieceZ[n - 1] + LIP - 70 }],
-    `Two ${LIP} mm strips along its outer edges, flush, so the top jars cannot slide off: three 5x70 wood screws down through each strip into the shelf (pre-drill the strip's full height), heads flush. Then turn the shelf over, lips down on the bench: the rest is built upside down.`,
+    [{ name: 'lip', z: pieceZ[n - 1] }, { name: 'wood screw 4x50', z: pieceZ[n - 1] - T }],
+    `Two ${LIP} mm strips under its outer edges, flush, standing on edge on the bench with the shelf on them: higher than the middle of a full jar, so the top jars can neither slide off nor tip over. Three 4x50 wood screws through the shelf into each strip's edge (pre-drill the edge, ${LIP_SCREW - T} deep), heads countersunk flush: the sides of the tier stand over them next.`,
     { view: 'above' },
   );
   for (let i = n - 2; i >= 0; i--) {
@@ -161,7 +167,7 @@ function rackStacked(id, name, jar, tiers, across) {
     comment:
       `Slide-in jar rack for the garage shelf: ${W} x ${D} x ${H}, for the ${jar}-high jars (Ø${JAR_D}). Stacked columns: ` +
       `each side is one 18 mm piece per tier (${tiers.slice(0, -1).join(', ')} high, then a ${LIP} lip strip) stacked in one plane with the full-width shelves ${W} x ${boardD} between them (bottom faces at ${shelfZ.join(', ')}), each shelf resting on the side pieces below along its whole length. ` +
-      `Each shelf is tied to the side pieces under it by four 20x20x40 angle brackets (2 mm sheet, four 3.5x16 screws) in the top corners of the tier below, front and back, in the headroom over the jars; the lip strips are screwed down into the top shelf with three 5x70 wood screws each. ` +
+      `Each shelf is tied to the side pieces under it by four 20x20x40 angle brackets (2 mm sheet, four 3.5x16 screws) in the top corners of the tier below, front and back, in the headroom over the jars; the lip strips are screwed from below, through the top shelf into their edge, with three 4x50 wood screws each, heads flush under the sides. ` +
       `The load goes down through the boards; the brackets and screws only hold position. Built top-down, upside down on the bench. No bottom (the deck is the first floor), no top, 3 mm HDF back stapled over every rear edge. ` +
       `Tiers of ${tiers.join(' / ')} clear; the top tier's jars reach ${topJar} (entrance 350). ` +
       `${across} jars across x ${deep} deep = ${across * deep} per tier, ${across * deep * n} in the module. ` +
@@ -178,6 +184,7 @@ function rackStacked(id, name, jar, tiers, across) {
 
 // Small module: plain carcass, full-height sides, shelves on confirmats.
 function rackPlain(id, name, jar, tiers, across) {
+  const LIP = LIP_SMALL;
   const W = widthFor(across);
   const inner = W - 2 * T;
   const parts = [];
@@ -281,11 +288,11 @@ write(jars('jars-small', 'Jars 85 (in the small rack)', JAR_SMALL, small));
 // placed at the bay's origin, body + neck + cap per bottle.
 {
   const parts = [];
-  const bd = Math.floor(boardD / JAR_D);
+  const bd = Math.floor(BOTTLE_BAY_D / JAR_D);
   for (let i = 0; i < BOTTLES_ACROSS; i++)
     for (let k = 0; k < bd; k++) {
       const x = i * (BOTTLE_D + 5) + 1;
-      const y = (boardD - bd * JAR_D) / 2 + k * JAR_D + 1;
+      const y = (BOTTLE_BAY_D - bd * JAR_D) / 2 + k * JAR_D + 1;
       const d = BOTTLE_D - 2;
       parts.push({ name: 'bottle', pos: [x, y, 0], size: [d, d, BOTTLE_H - 90], color: '#3f5f3e', disc: 'z' });
       parts.push({ name: 'neck', pos: [x + (d - 32) / 2, y + (d - 32) / 2, BOTTLE_H - 90], size: [32, 32, 78], color: '#3f5f3e', disc: 'z' });
