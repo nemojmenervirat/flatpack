@@ -28,8 +28,8 @@
 // brackets are only reachable while the tier under the shelf is still open.
 //
 // Small module, 231 wide, 2 jars across (180 + 15 play), 3 tiers, 42 jars:
-// a plain carcass. Two full-height sides in one piece (rising the same 50
-// lip over the top shelf, over half an 85 jar), fixed shelves between them on three confirmats
+// a plain carcass. Two full-height sides in one piece (rising a 30 lip
+// over the top shelf, a third of an 85 jar), fixed shelves between them on three confirmats
 // per edge through the sides. Narrow enough that nothing more is needed.
 //
 // Bottles stand straight on the deck in the ~380 left over at the right:
@@ -48,11 +48,11 @@ const JAR_TALL = 150;
 const JAR_SMALL = 85;
 const PLAY_W = 15; // width play in a bay beside the jars: ~7 per side, so a row can be spread to grip a jar
 const PLAY_TALL = 8; // headroom over a jar under the shelf above
-const PLAY_SMALL = 10;
+const PLAY_SMALL = 20; // 105 clear: was 10, raised once the sides were cut (276 high) by taking 20 off the lip
 const ACROSS_TALL = 4; // jars across in the tall module
 const ACROSS_SMALL = 2; // and in the small one
 const LIP_TALL = 100; // how far the sides rise over the top shelf: over the centre of gravity of a full jar, so it can neither slide off nor tip over
-const LIP_SMALL = 50;
+const LIP_SMALL = 30; // enough to stop a jar sliding off; the side stays 276
 const LIP_SCREW = 50; // 4x50 up through the shelf into the lip's edge (tall module)
 const BRACKET = 20; // 20x20x40 angle bracket legs (tall module)
 const BRACKET_L = 40;
